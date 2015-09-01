@@ -1,7 +1,7 @@
 __author__ = 'phg49389'
 
 from flask import Flask
-from primary_directory.view import ClassifiedsView
+from classifieds.views import ClassifiedsView
 
 if __name__ == '__main__':
     app = Flask(__name__)

@@ -8,18 +8,6 @@ def get_form():
     return ClassifiedForm()
 
 
-class ClassifiedForm(Form):
-    # name = StringField('Name:')
-    # email = StringField('Email:')
-    # phone_number = StringField('Phone number:')
-    # title = StringField('Title:')
-    # description = TextAreaField('Description:')
-    # categories = SelectMultipleField('Categories:')
-    contact_info = FormField(ContactInfoForm)
-    content = FormField(ContentForm)
-    submit = SubmitField("Submit")
-
-
 class ContactInfoForm(Form):
     name = StringField('Name:')
     email = StringField('Email:')
@@ -30,6 +18,18 @@ class ContentForm(Form):
     title = StringField('Title:')
     description = TextAreaField('Description:')
     categories = SelectMultipleField('Categories:')
+
+
+class ClassifiedForm(Form):
+    # name = StringField('Name:')
+    # email = StringField('Email:')
+    # phone_number = StringField('Phone number:')
+    # title = StringField('Title:')
+    # description = TextAreaField('Description:')
+    # categories = SelectMultipleField('Categories:')
+    contact_info = FormField(ContactInfoForm)
+    content = FormField(ContentForm)
+    submit = SubmitField("Submit")
 
 
 # Returns whether or not it was successfully submitted
