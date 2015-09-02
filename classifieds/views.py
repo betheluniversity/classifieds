@@ -8,7 +8,7 @@ from classifieds.forms import get_form, submit_form
 class ClassifiedsView(FlaskView):
 
     def index(self):
-        return render_template("/templates/classifiedForm.html")
+        return render_template("classifiedForm.html", form=get_form())
 
     @route("/submit", methods=['POST'])
     def submit(self):

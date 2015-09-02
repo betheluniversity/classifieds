@@ -5,15 +5,27 @@
     <title></title>
 </head>
 <body>
+<div>
 {% for field in form if field.widget.input_type != 'hidden' %}
+    {% if field.type != "SubmitField" %}
+        {{ field.label }}
+    {% endif %}
 
-    {% if field.type == "FormField" %}
-        {{ field }}
-
-    {% elif field.type == "SelectMultipleField" %}
+    {% if field.type == "SelectMultipleField" %}
         {{ field(size=10, class="largeselect") }}
 
-    {% else%}
+    {% elif field.type == "SelectField" %}
+        {{ field() }}
+
+    {% elif field.type == "TextAreaField" %}
+        {{ field() }}
+
+    {% else %}
         {{ field(size=20) }}
+
+    {% endif %}
+    <br/><br/>
+{% endfor %}
+</div>
 </body>
 </html>
