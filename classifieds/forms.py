@@ -1,6 +1,37 @@
 __author__ = 'phg49389'
 
+import sqlite3
+
 from wtforms import Form, StringField, SelectMultipleField, TextAreaField, SelectField, SubmitField, validators
+sqlite_file = '../app.db'
+table_name = "classifieds"
+
+def create_table():
+    conn = sqlite3.connect(sqlite_file)
+    c = conn.cursor()
+
+    c.execute("CREATE TABLE {tn} ({nf} {ft} PRIMARY KEY)".format(tn=table_name, nf="classified_id", ft="INTEGER"))
+    columns_to_add = ["title", "description", "price", "duration", "categories"]
+    for column_name in columns_to_add:
+        c.execute("ALTER TABLE {tn} ADD COLUMN {cn} {ct}".format(tn=table_name, cn=column_name, ct="TEXT"))
+
+    conn.commit()
+    conn.close()
+
+
+def add_entry(title, description, price, duration, categories):
+    conn = sqlite3.connect(sqlite_file)
+    c = conn.cursor()
+
+    c.execute("INSERT INTO {tn} VALUES (%(0)s, %(1)s, %(2)s, %(3)s, %(4)s)".format(tn=table_name)
+                                                                            % {'0': title,
+                                                                               '1': description,
+                                                                               '2': price,
+                                                                               '3': duration,
+                                                                               '4': categories})
+
+    conn.commit()
+    conn.close()
 
 
 # Returns the WTForm version of the form to be made into HTML
