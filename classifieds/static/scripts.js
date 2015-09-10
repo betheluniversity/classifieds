@@ -6,27 +6,33 @@ function submit(){
     var form = document.getElementById("classifieds");
     var array_of_results = [];
     var id, val;
-    for(var i = 0; i < form.elements.length; i++){
+    for(var i = 0; i < form.elements.length-1; i++){
         id = form.elements[i].id;
-        alert("id is " + id);
         if(id != "categories"){
             val = form.elements[i].value;
         }
         else{
-            val = form.elements[i].selectedOptions;
+            var selected = form.elements[i].selectedOptions;
+            val = "";
+            for(var j = 0; j < selected.length; j++){
+                val += selected[j].value +";";
+            }
         }
-        alert(val);
-        //array_of_results.push(id + "=" + val);
+        array_of_results.push(id + "=" + val);
     }
-    //$.ajax({
-    //    type: "POST",
-    //    url: "submit",
-    //    data: { data_pairs: JSON.stringify(array_of_results) }
-    //});//.done(function (response) {
+    alert(array_of_results);
+    $.ajax({
+        type: "POST",
+        url: "submitAd",
+        //JSON.stringify(array_of_results)
+        data: { data_pairs: "blah" }
+    });//.done(function (response) {
+        //alert(response);
         //var address = window.location.href;
         //var base = address.slice(0,address.indexOf("?")-1);
         //base += "/" + response;
         //window.location.href = base;
     //});
+    alert("Past AJAX section");
 
 }

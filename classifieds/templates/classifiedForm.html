@@ -7,7 +7,7 @@
 </head>
 <body>
 <div>
-    <form id="classifieds" method="post" action="JavaScript:submit()">
+    <form id="classifieds" method="POST" action="submitAd">
     <table>
 {% for field in form if field.widget.input_type != 'hidden' %}
     <tr>

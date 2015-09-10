@@ -10,7 +10,6 @@ class ClassifiedsView(FlaskView):
     def index(self):
         return render_template("classifiedForm.html", form=get_form())
 
-    @route("/submit", methods=['POST'])
-    def submit(self):
-        form_data = json.loads(request.form['data'])
-        return submit_form(form_data)
+    @route("/submitAd", methods=['POST'])
+    def submit_ad(self):
+        return submit_form(request.form)

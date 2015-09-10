@@ -3,8 +3,10 @@ __author__ = 'phg49389'
 import sqlite3
 
 from wtforms import Form, StringField, SelectMultipleField, TextAreaField, SelectField, SubmitField, validators
+
 sqlite_file = '../app.db'
 table_name = "classifieds"
+
 
 def create_table():
     conn = sqlite3.connect(sqlite_file)
@@ -23,12 +25,12 @@ def add_entry(title, description, price, duration, categories):
     conn = sqlite3.connect(sqlite_file)
     c = conn.cursor()
 
-    c.execute("INSERT INTO {tn} VALUES (%(0)s, %(1)s, %(2)s, %(3)s, %(4)s)".format(tn=table_name)
-                                                                            % {'0': title,
-                                                                               '1': description,
-                                                                               '2': price,
-                                                                               '3': duration,
-                                                                               '4': categories})
+    c.execute("INSERT INTO {tn} VALUES (NULL, %(0)s, %(1)s, %(2)s, %(3)s, %(4)s)".format(tn=table_name)
+              % {'0': title,
+                 '1': description,
+                 '2': price,
+                 '3': duration,
+                 '4': categories})
 
     conn.commit()
     conn.close()
@@ -76,8 +78,22 @@ class ClassifiedForm(Form):
 
 # Returns whether or not it was successfully submitted
 def submit_form(form_contents):
-    # Flat array as argument
-    # Turn them into a SQLite object
+    print form_contents
+    print form_contents.getlist('categories')
+    storage = {}
+    for key in form_contents:
+        if key == "submit":
+            continue
+        raw_values = form_contents.getlist(key)
+        if len(raw_values) > 1:
+            parsed_values = ""
+            for val in raw_values:
+                parsed_values += val + ";"
+            parsed_values = parsed_values[:-1]  # Remove last semicolon; unnecessary
+        else:
+            parsed_values = raw_values[0]
+        storage[key] = parsed_values
+    print storage
     # Add that object to the database and store the result
     result = False
     if result:
