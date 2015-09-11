@@ -1,39 +1,40 @@
 __author__ = 'phg49389'
 
-import sqlite3
+import dataset
+import datetime
 
 from wtforms import Form, StringField, SelectMultipleField, TextAreaField, SelectField, SubmitField, validators
 
-sqlite_file = '../app.db'
-table_name = "classifieds"
+sqlite_file = '../classifieds.db'
 
+
+# Table columns are as follows:
+# PRIMARY INT | TEXT  | TEXT        | TEXT  | TEXT       | TEXT     | DATETIME   | BOOLEAN
+# ID          | Title | Description | Price | Categories | Username | Date Added | Completed
+
+# ID will auto-increment on the entry being added, Title, Desc, Price, and Categories will be extracted from the form,
+# Username will be metadata from the user's login to the classifieds, Date Added will be calculated on submission,
+# and Completed will default to False, and the user or a moderator can mark it as Completed at a later date when it's
+# either sold, or no longer for sale, or it's just been active for too long.
 
 def create_table():
-    conn = sqlite3.connect(sqlite_file)
-    c = conn.cursor()
-
-    c.execute("CREATE TABLE {tn} ({nf} {ft} PRIMARY KEY)".format(tn=table_name, nf="classified_id", ft="INTEGER"))
-    columns_to_add = ["title", "description", "price", "duration", "categories"]
-    for column_name in columns_to_add:
-        c.execute("ALTER TABLE {tn} ADD COLUMN {cn} {ct}".format(tn=table_name, cn=column_name, ct="TEXT"))
-
-    conn.commit()
-    conn.close()
+    db = dataset.connect('sqlite:///classifieds.db')
+    table = db['classifieds']
+    table.insert(dict(id=0, title="Creation Entry", description="This entry is simply here to "
+                                                                "set the format for future entries",
+                      price="$0", categories="", username="", dateAdded=datetime.datetime.now(), completed=False))
 
 
-def add_entry(title, description, price, duration, categories):
-    conn = sqlite3.connect(sqlite_file)
-    c = conn.cursor()
+def add_entry(title, description, price, categories, username):
+    table = dataset.connect('sqlite:///classifieds.db')['classifieds']
+    table.insert(dict(title=title, description=description, price=price, categories=categories, username=username,
+                      dateAdded=datetime.datetime.now(), completed=False))
 
-    c.execute("INSERT INTO {tn} VALUES (NULL, %(0)s, %(1)s, %(2)s, %(3)s, %(4)s)".format(tn=table_name)
-              % {'0': title,
-                 '1': description,
-                 '2': price,
-                 '3': duration,
-                 '4': categories})
 
-    conn.commit()
-    conn.close()
+def mark_entry_as_complete(entry_id):
+    # TODO: authenticate this as either the poster or a moderator
+    table = dataset.connect('sqlite:///classifieds.db')['classifieds']
+    table.update(dict(id=entry_id, completed=True), ['id'])
 
 
 # Returns the WTForm version of the form to be made into HTML
@@ -95,6 +96,7 @@ def submit_form(form_contents):
         storage[key] = parsed_values
     print storage
     # Add that object to the database and store the result
+    # TODO: once the DB is working, make sure that this method can add an entry
     result = False
     if result:
         return """
