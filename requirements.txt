@@ -1,4 +1,0 @@
-Flask
-Flask-Classy
-Flask-WTF
-WTForms
