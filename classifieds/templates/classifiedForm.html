@@ -1,11 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <title>Submit a New Classified Advertisement</title>
-    <script src="../static/scripts.js"></script>
-</head>
-<body>
+{% extends "foundation_base.html" %}
+
+{% block body_content %}
 <div>
     <form id="classifieds" method="POST" action="submitAd">
     <table>
@@ -40,5 +35,4 @@
     </table>
     </form>
 </div>
-</body>
-</html>
+{% endblock %}

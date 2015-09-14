@@ -11,4 +11,4 @@ class ClassifiedsView(FlaskView):
 
     @route("/submitAd", methods=['POST'])
     def submit_ad(self):
-        return submit_form(request.form)
+        return submit_form(request.form, "phg49389")

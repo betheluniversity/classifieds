@@ -5,9 +5,6 @@ import datetime
 
 from wtforms import Form, StringField, SelectMultipleField, TextAreaField, SelectField, SubmitField, validators
 
-sqlite_file = '../classifieds.db'
-
-
 # Table columns are as follows:
 # PRIMARY INT | TEXT  | TEXT        | TEXT  | TEXT       | TEXT     | DATETIME   | BOOLEAN
 # ID          | Title | Description | Price | Categories | Username | Date Added | Completed
@@ -19,15 +16,32 @@ sqlite_file = '../classifieds.db'
 
 def create_table():
     db = dataset.connect('sqlite:///classifieds.db')
+    db.create_table("classifieds")
     table = db['classifieds']
     table.insert(dict(id=0, title="Creation Entry", description="This entry is simply here to "
                                                                 "set the format for future entries",
                       price="$0", categories="", username="", dateAdded=datetime.datetime.now(), completed=False))
 
 
+def reset_table():
+    db = dataset.connect('sqlite:///classifieds.db')
+    table = db['classifieds']
+    table.drop()
+    db.create_table("classifieds")
+    table = db['classifieds']
+    table.insert(dict(id=0, title="Creation Entry", description="This entry is simply here to "
+                                                                "set the format for future entries",
+                      price="$0", categories="", username="", dateAdded=datetime.datetime.now(), completed=False))
+
+
+def table_exists():
+    db = dataset.connect('sqlite:///classifieds.db')
+    return len(db.tables) > 0
+
+
 def add_entry(title, description, price, categories, username):
     table = dataset.connect('sqlite:///classifieds.db')['classifieds']
-    table.insert(dict(title=title, description=description, price=price, categories=categories, username=username,
+    return table.insert(dict(title=title, description=description, price=price, categories=categories, username=username,
                       dateAdded=datetime.datetime.now(), completed=False))
 
 
@@ -78,9 +92,7 @@ class ClassifiedForm(Form):
 
 
 # Returns whether or not it was successfully submitted
-def submit_form(form_contents):
-    print form_contents
-    print form_contents.getlist('categories')
+def submit_form(form_contents, username):
     storage = {}
     for key in form_contents:
         if key == "submit":
@@ -97,8 +109,9 @@ def submit_form(form_contents):
     print storage
     # Add that object to the database and store the result
     # TODO: once the DB is working, make sure that this method can add an entry
-    result = False
-    if result:
+    result = add_entry(storage['title'], storage['description'], storage['price'], storage['categories'], username)
+    print result
+    if result > 0:
         return """
         <html>
             <head>
