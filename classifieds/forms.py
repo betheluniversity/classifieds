@@ -14,7 +14,7 @@ from wtforms import Form, StringField, SelectMultipleField, TextAreaField, Selec
 # and Completed will default to False, and the user or a moderator can mark it as Completed at a later date when it's
 # either sold, or no longer for sale, or it's just been active for too long.
 
-def create_table():
+def create_ads_table():
     db = dataset.connect('sqlite:///classifieds.db')
     db.create_table("classifieds")
     table = db['classifieds']
@@ -23,26 +23,47 @@ def create_table():
                       price="$0", categories="", username="", dateAdded=datetime.datetime.now(), completed=False))
 
 
-def reset_table():
+def create_contacts_table():
+    db = dataset.connect('sqlite:///classifieds.db')
+    db.create_table("contacts")
+    table = db['contacts']
+    table.insert(dict(id=0, username="enttes", first_name="Test", last_name="Entry", email="enttes@bethel.edu",
+                      phone_number="555-1234"))
+
+
+def reset_tables():
     db = dataset.connect('sqlite:///classifieds.db')
     table = db['classifieds']
+    table.drop()
+    table = db['contacts']
     table.drop()
     db.create_table("classifieds")
     table = db['classifieds']
     table.insert(dict(id=0, title="Creation Entry", description="This entry is simply here to "
                                                                 "set the format for future entries",
                       price="$0", categories="", username="", dateAdded=datetime.datetime.now(), completed=False))
+    db.create_table("contacts")
+    table = db['contacts']
+    table.insert(dict(id=0, username="enttes", first_name="Test", last_name="Entry", email="enttes@bethel.edu",
+                      phone_number="555-1234"))
 
 
-def table_exists():
+def table_exists(desired_table_name):
     db = dataset.connect('sqlite:///classifieds.db')
-    return len(db.tables) > 0
+    return desired_table_name in db.tables
 
 
-def add_entry(title, description, price, categories, username):
+def add_classified(title, description, price, categories, username):
     table = dataset.connect('sqlite:///classifieds.db')['classifieds']
-    return table.insert(dict(title=title, description=description, price=price, categories=categories, username=username,
-                      dateAdded=datetime.datetime.now(), completed=False))
+    return table.insert(
+        dict(title=title, description=description, price=price, categories=categories, username=username,
+             dateAdded=datetime.datetime.now(), completed=False))
+
+
+def add_contact(username, first_name, last_name, email, phone_number):
+    table = dataset.connect('sqlite:///classifieds.db')['contacts']
+    return table.insert(dict(username=username, first_name=first_name, last_name=last_name, email=email,
+                             phone_number=phone_number))
 
 
 def mark_entry_as_complete(entry_id):
@@ -106,10 +127,9 @@ def submit_form(form_contents, username):
         else:
             parsed_values = raw_values[0]
         storage[key] = parsed_values
-    print storage
     # Add that object to the database and store the result
     # TODO: once the DB is working, make sure that this method can add an entry
-    result = add_entry(storage['title'], storage['description'], storage['price'], storage['categories'], username)
+    result = add_classified(storage['title'], storage['description'], storage['price'], storage['categories'], username)
     print result
     if result > 0:
         return """
