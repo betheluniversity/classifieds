@@ -76,6 +76,10 @@ def mark_entry_as_complete(entry_id):
 def get_form():
     return ClassifiedForm()
 
+def fake_method():
+    x = "trying to test Phabricator"
+    return x
+
 
 class ClassifiedForm(Form):
     title = StringField('Title:', [validators.required()])
