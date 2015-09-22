@@ -131,6 +131,7 @@ def submit_form(form_contents, username):
     # TODO: once the DB is working, make sure that this method can add an entry
     result = add_classified(storage['title'], storage['description'], storage['price'], storage['categories'], username)
     print result
+    # TODO: move this to a template
     if result > 0:
         return """
         <html>
