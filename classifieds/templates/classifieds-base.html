@@ -1,1 +1,12 @@
-{% extends "foundation_base.html" %}
+{% extends "paper_kit/template.html" %}
+
+{% block body_content %}
+    <br/>
+    <div id="nav">
+        &nbsp;&nbsp;&nbsp;<a href="/classifieds">Submit a classified</a> | <a href="/contacts">Add a contact</a>
+    </div>
+    <br/>
+    {% block internal %}
+    {% endblock %}
+
+{% endblock %}

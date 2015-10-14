@@ -14,6 +14,7 @@ from wtforms import Form, StringField, SelectMultipleField, TextAreaField, Selec
 # and Completed will default to False, and the user or a moderator can mark it as Completed at a later date when it's
 # either sold, or no longer for sale, or it's just been active for too long.
 
+
 def create_ads_table():
     db = dataset.connect('sqlite:///classifieds.db')
     db.create_table("classifieds")
@@ -73,8 +74,21 @@ def mark_entry_as_complete(entry_id):
 
 
 # Returns the WTForm version of the form to be made into HTML
-def get_form():
+def get_classified_form():
     return ClassifiedForm()
+
+
+def get_contact_form():
+    return ContactForm()
+
+
+class ContactForm(Form):
+    first_name = StringField('First Name:', [validators.required()])
+    last_name = StringField('Last Name:', [validators.required()])
+    username = StringField('Username:', [validators.required()])
+    email = StringField('Email address:', [validators.required()])
+    phone_number = StringField('Phone Number:', [validators.required()])
+    submit = SubmitField("Submit")
 
 
 class ClassifiedForm(Form):
@@ -113,7 +127,7 @@ class ClassifiedForm(Form):
 
 
 # Returns whether or not it was successfully submitted
-def submit_form(form_contents, username):
+def submit_classified_form(form_contents, username):
     storage = {}
     for key in form_contents:
         if key == "submit":
@@ -151,6 +165,48 @@ def submit_form(form_contents, username):
             </head>
             <body>
                 Classified was not successfully submitted.
+            </body>
+        </html>
+        """
+
+
+def submit_contact_form(form_contents):
+    storage = {}
+    for key in form_contents:
+        if key == "submit":
+            continue
+        raw_values = form_contents.getlist(key)
+        if len(raw_values) > 1:
+            parsed_values = ""
+            for val in raw_values:
+                parsed_values += val + ";"
+            parsed_values = parsed_values[:-1]  # Remove last semicolon; unnecessary
+        else:
+            parsed_values = raw_values[0]
+        storage[key] = parsed_values
+    # Add that object to the database and store the result
+    # TODO: once the DB is working, make sure that this method can add an entry
+    result = add_contact(storage['username'], storage['first_name'], storage['lasT_name'], storage['email'], storage['phone_number'])
+    print result
+    if result > 0:
+        return """
+        <html>
+            <head>
+                <title>Success</title>
+            </head>
+            <body>
+                Contact successfully submitted!
+            </body>
+        </html>
+        """
+    else:
+        return """
+        <html>
+            <head>
+                <title>Failure</title>
+            </head>
+            <body>
+                Contact was not successfully submitted.
             </body>
         </html>
         """
