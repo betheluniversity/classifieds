@@ -105,7 +105,7 @@ class ClassifiedForm(Form):
     category_list = [
         ("appliances", "Appliances"),
         ("baby-kids", "Baby / Kids"),
-        ("books", "Books (no textbooks)"),
+        ("books", "Books (including Textbooks)"),
         ("cds-dvds", "CDs / DVDs"),
         ("cars-trucks", "Cars / Trucks"),
         ("clothes-accessories", "Clothes and Accessories"),
@@ -186,7 +186,7 @@ def submit_contact_form(form_contents):
         storage[key] = parsed_values
     # Add that object to the database and store the result
     # TODO: once the DB is working, make sure that this method can add an entry
-    result = add_contact(storage['username'], storage['first_name'], storage['lasT_name'], storage['email'], storage['phone_number'])
+    result = add_contact(storage['username'], storage['first_name'], storage['last_name'], storage['email'], storage['phone_number'])
     print result
     if result > 0:
         return """
