@@ -82,13 +82,15 @@ def get_contact_form():
     return ContactForm()
 
 
-class ContactForm(Form):
-    first_name = StringField('First Name:', [validators.required()])
-    last_name = StringField('Last Name:', [validators.required()])
-    username = StringField('Username:', [validators.required()])
-    email = StringField('Email address:', [validators.required()])
-    phone_number = StringField('Phone Number:', [validators.required()])
-    submit = SubmitField("Submit")
+def get_homepage():
+    table = dataset.connect('sqlite:///classifieds.db')['classifieds']
+    # headers = table.columns
+    entries = table.all()
+    elemsToTake = ["username", "dateAdded", "title", "price", "categories"]
+    toSend = [elemsToTake]
+    for entry in entries:
+        toSend += [[entry[elem] for elem in entry if elem in elemsToTake]]
+    return toSend
 
 
 class ClassifiedForm(Form):
@@ -123,6 +125,15 @@ class ClassifiedForm(Form):
         ("video-gaming", "Video Gaming")
     ]
     categories = SelectMultipleField('Categories:', [validators.required()], choices=category_list)
+    submit = SubmitField("Submit")
+
+
+class ContactForm(Form):
+    first_name = StringField('First Name:', [validators.required()])
+    last_name = StringField('Last Name:', [validators.required()])
+    username = StringField('Username:', [validators.required()])
+    email = StringField('Email address:', [validators.required()])
+    phone_number = StringField('Phone Number:', [validators.required()])
     submit = SubmitField("Submit")
 
 
