@@ -2,7 +2,7 @@
 
 {% block internal %}
 <div>
-    <form id="classifieds" method="POST" action="submitContact">
+    <form id="classifieds" method="POST" action="/submitContact">
     <table>
 {% for field in form if field.widget.input_type != 'hidden' %}
     <tr>

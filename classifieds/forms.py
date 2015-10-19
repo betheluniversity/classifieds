@@ -15,13 +15,13 @@ from wtforms import Form, StringField, SelectMultipleField, TextAreaField, Selec
 # either sold, or no longer for sale, or it's just been active for too long.
 
 
-def create_ads_table():
+def create_classifieds_table():
     db = dataset.connect('sqlite:///classifieds.db')
     db.create_table("classifieds")
     table = db['classifieds']
     table.insert(dict(id=0, title="Creation Entry", description="This entry is simply here to "
                                                                 "set the format for future entries",
-                      price="$0", categories="", username="", dateAdded=datetime.datetime.now(), completed=False))
+                      price="$0", duration="one-week", categories="", username="", dateAdded=datetime.datetime.now(), completed=False))
 
 
 def create_contacts_table():
@@ -54,10 +54,10 @@ def table_exists(desired_table_name):
     return desired_table_name in db.tables
 
 
-def add_classified(title, description, price, categories, username):
+def add_classified(title, description, price, duration, categories, username):
     table = dataset.connect('sqlite:///classifieds.db')['classifieds']
     return table.insert(
-        dict(title=title, description=description, price=price, categories=categories, username=username,
+        dict(title=title, description=description, price=price, duration=duration, categories=categories, username=username,
              dateAdded=datetime.datetime.now(), completed=False))
 
 
@@ -86,11 +86,28 @@ def get_homepage():
     table = dataset.connect('sqlite:///classifieds.db')['classifieds']
     # headers = table.columns
     entries = table.all()
-    elemsToTake = ["username", "dateAdded", "title", "price", "categories"]
+    elemsToTake = table.columns  # ["username", "dateAdded", "title", "price", "categories"]
     toSend = [elemsToTake]
-    for entry in entries:
-        toSend += [[entry[elem] for elem in entry if elem in elemsToTake]]
+    for i, entry in enumerate(entries):
+        if i != 0 and still_active(entry['dateAdded'], entry['duration']):
+            toSend += [[entry[elem] for elem in entry if elem in elemsToTake]]
     return toSend
+
+
+def still_active(dateAdded, duration):
+    num_days = 0
+    if duration == "one-day":
+        num_days = 1
+    elif duration == "one-week":
+        num_days = 7
+    elif duration == "two-weeks":
+        num_days = 14
+    elif duration == "one-month":
+        num_days = 28
+
+    now = datetime.datetime.now()
+    difference = (now - dateAdded).days
+    return difference <= duration
 
 
 class ClassifiedForm(Form):
@@ -154,7 +171,7 @@ def submit_classified_form(form_contents, username):
         storage[key] = parsed_values
     # Add that object to the database and store the result
     # TODO: once the DB is working, make sure that this method can add an entry
-    result = add_classified(storage['title'], storage['description'], storage['price'], storage['categories'], username)
+    result = add_classified(storage['title'], storage['description'], storage['price'], storage['duration'], storage['categories'], username)
     print result
     # TODO: move this to a template
     if result > 0:
