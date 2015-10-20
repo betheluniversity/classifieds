@@ -2,7 +2,8 @@ __author__ = 'phg49389'
 
 from flask import request, render_template
 from flask.ext.classy import FlaskView, route
-from classifieds.forms import get_classified_form, get_contact_form, get_homepage, submit_classified_form, submit_contact_form
+from classifieds.forms import get_classified_form, get_contact_form, get_homepage, \
+    submit_classified_form, submit_contact_form, view_classified, view_contact
 
 
 class View(FlaskView):
@@ -18,8 +19,14 @@ class View(FlaskView):
 
     @route("/submitAd", methods=['POST'])
     def submit_ad(self):
-        return submit_classified_form(request.form, "phg49389")
+        return submit_classified_form(request.form, "enttes")
 
     @route("/submitContact", methods=['POST'])
     def submit_contact(self):
         return submit_contact_form(request.form)
+
+    def viewClassified(self, id):
+        return render_template("viewClassified.html", classified=view_classified(id))
+
+    def viewContact(self, username):
+        return render_template("viewContact.html", contact=view_contact(username))

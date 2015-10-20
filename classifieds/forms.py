@@ -94,6 +94,16 @@ def get_homepage():
     return toSend
 
 
+def view_contact(username):
+    table = dataset.connect('sqlite:///classifieds.db')['contacts']
+    return table.find_one(username=username)
+
+
+def view_classified(id):
+    table = dataset.connect('sqlite:///classifieds.db')['classifieds']
+    return table.find_one(id=id)
+
+
 def still_active(dateAdded, duration):
     num_days = 0
     if duration == "one-day":
