@@ -19,6 +19,7 @@ class View(FlaskView):
 
     @route("/submitAd", methods=['POST'])
     def submit_ad(self):
+        # TODO: need to figure out a way to pass sign-in to this method
         return submit_classified_form(request.form, "enttes")
 
     @route("/submitContact", methods=['POST'])

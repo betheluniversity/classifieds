@@ -14,6 +14,23 @@ from wtforms import Form, StringField, SelectMultipleField, TextAreaField, Selec
 # and Completed will default to False, and the user or a moderator can mark it as Completed at a later date when it's
 # either sold, or no longer for sale, or it's just been active for too long.
 
+# TODO: update database constructors
+# TODO: use 'username' as foreign key in classifieds
+
+# TODO: truncate description in homepage to only display ~80 chars
+# TODO: have the homepage have an option to display more of the truncated description on the homepage (expand)
+
+# TODO: build view of all of a user's posted classifieds (all, active, completed, expired)
+    # TODO: on active view, allow to mark completed.
+    # TODO: on expired view, allow to mark completed or re-post
+
+# TODO: add edit contact info and edit classified views
+
+# TODO: integrate some kind of sign-in process that can be used with the views (such as submitting a classified or editing info)
+
+# TODO: expand the multiple-select box height in "submit a new classified" form
+
+# TODO: create a search page to sift through classifieds
 
 def create_classifieds_table():
     db = dataset.connect('sqlite:///classifieds.db')
@@ -73,7 +90,6 @@ def mark_entry_as_complete(entry_id):
     table.update(dict(id=entry_id, completed=True), ['id'])
 
 
-# Returns the WTForm version of the form to be made into HTML
 def get_classified_form():
     return ClassifiedForm()
 
@@ -85,9 +101,9 @@ def get_contact_form():
 def get_homepage():
     table = dataset.connect('sqlite:///classifieds.db')['classifieds']
     # headers = table.columns
-    entries = table.all()
+    entries = table.all()  # table.find(completed=False)
     elemsToTake = table.columns  # ["username", "dateAdded", "title", "price", "categories"]
-    toSend = [elemsToTake]
+    toSend = []
     for i, entry in enumerate(entries):
         if i != 0 and still_active(entry['dateAdded'], entry['duration']):
             toSend += [[entry[elem] for elem in entry if elem in elemsToTake]]

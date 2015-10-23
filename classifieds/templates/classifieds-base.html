@@ -1,9 +1,14 @@
 {% extends "foundation_base.html" %}
 
+{% block head_add %}
+    {% block head_scripts %}
+    {% endblock %}
+{% endblock %}
+
 {% block body_content %}
     <br/>
     <div id="nav">
-        &nbsp;&nbsp;&nbsp;<a href="/">Home</a> | <a href="/addClassified">Submit a classified</a> | <a href="/addContact">View your contact information</a>
+        &nbsp;&nbsp;&nbsp;<a href="/">Home</a> | <a href="/addClassified">Submit a classified</a> | <a href="/viewContact/enttes">View your contact information</a>
     </div>
     <br/>
     {% block internal %}

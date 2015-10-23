@@ -2,6 +2,11 @@
 
 {% block internal %}
 
-{{ contact }}
+<table>
+    <tr><td>Name:</td><td>{{ contact['first_name'] }}&nbsp;{{ contact['last_name'] }}</td></tr>
+    <tr><td>Email:</td><td>{{ contact['email'] }}</td></tr>
+    <tr><td>Phone number:</td><td>{{ contact['phone_number'] }}</td></tr>
+</table>
+<button >Edit info</button>
 
 {% endblock %}

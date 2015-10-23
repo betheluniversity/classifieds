@@ -1,17 +1,24 @@
 {% extends "classifieds-base.html" %}
 
+{% block head_scripts %}
+<script>
+
+</script>
+{% endblock %}
+
 {% block internal %}
 
 <div style="height:100px;overflow:auto;">
 <table>
     <tr>
-        <th>{{ values[0][4] }}</th>
-        <th>{{ values[0][3] }}</th>
-        <th>{{ values[0][6] }}</th>
-        <th>{{ values[0][2] }}</th>
-        <th>{{ values[0][1] }}</th>
+        <th>Title</th>
+        <th>Description</th>
+        <th>Price</th>
+        <th>Date Posted</th>
+        <th>Posted By</th>
+        <th>More Info</th>
     </tr>
-{% for val in values[1:] %}
+{% for val in values %}
     <tr>
         <td>{{ val[4] }}</td>
         <td>{{ val[3] }}</td>
