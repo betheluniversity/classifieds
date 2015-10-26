@@ -120,6 +120,31 @@ def view_classified(id):
     return table.find_one(id=id)
 
 
+def filter_posts(username, selector):
+    table = dataset.connect('sqlite:///classifieds.db')['classifieds']
+    elemsToTake = table.columns  # ["username", "dateAdded", "title", "price", "categories"]
+    toSend = []
+    if selector == "all":
+        entries = table.find(username=username)
+        for entry in entries:
+            toSend += [[entry[elem] for elem in entry if elem in elemsToTake]]
+    elif selector == "active":
+        entries = table.find(username=username, completed=False)
+        for entry in entries:
+            if still_active(entry['dateAdded'], entry['duration']):
+                toSend += [[entry[elem] for elem in entry if elem in elemsToTake]]
+    elif selector == "completed":
+        entries = table.find(username=username, completed=True)
+        for entry in entries:
+            toSend += [[entry[elem] for elem in entry if elem in elemsToTake]]
+    elif selector == "expired":
+        entries = table.find(username=username, completed=False)
+        for entry in entries:
+            if not still_active(entry['dateAdded'], entry['duration']):
+                toSend += [[entry[elem] for elem in entry if elem in elemsToTake]]
+    return toSend
+
+
 def still_active(dateAdded, duration):
     num_days = 0
     if duration == "one-day":

@@ -3,7 +3,7 @@ __author__ = 'phg49389'
 from flask import request, render_template
 from flask.ext.classy import FlaskView, route
 from classifieds.forms import get_classified_form, get_contact_form, get_homepage, \
-    submit_classified_form, submit_contact_form, view_classified, view_contact
+    submit_classified_form, submit_contact_form, view_classified, view_contact, filter_posts
 
 
 class View(FlaskView):
@@ -31,3 +31,6 @@ class View(FlaskView):
 
     def viewContact(self, username):
         return render_template("viewContact.html", contact=view_contact(username))
+
+    def viewPosted(self, selector):
+        return render_template("viewUsersPosts.html", posts=filter_posts("phg49389", selector))
