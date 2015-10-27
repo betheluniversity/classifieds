@@ -1,7 +1,7 @@
 {% extends "classifieds-base.html" %}
 
 {% block internal %}
-<a href="/viewPosted/all">All your posts</a> | <a href="/viewPosted/active">All active posts</a> | <a href="/viewPosted/completed">All completed posts</a> | <a href="/viewPosted/expired">All expired posts</a>
+&nbsp;&nbsp;&nbsp;<a href="/viewPosted/all">All your posts</a> | <a href="/viewPosted/active">All active posts</a> | <a href="/viewPosted/completed">All completed posts</a> | <a href="/viewPosted/expired">All expired posts</a>
 <br/><br/>
 
 <table>
@@ -10,7 +10,6 @@
         <th>Description</th>
         <th>Price</th>
         <th>Date Posted</th>
-        <th>Posted By</th>
         <th>More Info</th>
     </tr>
 {% for post in posts %}
@@ -19,7 +18,6 @@
         <td>{{ post[3] }}</td>
         <td>{{ post[6] }}</td>
         <td>{{ post[2].date() }}</td>
-        <td><a href="/viewContact/{{ post[1] }}">{{ post[1] }}</a></td>
         <td><a href="/viewClassified/{{ post[0] }}">View more...</a></td>
     </tr>
 {% endfor %}

@@ -1,0 +1,17 @@
+import os
+_basedir = os.path.abspath(os.path.dirname(__file__))
+
+##Foundation configs
+FOUNDATION_USE_MINIFIED = False
+FOUNDATION_USE_CDN = True
+
+##emails
+ADMINS = [']
+
+secret_key = ''
+SECRET_KEY = ''
+
+ENVIRON = ''
+TEST_USER = ''
+
+CACHE_DEFAULT_TIMEOUT = 300

@@ -3,6 +3,7 @@ __author__ = 'phg49389'
 import dataset
 import datetime
 
+import sqlalchemy.types as Types
 from wtforms import Form, StringField, SelectMultipleField, TextAreaField, SelectField, SubmitField, validators
 
 # Table columns are as follows:
@@ -20,33 +21,43 @@ from wtforms import Form, StringField, SelectMultipleField, TextAreaField, Selec
 # TODO: truncate description in homepage to only display ~80 chars
 # TODO: have the homepage have an option to display more of the truncated description on the homepage (expand)
 
-# TODO: build view of all of a user's posted classifieds (all, active, completed, expired)
-    # TODO: on active view, allow to mark completed.
-    # TODO: on expired view, allow to mark completed or re-post
-
-# TODO: add edit contact info and edit classified views
-
 # TODO: integrate some kind of sign-in process that can be used with the views (such as submitting a classified or editing info)
 
 # TODO: expand the multiple-select box height in "submit a new classified" form
 
 # TODO: create a search page to sift through classifieds
 
+# TODO: write script that runs every midnight to mark classifieds as expired
+
 def create_classifieds_table():
     db = dataset.connect('sqlite:///classifieds.db')
     db.create_table("classifieds")
     table = db['classifieds']
-    table.insert(dict(id=0, title="Creation Entry", description="This entry is simply here to "
-                                                                "set the format for future entries",
-                      price="$0", duration="one-week", categories="", username="", dateAdded=datetime.datetime.now(), completed=False))
+    table.create_column("id", Types.Integer)
+    table.create_column("title", Types.Text)
+    table.create_column("description", Types.Text)
+    table.create_column("price", Types.Text)
+    table.create_column("duration", Types.Text)
+    table.create_column("categories", Types.Text)
+    table.create_column("username", Types.Text)
+    table.create_column("dateAdded", Types.DateTime)
+    table.create_column("completed", Types.Boolean)
+    # table.insert(dict(id=0, title="Creation Entry", description="This entry is simply here to set the format for
+    # future entries", price="$0", duration="one-week", categories="", username="", dateAdded=datetime.datetime.now(),
+    # completed=False))
 
 
 def create_contacts_table():
     db = dataset.connect('sqlite:///classifieds.db')
     db.create_table("contacts")
     table = db['contacts']
-    table.insert(dict(id=0, username="enttes", first_name="Test", last_name="Entry", email="enttes@bethel.edu",
-                      phone_number="555-1234"))
+    table.create_column("username", Types.Text)
+    table.create_column("first_name", Types.Text)
+    table.create_column("last_name", Types.Text)
+    table.create_column("email", Types.Text)
+    table.create_column("phone_number", Types.Text)
+    # table.insert(dict(id=0, username="enttes", first_name="Test", last_name="Entry", email="enttes@bethel.edu",
+    #                   phone_number="555-1234"))
 
 
 def reset_tables():
