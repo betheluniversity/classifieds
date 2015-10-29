@@ -1,0 +1,31 @@
+{% extends "classifieds-base.html" %}
+
+{% block internal %}
+
+<form action="/search">
+    <label for="title">Title contains:</label><input type="text" id="title">
+    <label for="desc">Description contains:</label><input type="text" id="desc">
+    <label for="categories">Title contains:</label>
+    <select id="categories" class="largeselect" size="10" name="categories" multiple="">
+        <option value="appliances"></option>
+        <option value="baby-kids"></option>
+        <option value="books"></option>
+        <option value="cds-dvds"></option>
+        <option value="cars-trucks"></option>
+        <option value="clothes-accessories"></option>
+        <option value="computer"></option>
+        <option value="electronics"></option>
+        <option value="furniture"></option>
+        <option value="general"></option>
+        <option value="housing"></option>
+        <option value="jewelry"></option>
+        <option value="musical-instruments"></option>
+        <option value="photo-video"></option>
+        <option value="tickets"></option>
+        <option value="tools"></option>
+        <option value="toys-games"></option>
+        <option value="video-gaming"></option>
+    </select>
+</form>
+
+{% endblock %}
