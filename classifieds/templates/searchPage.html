@@ -2,7 +2,7 @@
 
 {% block internal %}
 
-<form action="/search">
+<form action="/search" method="post">
     <label for="title">Title contains:</label><input type="text" id="title">
     <label for="desc">Description contains:</label><input type="text" id="desc">
     <label for="categories">Title contains:</label>
@@ -26,6 +26,7 @@
         <option value="toys-games"></option>
         <option value="video-gaming"></option>
     </select>
+    <input type="submit" value="Search"/>
 </form>
 
 {% endblock %}

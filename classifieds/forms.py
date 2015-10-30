@@ -156,6 +156,11 @@ def filter_posts(username, selector):
     return toSend
 
 
+def query_database(params):
+    table = dataset.connect('sqlite:///classifieds.db')['classifieds']
+    print params
+
+
 def still_active(dateAdded, duration):
     num_days = 0
     if duration == "one-day":
