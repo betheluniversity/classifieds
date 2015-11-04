@@ -158,7 +158,15 @@ def filter_posts(username, selector):
 
 def query_database(params):
     table = dataset.connect('sqlite:///classifieds.db')['classifieds']
-    print params
+    for param in params:
+        print params.getlist(param)
+    entries = table.find(**params)  # table.find(completed=False)
+    elemsToTake = table.columns  # ["username", "dateAdded", "title", "price", "categories"]
+    toSend = []
+    for i, entry in enumerate(entries):
+        if i != 0 and still_active(entry['dateAdded'], entry['duration']):
+            toSend += [[entry[elem] for elem in entry if elem in elemsToTake]]
+    return toSend
 
 
 def still_active(dateAdded, duration):
@@ -174,7 +182,7 @@ def still_active(dateAdded, duration):
 
     now = datetime.datetime.now()
     difference = (now - dateAdded).days
-    return difference <= duration
+    return difference <= num_days
 
 
 class ClassifiedForm(Form):
