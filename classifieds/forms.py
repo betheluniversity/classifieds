@@ -15,8 +15,7 @@ from wtforms import Form, StringField, SelectMultipleField, TextAreaField, Selec
 # and Completed will default to False, and the user or a moderator can mark it as Completed at a later date when it's
 # either sold, or no longer for sale, or it's just been active for too long.
 
-# TODO: update database constructors
-# TODO: use 'username' as foreign key in classifieds
+# TODO: change database from dataset to flask-sqlalchemy (http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-iv-database)
 
 # TODO: truncate description in homepage to only display ~80 chars
 # TODO: have the homepage have an option to display more of the truncated description on the homepage (expand)
@@ -25,12 +24,11 @@ from wtforms import Form, StringField, SelectMultipleField, TextAreaField, Selec
 
 # TODO: expand the multiple-select box height in "submit a new classified" form
 
-# TODO: create a search page to sift through classifieds
-
 # TODO: write script that runs every midnight to mark classifieds as expired
 
 def create_classifieds_table():
     db = dataset.connect('sqlite:///classifieds.db')
+    db.query("CREATE TABLE classifieds")
     db.create_table("classifieds")
     table = db['classifieds']
     table.create_column("id", Types.Integer)
@@ -157,19 +155,31 @@ def filter_posts(username, selector):
 
 
 def query_database(params):
+    db = dataset.connect('sqlite:///classifieds.db')
     table = dataset.connect('sqlite:///classifieds.db')['classifieds']
-    for param in params:
-        print params.getlist(param)
-    entries = table.find(**params)  # table.find(completed=False)
+    paramList = ""
+    for param in list(params):
+        paramList += "("
+        for val in params.getlist(param):
+            paramList += param + " LIKE '%" + val + "%'"
+            if params.getlist(param).index(val) < len(params.getlist(param)) - 1:
+                paramList += " OR "
+        paramList += ")"
+        if list(params).index(param) < len(list(params)) - 1:
+            paramList += " AND "
+    entries = db.query("SELECT * FROM classifieds WHERE " + paramList)
     elemsToTake = table.columns  # ["username", "dateAdded", "title", "price", "categories"]
     toSend = []
     for i, entry in enumerate(entries):
-        if i != 0 and still_active(entry['dateAdded'], entry['duration']):
+        if still_active(entry['dateAdded'], entry['duration']):
             toSend += [[entry[elem] for elem in entry if elem in elemsToTake]]
     return toSend
 
 
 def still_active(dateAdded, duration):
+    # print type(dateAdded)
+    # print dateAdded
+    dateAdded = datetime.datetime.strptime(dateAdded, '%Y-%m-%d %H:%M:%S.%f')
     num_days = 0
     if duration == "one-day":
         num_days = 1
