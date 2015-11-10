@@ -1,6 +1,7 @@
 __author__ = 'phg49389'
 
 import dataset
+import sqlalchemy
 import datetime
 
 import sqlalchemy.types as Types
@@ -26,9 +27,34 @@ from wtforms import Form, StringField, SelectMultipleField, TextAreaField, Selec
 
 # TODO: write script that runs every midnight to mark classifieds as expired
 
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import *
+Base = declarative_base()
+
+
+class Classifieds(Base):
+    __tablename__ = "classifieds"
+    id = Column(Integer, primary_key=True)
+    title = Column(String(100), nullable=False)
+    description = Column(String(500), nullable=False)
+    price = Column(String(50), nullable=False)
+    categories = Column(String(200), nullable=False)
+    username = Column(String(8), ForeignKey('contacts.username'))
+    dateAdded = Column(DateTime, nullable=False)
+    completed = Column(Boolean, nullable=False)
+
+
+class Contacts(Base):
+    __tablename__ = "contacts"
+    username = Column(String(8), primary_key=True)
+    first_name = Column(String(20), nullable=False)
+    last_name = Column(String(30), nullable=False)
+    email_name = Column(String(50), nullable=False)
+    phone_number = Column(String(15), nullable=False)
+
+
 def create_classifieds_table():
     db = dataset.connect('sqlite:///classifieds.db')
-    db.query("CREATE TABLE classifieds")
     db.create_table("classifieds")
     table = db['classifieds']
     table.create_column("id", Types.Integer)
