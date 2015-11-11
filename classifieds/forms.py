@@ -28,8 +28,16 @@ from wtforms import Form, StringField, SelectMultipleField, TextAreaField, Selec
 # TODO: write script that runs every midnight to mark classifieds as expired
 
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
 from sqlalchemy import *
+
 Base = declarative_base()
+engine = create_engine('sqlite:///classifieds2.db')
+Base.metadata.create_all(engine)
+
+DBSession = sessionmaker()
+DBSession.bind = engine
+session = DBSession()
 
 
 class Classifieds(Base):
@@ -38,6 +46,7 @@ class Classifieds(Base):
     title = Column(String(100), nullable=False)
     description = Column(String(500), nullable=False)
     price = Column(String(50), nullable=False)
+    duration = Column(String(15), nullable=False)
     categories = Column(String(200), nullable=False)
     username = Column(String(8), ForeignKey('contacts.username'))
     dateAdded = Column(DateTime, nullable=False)
@@ -49,7 +58,7 @@ class Contacts(Base):
     username = Column(String(8), primary_key=True)
     first_name = Column(String(20), nullable=False)
     last_name = Column(String(30), nullable=False)
-    email_name = Column(String(50), nullable=False)
+    email = Column(String(50), nullable=False)
     phone_number = Column(String(15), nullable=False)
 
 
@@ -107,16 +116,25 @@ def table_exists(desired_table_name):
 
 
 def add_classified(title, description, price, duration, categories, username):
-    table = dataset.connect('sqlite:///classifieds.db')['classifieds']
-    return table.insert(
-        dict(title=title, description=description, price=price, duration=duration, categories=categories, username=username,
-             dateAdded=datetime.datetime.now(), completed=False))
+    new_classified = Classifieds(title=title, description=description, price=price, duration=duration,
+                                 categories=categories, username=username, completed=False)
+    session.add(new_classified)
+    session.commit()
+
+    # table = dataset.connect('sqlite:///classifieds.db')['classifieds']
+    # return table.insert(
+    #     dict(title=title, description=description, price=price, duration=duration, categories=categories, username=username,
+    #          dateAdded=datetime.datetime.now(), completed=False))
 
 
 def add_contact(username, first_name, last_name, email, phone_number):
-    table = dataset.connect('sqlite:///classifieds.db')['contacts']
-    return table.insert(dict(username=username, first_name=first_name, last_name=last_name, email=email,
-                             phone_number=phone_number))
+    new_contact = Contacts(username=username, first_name=first_name, last_name=last_name, email=email,
+                           phone_number=phone_number)
+    session.add(new_contact)
+    session.commit()
+    # table = dataset.connect('sqlite:///classifieds.db')['contacts']
+    # return table.insert(dict(username=username, first_name=first_name, last_name=last_name, email=email,
+    #                          phone_number=phone_number))
 
 
 def mark_entry_as_complete(entry_id):
