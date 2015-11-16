@@ -1,6 +1,12 @@
 {% extends "foundation_base.html" %}
 
 {% block head_add %}
+    <script src="../static/sorttable.js"></script>
+    <style>
+        table.sortable th:not(.sorttable_sorted):not(.sorttable_sorted_reverse):not(.sorttable_nosort):after {
+            content: " \25B4\25BE"
+        }
+    </style>
     {% block head_scripts %}
     {% endblock %}
 {% endblock %}

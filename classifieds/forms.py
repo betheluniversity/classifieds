@@ -21,6 +21,8 @@ from wtforms import Form, StringField, SelectMultipleField, TextAreaField, Selec
 # TODO: truncate description in homepage to only display ~80 chars
 # TODO: have the homepage have an option to display more of the truncated description on the homepage (expand)
 
+# TODO: implement the result sorter from Caleb
+
 # TODO: integrate some kind of sign-in process that can be used with the views (such as submitting a classified or editing info)
 
 # TODO: expand the multiple-select box height in "submit a new classified" form
@@ -116,25 +118,25 @@ def table_exists(desired_table_name):
 
 
 def add_classified(title, description, price, duration, categories, username):
-    new_classified = Classifieds(title=title, description=description, price=price, duration=duration,
-                                 categories=categories, username=username, completed=False)
-    session.add(new_classified)
-    session.commit()
+    # new_classified = Classifieds(title=title, description=description, price=price, duration=duration,
+    #                              categories=categories, username=username, completed=False)
+    # session.add(new_classified)
+    # session.commit()
 
-    # table = dataset.connect('sqlite:///classifieds.db')['classifieds']
-    # return table.insert(
-    #     dict(title=title, description=description, price=price, duration=duration, categories=categories, username=username,
-    #          dateAdded=datetime.datetime.now(), completed=False))
+    table = dataset.connect('sqlite:///classifieds.db')['classifieds']
+    return table.insert(
+        dict(title=title, description=description, price=price, duration=duration, categories=categories, username=username,
+             dateAdded=datetime.datetime.now(), completed=False))
 
 
 def add_contact(username, first_name, last_name, email, phone_number):
-    new_contact = Contacts(username=username, first_name=first_name, last_name=last_name, email=email,
-                           phone_number=phone_number)
-    session.add(new_contact)
-    session.commit()
-    # table = dataset.connect('sqlite:///classifieds.db')['contacts']
-    # return table.insert(dict(username=username, first_name=first_name, last_name=last_name, email=email,
-    #                          phone_number=phone_number))
+    # new_contact = Contacts(username=username, first_name=first_name, last_name=last_name, email=email,
+    #                        phone_number=phone_number)
+    # session.add(new_contact)
+    # session.commit()
+    table = dataset.connect('sqlite:///classifieds.db')['contacts']
+    return table.insert(dict(username=username, first_name=first_name, last_name=last_name, email=email,
+                             phone_number=phone_number))
 
 
 def mark_entry_as_complete(entry_id):
@@ -221,9 +223,8 @@ def query_database(params):
 
 
 def still_active(dateAdded, duration):
-    # print type(dateAdded)
-    # print dateAdded
-    dateAdded = datetime.datetime.strptime(dateAdded, '%Y-%m-%d %H:%M:%S.%f')
+    if type(dateAdded) is String:
+        dateAdded = datetime.datetime.strptime(dateAdded, '%Y-%m-%d %H:%M:%S.%f')
     num_days = 0
     if duration == "one-day":
         num_days = 1

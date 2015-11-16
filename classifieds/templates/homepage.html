@@ -9,25 +9,29 @@
 {% block internal %}
 
 <div style="height:100px;overflow:auto;">
-<table>
-    <tr>
-        <th>Title</th>
-        <th>Description</th>
-        <th>Price</th>
-        <th>Date Posted</th>
-        <th>Posted By</th>
-        <th>More Info</th>
-    </tr>
+<table class="sortable">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Date Posted</th>
+            <th>Posted By</th>
+            <th class="sorttable_nosort">More Info</th>
+        </tr>
+    </thead>
+    <tbody>
 {% for val in values %}
-    <tr>
-        <td>{{ val[4] }}</td>
-        <td>{{ val[3] }}</td>
-        <td>{{ val[6] }}</td>
-        <td>{{ val[2].date() }}</td>
-        <td><a href="/viewContact/{{ val[1] }}">{{ val[1] }}</a></td>
-        <td><a href="/viewClassified/{{ val[0] }}">View more...</a></td>
-    </tr>
+        <tr>
+            <td>{{ val[4] }}</td>
+            <td>{{ val[3] }}</td>
+            <td>{{ val[6] }}</td>
+            <td>{{ val[2].date() }}</td>
+            <td><a href="/viewContact/{{ val[1] }}">{{ val[1] }}</a></td>
+            <td><a href="/viewClassified/{{ val[0] }}">View more...</a></td>
+        </tr>
 {% endfor %}
+    </tbody>
 </table>
 </div>
 
