@@ -16,52 +16,14 @@ from wtforms import Form, StringField, SelectMultipleField, TextAreaField, Selec
 # and Completed will default to False, and the user or a moderator can mark it as Completed at a later date when it's
 # either sold, or no longer for sale, or it's just been active for too long.
 
-# TODO: change database from dataset to flask-sqlalchemy (http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-iv-database)
-
 # TODO: truncate description in homepage to only display ~80 chars
 # TODO: have the homepage have an option to display more of the truncated description on the homepage (expand)
-
-# TODO: implement the result sorter from Caleb
 
 # TODO: integrate some kind of sign-in process that can be used with the views (such as submitting a classified or editing info)
 
 # TODO: expand the multiple-select box height in "submit a new classified" form
 
 # TODO: write script that runs every midnight to mark classifieds as expired
-
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy import *
-
-Base = declarative_base()
-engine = create_engine('sqlite:///classifieds2.db')
-Base.metadata.create_all(engine)
-
-DBSession = sessionmaker()
-DBSession.bind = engine
-session = DBSession()
-
-
-class Classifieds(Base):
-    __tablename__ = "classifieds"
-    id = Column(Integer, primary_key=True)
-    title = Column(String(100), nullable=False)
-    description = Column(String(500), nullable=False)
-    price = Column(String(50), nullable=False)
-    duration = Column(String(15), nullable=False)
-    categories = Column(String(200), nullable=False)
-    username = Column(String(8), ForeignKey('contacts.username'))
-    dateAdded = Column(DateTime, nullable=False)
-    completed = Column(Boolean, nullable=False)
-
-
-class Contacts(Base):
-    __tablename__ = "contacts"
-    username = Column(String(8), primary_key=True)
-    first_name = Column(String(20), nullable=False)
-    last_name = Column(String(30), nullable=False)
-    email = Column(String(50), nullable=False)
-    phone_number = Column(String(15), nullable=False)
 
 
 def create_classifieds_table():
