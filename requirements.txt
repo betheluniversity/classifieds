@@ -3,5 +3,5 @@ Flask-Classy
 Flask-WTF
 Flask-SQLAlchemy
 WTForms
-dataset
-SQLAlchemy-migrate
+migrate
+sqlalchemy-migrate

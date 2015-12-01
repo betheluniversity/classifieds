@@ -19,15 +19,16 @@ def add_contact(username, first_name, last_name, email, phone_number):
 
 
 def mark_entry_as_complete(entry_id):
-    entry_to_update = Classifieds.query.filter_by(id=entry_id).first()
+    entry_to_update = Classifieds.query.filter(id=entry_id).first()
     entry_to_update.completed = True
     db.session.update(entry_to_update)
     db.session.commit()
 
 
-def search_classifieds(title="*", description="*", categories="*"):
-    results = Classifieds.query.filter_by(Classifieds.title.like(title), Classifieds.description.like(description),
-                                          Classifieds.categories.like(categories)).all()
+def search_classifieds(title="*", description="*", categories="*", max_results=50):
+    results = Classifieds.query.filter(
+            Classifieds.title.like(title), Classifieds.description.like(description), Classifieds.categories.like(categories)
+        ).limit(max_results).all()
     toReturn = []
     for result in results:
         toReturn += [result]

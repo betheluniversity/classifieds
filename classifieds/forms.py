@@ -2,7 +2,9 @@ __author__ = 'phg49389'
 
 import datetime
 
+from classifieds import db
 from db_utilities import *
+from models import *
 from wtforms import Form, StringField, SelectMultipleField, TextAreaField, SelectField, SubmitField, validators
 
 # Table columns are as follows:
@@ -34,10 +36,9 @@ def get_contact_form():
 
 def get_homepage():
     # TODO: update to new db
-    table = dataset.connect('sqlite:///classifieds.db')['classifieds']
-    # headers = table.columns
-    entries = table.all()  # table.find(completed=False)
-    elemsToTake = table.columns  # ["username", "dateAdded", "title", "price", "categories"]
+
+    entries = search_classifieds(max_results=50)
+    elemsToTake = "table.columns"  # ["username", "dateAdded", "title", "price", "categories"]
     toSend = []
     for i, entry in enumerate(entries):
         if i != 0 and still_active(entry['dateAdded'], entry['duration']):
@@ -46,20 +47,16 @@ def get_homepage():
 
 
 def view_contact(username):
-    # TODO: update to new db
-    table = dataset.connect('sqlite:///classifieds.db')['contacts']
-    return table.find_one(username=username)
+    return Contacts.query(username=username).first()
 
 
 def view_classified(id):
-    # TODO: update to new db
-    table = dataset.connect('sqlite:///classifieds.db')['classifieds']
-    return table.find_one(id=id)
+    return Classifieds.query(id=id).first()
 
 
 def filter_posts(username, selector):
     # TODO: update to new db
-    table = dataset.connect('sqlite:///classifieds.db')['classifieds']
+    table = ""
     elemsToTake = table.columns  # ["username", "dateAdded", "title", "price", "categories"]
     toSend = []
     if selector == "all":
@@ -84,8 +81,6 @@ def filter_posts(username, selector):
 
 
 def query_database(params):
-    db = dataset.connect('sqlite:///classifieds.db')
-    table = dataset.connect('sqlite:///classifieds.db')['classifieds']
     paramList = ""
     for param in list(params):
         paramList += "("
@@ -97,7 +92,7 @@ def query_database(params):
         if list(params).index(param) < len(list(params)) - 1:
             paramList += " AND "
     entries = db.query("SELECT * FROM classifieds WHERE " + paramList)
-    elemsToTake = table.columns  # ["username", "dateAdded", "title", "price", "categories"]
+    elemsToTake = "table.columns"  # ["username", "dateAdded", "title", "price", "categories"]
     toSend = []
     for i, entry in enumerate(entries):
         if still_active(entry['dateAdded'], entry['duration']):
