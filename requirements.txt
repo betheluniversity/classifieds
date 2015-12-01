@@ -1,5 +1,7 @@
 Flask
 Flask-Classy
 Flask-WTF
+Flask-SQLAlchemy
 WTForms
 dataset
+SQLAlchemy-migrate

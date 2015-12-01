@@ -1,10 +1,8 @@
 __author__ = 'phg49389'
 
-import dataset
-import sqlalchemy
 import datetime
 
-import sqlalchemy.types as Types
+from db_utilities import *
 from wtforms import Form, StringField, SelectMultipleField, TextAreaField, SelectField, SubmitField, validators
 
 # Table columns are as follows:
@@ -26,87 +24,6 @@ from wtforms import Form, StringField, SelectMultipleField, TextAreaField, Selec
 # TODO: write script that runs every midnight to mark classifieds as expired
 
 
-def create_classifieds_table():
-    db = dataset.connect('sqlite:///classifieds.db')
-    db.create_table("classifieds")
-    table = db['classifieds']
-    table.create_column("id", Types.Integer)
-    table.create_column("title", Types.Text)
-    table.create_column("description", Types.Text)
-    table.create_column("price", Types.Text)
-    table.create_column("duration", Types.Text)
-    table.create_column("categories", Types.Text)
-    table.create_column("username", Types.Text)
-    table.create_column("dateAdded", Types.DateTime)
-    table.create_column("completed", Types.Boolean)
-    # table.insert(dict(id=0, title="Creation Entry", description="This entry is simply here to set the format for
-    # future entries", price="$0", duration="one-week", categories="", username="", dateAdded=datetime.datetime.now(),
-    # completed=False))
-
-
-def create_contacts_table():
-    db = dataset.connect('sqlite:///classifieds.db')
-    db.create_table("contacts")
-    table = db['contacts']
-    table.create_column("username", Types.Text)
-    table.create_column("first_name", Types.Text)
-    table.create_column("last_name", Types.Text)
-    table.create_column("email", Types.Text)
-    table.create_column("phone_number", Types.Text)
-    # table.insert(dict(id=0, username="enttes", first_name="Test", last_name="Entry", email="enttes@bethel.edu",
-    #                   phone_number="555-1234"))
-
-
-def reset_tables():
-    db = dataset.connect('sqlite:///classifieds.db')
-    table = db['classifieds']
-    table.drop()
-    table = db['contacts']
-    table.drop()
-    db.create_table("classifieds")
-    table = db['classifieds']
-    table.insert(dict(id=0, title="Creation Entry", description="This entry is simply here to "
-                                                                "set the format for future entries",
-                      price="$0", categories="", username="", dateAdded=datetime.datetime.now(), completed=False))
-    db.create_table("contacts")
-    table = db['contacts']
-    table.insert(dict(id=0, username="enttes", first_name="Test", last_name="Entry", email="enttes@bethel.edu",
-                      phone_number="555-1234"))
-
-
-def table_exists(desired_table_name):
-    db = dataset.connect('sqlite:///classifieds.db')
-    return desired_table_name in db.tables
-
-
-def add_classified(title, description, price, duration, categories, username):
-    # new_classified = Classifieds(title=title, description=description, price=price, duration=duration,
-    #                              categories=categories, username=username, completed=False)
-    # session.add(new_classified)
-    # session.commit()
-
-    table = dataset.connect('sqlite:///classifieds.db')['classifieds']
-    return table.insert(
-        dict(title=title, description=description, price=price, duration=duration, categories=categories, username=username,
-             dateAdded=datetime.datetime.now(), completed=False))
-
-
-def add_contact(username, first_name, last_name, email, phone_number):
-    # new_contact = Contacts(username=username, first_name=first_name, last_name=last_name, email=email,
-    #                        phone_number=phone_number)
-    # session.add(new_contact)
-    # session.commit()
-    table = dataset.connect('sqlite:///classifieds.db')['contacts']
-    return table.insert(dict(username=username, first_name=first_name, last_name=last_name, email=email,
-                             phone_number=phone_number))
-
-
-def mark_entry_as_complete(entry_id):
-    # TODO: authenticate this as either the poster or a moderator
-    table = dataset.connect('sqlite:///classifieds.db')['classifieds']
-    table.update(dict(id=entry_id, completed=True), ['id'])
-
-
 def get_classified_form():
     return ClassifiedForm()
 
@@ -116,6 +33,7 @@ def get_contact_form():
 
 
 def get_homepage():
+    # TODO: update to new db
     table = dataset.connect('sqlite:///classifieds.db')['classifieds']
     # headers = table.columns
     entries = table.all()  # table.find(completed=False)
@@ -128,16 +46,19 @@ def get_homepage():
 
 
 def view_contact(username):
+    # TODO: update to new db
     table = dataset.connect('sqlite:///classifieds.db')['contacts']
     return table.find_one(username=username)
 
 
 def view_classified(id):
+    # TODO: update to new db
     table = dataset.connect('sqlite:///classifieds.db')['classifieds']
     return table.find_one(id=id)
 
 
 def filter_posts(username, selector):
+    # TODO: update to new db
     table = dataset.connect('sqlite:///classifieds.db')['classifieds']
     elemsToTake = table.columns  # ["username", "dateAdded", "title", "price", "categories"]
     toSend = []
@@ -184,9 +105,9 @@ def query_database(params):
     return toSend
 
 
-def still_active(dateAdded, duration):
-    if type(dateAdded) is String:
-        dateAdded = datetime.datetime.strptime(dateAdded, '%Y-%m-%d %H:%M:%S.%f')
+def still_active(date_added, duration):
+    if isinstance(date_added, str):
+        date_added = datetime.datetime.strptime(date_added, '%Y-%m-%d %H:%M:%S.%f')
     num_days = 0
     if duration == "one-day":
         num_days = 1
@@ -198,7 +119,7 @@ def still_active(dateAdded, duration):
         num_days = 28
 
     now = datetime.datetime.now()
-    difference = (now - dateAdded).days
+    difference = (now - date_added).days
     return difference <= num_days
 
 
