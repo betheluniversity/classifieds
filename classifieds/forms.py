@@ -2,7 +2,6 @@ __author__ = 'phg49389'
 
 import datetime
 
-from classifieds import db
 from db_utilities import *
 from models import *
 from wtforms import Form, StringField, SelectMultipleField, TextAreaField, SelectField, SubmitField, validators
@@ -16,7 +15,7 @@ from wtforms import Form, StringField, SelectMultipleField, TextAreaField, Selec
 # and Completed will default to False, and the user or a moderator can mark it as Completed at a later date when it's
 # either sold, or no longer for sale, or it's just been active for too long.
 
-# TODO: truncate description in homepage to only display ~80 chars
+# TODO: truncate description in homepage to only display ~80 chars (maybe http://jedfoster.com/Readmore.js/ ?)
 # TODO: have the homepage have an option to display more of the truncated description on the homepage (expand)
 
 # TODO: integrate some kind of sign-in process that can be used with the views (such as submitting a classified or editing info)
@@ -35,8 +34,6 @@ def get_contact_form():
 
 
 def get_homepage():
-    # TODO: update to new db
-
     entries = search_classifieds(max_results=50)
     elemsToTake = "table.columns"  # ["username", "dateAdded", "title", "price", "categories"]
     toSend = []
@@ -55,25 +52,23 @@ def view_classified(id):
 
 
 def filter_posts(username, selector):
-    # TODO: update to new db
-    table = ""
-    elemsToTake = table.columns  # ["username", "dateAdded", "title", "price", "categories"]
+    elemsToTake = ["username", "dateAdded", "title", "price", "categories"]
     toSend = []
     if selector == "all":
-        entries = table.find(username=username)
+        entries = search_classifieds(username=username)
         for entry in entries:
             toSend += [[entry[elem] for elem in entry if elem in elemsToTake]]
     elif selector == "active":
-        entries = table.find(username=username, completed=False)
+        entries = search_classifieds(username=username, completed=False)
         for entry in entries:
             if still_active(entry['dateAdded'], entry['duration']):
                 toSend += [[entry[elem] for elem in entry if elem in elemsToTake]]
     elif selector == "completed":
-        entries = table.find(username=username, completed=True)
+        entries = search_classifieds(username=username, completed=True)
         for entry in entries:
             toSend += [[entry[elem] for elem in entry if elem in elemsToTake]]
     elif selector == "expired":
-        entries = table.find(username=username, completed=False)
+        entries = search_classifieds(username=username, completed=False)
         for entry in entries:
             if not still_active(entry['dateAdded'], entry['duration']):
                 toSend += [[entry[elem] for elem in entry if elem in elemsToTake]]
@@ -81,17 +76,7 @@ def filter_posts(username, selector):
 
 
 def query_database(params):
-    paramList = ""
-    for param in list(params):
-        paramList += "("
-        for val in params.getlist(param):
-            paramList += param + " LIKE '%" + val + "%'"
-            if params.getlist(param).index(val) < len(params.getlist(param)) - 1:
-                paramList += " OR "
-        paramList += ")"
-        if list(params).index(param) < len(list(params)) - 1:
-            paramList += " AND "
-    entries = db.query("SELECT * FROM classifieds WHERE " + paramList)
+    entries = search_classifieds(params)
     elemsToTake = "table.columns"  # ["username", "dateAdded", "title", "price", "categories"]
     toSend = []
     for i, entry in enumerate(entries):

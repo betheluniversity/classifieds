@@ -14,6 +14,7 @@ def add_classified(title, description, price, duration, categories, username="en
 def add_contact(username, first_name, last_name, email, phone_number):
     new_contact = Contacts(username=username, first=first_name, last=last_name, email=email,
                            phone=phone_number)
+    print new_contact
     db.session.add(new_contact)
     db.session.commit()
 
@@ -25,9 +26,11 @@ def mark_entry_as_complete(entry_id):
     db.session.commit()
 
 
-def search_classifieds(title="*", description="*", categories="*", max_results=50):
+def search_classifieds(title="*", description="*", categories="*", username="*", completed=False, max_results=50):
     results = Classifieds.query.filter(
-            Classifieds.title.like(title), Classifieds.description.like(description), Classifieds.categories.like(categories)
+            Classifieds.title.like(title), Classifieds.description.like(description),
+            Classifieds.categories.like(categories), Classifieds.username.like(username),
+            Classifieds.completed.like(completed)
         ).limit(max_results).all()
     toReturn = []
     for result in results:
