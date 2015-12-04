@@ -8,6 +8,10 @@ FOUNDATION_USE_CDN = True
 ##emails
 ADMINS = [']
 
+# sqlalchemy
+SQLALCHEMY_DATABASE_URI = ''
+SQLALCHEMY_MIGRATE_REPO = ''
+
 secret_key = ''
 SECRET_KEY = ''
 
