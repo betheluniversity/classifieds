@@ -12,11 +12,13 @@ def add_classified(title, description, price, duration, categories, username="en
 
 
 def add_contact(username, first_name, last_name, email, phone_number):
+    if Contacts.query.filter(Contacts.username.like(username)).first() is not None:
+        return False
     new_contact = Contacts(username=username, first=first_name, last=last_name, email=email,
                            phone=phone_number)
-    print new_contact
     db.session.add(new_contact)
     db.session.commit()
+    return True
 
 
 def mark_entry_as_complete(entry_id):
