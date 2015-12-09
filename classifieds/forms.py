@@ -35,11 +35,10 @@ def get_contact_form():
 
 def get_homepage():
     entries = search_classifieds(max_results=50)
-    elemsToTake = "table.columns"  # ["username", "dateAdded", "title", "price", "categories"]
     toSend = []
-    for i, entry in enumerate(entries):
-        if i != 0 and still_active(entry['dateAdded'], entry['duration']):
-            toSend += [[entry[elem] for elem in entry if elem in elemsToTake]]
+    for entry in list(entries):
+        if still_active(entry.dateAdded, entry.duration):
+            toSend += [[entry.id, entry.title, entry.description, entry.price, entry.dateAdded, entry.username]]
     return toSend
 
 

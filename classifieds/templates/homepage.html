@@ -23,11 +23,11 @@
     <tbody>
 {% for val in values %}
         <tr>
-            <td>{{ val[4] }}</td>
+            <td>{{ val[1] }}</td>
+            <td>{{ val[2] }}</td>
             <td>{{ val[3] }}</td>
-            <td>{{ val[6] }}</td>
-            <td>{{ val[2].date() }}</td>
-            <td><a href="/viewContact/{{ val[1] }}">{{ val[1] }}</a></td>
+            <td>{{ val[4].date() }}</td>
+            <td><a href="/viewContact/{{ val[5] }}">{{ val[5] }}</a></td>
             <td><a href="/viewClassified/{{ val[0] }}">View more...</a></td>
         </tr>
 {% endfor %}

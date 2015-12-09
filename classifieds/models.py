@@ -25,7 +25,7 @@ class Classifieds(db.Model):
         self.completed = False
 
     def __repr__(self):
-        return "<Classified %s>" % self.id
+        return "<Classified #%(0)s: %(1)s>" % {'0': self.id, '1': self.title}
 
 class Contacts(db.Model):
     username = db.Column(db.String(8), primary_key=True)

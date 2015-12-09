@@ -9,6 +9,7 @@ def add_classified(title, description, price, duration, categories, username="en
                                  categories=categories, username=username)
     db.session.add(new_classified)
     db.session.commit()
+    return True
 
 
 def add_contact(username, first_name, last_name, email, phone_number):
@@ -28,13 +29,9 @@ def mark_entry_as_complete(entry_id):
     db.session.commit()
 
 
-def search_classifieds(title="*", description="*", categories="*", username="*", completed=False, max_results=50):
-    results = Classifieds.query.filter(
+def search_classifieds(title="%", description="%", categories="%", username="%", completed=False, max_results=50):
+    return Classifieds.query.filter(
             Classifieds.title.like(title), Classifieds.description.like(description),
             Classifieds.categories.like(categories), Classifieds.username.like(username),
-            Classifieds.completed.like(completed)
-        ).limit(max_results).all()
-    toReturn = []
-    for result in results:
-        toReturn += [result]
-    return toReturn
+            Classifieds.completed == completed
+    ).limit(max_results).all()
