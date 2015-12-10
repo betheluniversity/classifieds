@@ -34,7 +34,7 @@ class View(FlaskView):
         return render_template("viewContact.html", contact=view_contact(username))
 
     def viewPosted(self, selector):
-        return render_template("viewUsersPosts.html", posts=filter_posts("phg49389", selector))
+        return render_template("viewUsersPosts.html", posts=filter_posts("enttes", selector))
 
     def searchPage(self):
         return render_template("searchPage.html")

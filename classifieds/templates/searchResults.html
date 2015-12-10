@@ -17,11 +17,11 @@
     <tbody>
 {% for result in results %}
         <tr>
-            <td>{{ result[4] }}</td>
-            <td>{{ result[3] }}</td>
-            <td>{{ result[6] }}</td>
+            <td>{{ result[1] }}</td>
             <td>{{ result[2] }}</td>
-            <td><a href="/viewContact/{{ result[1] }}">{{ result[1] }}</a></td>
+            <td>{{ result[3] }}</td>
+            <td>{{ result[4] }}</td>
+            <td><a href="/viewContact/{{ result[5] }}">{{ result[5] }}</a></td>
             <td><a href="/viewClassified/{{ result[0] }}">View more...</a></td>
         </tr>
 {% endfor %}

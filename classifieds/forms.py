@@ -36,7 +36,7 @@ def get_contact_form():
 def get_homepage():
     entries = search_classifieds(max_results=50)
     toSend = []
-    for entry in list(entries):
+    for entry in entries:
         if still_active(entry.dateAdded, entry.duration):
             toSend += [[entry.id, entry.title, entry.description, entry.price, entry.dateAdded, entry.username]]
     return toSend
@@ -51,36 +51,34 @@ def view_classified(id):
 
 
 def filter_posts(username, selector):
-    elemsToTake = ["username", "dateAdded", "title", "price", "categories"]
     toSend = []
     if selector == "all":
         entries = search_classifieds(username=username)
         for entry in entries:
-            toSend += [[entry[elem] for elem in entry if elem in elemsToTake]]
+            toSend += [[entry.id, entry.title, entry.description, entry.price, entry.dateAdded, entry.username]]
     elif selector == "active":
         entries = search_classifieds(username=username, completed=False)
         for entry in entries:
-            if still_active(entry['dateAdded'], entry['duration']):
-                toSend += [[entry[elem] for elem in entry if elem in elemsToTake]]
+            if still_active(entry.dateAdded, entry.duration):
+                toSend += [[entry.id, entry.title, entry.description, entry.price, entry.dateAdded, entry.username]]
     elif selector == "completed":
         entries = search_classifieds(username=username, completed=True)
         for entry in entries:
-            toSend += [[entry[elem] for elem in entry if elem in elemsToTake]]
+            toSend += [[entry.id, entry.title, entry.description, entry.price, entry.dateAdded, entry.username]]
     elif selector == "expired":
         entries = search_classifieds(username=username, completed=False)
         for entry in entries:
-            if not still_active(entry['dateAdded'], entry['duration']):
-                toSend += [[entry[elem] for elem in entry if elem in elemsToTake]]
+            if not still_active(entry.dateAdded, entry.duration):
+                toSend += [[entry.id, entry.title, entry.description, entry.price, entry.dateAdded, entry.username]]
     return toSend
 
 
 def query_database(params):
     entries = search_classifieds(params)
-    elemsToTake = "table.columns"  # ["username", "dateAdded", "title", "price", "categories"]
     toSend = []
-    for i, entry in enumerate(entries):
-        if still_active(entry['dateAdded'], entry['duration']):
-            toSend += [[entry[elem] for elem in entry if elem in elemsToTake]]
+    for entry in entries:
+        if still_active(entry.dateAdded, entry.duration):
+            toSend += [[entry.id, entry.title, entry.description, entry.price, entry.dateAdded, entry.username]]
     return toSend
 
 
