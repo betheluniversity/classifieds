@@ -3,10 +3,10 @@
 {% block internal %}
 
 <table>
-    <tr><td>Name:</td><td>{{ contact['first_name'] }}&nbsp;{{ contact['last_name'] }}</td></tr>
-    <tr><td>Email:</td><td>{{ contact['email'] }}</td></tr>
-    <tr><td>Phone number:</td><td>{{ contact['phone_number'] }}</td></tr>
+    <tr><td>Name:</td><td>{{ contact[0] }}&nbsp;{{ contact[1] }}</td></tr>
+    <tr><td>Email:</td><td>{{ contact[2] }}</td></tr>
+    <tr><td>Phone number:</td><td>{{ contact[3] }}</td></tr>
 </table>
-<button >Edit info</button>
+<a href="">Edit info</a>
 
 {% endblock %}

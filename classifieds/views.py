@@ -5,6 +5,7 @@ from flask.ext.classy import FlaskView, route
 from classifieds.forms import get_classified_form, get_contact_form, get_homepage, \
     submit_classified_form, submit_contact_form, view_classified, view_contact, filter_posts, \
     query_database
+from db_utilities import mark_entry_as_complete
 
 
 class View(FlaskView):
@@ -42,3 +43,7 @@ class View(FlaskView):
     @route("/search", methods=['POST'])
     def search(self):
         return render_template("searchResults.html", results=query_database(request.form))
+
+    def markComplete(self, id):
+        mark_entry_as_complete(id)
+        return render_template("homepage.html", values=get_homepage())

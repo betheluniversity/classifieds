@@ -6,14 +6,6 @@ from db_utilities import *
 from models import *
 from wtforms import Form, StringField, SelectMultipleField, TextAreaField, SelectField, SubmitField, validators
 
-# Table columns are as follows:
-# PRIMARY INT | TEXT  | TEXT        | TEXT  | TEXT       | TEXT     | DATETIME   | BOOLEAN
-# ID          | Title | Description | Price | Categories | Username | Date Added | Completed
-
-# ID will auto-increment on the entry being added, Title, Desc, Price, and Categories will be extracted from the form,
-# Username will be metadata from the user's login to the classifieds, Date Added will be calculated on submission,
-# and Completed will default to False, and the user or a moderator can mark it as Completed at a later date when it's
-# either sold, or no longer for sale, or it's just been active for too long.
 
 # TODO: truncate description in homepage to only display ~80 chars (maybe http://jedfoster.com/Readmore.js/ ?)
 # TODO: have the homepage have an option to display more of the truncated description on the homepage (expand)
@@ -43,11 +35,13 @@ def get_homepage():
 
 
 def view_contact(username):
-    return Contacts.query(username=username).first()
+    toReturn = Contacts.query.filter(Contacts.username.like(username)).first()
+    return [toReturn.first_name, toReturn.last_name, toReturn.email, toReturn.phone_number]
 
 
 def view_classified(id):
-    return Classifieds.query(id=id).first()
+    toReturn = Classifieds.query.filter(Classifieds.id.like(id)).first()
+    return [toReturn.id, toReturn.title, toReturn.description, toReturn.price, toReturn.duration, toReturn.categories, toReturn.username, toReturn.dateAdded, toReturn.completed]
 
 
 def filter_posts(username, selector):

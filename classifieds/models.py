@@ -3,6 +3,15 @@ __author__ = 'phg49389'
 from classifieds import db
 import datetime
 
+# Table columns are as follows:
+# PRIMARY INT | TEXT  | TEXT        | TEXT  | TEXT       | TEXT     | DATETIME   | BOOLEAN
+# ID          | Title | Description | Price | Categories | Username | Date Added | Completed
+
+# ID will auto-increment on the entry being added, Title, Desc, Price, and Categories will be extracted from the form,
+# Username will be metadata from the user's login to the classifieds, Date Added will be calculated on submission,
+# and Completed will default to False, and the user or a moderator can mark it as Completed at a later date when it's
+# either sold, or no longer for sale, or it's just been active for too long.
+
 class Classifieds(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)

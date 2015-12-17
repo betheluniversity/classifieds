@@ -1,21 +1,21 @@
 {% extends "classifieds-base.html" %}
 
 {% block internal %}
-{% if classified['completed'] == false %}
+{% if classified[8] == false %}
 <table>
     <tr>
-        <td>Title:</td><td>{{ classified['title'] }}</td>
+        <td>Title:</td><td>{{ classified[1] }}</td>
     </tr>
     <tr>
-        <td>Description:</td><td>{{ classified['description'] }}</td>
+        <td>Description:</td><td>{{ classified[2] }}</td>
     </tr>
     <tr>
-        <td>Price:</td><td>{{ classified['price'] }}</td>
+        <td>Price:</td><td>{{ classified[3] }}</td>
     </tr>
     <tr>
         <td>Categories:</td>
         <td>
-            {% for cat in classified['categories'].split(";") %}
+            {% for cat in classified[5].split(";") %}
                 {% for word in cat.split("-") %}
                     {{ word.capitalize() }}
                     {% if cat.split("-").index(word) < cat.split("-").__len__() - 1 %}
@@ -26,13 +26,13 @@
         </td>
     </tr>
     <tr>
-        <td>Listed by:</td><td><a href="/viewContact/{{ classified['username'] }}">{{ classified['username'] }}</a></td>
+        <td>Listed by:</td><td><a href="/viewContact/{{ classified[6] }}">{{ classified[6] }}</a></td>
     </tr>
     <tr>
-        <td>Date listed:</td><td>{{ classified['dateAdded'].date() }}</td>
+        <td>Date listed:</td><td>{{ classified[7].date() }}</td>
     </tr>
     <tr>
-        <td>Active for:</td><td>{% for word in classified['duration'].split("-") %}{{ word.capitalize() }}&nbsp;{% endfor %}</td>
+        <td>Active for:</td><td>{% for word in classified[4].split("-") %}{{ word.capitalize() }}&nbsp;{% endfor %}</td>
     </tr>
 </table>
 <button>Edit info</button>

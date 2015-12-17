@@ -23,9 +23,8 @@ def add_contact(username, first_name, last_name, email, phone_number):
 
 
 def mark_entry_as_complete(entry_id):
-    entry_to_update = Classifieds.query.filter(id=entry_id).first()
+    entry_to_update = Classifieds.query.filter(Classifieds.id.like(entry_id)).first()
     entry_to_update.completed = True
-    db.session.update(entry_to_update)
     db.session.commit()
 
 
