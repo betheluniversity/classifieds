@@ -7,14 +7,12 @@ from models import *
 from wtforms import Form, StringField, SelectMultipleField, TextAreaField, SelectField, SubmitField, validators
 
 
+# TODO: search page
+
 # TODO: truncate description in homepage to only display ~80 chars (maybe http://jedfoster.com/Readmore.js/ ?)
 # TODO: have the homepage have an option to display more of the truncated description on the homepage (expand)
 
 # TODO: integrate some kind of sign-in process that can be used with the views (such as submitting a classified or editing info)
-
-# TODO: expand the multiple-select box height in "submit a new classified" form
-
-# TODO: write script that runs every midnight to mark classifieds as expired
 
 
 def get_classified_form():
@@ -47,28 +45,32 @@ def view_classified(id):
 def filter_posts(username, selector):
     toSend = []
     if selector == "all":
-        entries = search_classifieds(username=username)
-        for entry in entries:
-            toSend += [[entry.id, entry.title, entry.description, entry.price, entry.dateAdded, entry.username]]
+        active_entries = search_classifieds(username=username)
+        inactive_entries = search_classifieds(username=username, completed=True)
+        for entry in active_entries:
+            toSend += [[entry.id, entry.title, entry.description, entry.price, entry.dateAdded, entry.username, entry.completed]]
+        for entry in inactive_entries:
+            toSend += [[entry.id, entry.title, entry.description, entry.price, entry.dateAdded, entry.username, entry.completed]]
+        toSend = sorted(toSend, key=lambda entry: entry[0])
     elif selector == "active":
         entries = search_classifieds(username=username, completed=False)
         for entry in entries:
             if still_active(entry.dateAdded, entry.duration):
-                toSend += [[entry.id, entry.title, entry.description, entry.price, entry.dateAdded, entry.username]]
+                toSend += [[entry.id, entry.title, entry.description, entry.price, entry.dateAdded, entry.username, entry.completed]]
     elif selector == "completed":
         entries = search_classifieds(username=username, completed=True)
         for entry in entries:
-            toSend += [[entry.id, entry.title, entry.description, entry.price, entry.dateAdded, entry.username]]
+            toSend += [[entry.id, entry.title, entry.description, entry.price, entry.dateAdded, entry.username, entry.completed]]
     elif selector == "expired":
         entries = search_classifieds(username=username, completed=False)
         for entry in entries:
             if not still_active(entry.dateAdded, entry.duration):
-                toSend += [[entry.id, entry.title, entry.description, entry.price, entry.dateAdded, entry.username]]
+                toSend += [[entry.id, entry.title, entry.description, entry.price, entry.dateAdded, entry.username, entry.completed]]
     return toSend
 
 
 def query_database(params):
-    entries = search_classifieds(params)
+    entries = search_classifieds(**params)
     toSend = []
     for entry in entries:
         if still_active(entry.dateAdded, entry.duration):
@@ -154,32 +156,7 @@ def submit_classified_form(form_contents, username):
             parsed_values = raw_values[0]
         storage[key] = parsed_values
     # Add that object to the database and store the result
-    # TODO: once the DB is working, make sure that this method can add an entry
-    result = add_classified(storage['title'], storage['description'], storage['price'], storage['duration'], storage['categories'], username)
-    print result
-    # TODO: move this to a template
-    if result > 0:
-        return """
-        <html>
-            <head>
-                <title>Success</title>
-            </head>
-            <body>
-                Classified successfully submitted!
-            </body>
-        </html>
-        """
-    else:
-        return """
-        <html>
-            <head>
-                <title>Failure</title>
-            </head>
-            <body>
-                Classified was not successfully submitted.
-            </body>
-        </html>
-        """
+    return add_classified(storage['title'], storage['description'], storage['price'], storage['duration'], storage['categories'], username)
 
 
 def submit_contact_form(form_contents):
@@ -197,28 +174,4 @@ def submit_contact_form(form_contents):
             parsed_values = raw_values[0]
         storage[key] = parsed_values
     # Add that object to the database and store the result
-    # TODO: once the DB is working, make sure that this method can add an entry
-    result = add_contact(storage['username'], storage['first_name'], storage['last_name'], storage['email'], storage['phone_number'])
-    print result
-    if result > 0:
-        return """
-        <html>
-            <head>
-                <title>Success</title>
-            </head>
-            <body>
-                Contact successfully submitted!
-            </body>
-        </html>
-        """
-    else:
-        return """
-        <html>
-            <head>
-                <title>Failure</title>
-            </head>
-            <body>
-                Contact was not successfully submitted.
-            </body>
-        </html>
-        """
+    return add_contact(storage['username'], storage['first_name'], storage['last_name'], storage['email'], storage['phone_number'])

@@ -18,7 +18,7 @@
 
     <td>
     {% if field.type == "SelectMultipleField" %}
-        {{ field(size=10, class="largeselect") }}
+        {{ field(style="height:auto;", class="largeselect") }}
 
     {% elif field.type == "SelectField" %}
         {{ field() }}

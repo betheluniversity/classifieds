@@ -5,7 +5,7 @@ from flask.ext.classy import FlaskView, route
 from classifieds.forms import get_classified_form, get_contact_form, get_homepage, \
     submit_classified_form, submit_contact_form, view_classified, view_contact, filter_posts, \
     query_database
-from db_utilities import mark_entry_as_complete
+from db_utilities import mark_entry_as_complete, mark_entry_as_active
 
 
 class View(FlaskView):
@@ -22,11 +22,11 @@ class View(FlaskView):
     @route("/submitAd", methods=['POST'])
     def submit_ad(self):
         # TODO: need to figure out a way to pass sign-in to this method
-        return submit_classified_form(request.form, "enttes")
+        return render_template("submissionResults.html", result=submit_classified_form(request.form, "enttes"))
 
     @route("/submitContact", methods=['POST'])
     def submit_contact(self):
-        return submit_contact_form(request.form)
+        return render_template("submissionResults.html", result=submit_contact_form(request.form))
 
     def viewClassified(self, id):
         return render_template("viewClassified.html", classified=view_classified(id))
@@ -42,8 +42,23 @@ class View(FlaskView):
 
     @route("/search", methods=['POST'])
     def search(self):
-        return render_template("searchResults.html", results=query_database(request.form))
+        # Turn the lists into strings
+        storage = dict(request.form)
+        to_send = {}
+        for key in storage:
+            if isinstance(storage[key], list):
+                if len(storage[key]) > 1:  # Means that multiple categories are being selected
+                    to_send[key] = storage[key]
+                else:
+                    storage[key] = storage[key][0]
+                    if storage[key] != '':
+                        to_send[key] = u'%' + storage[key] + u'%'
+        return render_template("searchResults.html", results=query_database(to_send))
 
     def markComplete(self, id):
         mark_entry_as_complete(id)
+        return render_template("homepage.html", values=get_homepage())
+
+    def reactivate(self, id):
+        mark_entry_as_active(id)
         return render_template("homepage.html", values=get_homepage())

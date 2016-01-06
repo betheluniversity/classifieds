@@ -17,9 +17,13 @@
         <td>{{ post[1] }}</td>
         <td>{{ post[2] }}</td>
         <td>{{ post[3] }}</td>
-        <td>{{ post[4] }}</td>
-        <td><a href="/viewClassified/{{ post[0] }}">View more...</a></td>'
-        <td><a href="/markComplete/{{ post[0] }}">Mark as complete</a></td>
+        <td>{{ post[4].date() }}</td>
+        <td><a href="/viewClassified/{{ post[0] }}">View more...</a></td>
+        {% if post[6] == False %}
+            <td><a href="/markComplete/{{ post[0] }}">Mark as complete</a></td>
+        {% else %}
+            <td><a href="/reactivate/{{ post[0] }}">Renew this ad</a></td>
+        {% endif %}
     </tr>
 {% endfor %}
 </table>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>
+        {% if result > 0 %}
+            Success
+        {% else %}
+            Failure
+        {% endif %}
+    </title>
+</head>
+<body>
+{% if result > 0 %}
+    Successfully submitted!
+{% else %}
+    Not successfully submitted.
+{% endif %}
+<br/>
+<a href="/">Return to homepage</a>
+</body>
+</html>
