@@ -9,3 +9,11 @@ db = SQLAlchemy(app)
 
 from classifieds.views import View
 View.register(app)
+
+
+# from flask import current_app, request, session
+# if current_app.config['ENVIRON'] == 'prod':
+#     username = request.environ.get('REMOTE_USER')
+# else:
+#     username = current_app.config['TEST_USER']
+# session['username'] = username

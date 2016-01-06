@@ -10,27 +10,24 @@
         <td>{{ field.label }}
         {% if field.flags.required %}
             <span style="color:red">*</span>
-
         {% endif %}
         </td>
-
-    {% endif %}
-
-    <td>
-    {% if field.type == "SelectMultipleField" %}
-        {{ field(size=10, class="largeselect") }}
-
-    {% elif field.type == "SelectField" %}
-        {{ field() }}
-
-    {% elif field.type == "TextAreaField" %}
-        {{ field() }}
-
     {% else %}
-        {{ field(size=20) }}
-
+        <td></td>
     {% endif %}
-    </td></tr>
+
+        <td>
+            {% if info.__len__() > 0 %}
+                {% if loop.index0 == info.__len__() %}
+                    {{ field(size=20, value="Update") }}
+                {% else %}
+                    {{ field(size=20, value=info[loop.index0]) }}
+                {% endif %}
+            {% else %}
+                {{ field(size=20) }}
+            {% endif %}
+        </td>
+    </tr>
 {% endfor %}
     </table>
     </form>

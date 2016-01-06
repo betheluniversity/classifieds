@@ -3,7 +3,7 @@ __author__ = 'phg49389'
 from flask import request, render_template
 from flask.ext.classy import FlaskView, route
 from classifieds.forms import get_classified_form, get_contact_form, get_homepage, \
-    submit_classified_form, submit_contact_form, view_classified, view_contact, filter_posts, \
+    submit_classified_form, submit_contact_form, view_classified, get_contact, filter_posts, \
     query_database
 from db_utilities import mark_entry_as_complete, mark_entry_as_active
 
@@ -17,7 +17,10 @@ class View(FlaskView):
         return render_template("classifiedForm.html", form=get_classified_form())
 
     def addContact(self):
-        return render_template("contactForm.html", form=get_contact_form())
+        return render_template("contactForm.html", form=get_contact_form(), info=[])
+
+    def editContact(self, username):
+        return render_template("contactForm.html", form=get_contact_form(), info=get_contact(username))
 
     @route("/submitAd", methods=['POST'])
     def submit_ad(self):
@@ -32,7 +35,7 @@ class View(FlaskView):
         return render_template("viewClassified.html", classified=view_classified(id))
 
     def viewContact(self, username):
-        return render_template("viewContact.html", contact=view_contact(username))
+        return render_template("viewContact.html", contact=get_contact(username))
 
     def viewPosted(self, selector):
         return render_template("viewUsersPosts.html", posts=filter_posts("enttes", selector))

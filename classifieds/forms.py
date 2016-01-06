@@ -7,8 +7,6 @@ from models import *
 from wtforms import Form, StringField, SelectMultipleField, TextAreaField, SelectField, SubmitField, validators
 
 
-# TODO: search page
-
 # TODO: truncate description in homepage to only display ~80 chars (maybe http://jedfoster.com/Readmore.js/ ?)
 # TODO: have the homepage have an option to display more of the truncated description on the homepage (expand)
 
@@ -32,9 +30,9 @@ def get_homepage():
     return toSend
 
 
-def view_contact(username):
+def get_contact(username):
     toReturn = Contacts.query.filter(Contacts.username.like(username)).first()
-    return [toReturn.first_name, toReturn.last_name, toReturn.email, toReturn.phone_number]
+    return [toReturn.first_name, toReturn.last_name, toReturn.username, toReturn.email, toReturn.phone_number]
 
 
 def view_classified(id):
@@ -48,24 +46,33 @@ def filter_posts(username, selector):
         active_entries = search_classifieds(username=username)
         inactive_entries = search_classifieds(username=username, completed=True)
         for entry in active_entries:
-            toSend += [[entry.id, entry.title, entry.description, entry.price, entry.dateAdded, entry.username, entry.completed]]
+            toSend += [[entry.id, entry.title, entry.description, entry.price, entry.dateAdded, entry.username, entry.completed, True]]
         for entry in inactive_entries:
-            toSend += [[entry.id, entry.title, entry.description, entry.price, entry.dateAdded, entry.username, entry.completed]]
+            toSend += [[entry.id, entry.title, entry.description, entry.price, entry.dateAdded, entry.username, entry.completed, False]]
         toSend = sorted(toSend, key=lambda entry: entry[0])
     elif selector == "active":
-        entries = search_classifieds(username=username, completed=False)
+        entries = search_classifieds(username=username)
         for entry in entries:
             if still_active(entry.dateAdded, entry.duration):
-                toSend += [[entry.id, entry.title, entry.description, entry.price, entry.dateAdded, entry.username, entry.completed]]
+                toSend += [[entry.id, entry.title, entry.description, entry.price, entry.dateAdded, entry.username, entry.completed, True]]
     elif selector == "completed":
         entries = search_classifieds(username=username, completed=True)
         for entry in entries:
-            toSend += [[entry.id, entry.title, entry.description, entry.price, entry.dateAdded, entry.username, entry.completed]]
+            toSend += [[entry.id, entry.title, entry.description, entry.price, entry.dateAdded, entry.username, entry.completed, True]]
     elif selector == "expired":
-        entries = search_classifieds(username=username, completed=False)
-        for entry in entries:
+        entries = search_classifieds(username=username)
+        active_entries = search_classifieds(username=username)
+        inactive_entries = search_classifieds(username=username, completed=True)
+        for entry in active_entries:
             if not still_active(entry.dateAdded, entry.duration):
-                toSend += [[entry.id, entry.title, entry.description, entry.price, entry.dateAdded, entry.username, entry.completed]]
+                toSend += [[entry.id, entry.title, entry.description, entry.price, entry.dateAdded, entry.username, entry.completed, False]]
+        for entry in inactive_entries:
+            if not still_active(entry.dateAdded, entry.duration):
+                toSend += [[entry.id, entry.title, entry.description, entry.price, entry.dateAdded, entry.username, entry.completed, False]]
+        toSend = sorted(toSend, key=lambda entry: entry[0])
+        # for entry in entries:
+        #     if not still_active(entry.dateAdded, entry.duration):
+        #         toSend += [[entry.id, entry.title, entry.description, entry.price, entry.dateAdded, entry.username, entry.completed]]
     return toSend
 
 

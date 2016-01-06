@@ -1,7 +1,7 @@
 {% extends "classifieds-base.html" %}
 
 {% block internal %}
-{% if classified[8] == false %}
+{% if classified[8] == False %}
 <table>
     <tr>
         <td>Title:</td><td>{{ classified[1] }}</td>
@@ -37,7 +37,7 @@
 </table>
 <button>Edit info</button>
 {% else %}
-<div>This classified is no longer active.</div>
+<div>This classified has been marked as completed.</div>
 {% endif %}
 
 {% endblock %}
