@@ -4,13 +4,14 @@
 &nbsp;&nbsp;&nbsp;<a href="/viewPosted/all">All your posts</a> | <a href="/viewPosted/active">All active posts</a> | <a href="/viewPosted/completed">All completed posts</a> | <a href="/viewPosted/expired">All expired posts</a>
 <br/><br/>
 
-<table>
+<table class="sortable">
     <tr>
         <th>Title</th>
         <th>Description</th>
         <th>Price</th>
         <th>Date Posted</th>
-        <th>More Info</th>
+        <th class="sorttable_nosort">More Info</th>
+        <th class="sorttable_nosort"></th>
     </tr>
 {% for post in posts %}
     <tr>

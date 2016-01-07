@@ -24,7 +24,7 @@
         {{ field() }}
 
     {% elif field.type == "TextAreaField" %}
-        {{ field() }}
+        {{ field(style="height:auto;") }}
 
     {% else %}
         {{ field(size=20) }}

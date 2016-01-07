@@ -1,9 +1,7 @@
 __author__ = 'phg49389'
 
-import datetime
-
 from db_utilities import *
-from models import *
+from classifieds import Classifieds, Contacts
 from wtforms import Form, StringField, SelectMultipleField, TextAreaField, SelectField, SubmitField, validators
 
 
@@ -46,9 +44,9 @@ def filter_posts(username, selector):
         active_entries = search_classifieds(username=username)
         inactive_entries = search_classifieds(username=username, completed=True)
         for entry in active_entries:
-            toSend += [[entry.id, entry.title, entry.description, entry.price, entry.dateAdded, entry.username, entry.completed, True]]
+            toSend += [[entry.id, entry.title, entry.description, entry.price, entry.dateAdded, entry.username, entry.completed, still_active(entry.dateAdded, entry.duration)]]
         for entry in inactive_entries:
-            toSend += [[entry.id, entry.title, entry.description, entry.price, entry.dateAdded, entry.username, entry.completed, False]]
+            toSend += [[entry.id, entry.title, entry.description, entry.price, entry.dateAdded, entry.username, entry.completed, still_active(entry.dateAdded, entry.duration)]]
         toSend = sorted(toSend, key=lambda entry: entry[0])
     elif selector == "active":
         entries = search_classifieds(username=username)
@@ -58,9 +56,8 @@ def filter_posts(username, selector):
     elif selector == "completed":
         entries = search_classifieds(username=username, completed=True)
         for entry in entries:
-            toSend += [[entry.id, entry.title, entry.description, entry.price, entry.dateAdded, entry.username, entry.completed, True]]
+            toSend += [[entry.id, entry.title, entry.description, entry.price, entry.dateAdded, entry.username, entry.completed, still_active(entry.dateAdded, entry.duration)]]
     elif selector == "expired":
-        entries = search_classifieds(username=username)
         active_entries = search_classifieds(username=username)
         inactive_entries = search_classifieds(username=username, completed=True)
         for entry in active_entries:
@@ -70,9 +67,6 @@ def filter_posts(username, selector):
             if not still_active(entry.dateAdded, entry.duration):
                 toSend += [[entry.id, entry.title, entry.description, entry.price, entry.dateAdded, entry.username, entry.completed, False]]
         toSend = sorted(toSend, key=lambda entry: entry[0])
-        # for entry in entries:
-        #     if not still_active(entry.dateAdded, entry.duration):
-        #         toSend += [[entry.id, entry.title, entry.description, entry.price, entry.dateAdded, entry.username, entry.completed]]
     return toSend
 
 
@@ -86,6 +80,8 @@ def query_database(params):
 
 
 def still_active(date_added, duration):
+    # Think about this method like it gets the number of seconds between when it was posted and now, then divides and
+    # mods it down to bigger units. Once it has a full 24 hours, 1 day has elapsed, and that's what this checks for.
     if isinstance(date_added, str):
         date_added = datetime.datetime.strptime(date_added, '%Y-%m-%d %H:%M:%S.%f')
     num_days = 0
@@ -100,7 +96,7 @@ def still_active(date_added, duration):
 
     now = datetime.datetime.now()
     difference = (now - date_added).days
-    return difference <= num_days
+    return difference < num_days
 
 
 class ClassifiedForm(Form):

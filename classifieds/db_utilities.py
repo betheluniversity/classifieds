@@ -1,9 +1,9 @@
 __author__ = 'phg49389'
 
 import datetime
-from classifieds import db
+from classifieds import db, Classifieds, Contacts
 from sqlalchemy import or_
-from models import Classifieds, Contacts
+# from models import Classifieds, Contacts
 
 
 def add_classified(title, description, price, duration, categories, username="enttes"):
@@ -22,7 +22,6 @@ def add_contact(username, first_name, last_name, email, phone_number):
         existing_info.last_name = last_name
         existing_info.email = email
         existing_info.phone_number = phone_number
-        return True
     else:
         new_contact = Contacts(username=username, first=first_name, last=last_name, email=email,
                                phone=phone_number)

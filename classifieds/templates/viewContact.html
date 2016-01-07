@@ -3,10 +3,12 @@
 {% block internal %}
 
 <table>
-    <tr><td>Name:</td><td>{{ contact[0] }}&nbsp;{{ contact[1] }}</td></tr>
-    <tr><td>Email:</td><td>{{ contact[3] }}</td></tr>
-    <tr><td>Phone number:</td><td>{{ contact[4] }}</td></tr>
+    <tr><td>Name:</td><td>{{ to_view[0] }}&nbsp;{{ to_view[1] }}</td></tr>
+    <tr><td>Email:</td><td>{{ to_view[3] }}</td></tr>
+    <tr><td>Phone number:</td><td>{{ to_view[4] }}</td></tr>
 </table>
-<a href="/editContact/{{ contact[2] }}">Edit info</a>
+{% if session['username'] == to_view[2] %}
+    <a href="/editContact">Edit info</a>
+{% endif %}
 
 {% endblock %}
