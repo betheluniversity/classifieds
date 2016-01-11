@@ -2,31 +2,35 @@ __author__ = 'phg49389'
 
 import datetime
 from classifieds import db, Classifieds, Contacts
-from sqlalchemy import or_
-# from models import Classifieds, Contacts
+from sqlalchemy import or_, desc
 
 
-def add_classified(title, description, price, duration, categories, username="enttes"):
-    new_classified = Classifieds(title=title, desc=description, price=price, duration=duration,
-                                 categories=categories, username=username)
-    db.session.add(new_classified)
-    db.session.commit()
+def add_classified(title, description, price, categories, username):
+    new_classified = Classifieds(title=title, desc=description, price=price, categories=categories, username=username)
+    try:
+        db.session.add(new_classified)
+        db.session.commit()
+    except:
+        return False
     return True
 
 
 def add_contact(username, first_name, last_name, email, phone_number):
     # If the username is already in here, it should update the rest of the info.
-    existing_info = Contacts.query.filter(Contacts.username.like(username)).first()
-    if existing_info is not None:
-        existing_info.first_name = first_name
-        existing_info.last_name = last_name
-        existing_info.email = email
-        existing_info.phone_number = phone_number
-    else:
-        new_contact = Contacts(username=username, first=first_name, last=last_name, email=email,
-                               phone=phone_number)
-        db.session.add(new_contact)
-    db.session.commit()
+    try:
+        existing_info = Contacts.query.filter(Contacts.username.like(username)).first()
+        if existing_info is not None:
+            existing_info.first_name = first_name
+            existing_info.last_name = last_name
+            existing_info.email = email
+            existing_info.phone_number = phone_number
+        else:
+            new_contact = Contacts(username=username, first=first_name, last=last_name, email=email,
+                                   phone=phone_number)
+            db.session.add(new_contact)
+        db.session.commit()
+    except:
+        return False
     return True
 
 
@@ -42,19 +46,58 @@ def mark_entry_as_active(entry_id):
     db.session.commit()
 
 
-def search_classifieds(title=u"%", description=u"%", categories=u"%", username=u"%", completed=False, max_results=50):
+# If we want to change this over to pagination at a later date, I'm putting in commented code that should get you
+# started on it.
+def search_classifieds(title=u"%", description=u"%", categories=u"%", username=u"%", completed=u"%", expired=u"%"):
+    # def search_classifieds(title=u"%", description=u"%", categories=u"%", username=u"%", completed=u"%", expired=u"%",
+    #                        max_results=50, page_no=1):
+    if isinstance(title, list):
+        titles = Classifieds.title.like(u'%' + title[0] + u'%')
+        for term in title[1:]:
+            titles = or_(titles, Classifieds.title.like(u'%' + term + u'%'))
+    else:
+        titles = Classifieds.title.like(title)
+
+    if isinstance(description, list):
+        descriptions = Classifieds.description.like(u'%' + description[0] + u'%')
+        for term in description[1:]:
+            descriptions = or_(descriptions, Classifieds.description.like(u'%' + term + u'%'))
+    else:
+        descriptions = Classifieds.description.like(description)
+
     if isinstance(categories, list):
         or_categories = Classifieds.categories.like(u'%' + categories[0] + u'%')
-        for category in categories[1:]:
-            or_categories = or_(or_categories, Classifieds.categories.like(u'%' + category + u'%'))
-        return Classifieds.query.filter(
-                Classifieds.title.like(title), Classifieds.description.like(description),
-                or_categories, Classifieds.username.like(username),
-                Classifieds.completed == completed
-        ).limit(max_results).all()
+        for term in categories[1:]:
+            or_categories = or_(or_categories, Classifieds.categories.like(u'%' + term + u'%'))
+    else:
+        or_categories = Classifieds.categories.like(categories)
 
-    return Classifieds.query.filter(
-            Classifieds.title.like(title), Classifieds.description.like(description),
-            Classifieds.categories.like(categories), Classifieds.username.like(username),
-            Classifieds.completed == completed
-    ).limit(max_results).all()
+    if completed == u"%":
+        completed = Classifieds.completed.like(completed)
+    elif isinstance(completed, bool):
+        completed = Classifieds.completed == completed
+
+    if expired == u"%":
+        expired = Classifieds.expired.like(expired)
+    elif isinstance(expired, bool):
+        expired = Classifieds.expired == expired
+
+    return Classifieds.query.order_by(desc(Classifieds.dateAdded)).filter(
+            titles, descriptions, or_categories, Classifieds.username.like(username),
+            completed, expired
+    ).all()
+    # ).limit(max_results).offset(max_results * (page_no - 1)).all()
+
+
+def expire_old_posts():
+    all_entries = search_classifieds(expired=False)
+    for entry in all_entries:
+        now = datetime.date()
+        then = entry.dateAdded.date()
+        if (now - then).days >= 180:
+            entry.expired = True
+    db.session.commit()
+
+
+def contact_exists_in_db(username):
+    return len(list(Contacts.query.filter(Contacts.username.like(username)).all())) > 0

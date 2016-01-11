@@ -5,7 +5,7 @@ from flask.ext.classy import FlaskView, route
 from classifieds.forms import get_classified_form, get_contact_form, get_homepage, \
     submit_classified_form, submit_contact_form, view_classified, get_contact, filter_posts, \
     query_database
-from db_utilities import mark_entry_as_complete, mark_entry_as_active
+from db_utilities import mark_entry_as_complete, mark_entry_as_active, expire_old_posts, contact_exists_in_db
 
 
 class View(FlaskView):
@@ -14,10 +14,10 @@ class View(FlaskView):
         return render_template("homepage.html", values=get_homepage())
 
     def addClassified(self):
-        return render_template("classifiedForm.html", form=get_classified_form())
-
-    def addContact(self):
-        return render_template("contactForm.html", form=get_contact_form(), info=[])
+        if contact_exists_in_db(session['username']):
+            return render_template("classifiedForm.html", form=get_classified_form())
+        else:
+            return render_template("contactForm.html", form=get_contact_form(), info=[])
 
     def editContact(self):
         return render_template("contactForm.html", form=get_contact_form(), info=get_contact(session['username']))
@@ -34,28 +34,36 @@ class View(FlaskView):
         return render_template("viewClassified.html", classified=view_classified(id))
 
     def viewContact(self, username):
-        return render_template("viewContact.html", to_view=get_contact(username))
+        if contact_exists_in_db(username):
+            return render_template("viewContact.html", to_view=get_contact(username))
+        else:
+            return render_template("contactForm.html", form=get_contact_form(), info=[])
 
     def viewPosted(self, selector):
-        return render_template("viewUsersPosts.html", posts=filter_posts(session['username'], selector))
+        if contact_exists_in_db(session['username']):
+            return render_template("viewUsersPosts.html", posts=filter_posts(session['username'], selector))
+        else:
+            return render_template("contactForm.html", form=get_contact_form(), info=[])
 
     def searchPage(self):
         return render_template("searchPage.html")
 
     @route("/search", methods=['POST'])
     def search(self):
-        # Turn the lists into strings
         storage = dict(request.form)
-        to_send = {}
+        storage['title'] = storage['title'][0].split(" ")
+        storage['description'] = storage['description'][0].split(" ")
+        toSend = {}
         for key in storage:
-            if isinstance(storage[key], list):
-                if len(storage[key]) > 1:  # Means that multiple categories are being selected
-                    to_send[key] = storage[key]
-                else:
-                    storage[key] = storage[key][0]
-                    if storage[key] != '':
-                        to_send[key] = u'%' + storage[key] + u'%'
-        return render_template("searchResults.html", results=query_database(to_send), contact=get_contact(session['username']))
+            print storage[key]
+            if len(storage[key]) == 1:
+                if len(storage[key][0]) > 0:
+                    print "storage[key] is '" + storage[key][0] + "'"
+                    toSend[key] = u'%' + storage[key][0] + u'%'
+            else:
+                toSend[key] = storage[key]
+        print toSend
+        return render_template("searchResults.html", results=query_database(toSend))
 
     def markComplete(self, id):
         mark_entry_as_complete(id)
@@ -64,3 +72,6 @@ class View(FlaskView):
     def reactivate(self, id):
         mark_entry_as_active(id)
         return render_template("homepage.html", values=get_homepage())
+
+    def expire(self):
+        expire_old_posts()

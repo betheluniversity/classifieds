@@ -21,13 +21,12 @@
     <br/>
     <div id="nav">
         &nbsp;&nbsp;&nbsp;<a href="/">Home</a> |
+        <a href="/searchPage">Search through classifieds</a> |
         <a href="/addClassified">Submit a classified</a> |
-        <a href="/viewContact/{{ session['username'] }}">View your contact information</a> |
-        <a href="/viewPosted/active">View your posted classifieds</a> |
-        <a href="/searchPage">Search through classifieds</a>
+        <a href="/viewPosted/active">View your posted classifieds</a>
     </div>
     <div id="contact_greeting" class="top-right">
-        Hello, {{ session['fullname'] }}!
+        Hello, <a href="/viewContact/{{ session['username'] }}">{{ session['fullname'] }}</a>!
     </div>
     <br/>
     {% block internal %}

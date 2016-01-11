@@ -22,7 +22,7 @@
         <td><a href="/viewClassified/{{ post[0] }}">View more...</a></td>
         <td>
         {% if post[6] == False %}
-            {% if post[7] == False %}
+            {% if post[7] == True %}
                 <a href="/reactivate/{{ post[0] }}">Renew this ad</a>
             {% else %}
                 <a href="/markComplete/{{ post[0] }}">Mark as complete</a>

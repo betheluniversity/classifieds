@@ -3,11 +3,11 @@
 {% block internal %}
 
 <table>
-    <tr><td>Name:</td><td>{{ to_view[0] }}&nbsp;{{ to_view[1] }}</td></tr>
+    <tr><td>Name:</td><td>{{ to_view[1] }}&nbsp;{{ to_view[2] }}</td></tr>
     <tr><td>Email:</td><td>{{ to_view[3] }}</td></tr>
     <tr><td>Phone number:</td><td>{{ to_view[4] }}</td></tr>
 </table>
-{% if session['username'] == to_view[2] %}
+{% if session['username'] == to_view[0] %}
     <a href="/editContact">Edit info</a>
 {% endif %}
 

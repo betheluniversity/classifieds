@@ -1,15 +1,16 @@
 __author__ = 'phg49389'
 
+from flask import session
 from db_utilities import *
 from classifieds import Classifieds, Contacts
-from wtforms import Form, StringField, SelectMultipleField, TextAreaField, SelectField, SubmitField, validators
+from wtforms import Form, StringField, SelectMultipleField, TextAreaField, SubmitField, validators
 
 
 # TODO: truncate description in homepage to only display ~80 chars (maybe http://jedfoster.com/Readmore.js/ ?)
 # TODO: have the homepage have an option to display more of the truncated description on the homepage (expand)
 
-# TODO: integrate some kind of sign-in process that can be used with the views (such as submitting a classified or editing info)
-
+# TODO: sanitize search queries to guard against injection attacks and make sure that the text doesn't go over the
+# TODO:     allotted space in the DB object (500 chars, 10 chars, etc...)
 
 def get_classified_form():
     return ClassifiedForm()
@@ -20,51 +21,52 @@ def get_contact_form():
 
 
 def get_homepage():
-    entries = search_classifieds(max_results=50)
+    entries = search_classifieds()
     toSend = []
     for entry in entries:
-        if still_active(entry.dateAdded, entry.duration):
+        if not entry.expired:
             toSend += [[entry.id, entry.title, entry.description, entry.price, entry.dateAdded, entry.username]]
     return toSend
 
 
 def get_contact(username):
     toReturn = Contacts.query.filter(Contacts.username.like(username)).first()
-    return [toReturn.first_name, toReturn.last_name, toReturn.username, toReturn.email, toReturn.phone_number]
+    return [toReturn.username, toReturn.first_name, toReturn.last_name, toReturn.email, toReturn.phone_number]
 
 
 def view_classified(id):
     toReturn = Classifieds.query.filter(Classifieds.id.like(id)).first()
-    return [toReturn.id, toReturn.title, toReturn.description, toReturn.price, toReturn.duration, toReturn.categories, toReturn.username, toReturn.dateAdded, toReturn.completed]
+    return [toReturn.id, toReturn.title, toReturn.description, toReturn.price, toReturn.categories, toReturn.username,
+            toReturn.dateAdded, toReturn.completed, toReturn.expired]
 
 
 def filter_posts(username, selector):
     toSend = []
     if selector == "all":
         active_entries = search_classifieds(username=username)
-        inactive_entries = search_classifieds(username=username, completed=True)
+        completed_entries = search_classifieds(username=username, completed=True)
         for entry in active_entries:
-            toSend += [[entry.id, entry.title, entry.description, entry.price, entry.dateAdded, entry.username, entry.completed, still_active(entry.dateAdded, entry.duration)]]
-        for entry in inactive_entries:
-            toSend += [[entry.id, entry.title, entry.description, entry.price, entry.dateAdded, entry.username, entry.completed, still_active(entry.dateAdded, entry.duration)]]
+            toSend += [[entry.id, entry.title, entry.description, entry.price, entry.dateAdded, entry.username, entry.completed, entry.expired]]
+        for entry in completed_entries:
+            toSend += [[entry.id, entry.title, entry.description, entry.price, entry.dateAdded, entry.username, entry.completed, entry.expired]]
         toSend = sorted(toSend, key=lambda entry: entry[0])
     elif selector == "active":
         entries = search_classifieds(username=username)
         for entry in entries:
-            if still_active(entry.dateAdded, entry.duration):
-                toSend += [[entry.id, entry.title, entry.description, entry.price, entry.dateAdded, entry.username, entry.completed, True]]
+            if not entry.expired:
+                toSend += [[entry.id, entry.title, entry.description, entry.price, entry.dateAdded, entry.username, entry.completed, entry.expired]]
     elif selector == "completed":
         entries = search_classifieds(username=username, completed=True)
         for entry in entries:
-            toSend += [[entry.id, entry.title, entry.description, entry.price, entry.dateAdded, entry.username, entry.completed, still_active(entry.dateAdded, entry.duration)]]
+            toSend += [[entry.id, entry.title, entry.description, entry.price, entry.dateAdded, entry.username, entry.completed, entry.expired]]
     elif selector == "expired":
         active_entries = search_classifieds(username=username)
         inactive_entries = search_classifieds(username=username, completed=True)
         for entry in active_entries:
-            if not still_active(entry.dateAdded, entry.duration):
+            if entry.expired:
                 toSend += [[entry.id, entry.title, entry.description, entry.price, entry.dateAdded, entry.username, entry.completed, False]]
         for entry in inactive_entries:
-            if not still_active(entry.dateAdded, entry.duration):
+            if entry.expired:
                 toSend += [[entry.id, entry.title, entry.description, entry.price, entry.dateAdded, entry.username, entry.completed, False]]
         toSend = sorted(toSend, key=lambda entry: entry[0])
     return toSend
@@ -74,42 +76,15 @@ def query_database(params):
     entries = search_classifieds(**params)
     toSend = []
     for entry in entries:
-        if still_active(entry.dateAdded, entry.duration):
+        if not entry.expired:
             toSend += [[entry.id, entry.title, entry.description, entry.price, entry.dateAdded, entry.username]]
     return toSend
-
-
-def still_active(date_added, duration):
-    # Think about this method like it gets the number of seconds between when it was posted and now, then divides and
-    # mods it down to bigger units. Once it has a full 24 hours, 1 day has elapsed, and that's what this checks for.
-    if isinstance(date_added, str):
-        date_added = datetime.datetime.strptime(date_added, '%Y-%m-%d %H:%M:%S.%f')
-    num_days = 0
-    if duration == "one-day":
-        num_days = 1
-    elif duration == "one-week":
-        num_days = 7
-    elif duration == "two-weeks":
-        num_days = 14
-    elif duration == "one-month":
-        num_days = 28
-
-    now = datetime.datetime.now()
-    difference = (now - date_added).days
-    return difference < num_days
 
 
 class ClassifiedForm(Form):
     title = StringField('Title:', [validators.required()])
     description = TextAreaField('Description:', [validators.required()])
     price = StringField('Price:', [validators.required()])
-    duration_list = [
-        ("one-day", "One Day"),
-        ("one-week", "One Week"),
-        ("two-weeks", "Two Weeks"),
-        ("one-month", "One Month")
-    ]
-    duration = SelectField('How long to list:', [validators.required()], choices=duration_list, default="One Day")
     category_list = [
         ("appliances", "Appliances"),
         ("baby-kids", "Baby / Kids"),
@@ -137,7 +112,6 @@ class ClassifiedForm(Form):
 class ContactForm(Form):
     first_name = StringField('First Name:', [validators.required()])
     last_name = StringField('Last Name:', [validators.required()])
-    username = StringField('Username:', [validators.required()])
     email = StringField('Email address:', [validators.required()])
     phone_number = StringField('Phone Number:', [validators.required()])
     submit = SubmitField("Submit")
@@ -159,7 +133,7 @@ def submit_classified_form(form_contents, username):
             parsed_values = raw_values[0]
         storage[key] = parsed_values
     # Add that object to the database and store the result
-    return add_classified(storage['title'], storage['description'], storage['price'], storage['duration'], storage['categories'], username)
+    return add_classified(storage['title'], storage['description'], storage['price'], storage['categories'], username)
 
 
 def submit_contact_form(form_contents):
@@ -177,4 +151,4 @@ def submit_contact_form(form_contents):
             parsed_values = raw_values[0]
         storage[key] = parsed_values
     # Add that object to the database and store the result
-    return add_contact(storage['username'], storage['first_name'], storage['last_name'], storage['email'], storage['phone_number'])
+    return add_contact(session['username'], storage['first_name'], storage['last_name'], storage['email'], storage['phone_number'])
