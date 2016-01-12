@@ -58,10 +58,9 @@ View.register(app)
 def before_request():
     try:
         init_user()
-        # app.logger.info(session['username'])
+        app.logger.info(session['username'])
     except:
-        # app.logger.info("failed to init")
-        pass
+        app.logger.info("failed to init")
 
 
 def init_user():

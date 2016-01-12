@@ -1,8 +1,13 @@
 {% extends "classifieds-base.html" %}
 
 {% block internal %}
-&nbsp;&nbsp;&nbsp;<a href="/viewPosted/all">All your posts</a> | <a href="/viewPosted/active">All active posts</a> | <a href="/viewPosted/completed">All completed posts</a> | <a href="/viewPosted/expired">All expired posts</a>
-<br/><br/>
+<div>
+    <div class="padded">
+        <a href="/viewPosted/all">All your posts</a> |
+        <a href="/viewPosted/active">All active posts</a> |
+        <a href="/viewPosted/completed">All completed posts</a> |
+        <a href="/viewPosted/expired">All expired posts</a>
+    </div>
 
 <table class="sortable">
     <tr>
@@ -32,5 +37,5 @@
     </tr>
 {% endfor %}
 </table>
-
+</div>
 {% endblock %}

@@ -1,0 +1,20 @@
+table.sortable th:not(.sorttable_sorted):not(.sorttable_sorted_reverse):not(.sorttable_nosort):after {
+    content: " \25B4\25BE"
+}
+
+.top-right{
+    position:absolute;
+    top: 0px;
+    right: 0px;
+}
+
+.padded{
+    padding: 15px;
+}
+
+.center{
+    position: relative;
+    width: 30%;
+    left: 35%;
+    right: 35%;
+}

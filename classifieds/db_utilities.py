@@ -96,7 +96,11 @@ def expire_old_posts():
         then = entry.dateAdded.date()
         if (now - then).days >= 180:
             entry.expired = True
+            # TODO: send email to owner of ad about expiration
     db.session.commit()
+
+def send_expired_email(username):
+    pass
 
 
 def contact_exists_in_db(username):

@@ -1,7 +1,7 @@
 {% extends "classifieds-base.html" %}
 
 {% block internal %}
-
+<div>
 <table>
     <tr><td>Name:</td><td>{{ to_view[1] }}&nbsp;{{ to_view[2] }}</td></tr>
     <tr><td>Email:</td><td>{{ to_view[3] }}</td></tr>
@@ -10,5 +10,5 @@
 {% if session['username'] == to_view[0] %}
     <a href="/editContact">Edit info</a>
 {% endif %}
-
+</div>
 {% endblock %}
