@@ -53,17 +53,19 @@ class View(FlaskView):
         storage = dict(request.form)
         storage['title'] = storage['title'][0].split(" ")
         storage['description'] = storage['description'][0].split(" ")
-        toSend = {}
+        to_send = {}
         for key in storage:
             print storage[key]
             if len(storage[key]) == 1:
                 if len(storage[key][0]) > 0:
                     print "storage[key] is '" + storage[key][0] + "'"
-                    toSend[key] = u'%' + storage[key][0] + u'%'
+                    to_send[key] = u'%' + storage[key][0] + u'%'
             else:
-                toSend[key] = storage[key]
-        print toSend
-        return render_template("searchResults.html", results=query_database(toSend))
+                to_send[key] = storage[key]
+        to_send['expired'] = False
+        to_send['completed'] = False
+        print to_send
+        return render_template("searchResults.html", results=query_database(to_send))
 
     def markComplete(self, id):
         mark_entry_as_complete(id)
@@ -75,3 +77,4 @@ class View(FlaskView):
 
     def expire(self):
         expire_old_posts()
+        return "Old posts expired"

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>
-        {% if result > 0 %}
+        {% if result[0] > 0 %}
             Success
         {% else %}
             Failure
@@ -11,12 +11,22 @@
     </title>
 </head>
 <body>
-{% if result > 0 %}
+{% if result[0] > 0 %}
     Successfully submitted!
+    <br/>
+    <a href="/">Return to homepage</a>
 {% else %}
-    Not successfully submitted.
+    Not successfully submitted. Errors:<br/>
+    <br/>
+    {% for field_name in result[1] %}
+        {{ field_name }}:
+            <ul>
+            {% for err in result[1][field_name] %}
+                <li>{{ err }}</li>
+            {% endfor %}
+            </ul><br/>
+    {% endfor %}
+    <a href="javascript:history.back()">Go back to your submission</a>
 {% endif %}
-<br/>
-<a href="/">Return to homepage</a>
 </body>
 </html>

@@ -1,6 +1,8 @@
 __author__ = 'phg49389'
 
 import datetime
+import smtplib
+from email.mime.text import MIMEText
 from classifieds import db, Classifieds, Contacts
 from sqlalchemy import or_, desc
 
@@ -43,6 +45,7 @@ def mark_entry_as_complete(entry_id):
 def mark_entry_as_active(entry_id):
     entry_to_update = Classifieds.query.filter(Classifieds.id.like(entry_id)).first()
     entry_to_update.dateAdded = datetime.datetime.now()
+    entry_to_update.expired = False
     db.session.commit()
 
 
@@ -90,17 +93,28 @@ def search_classifieds(title=u"%", description=u"%", categories=u"%", username=u
 
 
 def expire_old_posts():
+    # send_expired_email("phg49389")
     all_entries = search_classifieds(expired=False)
     for entry in all_entries:
-        now = datetime.date()
+        now = datetime.datetime.now().date()
         then = entry.dateAdded.date()
         if (now - then).days >= 180:
             entry.expired = True
-            # TODO: send email to owner of ad about expiration
+            send_expired_email(entry.username)
     db.session.commit()
 
+
 def send_expired_email(username):
-    pass
+    contact = Contacts.query.filter(Contacts.username.like(username)).first()
+
+    msg = MIMEText("One of the classifieds that you posted 180 days ago has been marked as expired.")
+    msg['Subject'] = "One of your classifieds has expired"
+    msg['From'] = "classifieds@bethel.edu"
+    msg['To'] = contact.email
+
+    s = smtplib.SMTP('localhost')
+    s.sendmail("classifieds@bethel.edu", [contact.email], msg.as_string())
+    s.quit()
 
 
 def contact_exists_in_db(username):
