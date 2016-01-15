@@ -17,7 +17,7 @@
 {% for result in results %}
         <tr>
             <td>{{ result[1] }}</td>
-            <td>{{ result[2] }}</td>
+            <td><article>{{ result[2] }}</article></td>
             <td>{{ result[3] }}</td>
             <td>{{ result[4].date() }}</td>
             <td><a href="/viewContact/{{ result[5] }}">{{ result[5] }}</a></td>

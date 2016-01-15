@@ -93,7 +93,6 @@ def search_classifieds(title=u"%", description=u"%", categories=u"%", username=u
 
 
 def expire_old_posts():
-    # send_expired_email("phg49389")
     all_entries = search_classifieds(expired=False)
     for entry in all_entries:
         now = datetime.datetime.now().date()

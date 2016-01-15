@@ -21,7 +21,7 @@
 {% for post in posts %}
     <tr>
         <td>{{ post[1] }}</td>
-        <td>{{ post[2] }}</td>
+        <td><article>{{ post[2] }}</article></td>
         <td>{{ post[3] }}</td>
         <td>{{ post[4].date() }}</td>
         <td><a href="/viewClassified/{{ post[0] }}">View more...</a></td>

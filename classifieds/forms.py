@@ -7,10 +7,13 @@ from classifieds import Classifieds, Contacts
 from wtforms import Form, StringField, SelectMultipleField, TextAreaField, SubmitField, validators, ValidationError
 
 
-# TODO: truncate description in homepage to only display ~80 chars (maybe http://jedfoster.com/Readmore.js/ ?)
-# TODO: have the homepage have an option to display more of the truncated description on the homepage (expand)
+# TODO: update classified's description column to be able to handle 1000 chars
 
-# TODO: write crontab job that calls "wget https://classifieds.bethel.edu/expire"
+# TODO: investigate why db_create and db_migrate aren't working as they should be
+
+# TODO: implement crontab expire job
+# This will run at 12:01am every night and call the URL to expire all the 180-day old posts
+# 1 0 * * * wget https://classifieds.bethel.edu/expire
 
 def get_classified_form():
     return ClassifiedForm()

@@ -55,16 +55,16 @@ class View(FlaskView):
         storage['description'] = storage['description'][0].split(" ")
         to_send = {}
         for key in storage:
-            print storage[key]
+            # print storage[key]
             if len(storage[key]) == 1:
                 if len(storage[key][0]) > 0:
-                    print "storage[key] is '" + storage[key][0] + "'"
+                    # print "storage[key] is '" + storage[key][0] + "'"
                     to_send[key] = u'%' + storage[key][0] + u'%'
             else:
                 to_send[key] = storage[key]
         to_send['expired'] = False
         to_send['completed'] = False
-        print to_send
+        # print to_send
         return render_template("searchResults.html", results=query_database(to_send))
 
     def markComplete(self, id):

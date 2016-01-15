@@ -1,6 +1,8 @@
 __author__ = 'phg49389'
 
+import ast
 import datetime
+import urllib2
 from flask import Flask, session, request, current_app
 from flask.ext.sqlalchemy import SQLAlchemy
 
@@ -8,10 +10,11 @@ app = Flask(__name__)
 app.config.from_object('config')
 db = SQLAlchemy(app)
 
+
 class Classifieds(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
-    description = db.Column(db.String(500), nullable=False)
+    description = db.Column(db.String(1000), nullable=False)
     price = db.Column(db.String(50), nullable=False)
     categories = db.Column(db.String(200), nullable=False)
     username = db.Column(db.String(8), db.ForeignKey('contacts.username'))
@@ -32,6 +35,7 @@ class Classifieds(db.Model):
     def __repr__(self):
         return "<Classified #%(0)s: %(1)s>" % {'0': self.id, '1': self.title}
 
+
 class Contacts(db.Model):
     username = db.Column(db.String(8), primary_key=True)
     first_name = db.Column(db.String(20), nullable=False)
@@ -50,6 +54,7 @@ class Contacts(db.Model):
         return "<Contact %s>" % self.username
 
 
+# This import needs to be after app and db's creation, as they get imported into views.py, from which this imports.
 from classifieds.views import View
 View.register(app)
 
@@ -73,5 +78,14 @@ def init_user():
     if contact is not None:
         session['fullname'] = contact.first_name + " " + contact.last_name
     else:
-        session['fullname'] = "please update your profile"
+        banner_info = urllib2.urlopen("http://wsapi.bethel.edu/username/" + username + "/names").read()
+        info_dict = ast.literal_eval(banner_info)['0']
+        primary_name = info_dict['firstName']
+        if len(info_dict['prefFirstName']) > 0:
+            primary_name = info_dict['prefFirstName']
+        session['fullname'] = primary_name + " " + info_dict['lastName']
+        new_contact = Contacts(username=username, first=primary_name, last=info_dict['lastName'],
+                               email=username + "@bethel.edu", phone="")
+        db.session.add(new_contact)
+        db.session.commit()
 
