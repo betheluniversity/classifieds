@@ -2,6 +2,9 @@
 
 {% block internal %}
 <div>
+    {% if form.errors %}
+        <span style="color:red">There were errors with your form submission.</span>
+    {% endif %}
 <form id="classifieds" method="POST" action="/submitAd">
     <table>
 {% for field in form if field.widget.input_type != 'hidden' %}
@@ -12,6 +15,9 @@
             <span style="color:red">*</span>
 
         {% endif %}
+        {% for error in form.errors[field.name] %}
+            {{ error }}
+        {% endfor %}
         </td>
 
     {% endif %}

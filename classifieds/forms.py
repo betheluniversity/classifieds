@@ -1,27 +1,16 @@
 __author__ = 'phg49389'
 
 import re
-from flask import session
 from db_utilities import *
 from classifieds import Classifieds, Contacts
 from wtforms import Form, StringField, SelectMultipleField, TextAreaField, SubmitField, validators, ValidationError
 
 
-# TODO: update classified's description column to be able to handle 1000 chars
-
-# TODO: investigate why db_create and db_migrate aren't working as they should be
+# TODO: make it all look pretty
 
 # TODO: implement crontab expire job
 # This will run at 12:01am every night and call the URL to expire all the 180-day old posts
 # 1 0 * * * wget https://classifieds.bethel.edu/expire
-
-def get_classified_form():
-    return ClassifiedForm()
-
-
-def get_contact_form():
-    return ContactForm()
-
 
 def get_homepage():
     entries = search_classifieds(expired=False, completed=False)
@@ -70,48 +59,9 @@ def query_database(params):
     return toSend
 
 
-def submit_classified_form(form_contents, username):
-    form = ClassifiedForm(form_contents)
-    isValid = form.validate()
-    if not isValid:
-        return [isValid, form.errors]
-    storage = {}
-    for key in form_contents:
-        if key == "submit":
-            continue
-        raw_values = form_contents.getlist(key)
-        if len(raw_values) > 1:
-            parsed_values = ""
-            for val in raw_values:
-                parsed_values += val + ";"
-            parsed_values = parsed_values[:-1]  # Remove last semicolon; unnecessary
-        else:
-            parsed_values = raw_values[0]
-        storage[key] = parsed_values
-    # Add that object to the database and store the result
-    return [add_classified(storage['title'], storage['description'], storage['price'], storage['categories'], username)]
-
-
-def submit_contact_form(form_contents):
-    form = ContactForm(form_contents)
-    isValid = form.validate()
-    if not isValid:
-        return [isValid, form.errors]
-    storage = {}
-    for key in form_contents:
-        if key == "submit":
-            continue
-        raw_values = form_contents.getlist(key)
-        if len(raw_values) > 1:
-            parsed_values = ""
-            for val in raw_values:
-                parsed_values += val + ";"
-            parsed_values = parsed_values[:-1]  # Remove last semicolon; unnecessary
-        else:
-            parsed_values = raw_values[0]
-        storage[key] = parsed_values
-    # Add that object to the database and store the result
-    return [add_contact(session['username'], storage['first_name'], storage['last_name'], storage['email'], storage['phone_number'])]
+def log_out():
+    # TODO
+    pass
 
 
 def phone_validator():
@@ -128,7 +78,7 @@ def phone_validator():
 
 class ClassifiedForm(Form):
     title = StringField('Title:', [validators.DataRequired(), validators.Length(max=100)])
-    description = TextAreaField('Description:', [validators.DataRequired(), validators.Length(max=500)])
+    description = TextAreaField('Description:', [validators.DataRequired(), validators.Length(max=1000)])
     price = StringField('Price:', [validators.DataRequired(), validators.Length(max=50)])
     category_list = [
         ("appliances", "Appliances"),
@@ -161,3 +111,15 @@ class ContactForm(Form):
     phone_number = StringField('Phone Number:', [validators.DataRequired(), phone_validator()])
     submit = SubmitField("Submit")
 
+
+def send_feedback_email(form_contents, username):
+    msg = MIMEText(form_contents['input'])
+    msg['Subject'] = "Feedback from " + username
+    msg['From'] = "classifieds@bethel.edu"
+    msg['To'] = "classifieds@bethel.edu"
+
+    print msg.as_string()
+
+    s = smtplib.SMTP('localhost')
+    s.sendmail("classifieds@bethel.edu", ["classifieds@bethel.edu"], msg.as_string())
+    s.quit()

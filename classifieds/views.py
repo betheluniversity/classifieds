@@ -1,11 +1,10 @@
 __author__ = 'phg49389'
 
-from flask import request, render_template, session
+from flask import request, render_template, session, redirect
 from flask.ext.classy import FlaskView, route
-from classifieds.forms import get_classified_form, get_contact_form, get_homepage, \
-    submit_classified_form, submit_contact_form, view_classified, get_contact, filter_posts, \
-    query_database
-from db_utilities import mark_entry_as_complete, mark_entry_as_active, expire_old_posts, contact_exists_in_db
+from classifieds.forms import get_homepage, view_classified, get_contact, filter_posts, query_database, log_out, \
+    send_feedback_email, ClassifiedForm, ContactForm
+from db_utilities import *
 
 
 class View(FlaskView):
@@ -14,36 +13,56 @@ class View(FlaskView):
         return render_template("homepage.html", values=get_homepage())
 
     def addClassified(self):
-        if contact_exists_in_db(session['username']):
-            return render_template("classifiedForm.html", form=get_classified_form())
-        else:
-            return render_template("contactForm.html", form=get_contact_form(), info=[])
+        return render_template("classifiedForm.html", form=ClassifiedForm())
 
     def editContact(self):
-        return render_template("contactForm.html", form=get_contact_form(), info=get_contact(session['username']))
+        return render_template("contactForm.html", form=ContactForm(), info=get_contact(session['username']))
 
     @route("/submitAd", methods=['POST'])
     def submit_ad(self):
-        return render_template("submissionResults.html", result=submit_classified_form(request.form, session['username']))
+        form_contents = request.form
+        form = ClassifiedForm(form_contents)
+        isValid = form.validate()
+        if not isValid:
+            return render_template("classifiedForm.html", form=form)
+        storage = {}
+        for key in form_contents:
+            if key == "submit":
+                continue
+            raw_values = form_contents.getlist(key)
+            if len(raw_values) > 1:
+                parsed_values = ""
+                for val in raw_values:
+                    parsed_values += val + ";"
+                parsed_values = parsed_values[:-1]  # Remove last semicolon; unnecessary
+            else:
+                parsed_values = raw_values[0]
+            storage[key] = parsed_values
+        # Add that object to the database
+        add_classified(storage['title'], storage['description'], storage['price'], storage['categories'], session['username'])
+        # return render_template("homepage.html", values=get_homepage())
+        return redirect('/')
 
     @route("/submitContact", methods=['POST'])
     def submit_contact(self):
-        return render_template("submissionResults.html", result=submit_contact_form(request.form))
+        storage = request.form
+        form = ContactForm(storage)
+        isValid = form.validate()
+        if not isValid:
+            return render_template("contactForm.html", form=form)
+        # Add that object to the database
+        add_contact(session['username'], storage['first_name'], storage['last_name'], storage['email'], storage['phone_number'])
+        # return render_template("homepage.html", values=get_homepage())
+        return redirect('/')
 
     def viewClassified(self, id):
         return render_template("viewClassified.html", classified=view_classified(id))
 
     def viewContact(self, username):
-        if contact_exists_in_db(username):
-            return render_template("viewContact.html", to_view=get_contact(username))
-        else:
-            return render_template("contactForm.html", form=get_contact_form(), info=[])
+        return render_template("viewContact.html", to_view=get_contact(username))
 
     def viewPosted(self, selector):
-        if contact_exists_in_db(session['username']):
-            return render_template("viewUsersPosts.html", posts=filter_posts(session['username'], selector))
-        else:
-            return render_template("contactForm.html", form=get_contact_form(), info=[])
+        return render_template("viewUsersPosts.html", posts=filter_posts(session['username'], selector))
 
     def searchPage(self):
         return render_template("searchPage.html")
@@ -55,10 +74,8 @@ class View(FlaskView):
         storage['description'] = storage['description'][0].split(" ")
         to_send = {}
         for key in storage:
-            # print storage[key]
             if len(storage[key]) == 1:
                 if len(storage[key][0]) > 0:
-                    # print "storage[key] is '" + storage[key][0] + "'"
                     to_send[key] = u'%' + storage[key][0] + u'%'
             else:
                 to_send[key] = storage[key]
@@ -69,12 +86,24 @@ class View(FlaskView):
 
     def markComplete(self, id):
         mark_entry_as_complete(id)
-        return render_template("homepage.html", values=get_homepage())
+        return redirect('/viewPosted/active')
 
     def reactivate(self, id):
         mark_entry_as_active(id)
-        return render_template("homepage.html", values=get_homepage())
+        return redirect('/viewPosted/expired')
+
+    def logout(self):
+        log_out()
+        return "Logged out"
 
     def expire(self):
         expire_old_posts()
         return "Old posts expired"
+
+    def feedback(self):
+        return render_template("feedback.html")
+
+    @route("/submitFeedback", methods=['POST'])
+    def submit_feedback(self):
+        send_feedback_email(request.form, session['username'])
+        return redirect('/')
