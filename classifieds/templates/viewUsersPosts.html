@@ -15,16 +15,14 @@
         <th>Description</th>
         <th>Price</th>
         <th>Date Posted</th>
-        <th class="sorttable_nosort">More Info</th>
         <th class="sorttable_nosort"></th>
     </tr>
 {% for post in posts %}
     <tr>
-        <td>{{ post[1] }}</td>
+        <td><a href="/viewClassified/{{ post[0] }}">{{ post[1] }}</a></td>
         <td><article>{{ post[2] }}</article></td>
         <td>{{ post[3] }}</td>
         <td>{{ post[4].date() }}</td>
-        <td><a href="/viewClassified/{{ post[0] }}">View more...</a></td>
         <td>
         {% if post[6] == False %}
             {% if post[7] == True %}

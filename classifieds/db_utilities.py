@@ -36,17 +36,24 @@ def add_contact(username, first_name, last_name, email, phone_number):
     return True
 
 
-def mark_entry_as_complete(entry_id):
-    entry_to_update = Classifieds.query.filter(Classifieds.id.like(entry_id)).first()
-    entry_to_update.completed = True
-    db.session.commit()
+def get_contact(username):
+    toReturn = Contacts.query.filter(Contacts.username.like(username)).first()
+    return [toReturn.username, toReturn.first_name, toReturn.last_name, toReturn.email, toReturn.phone_number]
 
 
-def mark_entry_as_active(entry_id):
+def mark_entry_as_complete(entry_id, username):
     entry_to_update = Classifieds.query.filter(Classifieds.id.like(entry_id)).first()
-    entry_to_update.dateAdded = datetime.datetime.now()
-    entry_to_update.expired = False
-    db.session.commit()
+    if entry_to_update.username == username:
+        entry_to_update.completed = True
+        db.session.commit()
+
+
+def mark_entry_as_active(entry_id, username):
+    entry_to_update = Classifieds.query.filter(Classifieds.id.like(entry_id)).first()
+    if entry_to_update.username == username:
+        entry_to_update.dateAdded = datetime.datetime.now()
+        entry_to_update.expired = False
+        db.session.commit()
 
 
 # If we want to change this over to pagination at a later date, I'm putting in commented code that should get you
@@ -85,7 +92,8 @@ def search_classifieds(title=u"%", description=u"%", categories=u"%", username=u
     elif isinstance(expired, bool):
         expired = Classifieds.expired == expired
 
-    return Classifieds.query.order_by(desc(Classifieds.dateAdded)).filter(
+    return Classifieds.query.join(Contacts, Contacts.username == Classifieds.username).add_columns(Contacts.first_name,
+        Contacts.last_name).order_by(desc(Classifieds.dateAdded)).filter(
             titles, descriptions, or_categories, Classifieds.username.like(username),
             completed, expired
     ).all()
@@ -120,3 +128,4 @@ def send_expired_email(username):
 
 def contact_exists_in_db(username):
     return len(list(Contacts.query.filter(Contacts.username.like(username)).all())) > 0
+

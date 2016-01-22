@@ -2,7 +2,7 @@ __author__ = 'phg49389'
 
 from flask import request, render_template, session, redirect
 from flask.ext.classy import FlaskView, route
-from classifieds.forms import get_homepage, view_classified, get_contact, filter_posts, query_database, log_out, \
+from classifieds.forms import get_homepage, view_classified, filter_posts, query_database, \
     send_feedback_email, ClassifiedForm, ContactForm
 from db_utilities import *
 
@@ -13,7 +13,11 @@ class View(FlaskView):
         return render_template("homepage.html", values=get_homepage())
 
     def addClassified(self):
-        return render_template("classifiedForm.html", form=ClassifiedForm())
+        if contact_exists_in_db(session['username']):
+            return render_template("classifiedForm.html", form=ClassifiedForm())
+        else:
+            error_message = "You don't exist in the contacts database yet, and as such you cannot submit a classified."
+            return render_template("errorPage.html", error=error_message)
 
     def editContact(self):
         return render_template("contactForm.html", form=ContactForm(), info=get_contact(session['username']))
@@ -59,10 +63,18 @@ class View(FlaskView):
         return render_template("viewClassified.html", classified=view_classified(id))
 
     def viewContact(self, username):
-        return render_template("viewContact.html", to_view=get_contact(username))
+        if contact_exists_in_db(username):
+            return render_template("viewContact.html", to_view=get_contact(username))
+        else:
+            error_message = "That username doesn't exist in the contacts database."
+            return render_template("errorPage.html", error=error_message)
 
     def viewPosted(self, selector):
-        return render_template("viewUsersPosts.html", posts=filter_posts(session['username'], selector))
+        if contact_exists_in_db(session['username']):
+            return render_template("viewUsersPosts.html", posts=filter_posts(session['username'], selector))
+        else:
+            error_message = "You don't exist in the contacts database yet, and as such you don't have any posts to view."
+            return render_template("errorPage.html", error=error_message)
 
     def searchPage(self):
         return render_template("searchPage.html")
@@ -82,19 +94,21 @@ class View(FlaskView):
         to_send['expired'] = False
         to_send['completed'] = False
         # print to_send
-        return render_template("searchResults.html", results=query_database(to_send))
+        return render_template("homepage.html", values=query_database(to_send))
 
     def markComplete(self, id):
-        mark_entry_as_complete(id)
+        mark_entry_as_complete(id, session['username'])
         return redirect('/viewPosted/active')
 
     def reactivate(self, id):
-        mark_entry_as_active(id)
+        mark_entry_as_active(id, session['username'])
         return redirect('/viewPosted/expired')
 
     def logout(self):
-        log_out()
-        return "Logged out"
+        return redirect("https://auth.bethel.edu/cas/logout?gateway=true&service=/signedOut")
+
+    def signedOut(self):
+        return render_template("loggedOutPage.html")
 
     def expire(self):
         expire_old_posts()

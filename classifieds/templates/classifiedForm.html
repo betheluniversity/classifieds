@@ -3,7 +3,7 @@
 {% block internal %}
 <div>
     {% if form.errors %}
-        <span style="color:red">There were errors with your form submission.</span>
+        <span class="error">There were errors with your form submission.</span>
     {% endif %}
 <form id="classifieds" method="POST" action="/submitAd">
     <table>
@@ -16,7 +16,9 @@
 
         {% endif %}
         {% for error in form.errors[field.name] %}
+            <span class="error">
             {{ error }}
+            </span>
         {% endfor %}
         </td>
 

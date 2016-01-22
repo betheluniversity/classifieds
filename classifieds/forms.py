@@ -2,9 +2,9 @@ __author__ = 'phg49389'
 
 import re
 from db_utilities import *
-from classifieds import Classifieds, Contacts
 from wtforms import Form, StringField, SelectMultipleField, TextAreaField, SubmitField, validators, ValidationError
 
+# TODO: update dropdown menu to touch the button
 
 # TODO: make it all look pretty
 
@@ -12,24 +12,24 @@ from wtforms import Form, StringField, SelectMultipleField, TextAreaField, Submi
 # This will run at 12:01am every night and call the URL to expire all the 180-day old posts
 # 1 0 * * * wget https://classifieds.bethel.edu/expire
 
+# TODO: make sure that email-sending methods work
+
+
 def get_homepage():
     entries = search_classifieds(expired=False, completed=False)
     toSend = []
     for entry in entries:
-        if not entry.expired:
-            toSend += [[entry.id, entry.title, entry.description, entry.price, entry.dateAdded, entry.username]]
+        if not entry[0].expired:
+            toSend += [[entry[0].id, entry[0].title, entry[0].description, entry[0].price, entry[0].dateAdded,
+                        entry[1] + " " + entry[2]]]
     return toSend
-
-
-def get_contact(username):
-    toReturn = Contacts.query.filter(Contacts.username.like(username)).first()
-    return [toReturn.username, toReturn.first_name, toReturn.last_name, toReturn.email, toReturn.phone_number]
 
 
 def view_classified(id):
     toReturn = Classifieds.query.filter(Classifieds.id.like(id)).first()
-    return [toReturn.id, toReturn.title, toReturn.description, toReturn.price, toReturn.categories, toReturn.username,
-            toReturn.dateAdded, toReturn.completed, toReturn.expired]
+    contact = Contacts.query.filter(Contacts.username.like(toReturn.username)).first()
+    return [toReturn.id, toReturn.title, toReturn.description, toReturn.price, toReturn.categories,
+            contact.first_name + " " + contact.last_name, toReturn.dateAdded, toReturn.completed, toReturn.expired]
 
 
 def filter_posts(username, selector):
@@ -45,8 +45,8 @@ def filter_posts(username, selector):
         entries = search_classifieds(username=username, completed=False, expired=True)
 
     for entry in entries:
-        to_send += [[entry.id, entry.title, entry.description, entry.price, entry.dateAdded, entry.username,
-                     entry.completed, entry.expired]]
+        to_send += [[entry[0].id, entry[0].title, entry[0].description, entry[0].price, entry[0].dateAdded,
+                     entry[1] + " " + entry[2], entry[0].completed, entry[0].expired]]
     to_send = sorted(to_send, key=lambda entry: entry[0])
     return to_send
 
@@ -55,13 +55,9 @@ def query_database(params):
     entries = search_classifieds(**params)
     toSend = []
     for entry in entries:
-        toSend += [[entry.id, entry.title, entry.description, entry.price, entry.dateAdded, entry.username]]
+        toSend += [[entry[0].id, entry[0].title, entry[0].description, entry[0].price, entry[0].dateAdded,
+                    entry[1] + " " + entry[2]]]
     return toSend
-
-
-def log_out():
-    # TODO
-    pass
 
 
 def phone_validator():

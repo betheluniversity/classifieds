@@ -5,7 +5,7 @@
     that if someone wants to contact you about an ad you post, they can view your info here.</p>
 <div class="center">
     {% if form.errors %}
-        <span style="color:red">There were errors with your form submission.</span>
+        <span class="error">There were errors with your form submission.</span>
     {% endif %}
     <form id="classifieds" method="POST" action="/submitContact">
     <table>
@@ -17,7 +17,9 @@
             <span style="color:red">*</span>
         {% endif %}
         {% for error in form.errors[field.name] %}
+            <span class="error">
             {{ error }}
+            </span>
         {% endfor %}
         </td>
     {% else %}

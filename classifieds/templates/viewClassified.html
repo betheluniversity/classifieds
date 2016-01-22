@@ -1,48 +1,86 @@
 {% extends "classifieds-base.html" %}
 
 {% block internal %}
-{% if classified[7] == False %}
-    {% if classified[8] == False %}
-        <div>
-            <table>
-                <tr>
-                    <td>Title:</td><td>{{ classified[1] }}</td>
-                </tr>
-                <tr>
-                    <td>Description:</td><td>{{ classified[2] }}</td>
-                </tr>
-                <tr>
-                    <td>Price:</td><td>{{ classified[3] }}</td>
-                </tr>
-                <tr>
-                    <td>Categories:</td>
-                    <td>
-                        {% for cat in classified[4].split(";") %}
-                            {% for word in cat.split("-") %}
-                                {{ word.capitalize() }}
-                                {% if cat.split("-").index(word) < cat.split("-").__len__() - 1 %}
-                                    /
-                                {% endif %}
-                            {% endfor %}<br/>
-                        {% endfor %}
-                    </td>
-                </tr>
-                <tr>
-                    <td>Listed by:</td><td><a href="/viewContact/{{ classified[5] }}">{{ classified[5] }}</a></td>
-                </tr>
-                <tr>
-                    <td>Date listed:</td><td>{{ classified[6].date() }}</td>
-                </tr>
-            </table>
-            {% if session['username'] == classified[5] %}
+{% if session['fullname'] == classified[5] %}
+    <div>
+        <table>
+            <tr>
+                <td>Title:</td><td>{{ classified[1] }}</td>
+            </tr>
+            <tr>
+                <td>Description:</td><td>{{ classified[2] }}</td>
+            </tr>
+            <tr>
+                <td>Price:</td><td>{{ classified[3] }}</td>
+            </tr>
+            <tr>
+                <td>Categories:</td>
+                <td>
+                    {% for cat in classified[4].split(";") %}
+                        {% for word in cat.split("-") %}
+                            {{ word.capitalize() }}
+                            {% if cat.split("-").index(word) < cat.split("-").__len__() - 1 %}
+                                /
+                            {% endif %}
+                        {% endfor %}<br/>
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <td>Listed by:</td><td><a href="/viewContact/{{ classified[5] }}">{{ classified[5] }}</a></td>
+            </tr>
+            <tr>
+                <td>Date listed:</td><td>{{ classified[6].date() }}</td>
+            </tr>
+        </table>
+        {% if classified[7] == False %}
+            {% if classified[8] == False %}
                 <a href="/markComplete/{{ classified[0] }}">Mark as complete</a>
+            {% else %}
+                <a href="/reactivate/{{ classified[0] }}">Renew this ad</a>
             {% endif %}
-        </div>
-    {% else %}
-        <div>This classified has expired; it hasn't been completed in over 180 days</div>
-    {% endif %}
+        {% endif %}
+    </div>
 {% else %}
-    <div>This classified has been marked as completed.</div>
+    {% if classified[7] == False %}
+        {% if classified[8] == False %}
+            <div>
+                <table>
+                    <tr>
+                        <td>Title:</td><td>{{ classified[1] }}</td>
+                    </tr>
+                    <tr>
+                        <td>Description:</td><td>{{ classified[2] }}</td>
+                    </tr>
+                    <tr>
+                        <td>Price:</td><td>{{ classified[3] }}</td>
+                    </tr>
+                    <tr>
+                        <td>Categories:</td>
+                        <td>
+                            {% for cat in classified[4].split(";") %}
+                                {% for word in cat.split("-") %}
+                                    {{ word.capitalize() }}
+                                    {% if cat.split("-").index(word) < cat.split("-").__len__() - 1 %}
+                                        /
+                                    {% endif %}
+                                {% endfor %}<br/>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Listed by:</td><td><a href="/viewContact/{{ classified[5] }}">{{ classified[5] }}</a></td>
+                    </tr>
+                    <tr>
+                        <td>Date listed:</td><td>{{ classified[6].date() }}</td>
+                    </tr>
+                </table>
+            </div>
+        {% else %}
+            <div>This classified has expired; it hasn't been completed in over 180 days</div>
+        {% endif %}
+    {% else %}
+        <div>This classified has been marked as completed.</div>
+    {% endif %}
 {% endif %}
-
 {% endblock %}
