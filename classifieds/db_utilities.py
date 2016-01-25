@@ -116,13 +116,13 @@ def send_expired_email(username):
 
     msg = MIMEText("One of the classifieds that you posted 180 days ago has been marked as expired.")
     msg['Subject'] = "One of your classifieds has expired"
-    msg['From'] = "classifieds@bethel.edu"
+    msg['From'] = "no-reply@bethel.edu"
     msg['To'] = contact.email
 
     print msg.as_string()
 
     s = smtplib.SMTP('localhost')
-    s.sendmail("classifieds@bethel.edu", [contact.email], msg.as_string())
+    s.sendmail("no-reply@bethel.edu", [contact.email], msg.as_string())
     s.quit()
 
 

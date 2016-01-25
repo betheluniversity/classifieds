@@ -44,7 +44,6 @@ class View(FlaskView):
             storage[key] = parsed_values
         # Add that object to the database
         add_classified(storage['title'], storage['description'], storage['price'], storage['categories'], session['username'])
-        # return render_template("homepage.html", values=get_homepage())
         return redirect('/')
 
     @route("/submitContact", methods=['POST'])
@@ -56,7 +55,6 @@ class View(FlaskView):
             return render_template("contactForm.html", form=form)
         # Add that object to the database
         add_contact(session['username'], storage['first_name'], storage['last_name'], storage['email'], storage['phone_number'])
-        # return render_template("homepage.html", values=get_homepage())
         return redirect('/')
 
     def viewClassified(self, id):
@@ -93,7 +91,6 @@ class View(FlaskView):
                 to_send[key] = storage[key]
         to_send['expired'] = False
         to_send['completed'] = False
-        # print to_send
         return render_template("homepage.html", values=query_database(to_send))
 
     def markComplete(self, id):

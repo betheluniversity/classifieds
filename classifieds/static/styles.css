@@ -3,7 +3,7 @@ table.sortable th:not(.sorttable_sorted):not(.sorttable_sorted_reverse):not(.sor
 }
 
 .top-right{
-    position:absolute;
+    position: absolute;
     top: 15px;
     right: 15px;
 }
@@ -24,6 +24,7 @@ table.sortable th:not(.sorttable_sorted):not(.sorttable_sorted_reverse):not(.sor
 }
 
 .dropbtn {
+    margin: 0px 0px 0px;
     border: none;
     cursor: pointer;
 }

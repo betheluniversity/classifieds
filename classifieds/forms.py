@@ -4,7 +4,7 @@ import re
 from db_utilities import *
 from wtforms import Form, StringField, SelectMultipleField, TextAreaField, SubmitField, validators, ValidationError
 
-# TODO: update dropdown menu to touch the button
+# TODO: make this an RSS-esque feed for BLink with specific formatting
 
 # TODO: make it all look pretty
 
@@ -111,11 +111,11 @@ class ContactForm(Form):
 def send_feedback_email(form_contents, username):
     msg = MIMEText(form_contents['input'])
     msg['Subject'] = "Feedback from " + username
-    msg['From'] = "classifieds@bethel.edu"
-    msg['To'] = "classifieds@bethel.edu"
+    msg['From'] = "phg49389@bethel.edu"
+    msg['To'] = "phg49389@bethel.edu"
 
     print msg.as_string()
 
     s = smtplib.SMTP('localhost')
-    s.sendmail("classifieds@bethel.edu", ["classifieds@bethel.edu"], msg.as_string())
+    s.sendmail("phg49389@bethel.edu", ["phg49389@bethel.edu"], msg.as_string())
     s.quit()
