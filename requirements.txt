@@ -1,7 +1,7 @@
+argparse
 Flask
 Flask-Classy
 Flask-WTF
 Flask-SQLAlchemy
-WTForms
 migrate
-sqlalchemy-migrate
+WTForms
