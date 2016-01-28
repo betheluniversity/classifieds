@@ -14,8 +14,6 @@ from wtforms import Form, StringField, SelectMultipleField, TextAreaField, Submi
 # This will run at 12:01am every night and call the URL to expire all the 180-day old posts
 # 1 0 * * * wget https://classifieds.bethel.edu/expire
 
-# TODO: make sure that email-sending methods work
-
 # Feature suggestion: upload images for a post?
 
 

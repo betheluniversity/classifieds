@@ -104,10 +104,7 @@ class View(FlaskView):
         return redirect('/viewPosted/expired')
 
     def logout(self):
-        return redirect("https://auth.bethel.edu/cas/logout?gateway=true&service=/signedOut")
-
-    def signedOut(self):
-        return render_template("loggedOutPage.html")
+        return redirect("https://auth.bethel.edu/cas/logout")
 
     def expire(self):
         expire_old_posts()
