@@ -9,6 +9,8 @@ from wtforms import Form, StringField, SelectMultipleField, TextAreaField, Submi
 
 # TODO: make this an RSS-esque feed for BLink with specific formatting
 
+# TODO: on view user's posts, add highlighter of what status is being examined, and add a STATUS column
+
 # TODO: make it all look pretty
 
 # TODO: update the titles via extension craziness
@@ -115,7 +117,7 @@ class ContactForm(Form):
 
 def send_feedback_email(form_contents, username):
     msg = MIMEText(form_contents['input'])
-    msg['Subject'] = "Feedback from " + username
+    msg['Subject'] = "Feedback regarding classifieds.xp.bethel.edu from " + username
     msg['From'] = username + "@bethel.edu"
     msg['To'] = ADMINS
 

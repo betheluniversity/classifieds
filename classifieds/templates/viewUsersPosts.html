@@ -1,12 +1,35 @@
 {% extends "classifieds-base.html" %}
 
+{% block subpage_title %}
+    &nbsp;|&nbsp;View your posts
+{% endblock %}
+
 {% block internal %}
 <div>
     <div class="padded">
-        <a href="/viewPosted/all">All your posts</a> |
-        <a href="/viewPosted/active">All active posts</a> |
-        <a href="/viewPosted/completed">All completed posts</a> |
-        <a href="/viewPosted/expired">All expired posts</a>
+        {% if '/all' in request.path %}
+            <a href="/viewPosted/all" class="button active">All your posts</a>
+        {% else %}
+            <a href="/viewPosted/all" class="button">All your posts</a>
+        {% endif %}
+
+        {% if '/active' in request.path %}
+            <a href="/viewPosted/active" class="button active">All active posts</a>
+        {% else %}
+            <a href="/viewPosted/active" class="button">All active posts</a>
+        {% endif %}
+
+        {% if '/completed' in request.path %}
+            <a href="/viewPosted/completed" class="button active">All completed posts</a>
+        {% else %}
+            <a href="/viewPosted/completed" class="button">All completed posts</a>
+        {% endif %}
+
+        {% if '/expired' in request.path %}
+            <a href="/viewPosted/expired" class="button active">All expired posts</a>
+        {% else %}
+            <a href="/viewPosted/expired" class="button">All expired posts</a>
+        {% endif %}
     </div>
 {% if posts.__len__() == 0 %}
 There are no active posts to show.
