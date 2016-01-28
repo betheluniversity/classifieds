@@ -16,6 +16,8 @@ from wtforms import Form, StringField, SelectMultipleField, TextAreaField, Submi
 
 # TODO: make sure that email-sending methods work
 
+# Feature suggestion: upload images for a post?
+
 
 def get_homepage():
     entries = search_classifieds(expired=False, completed=False)
@@ -31,7 +33,7 @@ def view_classified(id):
     toReturn = Classifieds.query.filter(Classifieds.id.like(id)).first()
     contact = Contacts.query.filter(Contacts.username.like(toReturn.username)).first()
     return [toReturn.id, toReturn.title, toReturn.description, toReturn.price, toReturn.categories,
-            contact.first_name + " " + contact.last_name, toReturn.dateAdded, toReturn.completed, toReturn.expired]
+            contact.username, contact.first_name + " " + contact.last_name, toReturn.dateAdded, toReturn.completed, toReturn.expired]
 
 
 def filter_posts(username, selector):

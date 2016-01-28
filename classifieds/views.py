@@ -44,7 +44,8 @@ class View(FlaskView):
             storage[key] = parsed_values
         # Add that object to the database
         add_classified(storage['title'], storage['description'], storage['price'], storage['categories'], session['username'])
-        return redirect('/')
+        message = "Classified ad successfully posted!"
+        return render_template("confirmationPage.html", message=message)
 
     @route("/submitContact", methods=['POST'])
     def submit_contact(self):
@@ -55,7 +56,8 @@ class View(FlaskView):
             return render_template("contactForm.html", form=form)
         # Add that object to the database
         add_contact(session['username'], storage['first_name'], storage['last_name'], storage['email'], storage['phone_number'])
-        return redirect('/')
+        message = "Contact information successfully updated!"
+        return render_template("confirmationPage.html", message=message)
 
     def viewClassified(self, id):
         return render_template("viewClassified.html", classified=view_classified(id))
@@ -117,4 +119,6 @@ class View(FlaskView):
     @route("/submitFeedback", methods=['POST'])
     def submit_feedback(self):
         send_feedback_email(request.form, session['username'])
-        return redirect('/')
+        message = "Thank you for submitting feedback! We'll take a look at your message and try to make the " \
+                  "site better for everyone!"
+        return render_template("confirmationPage.html", message=message)

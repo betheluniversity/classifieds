@@ -1,7 +1,7 @@
 {% extends "classifieds-base.html" %}
 
 {% block internal %}
-{% if session['fullname'] == classified[5] %}
+{% if session['username'] == classified[5] %}
     <div>
         <table>
             <tr>
@@ -27,14 +27,14 @@
                 </td>
             </tr>
             <tr>
-                <td>Listed by:</td><td><a href="/viewContact/{{ classified[5] }}">{{ classified[5] }}</a></td>
+                <td>Listed by:</td><td><a href="/viewContact/{{ classified[5] }}">{{ classified[6] }}</a></td>
             </tr>
             <tr>
-                <td>Date listed:</td><td>{{ classified[6].date() }}</td>
+                <td>Date listed:</td><td>{{ classified[7].date() }}</td>
             </tr>
         </table>
-        {% if classified[7] == False %}
-            {% if classified[8] == False %}
+        {% if classified[8] == False %}
+            {% if classified[9] == False %}
                 <a href="/markComplete/{{ classified[0] }}">Mark as complete</a>
             {% else %}
                 <a href="/reactivate/{{ classified[0] }}">Renew this ad</a>
@@ -42,8 +42,8 @@
         {% endif %}
     </div>
 {% else %}
-    {% if classified[7] == False %}
-        {% if classified[8] == False %}
+    {% if classified[8] == False %}
+        {% if classified[9] == False %}
             <div>
                 <table>
                     <tr>
@@ -69,10 +69,10 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>Listed by:</td><td><a href="/viewContact/{{ classified[5] }}">{{ classified[5] }}</a></td>
+                        <td>Listed by:</td><td><a href="/viewContact/{{ classified[5] }}">{{ classified[6] }}</a></td>
                     </tr>
                     <tr>
-                        <td>Date listed:</td><td>{{ classified[6].date() }}</td>
+                        <td>Date listed:</td><td>{{ classified[7].date() }}</td>
                     </tr>
                 </table>
             </div>
