@@ -101,7 +101,7 @@ def search_classifieds(title=u"%", description=u"%", categories=u"%", username=u
 
 
 def expire_old_posts():
-    all_entries = search_classifieds(expired=False)
+    all_entries = search_classifieds(completed=False, expired=False)
     for entry in all_entries:
         now = datetime.datetime.now().date()
         then = entry.dateAdded.date()
@@ -127,3 +127,6 @@ def send_expired_email(username):
 def contact_exists_in_db(username):
     return len(list(Contacts.query.filter(Contacts.username.like(username)).all())) > 0
 
+
+def classified_exists_in_db(id):
+    return len(list(Classifieds.query.filter(Classifieds.id.like(id)).all())) > 0

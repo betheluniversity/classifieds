@@ -19,6 +19,10 @@ table.sortable th:not(.sorttable_sorted):not(.sorttable_sorted_reverse):not(.sor
     right: 35%;
 }
 
+a.active {
+    background-color: #0F2C52;
+}
+
 .error{
     color: red;
 }

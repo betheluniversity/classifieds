@@ -10,7 +10,7 @@ from db_utilities import *
 class View(FlaskView):
 
     def index(self):
-        return render_template("homepage.html", values=get_homepage())
+        return render_template("homepage.html", values=get_homepage(), showStatus=False)
 
     def addClassified(self):
         if contact_exists_in_db(session['username']):
@@ -60,7 +60,11 @@ class View(FlaskView):
         return render_template("confirmationPage.html", message=message)
 
     def viewClassified(self, id):
-        return render_template("viewClassified.html", classified=view_classified(id))
+        if classified_exists_in_db(id):
+            return render_template("viewClassified.html", classified=view_classified(id))
+        else:
+            error_message = "That classified id number doesn't exist in the contacts database."
+            return render_template("errorPage.html", error=error_message)
 
     def viewContact(self, username):
         if contact_exists_in_db(username):
@@ -93,7 +97,7 @@ class View(FlaskView):
                 to_send[key] = storage[key]
         to_send['expired'] = False
         to_send['completed'] = False
-        return render_template("homepage.html", values=query_database(to_send))
+        return render_template("homepage.html", values=query_database(to_send), showStatus=True)
 
     def markComplete(self, id):
         mark_entry_as_complete(id, session['username'])

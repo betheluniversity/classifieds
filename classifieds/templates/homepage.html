@@ -17,6 +17,9 @@ There are no active posts to show.
             <th>Price</th>
             <th>Date Posted</th>
             <th>Posted By</th>
+            {% if showStatus == True %}
+            <th>Status</th>
+            {% endif %}
         </tr>
     </thead>
     <tbody>
@@ -27,6 +30,17 @@ There are no active posts to show.
             <td>{{ val[3] }}</td>
             <td>{{ val[4].date() }}</td>
             <td><a href="/viewContact/{{ val[5] }}">{{ val[6] }}</a></td>
+            {% if showStatus == True %}
+            <td>
+                {% if val[7] == True %}
+                Completed
+                {% elif val[8] == True %}
+                Expired
+                {% else %}
+                Active
+                {% endif %}
+            </td>
+            {% endif %}
         </tr>
 {% endfor %}
     </tbody>

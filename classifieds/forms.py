@@ -9,11 +9,9 @@ from wtforms import Form, StringField, SelectMultipleField, TextAreaField, Submi
 
 # TODO: make this an RSS-esque feed for BLink with specific formatting
 
-# TODO: on view user's posts, add highlighter of what status is being examined, and add a STATUS column
+# TODO: on view user's posts, add a STATUS column
 
 # TODO: make it all look pretty
-
-# TODO: update the titles via extension craziness
 
 # TODO: implement crontab expire job
 # This will run at 12:01am every night and call the URL to expire all the 180-day old posts
@@ -28,7 +26,7 @@ def get_homepage():
     for entry in entries:
         if not entry[0].expired:
             toSend += [[entry[0].id, entry[0].title, entry[0].description, entry[0].price, entry[0].dateAdded,
-                        entry[0].username, entry[1] + " " + entry[2]]]
+                        entry[0].username, entry[1] + " " + entry[2], entry[0].completed, entry[0].expired]]
     return toSend
 
 
