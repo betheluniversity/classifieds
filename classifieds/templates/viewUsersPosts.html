@@ -8,7 +8,9 @@
         <a href="/viewPosted/completed">All completed posts</a> |
         <a href="/viewPosted/expired">All expired posts</a>
     </div>
-
+{% if posts.__len__() == 0 %}
+There are no active posts to show.
+    {% else %}
 <table class="sortable">
     <tr>
         <th>Title</th>
@@ -35,5 +37,6 @@
     </tr>
 {% endfor %}
 </table>
+    {% endif %}
 </div>
 {% endblock %}

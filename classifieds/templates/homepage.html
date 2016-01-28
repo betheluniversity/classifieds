@@ -2,6 +2,9 @@
 
 {% block internal %}
 <div>
+    {% if values.__len__() == 0 %}
+There are no active posts to show.
+    {% else %}
 <table class="sortable">
     <thead>
         <tr>
@@ -19,10 +22,11 @@
             <td><article>{{ val[2] }}</article></td>
             <td>{{ val[3] }}</td>
             <td>{{ val[4].date() }}</td>
-            <td><a href="/viewContact/{{ val[5] }}">{{ val[5] }}</a></td>
+            <td><a href="/viewContact/{{ val[5] }}">{{ val[6] }}</a></td>
         </tr>
 {% endfor %}
     </tbody>
 </table>
+    {% endif %}
 </div>
 {% endblock %}
