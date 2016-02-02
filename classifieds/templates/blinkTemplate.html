@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>5 Most Recent Classifieds</title>
+</head>
+<body>
+div>
+    {% if values.__len__() == 0 %}
+There are no active posts to show.
+    {% else %}
+<table>
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Date Posted</th>
+            <th>Posted By</th>
+            {% if showStatus == True %}
+            <th>Status</th>
+            {% endif %}
+        </tr>
+    </thead>
+    <tbody>
+{% for val in values[0:5] %}
+        <tr>
+            <td><a href="classifieds.xp.bethel.edu/viewClassified/{{ val[0] }}">{{ val[1] }}</a></td>
+            <td><article>{{ val[2] }}</article></td>
+            <td>{{ val[3] }}</td>
+            <td>{{ val[4].date() }}</td>
+            <td>{{ val[6] }}</td>
+            {% if showStatus == True %}
+            <td>
+                {% if val[7] == True %}
+                Completed
+                {% elif val[8] == True %}
+                Expired
+                {% else %}
+                Active
+                {% endif %}
+            </td>
+            {% endif %}
+        </tr>
+{% endfor %}
+    </tbody>
+</table>
+    {% endif %}
+</div>
+</body>
+</html>

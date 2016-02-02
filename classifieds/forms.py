@@ -9,8 +9,6 @@ from wtforms import Form, StringField, SelectMultipleField, TextAreaField, Submi
 
 # TODO: make this an RSS-esque feed for BLink with specific formatting
 
-# TODO: on view user's posts, add a STATUS column
-
 # TODO: make it all look pretty
 
 # TODO: implement crontab expire job

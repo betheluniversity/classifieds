@@ -12,6 +12,9 @@ class View(FlaskView):
     def index(self):
         return render_template("homepage.html", values=get_homepage(), showStatus=False)
 
+    def blinkClassifieds(self):
+        return render_template("blinkTemplate.html", values=get_homepage(), showStatus=False)
+
     def addClassified(self):
         if contact_exists_in_db(session['username']):
             return render_template("classifiedForm.html", form=ClassifiedForm())
