@@ -7,8 +7,6 @@ from wtforms import Form, StringField, SelectMultipleField, TextAreaField, Submi
 
 # TODO: the top buttons in classifieds-base.html overlap when the window is too narrow
 
-# TODO: make this an RSS-esque feed for BLink with specific formatting
-
 # TODO: make it all look pretty
 
 # TODO: implement crontab expire job
