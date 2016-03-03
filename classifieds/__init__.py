@@ -88,4 +88,3 @@ def init_user():
                                email=username + "@bethel.edu", phone="")
         db.session.add(new_contact)
         db.session.commit()
-
