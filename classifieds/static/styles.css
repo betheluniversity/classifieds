@@ -115,3 +115,12 @@ a.active {
 .show {
     display:block;
 }
+
+.footer{
+    position: absolute;
+    background-color: #0F2C52;
+    height: 50px;
+    width: 100%;
+    bottom: 0;
+    margin: auto;
+}
