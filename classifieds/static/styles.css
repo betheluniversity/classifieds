@@ -124,3 +124,10 @@ a.active {
     bottom: 0;
     margin: auto;
 }
+
+#foot_title{
+    text-align: center;
+    color: white;
+    padding-top: 14px;
+    font-size: 10px;
+}
