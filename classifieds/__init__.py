@@ -1,5 +1,3 @@
-__author__ = 'phg49389'
-
 import ast
 import datetime
 import urllib2
@@ -68,6 +66,8 @@ def before_request():
         app.logger.info("failed to init")
 
 
+# This method sees who's logging in to the website, and then checks if they're in the contacts DB. If they are, it grabs
+# their info from the DB for rendering. If not, then it creates a default entry for that user using info from wsapi.
 def init_user():
     if current_app.config['ENVIRON'] == 'prod':
         username = request.environ.get('REMOTE_USER')
