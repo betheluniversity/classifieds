@@ -130,12 +130,10 @@ a.active {
 }
 
 .footer{
-    position: absolute;
+    position: relative;
     background-color: #0F2C52;
     height: 50px;
-    width: 100%;
-    bottom: 0px;
-    margin: auto;
+
 }
 
 #foot_title{
@@ -143,4 +141,15 @@ a.active {
     color: white;
     padding-top: 14px;
     font-size: 10px;
+}
+
+.clear_footer{
+    height: 10px;
+    clear: both;
+}
+
+#body{
+    min-height: 100%;
+    margin-bottom: -50px;
+    position: relative;
 }
