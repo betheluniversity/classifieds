@@ -15,11 +15,13 @@ class View(FlaskView):
         return render_template("homepage.html", values=get_homepage(), showStatus=False)
 
     # This URL is only for rendering to a channel in BLink
-    def blinkClassifieds(self):
+    @route("/blink-classifieds")
+    def blink_classifieds(self):
         return render_template("blinkTemplate.html", values=get_homepage(), showStatus=False)
 
     # This URL is to get the classified ad form so that the user can fill it out and submit it to the DB
-    def addClassified(self):
+    @route("/add-classified")
+    def add_classified(self):
         if contact_exists_in_db(session['username']):
             return render_template("classifiedForm.html", form=ClassifiedForm())
         else:
@@ -28,12 +30,13 @@ class View(FlaskView):
 
     # Because their contact entry in the DB should be added automatically by the init_user function the first time they
     # log in to classifieds, I only made a page to edit their contact info.
-    def editContact(self):
+    @route("/edit-contact")
+    def edit_contact(self):
         return render_template("contactForm.html", form=ContactForm(), info=get_contact(session['username']))
 
     # This is a post method that takes the classified form's contents, parses them, validates, and if it passes, it adds
     # it to the DB and then returns to the page if it was successful or not.
-    @route("/submitAd", methods=['POST'])
+    @route("/submit-ad", methods=['POST'])
     def submit_ad(self):
         form_contents = request.form
         form = ClassifiedForm(form_contents)
@@ -60,7 +63,7 @@ class View(FlaskView):
 
     # Similarly to submit_ad, this method parses the contact form's contents, validates, and updates the DB's entry for
     # the user.
-    @route("/submitContact", methods=['POST'])
+    @route("/submit-contact", methods=['POST'])
     def submit_contact(self):
         storage = request.form
         form = ContactForm(storage)
@@ -74,7 +77,8 @@ class View(FlaskView):
 
     # This method is pretty straightforward, just checks if the id they're requesting exists. If it does, it renders it.
     # The render itself takes care of the ad's expired/completed status, if it's the original poster, etc.
-    def viewClassified(self, id):
+    @route("/view-classified/<id>")
+    def view_classified(self, id):
         if classified_exists_in_db(id):
             return render_template("viewClassified.html", classified=view_classified(id))
         else:
@@ -83,7 +87,8 @@ class View(FlaskView):
 
     # Similarly to viewClassified, this method checks if the username exists. If it does, it has the render function do
     # the work.
-    def viewContact(self, username):
+    @route("/view-contact/<username>")
+    def view_contact(self, username):
         if contact_exists_in_db(username):
             return render_template("viewContact.html", to_view=get_contact(username))
         else:
@@ -93,7 +98,8 @@ class View(FlaskView):
     # This method is more or less a 'hub' for all the various ways that a poster would like to view the posts that
     # they've made. This passes on what type of posts they want to see, the DB does the filtering and returns the list,
     # and they all get rendered the same way.
-    def viewPosted(self, selector):
+    @route("/view-posted/<selector>")
+    def view_posted(self, selector):
         if contact_exists_in_db(session['username']):
             return render_template("viewUsersPosts.html", posts=filter_posts(session['username'], selector))
         else:
@@ -101,7 +107,8 @@ class View(FlaskView):
             return render_template("errorPage.html", error=error_message)
 
     # Really straightforward method, simply renders the search page.
-    def searchPage(self):
+    @route("/search-page")
+    def search_page(self):
         return render_template("searchPage.html")
 
     # This method does a bit of work in preparation of the DB query; it creates a dictionary of search terms that are
@@ -126,7 +133,8 @@ class View(FlaskView):
 
     # A pretty straightforward pair of methods; if the poster calls this URL via a link on the pages, it will change
     # that value appropriately in the DB.
-    def markComplete(self, id):
+    @route("/mark-complete/<id>")
+    def mark_complete(self, id):
         mark_entry_as_complete(id, session['username'])
         return redirect('/viewPosted/active')
 
@@ -150,7 +158,7 @@ class View(FlaskView):
         return render_template("feedback.html")
 
     #
-    @route("/submitFeedback", methods=['POST'])
+    @route("/submit-feedback", methods=['POST'])
     def submit_feedback(self):
         send_feedback_email(request.form, session['username'])
         message = "Thank you for submitting feedback! We'll take a look at your message and try to make the " \

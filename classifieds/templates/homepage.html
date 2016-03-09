@@ -25,11 +25,11 @@ There are no active posts to show.
     <tbody>
 {% for val in values %}
         <tr>
-            <td><a href="/viewClassified/{{ val[0] }}">{{ val[1] }}</a></td>
+            <td><a href="/view-classified/{{ val[0] }}">{{ val[1] }}</a></td>
             <td><article>{{ val[2] }}</article></td>
             <td>{{ val[3] }}</td>
             <td>{{ val[4].date() }}</td>
-            <td><a href="/viewContact/{{ val[5] }}">{{ val[6] }}</a></td>
+            <td><a href="/view-contact/{{ val[5] }}">{{ val[6] }}</a></td>
             {% if showStatus == True %}
             <td>
                 {% if val[7] == True %}
