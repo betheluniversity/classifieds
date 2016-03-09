@@ -8,34 +8,51 @@
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <script src="../static/sorttable.js"></script>
     <script src="../static/readmore.js"></script>
-    <script>
-    /* When the user clicks on the button,
-    toggle between hiding and showing the dropdown content */
-    function myFunction() {
-        document.getElementById("myDropdown").classList.toggle("show");
-    }
-
-    // Close the dropdown if the user clicks outside of it
-    window.onclick = function(event) {
-      if (!event.target.matches('.dropbtn')) {
-
-        var dropdowns = document.getElementsByClassName("dropdown-content");
-        var i;
-        for (i = 0; i < dropdowns.length; i++) {
-          var openDropdown = dropdowns[i];
-          if (openDropdown.classList.contains('show')) {
-            openDropdown.classList.remove('show');
-          }
-        }
-      }
-    }
-    </script>
+{#    <script>#}
+{#    /* When the user clicks on the button,#}
+{#    toggle between hiding and showing the dropdown content */#}
+{#    function myFunction() {#}
+{#        document.getElementById("myDropdown").classList.toggle("show");#}
+{#    }#}
+{##}
+{#    // Close the dropdown if the user clicks outside of it#}
+{#    window.onmouseover = function(event) {#}
+{#      if (!event.target.matches('.dropbtn')) {#}
+{##}
+{#        var dropdowns = document.getElementsByClassName("dropdown-content");#}
+{#        var i;#}
+{#        for (i = 0; i < dropdowns.length; i++) {#}
+{#          var openDropdown = dropdowns[i];#}
+{#          if (openDropdown.classList.contains('show')) {#}
+{#            openDropdown.classList.remove('show');#}
+{#          }#}
+{#        }#}
+{#      }#}
+{#    }#}
+{#    </script>#}
     <link rel="stylesheet" href="../static/styles.css"/>
 {% endblock %}
 
 {% block body_content %}
+{#    <div id="user_menu" class="top-right dropdown">#}
+{#        <button onmouseover="myFunction()" class="dropbtn">Hello, {{ session['fullname'] }}!</button>#}
+{#        <div id="myDropdown" class="dropdown-content">#}
+{#            <a href="/viewContact/{{ session['username'] }}">View your profile</a>#}
+{#            <a href="/feedback">Provide feedback</a>#}
+{#            <a href="/logout">Sign out</a>#}
+{#        </div>#}
+{#    </div>#}
+    <div id="user_menu" class="top-right dropdown">
+        <button class="dropbtn">Hello, {{ session['fullname'] }}!</button>
+        <div id="myDropdown" class="dropdown-content">
+            <a href="/viewContact/{{ session['username'] }}">View your profile</a>
+            <a href="/feedback">Provide feedback</a>
+            <a href="/logout">Sign out</a>
+        </div>
+    </div>
     <div id="nav" class="padded">
-        <h1>Bethel University's Classified Listings</h1>
+        <h1 class="baseTitle">Bethel University's Classified Listings</h1>
+        <div id="buttons">
         {% if request.path == '/' %}
             <a href="/" class="button active">Home</a>
         {% else %}
@@ -59,13 +76,6 @@
         {% else %}
             <a href="/viewPosted/active" class="button">View your posted classifieds</a>
         {% endif %}
-    </div>
-    <div id="user_menu" class="top-right dropdown">
-        <button onclick="myFunction()" class="dropbtn">Hello, {{ session['fullname'] }}!</button>
-        <div id="myDropdown" class="dropdown-content">
-            <a href="/viewContact/{{ session['username'] }}">View your profile</a>
-            <a href="/feedback">Provide feedback</a>
-            <a href="/logout">Sign out</a>
         </div>
     </div>
 

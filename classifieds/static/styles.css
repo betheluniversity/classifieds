@@ -42,20 +42,14 @@ input {
 }
 
 /* classifieds banner/header */
-h1 {
-    color: #FFFFFF !important;
-    font-family: Helvetica, sans-serif !important;
-}
-
-.top-right {
-    position: absolute;
-    top: 25px;
-    right: 50px;
+h1.baseTitle {
+    color: #FFFFFF;
+    font-family: Helvetica, sans-serif;
 }
 
 .padded {
-    padding: 15px 50px 15px 60px;
-    margin-left: -10px;
+    padding: 15px 50px 15px 50px;
+    margin: 0px 0px 0px 0px;
     background-color: #0F2C52;
 }
 
@@ -66,11 +60,19 @@ h1 {
     right: 35%;
 }
 
+a {
+    color: #0069AA !important;
+}
+
+a:hover {
+    color: #005285 !important;
+}
+
 a.button {
     margin-right: 2px;
-    border-radius: 5px;
+    /*border-radius: 5px;*/
     background-color: #0069AA;
-    color: #fff;
+    color: #fff !important;
 }
 
 a.button:hover {
@@ -86,20 +88,26 @@ a.active {
 }
 
 .dropbtn {
+    background-color: #0069AA !important;
     margin: 0px 0px 0px;
     border: none;
     cursor: pointer;
-    border-radius: 5px;
-    background-color: #0069AA;
+    /*border-radius: 5px;*/
+}
+
+.top-right {
+    float: right;
+    margin: 20px 50px 0px 0px;
+    display: inline-block;
 }
 
 .dropbtn:hover {
-    background-color: #005285;
+    background-color: #005285 !important;
 }
 
 .dropdown-content {
     display: none;
-    position: absolute;
+    /*position: absolute;*/
     width: 100%;
     background-color: white;
     overflow: auto;
@@ -108,7 +116,12 @@ a.active {
 
 .dropdown-content a {
     padding: 12px 16px;
+    color: #0069AA;
     text-decoration: none;
+    display: block;
+}
+
+.top-right:hover .dropdown-content {
     display: block;
 }
 
