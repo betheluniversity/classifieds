@@ -4,6 +4,7 @@
     Classifieds{% block subpage_title %}{% endblock %}
 {% endblock %}
 
+
 {% block head_add %}
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <script src="../static/sorttable.js"></script>
@@ -34,55 +35,58 @@
 {% endblock %}
 
 {% block body_content %}
-    <div id="nav" class="padded">
-        <h1>Bethel University's Classified Listings</h1>
-        {% if request.path == '/' %}
-            <a href="/" class="button active">Home</a>
-        {% else %}
-            <a href="/" class="button">Home</a>
-        {% endif %}
+    <div id="body">
+        <div id="nav" class="padded">
+            <h1>Bethel University's Classified Listings</h1>
+            {% if request.path == '/' %}
+                <a href="/" class="button active">Home</a>
+            {% else %}
+                <a href="/" class="button">Home</a>
+            {% endif %}
 
-        {% if '/searchPage' in request.path %}
-            <a href="/searchPage" class="button active">Search through classifieds</a>
-        {% else %}
-            <a href="/searchPage" class="button">Search through classifieds</a>
-        {% endif %}
+            {% if '/searchPage' in request.path %}
+                <a href="/searchPage" class="button active">Search through classifieds</a>
+            {% else %}
+                <a href="/searchPage" class="button">Search through classifieds</a>
+            {% endif %}
 
-        {% if '/addClassified' in request.path %}
-            <a href="/addClassified" class="button active">Submit a classified</a>
-        {% else %}
-            <a href="/addClassified" class="button">Submit a classified</a>
-        {% endif %}
+            {% if '/addClassified' in request.path %}
+                <a href="/addClassified" class="button active">Submit a classified</a>
+            {% else %}
+                <a href="/addClassified" class="button">Submit a classified</a>
+            {% endif %}
 
-        {% if '/viewPosted/' in request.path %}
-            <a href="/viewPosted/active" class="button active">View your posted classifieds</a>
-        {% else %}
-            <a href="/viewPosted/active" class="button">View your posted classifieds</a>
-        {% endif %}
-    </div>
-    <div id="user_menu" class="top-right dropdown">
-        <button onclick="myFunction()" class="dropbtn">Hello, {{ session['fullname'] }}!</button>
-        <div id="myDropdown" class="dropdown-content">
-            <a href="/viewContact/{{ session['username'] }}">View your profile</a>
-            <a href="/feedback">Provide feedback</a>
-            <a href="/logout">Sign out</a>
+            {% if '/viewPosted/' in request.path %}
+                <a href="/viewPosted/active" class="button active">View your posted classifieds</a>
+            {% else %}
+                <a href="/viewPosted/active" class="button">View your posted classifieds</a>
+            {% endif %}
         </div>
-    </div>
+        <div id="user_menu" class="top-right dropdown">
+            <button onclick="myFunction()" class="dropbtn">Hello, {{ session['fullname'] }}!</button>
+            <div id="myDropdown" class="dropdown-content">
+                <a href="/viewContact/{{ session['username'] }}">View your profile</a>
+                <a href="/feedback">Provide feedback</a>
+                <a href="/logout">Sign out</a>
+            </div>
+        </div>
 
-    {% block internal %}
-    {% endblock %}
-    <script>
-        $('article').readmore({
-            moreLink: '<a href="#">Read more...</a>',
-            lessLink: '<a href="#">Read less</a>',
-            collapsedHeight: 36,
-            afterToggle: function(trigger, element, expanded) {
-                if(! expanded) { // The "Close" link was clicked
-                    $('html, body').animate({scrollTop: element.offset().top}, {duration: 100});
+        {% block internal %}
+        {% endblock %}
+        <script>
+            $('article').readmore({
+                moreLink: '<a href="#">Read more...</a>',
+                lessLink: '<a href="#">Read less</a>',
+                collapsedHeight: 36,
+                afterToggle: function(trigger, element, expanded) {
+                    if(! expanded) { // The "Close" link was clicked
+                        $('html, body').animate({scrollTop: element.offset().top}, {duration: 100});
+                    }
                 }
-            }
-        });
-    </script>
+            });
+        </script>
+        <div class="clear_footer"></div>
+    </div>
     <div class="footer">
         <p id="foot_title">#BETHEL UNIVERSITY est. 1871</p>
     </div>
