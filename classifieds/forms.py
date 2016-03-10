@@ -1,5 +1,3 @@
-__author__ = 'phg49389'
-
 import re
 from config import ADMINS
 from db_utilities import *
@@ -16,6 +14,8 @@ from wtforms import Form, StringField, SelectMultipleField, TextAreaField, Submi
 # Feature suggestion: upload images for a post?
 
 
+# This method gets all the active posts, sorts them from most recent to least recent, then returns them as a list to be
+# rendered
 def get_homepage():
     entries = search_classifieds(expired=False, completed=False)
     toSend = []
@@ -26,6 +26,8 @@ def get_homepage():
     return toSend
 
 
+# This method takes the unique identifier of an ad in the DB, then returns it and all its details so that the rendering
+# can be done intelligently (e.g., if the poster is viewing it, if it's expired or completed, etc.)
 def view_classified(id):
     toReturn = Classifieds.query.filter(Classifieds.id.like(id)).first()
     contact = Contacts.query.filter(Contacts.username.like(toReturn.username)).first()
@@ -33,6 +35,8 @@ def view_classified(id):
             contact.username, contact.first_name + " " + contact.last_name, toReturn.dateAdded, toReturn.completed, toReturn.expired]
 
 
+# This method is used for when a poster is looking at all the ads that they've posted, and allows them to sort by the
+# status of the post, whether it's active, completed, expired, or all statuses
 def filter_posts(username, selector):
     to_send = []
     entries = []
@@ -52,6 +56,9 @@ def filter_posts(username, selector):
     return to_send
 
 
+# A nice, generalized query method. Given a dictionary of kwargs, it will search through the existing DB for matching
+# terms. If no term is given for a certain column, it will search for the wildcard '%'. All other search terms will be
+# searched in a way so that it will do partial matches as well as full matches.
 def query_database(params):
     entries = search_classifieds(**params)
     toSend = []
@@ -61,6 +68,7 @@ def query_database(params):
     return toSend
 
 
+# This is a custom validator that I made to make sure that they put in valid phone numbers into their Contact form
 def phone_validator():
     message = 'Must have a valid phone number'
 
@@ -73,6 +81,7 @@ def phone_validator():
     return _phone
 
 
+# 2 WTForm objects that are used in rendering. Each Field in this object corresponds to the user-input columns in the DB
 class ClassifiedForm(Form):
     title = StringField('Title:', [validators.DataRequired(), validators.Length(max=100)])
     description = TextAreaField('Description:', [validators.DataRequired(), validators.Length(max=1000)])
@@ -109,6 +118,7 @@ class ContactForm(Form):
     submit = SubmitField("Submit")
 
 
+# A temporary method for the early stages of the new website so that users have a convenient way to provide feedback
 def send_feedback_email(form_contents, username):
     msg = MIMEText(form_contents['input'])
     msg['Subject'] = "Feedback regarding classifieds.xp.bethel.edu from " + username

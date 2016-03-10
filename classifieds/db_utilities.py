@@ -1,10 +1,13 @@
-__author__ = 'phg49389'
-
 import datetime
 import smtplib
 from email.mime.text import MIMEText
 from classifieds import db, Classifieds, Contacts
 from sqlalchemy import or_, desc
+
+
+# In general, these methods simply enable loose coupling between the database and the server. Some take in the
+# necessary arguments needed by the database that can't be generated, and return the right value, while others are more
+# or less void methods that change specific entries in the database for functionality purposes.
 
 
 def add_classified(title, description, price, categories, username):

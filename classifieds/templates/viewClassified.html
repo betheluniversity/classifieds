@@ -31,7 +31,7 @@
                 </td>
             </tr>
             <tr>
-                <td>Listed by:</td><td><a href="/viewContact/{{ classified[5] }}">{{ classified[6] }}</a></td>
+                <td>Listed by:</td><td><a href="/view-contact/{{ classified[5] }}">{{ classified[6] }}</a></td>
             </tr>
             <tr>
                 <td>Date listed:</td><td>{{ classified[7].date() }}</td>
@@ -39,7 +39,7 @@
         </table>
         {% if classified[8] == False %}
             {% if classified[9] == False %}
-                <a href="/markComplete/{{ classified[0] }}">Mark as complete</a>
+                <a href="/mark-complete/{{ classified[0] }}">Mark as complete</a>
             {% else %}
                 <a href="/reactivate/{{ classified[0] }}">Renew this ad</a>
             {% endif %}
@@ -73,7 +73,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>Listed by:</td><td><a href="/viewContact/{{ classified[5] }}">{{ classified[6] }}</a></td>
+                        <td>Listed by:</td><td><a href="/view-contact/{{ classified[5] }}">{{ classified[6] }}</a></td>
                     </tr>
                     <tr>
                         <td>Date listed:</td><td>{{ classified[7].date() }}</td>
