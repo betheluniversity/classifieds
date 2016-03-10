@@ -10,7 +10,7 @@ error.log
 
 redirects.txt
 
-.db
+*.db
 
 app.db
 
