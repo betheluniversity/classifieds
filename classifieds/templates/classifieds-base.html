@@ -35,15 +35,6 @@
 {% endblock %}
 
 {% block body_content %}
-<<<<<<< HEAD
-{#    <div id="user_menu" class="top-right dropdown">#}
-{#        <button onmouseover="myFunction()" class="dropbtn">Hello, {{ session['fullname'] }}!</button>#}
-{#        <div id="myDropdown" class="dropdown-content">#}
-{#            <a href="/viewContact/{{ session['username'] }}">View your profile</a>#}
-{#            <a href="/feedback">Provide feedback</a>#}
-{#            <a href="/logout">Sign out</a>#}
-{#        </div>#}
-{#    </div>#}
     <div id="body">
         <div id="user_menu" class="top-right dropdown">
             <button class="dropbtn">Hello, {{ session['fullname'] }}!</button>
@@ -52,40 +43,6 @@
                 <a href="/feedback">Provide feedback</a>
                 <a href="/logout">Sign out</a>
             </div>
-=======
-    <h1>Bethel University's Classified Listings</h1>
-    <div id="nav" class="padded">
-        {% if request.path == '/' %}
-            <a href="/" class="button active">Home</a>
-        {% else %}
-            <a href="/" class="button">Home</a>
-        {% endif %}
-
-        {% if '/searchPage' in request.path %}
-            <a href="/search-page" class="button active">Search through classifieds</a>
-        {% else %}
-            <a href="/search-page" class="button">Search through classifieds</a>
-        {% endif %}
-
-        {% if '/addClassified' in request.path %}
-            <a href="/add-classified" class="button active">Submit a classified</a>
-        {% else %}
-            <a href="/add-classified" class="button">Submit a classified</a>
-        {% endif %}
-
-        {% if '/viewPosted/' in request.path %}
-            <a href="/view-posted/active" class="button active">View your posted classifieds</a>
-        {% else %}
-            <a href="/view-posted/active" class="button">View your posted classifieds</a>
-        {% endif %}
-    </div>
-    <div id="user_menu" class="top-right dropdown">
-        <button onclick="myFunction()" class="dropbtn">Hello, {{ session['fullname'] }}!</button>
-        <div id="myDropdown" class="dropdown-content">
-            <a href="/view-contact/{{ session['username'] }}">View your profile</a>
-            <a href="/feedback">Provide feedback</a>
-            <a href="/logout">Sign out</a>
->>>>>>> master
         </div>
         <div id="nav" class="padded">
             <h1 class="baseTitle">Bethel University's Classified Listings</h1>
