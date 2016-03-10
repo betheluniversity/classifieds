@@ -10,7 +10,7 @@
         <span class="error">There were errors with your form submission.</span>
     {% endif %}
 <form id="classifieds" method="POST" action="/submit-ad">
-    <table>
+    <table class="submit">
 {% for field in form if field.widget.input_type != 'hidden' %}
     <tr>
     {% if field.type != "SubmitField" %}
