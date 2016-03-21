@@ -31,7 +31,23 @@
 {#      }#}
 {#    }#}
 {#    </script>#}
-    <link rel="stylesheet" href="../static/styles.css"/>
+    <link {#id="pagestyle"#} rel="stylesheet" href="../static/styles.css"/>
+{#    <script>#}
+{#    function layoutHandler() {#}
+{#        var styleLink = document.getElementById("pagestyle");#}
+{#        if (window.innerWidth < 900) {#}
+{#            styleLink.setAttribute("href", "mobile.css");#}
+{#        }#}
+{#        else if (window.innerWidth < 1200) {#}
+{#            styleLink.setAttribute("href", "medium.css");#}
+{#        }#}
+{#        else {#}
+{#            styleLink.setAttribute("href", "../static/styles.css");#}
+{#        }#}
+{#    }#}
+{#    window.onresize = layoutHandler;#}
+{#    layoutHandler();#}
+{#    </script>#}
 {% endblock %}
 
 {% block body_content %}
@@ -87,6 +103,6 @@
         <div class="clear_footer"></div>
     </div>
     <div class="footer">
-        <p id="foot_title">#BETHEL UNIVERSITY est. 1871</p>
+        <p id="foot_title">BETHEL UNIVERSITY est. 1871</p>
     </div>
 {% endblock %}

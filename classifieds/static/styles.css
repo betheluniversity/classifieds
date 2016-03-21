@@ -4,11 +4,13 @@ table.sortable th:not(.sorttable_sorted):not(.sorttable_sorted_reverse):not(.sor
 
 /* Home page table */
 table.sortable {
+    font-family: Georgia, serif;
     margin: 20px 50px 50px 50px;
     border: none;
 }
 
 th.title {
+    font-family: inherit;
     width: 5%;
 }
 
@@ -37,11 +39,16 @@ form {
     margin: 20px 50px 50px 50px !important;
 }
 
-input {
-    font-family: sans-serif !important;
+label {
+    font-family: Georgia, serif;
+}
+
+option {
+    font-family: Georgia, serif;
 }
 
 input[type=submit] {
+    font-family: Gotham A, Gotham B, Helvetica, Arial, sans !important;
     color: #FFFFFF !important;
     background-color: #0069AA;
     border: none;
@@ -62,7 +69,7 @@ table.submit {
 /* classifieds banner/header */
 h1.baseTitle {
     color: #FFFFFF;
-    font-family: Gotham Book, sans-serif;
+    font-family: Gotham A, Gotham B, Helvetica, Arial, sans;
 }
 
 .padded {
@@ -80,7 +87,7 @@ h1.baseTitle {
 
 a {
     color: #0069AA !important;
-    font-family: Gotham Book, sans-serif !important;
+    font-family: Gotham A, Gotham B, Helvetica, Arial, sans !important;
 }
 
 a:hover {
@@ -111,7 +118,6 @@ a.button.active {
     margin: 0px 0px 0px;
     border: none;
     cursor: pointer;
-    /*border-radius: 5px;*/
 }
 
 .top-right {
@@ -146,29 +152,30 @@ a.button.active {
 }
 
 .show {
-    display:block;
+    display: block;
 }
 
-.footer{
+.footer {
     position: relative;
     background-color: #0F2C52;
     height: 50px;
 
 }
 
-#foot_title{
+#foot_title {
+    font-family: Gotham A, Gotham B, Helvetica, Arial, sans;
     text-align: center;
     color: white;
     padding-top: 14px;
     font-size: 10px;
 }
 
-.clear_footer{
+.clear_footer {
     height: 10px;
     clear: both;
 }
 
-#body{
+#body {
     min-height: 100%;
     margin-bottom: -50px;
     position: relative;
