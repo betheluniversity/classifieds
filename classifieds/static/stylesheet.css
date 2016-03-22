@@ -1,3 +1,40 @@
+table.sortable th:not(.sorttable_sorted):not(.sorttable_sorted_reverse):not(.sorttable_nosort):after {
+    content: " \25B4\25BE";
+}
+
+/* Home page table */
+table.sortable {
+    font-family: Georgia, serif;
+    margin: 20px 50px 50px 50px;
+    border: none;
+}
+
+th.title {
+    font-family: inherit;
+    width: 5%;
+}
+
+th.description {
+    width: 35%;
+}
+
+th.price {
+    width: 5%;
+}
+
+th.date {
+    width: 5%;
+}
+
+th.postedBy {
+    width: 5%;
+}
+
+th.status {
+    width: 5%;
+}
+
+
 body {
 
     background-color: white;
@@ -114,6 +151,7 @@ a.button.active {
     width: 100%;
     background-color: #0F2C52;
 }
+
 
 
 /* If webpage size becomes larger than 60em*/
