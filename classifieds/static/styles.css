@@ -35,8 +35,17 @@ th.status {
 }
 
 /* Search page form */
-form {
-    margin: 20px 50px 50px 50px !important;
+form#classifieds {
+    margin: 20px 50px 50px 0px;
+    /*position: absolute;*/
+}
+
+form#search {
+    margin: 20px 50px 50px 50px;
+}
+
+form#feedbackForm {
+    margin: 20px 50px 50px 50px;
 }
 
 label {
@@ -61,9 +70,31 @@ form:first-child {
     width: 50% !important;
 }
 
-/* Submit page form */
+/* Submit page form and contact form/edit contact */
 table.submit {
     border: none;
+}
+
+table {
+    margin-top: 20px;
+    margin-left: 41px;
+    /*border: none !important;*/
+}
+
+a#edit-profile{
+    margin-left: 50px;
+    font-size: 15px;
+}
+
+/* Viewing posts */
+
+span.posts {
+    float: left;
+    padding: 0px 15px 15px 0px;
+    margin-left: 50px;
+    margin-top: 20px;
+    margin-right: 50px;
+    font-family: Georgia, serif;
 }
 
 /* classifieds banner/header */
@@ -78,12 +109,12 @@ h1.baseTitle {
     background-color: #0F2C52;
 }
 
-.center {
-    position: relative;
-    width: 30%;
-    left: 35%;
-    right: 35%;
-}
+/*.center {*/
+    /*position: relative;*/
+    /*width: 30%;*/
+    /*left: 35%;*/
+    /*right: 35%;*/
+/*}*/
 
 a {
     color: #0069AA !important;
@@ -155,19 +186,21 @@ a.button.active {
     display: block;
 }
 
+/* footer */
+
 .footer {
     position: relative;
     background-color: #0F2C52;
     height: 50px;
-
 }
 
 #foot_title {
     font-family: Gotham A, Gotham B, Helvetica, Arial, sans;
     text-align: center;
-    color: white;
+    color: #f1f1f2;
     padding-top: 14px;
-    font-size: 10px;
+    font-size: 14px;
+    letter-spacing: 0.25px;
 }
 
 .clear_footer {

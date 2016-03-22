@@ -12,7 +12,7 @@
     <tr><td>Phone number:</td><td>{{ to_view[4] }}</td></tr>
 </table>
 {% if session['username'] == to_view[0] %}
-    <a href="/edit-contact">Edit info</a>
+    <a href="/edit-contact" id="edit-profile">Edit info</a>
 {% endif %}
 </div>
 {% endblock %}
