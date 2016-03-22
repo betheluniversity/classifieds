@@ -31,23 +31,7 @@
 {#      }#}
 {#    }#}
 {#    </script>#}
-    <link {#id="pagestyle"#} rel="stylesheet" href="../static/styles.css"/>
-{#    <script>#}
-{#    function layoutHandler() {#}
-{#        var styleLink = document.getElementById("pagestyle");#}
-{#        if (window.innerWidth < 900) {#}
-{#            styleLink.setAttribute("href", "mobile.css");#}
-{#        }#}
-{#        else if (window.innerWidth < 1200) {#}
-{#            styleLink.setAttribute("href", "medium.css");#}
-{#        }#}
-{#        else {#}
-{#            styleLink.setAttribute("href", "../static/styles.css");#}
-{#        }#}
-{#    }#}
-{#    window.onresize = layoutHandler;#}
-{#    layoutHandler();#}
-{#    </script>#}
+
 {% endblock %}
 
 {% block body_content %}
@@ -61,7 +45,8 @@
         </div>
         </div>
         <div id="nav" class="padded">
-            <h1 class="baseTitle">Bethel University's Classified Listings</h1>
+            <h1 class="baseTitle">Bethel University's</h1>
+            <h1 class="baseTitle">Classified Listings</h1>
             {% if request.path == '/' %}
                 <a href="/" class="button active">Home</a>
             {% else %}
