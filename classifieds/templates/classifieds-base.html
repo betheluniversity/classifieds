@@ -36,15 +36,15 @@
 
 {% block body_content %}
     <div id="body">
-        <div id="user_menu" class="top-right dropdown">
-        <button class="dropbtn">Hello, {{ session['fullname'] }}!</button>
-        <div id="myDropdown" class="dropdown-content">
-            <a href="/view-contact/{{ session['username'] }}">View your profile</a>
-            <a href="/feedback">Provide feedback</a>
-            <a href="/logout">Sign out</a>
-        </div>
-        </div>
         <div id="nav" class="padded">
+            <div id="user_menu" class="top-right dropdown">
+                <button class="dropbtn">Hello, {{ session['fullname'] }}!</button>
+                <div id="myDropdown" class="dropdown-content">
+                <a href="/view-contact/{{ session['username'] }}">View your profile</a>
+                <a href="/feedback">Provide feedback</a>
+                <a href="/logout">Sign out</a>
+        </div>
+        </div>
             <h1 class="baseTitle">Bethel University's</h1>
             <h1 class="baseTitle">Classified Listings</h1>
             {% if request.path == '/' %}
