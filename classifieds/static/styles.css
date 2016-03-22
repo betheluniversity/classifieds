@@ -89,6 +89,7 @@ a#edit-profile{
 /* Viewing posts */
 
 span.posts {
+    width: 30%;
     float: left;
     padding: 0px 15px 15px 0px;
     margin-left: 50px;
