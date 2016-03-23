@@ -189,3 +189,14 @@ form#classifieds {
 @media (min-width: 60em) {
 
 }
+
+
+input[type=submit] {
+    font-family: Gotham A, Gotham B, Helvetica, Arial, sans !important;
+    color: #FFFFFF !important;
+    background-color: #0069AA;
+    border: none;
+    padding: 10px 15px 10px 15px;
+    letter-spacing: 0.75px;
+    font-size: 15px !important;
+}
