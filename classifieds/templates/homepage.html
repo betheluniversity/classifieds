@@ -9,7 +9,7 @@
     {% if values.__len__() == 0 %}
 <p><span class="posts">There are no active posts to show.</span></p>
     {% else %}
-<div class="sortable">
+<div class="table">
 {% for val in values %}
     <div class="singlePost">
         <div class="title">Title<a href="/view-classified/{{ val[0] }}">{{ val[1] }}</a></div>

@@ -1,19 +1,9 @@
-table.sortable th:not(.sorttable_sorted):not(.sorttable_sorted_reverse):not(.sorttable_nosort):after {
-    content: " \25B4\25BE";
-}
-
 /* Home page table */
-div.sortable {
+div.table {
     overflow: auto;
     font-family: Georgia, serif;
-    margin: 20px 50px 50px 50px;
-    border: none;
-}
-
-table.sortable {
-    overflow: auto;
-    font-family: Georgia, serif;
-    margin: 20px 50px 50px 50px;
+    padding: 1.5em 2em 1em 1em;
+    margin: 0em 2em 4em 2em;
     border: none;
 }
 
@@ -129,31 +119,31 @@ a.button.active {
 .footer {
     position: relative;
     background-color: #0F2C52;
-    height: 60px;
+    height: 4em;
 }
 
 #foot_title {
     font-family: Gotham A, Gotham B, Helvetica, Arial, sans;
     text-align: center;
     color: #f1f1f2;
-    padding-top: 18px;
-    font-size: 14px;
+    padding-top: 1.4em;
+    font-size: .9em;
     letter-spacing: 0.25px;
 }
 
 .clear_footer {
-    height: 10px;
+    height: .625em;
     clear: both;
 }
 
 #body {
     min-height: 100%;
-    margin-bottom: -60px;
+    margin-bottom: -4em;
     position: relative;
 }
 
 .padded {
-    padding: 15px 50px 15px 50px;
+    padding: 1em 3em 1em 3em;
     margin: 0em;
     width: 100%;
     background-color: #0F2C52;
