@@ -1,37 +1,59 @@
 /* Home page table */
 div.table {
-    overflow: auto;
+    /*overflow: auto;*/
     font-family: Georgia, serif;
-    padding: 1.5em 2em 1em 1em;
+    padding: 1.5em 1em 1em 1em;
     margin: 0em 2em 4em 2em;
     border: none;
 }
 
-th.title {
-    font-family: inherit;
-    width: 5%;
+div.singlePost {
+    margin-bottom: 1em;
+    /*border: .05em solid black;*/
+    /*border-radius: .2em;*/
 }
 
-th.description {
-    width: 35%;
+div.title {
+    width: 50%;
+    padding: .1em;
+    background-color: #2ca8ff;
 }
 
-th.price {
-    width: 5%;
+div.titleItem {
+    width: 50%;
+    padding: .1em;
+    background-color: #0F2C52;
 }
 
-th.date {
-    width: 5%;
+div.description {
+    padding: .1em;
+    border: .05em;
 }
 
-th.postedBy {
-    width: 5%;
+div.price {
+    padding: .1em;
+    border: .05em;
 }
 
-th.status {
-    width: 5%;
+div.date {
+    padding: .1em;
+    border: .05em;
 }
 
+div.postedBy {
+    padding: .1em;
+    border: .05em;
+}
+
+div.status {
+    padding: .1em;
+    border: .05em;
+}
+
+article {
+    line-height: 120%;
+    /*padding-top: .1em;*/
+}
 
 body {
     background-color: white;
@@ -54,7 +76,7 @@ a:hover {
 }
 
 a.button {
-    margin-right: 2px;
+    margin-right: .1em;
     /*border-radius: 5px;*/
     background-color: #0069AA;
     color: #FFFFFF !important;

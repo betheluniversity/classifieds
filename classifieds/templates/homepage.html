@@ -12,11 +12,14 @@
 <div class="table">
 {% for val in values %}
     <div class="singlePost">
-        <div class="title">Title<a href="/view-classified/{{ val[0] }}">{{ val[1] }}</a></div>
-        <div class="description">Description<article>{{ val[2] }}</article></div>
-        <div class="price">Price{{ val[3] }}</div>
-        <div class="date">Date Posted{{ val[4].date() }}</div>
-        <div class="postedBy">Posted By<a href="/view-contact/{{ val[5] }}">{{ val[6] }}</a></div>
+        <div class="row1">
+            <div class="title">Title: </div>
+            <div class="titleItem"><a href="/view-classified/{{ val[0] }}">{{ val[1] }}</a></div>
+        </div>
+        <div class="description">Description: <article>{{ val[2] }}</article></div>
+        <div class="price">Price: {{ val[3] }}</div>
+        <div class="date">Date Posted: {{ val[4].date() }}</div>
+        <div class="postedBy">Posted By: <a href="/view-contact/{{ val[5] }}">{{ val[6] }}</a></div>
         {% if showStatus == True %}
             <div class="status">Status
                 {% if val[7] == True %}
