@@ -2,9 +2,9 @@
 div.table {
     /*overflow: auto;*/
     font-family: Georgia, serif;
-    padding: 1.5em 1em 1em 1em;
-    margin: 0em 2em 4em 2em;
     border: none;
+    padding: 1.5em 2em 1em 1em;
+    margin: 0em 2em 4em 2em;
 }
 
 div.singlePost {
