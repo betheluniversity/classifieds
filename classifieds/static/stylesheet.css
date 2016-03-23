@@ -3,7 +3,15 @@ table.sortable th:not(.sorttable_sorted):not(.sorttable_sorted_reverse):not(.sor
 }
 
 /* Home page table */
+div.sortable {
+    overflow: auto;
+    font-family: Georgia, serif;
+    margin: 20px 50px 50px 50px;
+    border: none;
+}
+
 table.sortable {
+    overflow: auto;
     font-family: Georgia, serif;
     margin: 20px 50px 50px 50px;
     border: none;
@@ -36,14 +44,13 @@ th.status {
 
 
 body {
-
     background-color: white;
     width: 100%;
 }
 
 h1.baseTitle {
     padding: 0em 3em 0em 0em;
-    text-align: center;
+    text-align: left;
     color: #FFFFFF;
 }
 

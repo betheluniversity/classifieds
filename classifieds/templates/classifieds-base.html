@@ -36,7 +36,6 @@
 
 {% block body_content %}
     <div id="body">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
         <div id="nav" class="padded">
             <div id="user_menu" class="top-right dropdown">
@@ -47,8 +46,8 @@
                 <a href="/logout">Sign out</a>
         </div>
         </div>
-            <h1 class="baseTitle">Bethel University's</h1>
-            <h1 class="baseTitle">Classified Listings</h1>
+            <h1 class="baseTitle">Bethel University's<br>Classified Listings</h1>
+{#            <h1 class="baseTitle">Classified Listings</h1>#}
             {% if request.path == '/' %}
                 <a href="/" class="button active">Home</a>
             {% else %}

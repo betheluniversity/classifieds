@@ -7,31 +7,18 @@
 {% block internal %}
 <div>
     {% if values.__len__() == 0 %}
-There are no active posts to show.
+<p><span class="posts">There are no active posts to show.</span></p>
     {% else %}
-<table class="sortable">
-    <thead>
-        <tr>
-            <th class="title">Title</th>
-            <th class="description">Description</th>
-            <th class="price">Price</th>
-            <th class="date">Date Posted</th>
-            <th class="postedBy">Posted By</th>
-            {% if showStatus == True %}
-            <th class="status">Status</th>
-            {% endif %}
-        </tr>
-    </thead>
-    <tbody>
+<div class="sortable">
 {% for val in values %}
-        <tr>
-            <td><a href="/view-classified/{{ val[0] }}">{{ val[1] }}</a></td>
-            <td><article>{{ val[2] }}</article></td>
-            <td>{{ val[3] }}</td>
-            <td>{{ val[4].date() }}</td>
-            <td><a href="/view-contact/{{ val[5] }}">{{ val[6] }}</a></td>
-            {% if showStatus == True %}
-            <td>
+    <div class="singlePost">
+        <div class="title">Title<a href="/view-classified/{{ val[0] }}">{{ val[1] }}</a></div>
+        <div class="description">Description<article>{{ val[2] }}</article></div>
+        <div class="price">Price{{ val[3] }}</div>
+        <div class="date">Date Posted{{ val[4].date() }}</div>
+        <div class="postedBy">Posted By<a href="/view-contact/{{ val[5] }}">{{ val[6] }}</a></div>
+        {% if showStatus == True %}
+            <div class="status">Status
                 {% if val[7] == True %}
                 Completed
                 {% elif val[8] == True %}
@@ -39,12 +26,11 @@ There are no active posts to show.
                 {% else %}
                 Active
                 {% endif %}
-            </td>
-            {% endif %}
-        </tr>
+            </div>
+        {% endif %}
+    </div>
 {% endfor %}
-    </tbody>
-</table>
+</div>
     {% endif %}
 </div>
 {% endblock %}
