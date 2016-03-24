@@ -43,33 +43,35 @@
                 <div id="myDropdown" class="dropdown-content">
                 <a href="/view-contact/{{ session['username'] }}">View your profile</a>
                 <a href="/feedback">Provide feedback</a>
-                <a href="/logout">Sign out</a></div>
-        </div>
-            <h1 class="baseTitle">Bethel University's<br>Classified Listings</h1>
-{#            <h1 class="baseTitle">Classified Listings</h1>#}
-            {% if request.path == '/' %}
-                <a href="/" class="button active">Home</a>
-            {% else %}
-                <a href="/" class="button">Home</a>
-            {% endif %}
+                <a href="/logout">Sign out</a>
+                </div>
+            </div>
+            <div class="centered">
+                <div class="centered"><h1 class="baseTitle">Bethel University's Classified Listings</h1></div>
+                {% if request.path == '/' %}
+                    <a href="/" class="button active">Home</a>
+                {% else %}
+                    <a href="/" class="button">Home</a>
+                {% endif %}
 
-            {% if '/search-page' in request.path %}
-                <a href="/search-page" class="button active">Search through classifieds</a>
-            {% else %}
-                <a href="/search-page" class="button">Search through classifieds</a>
-            {% endif %}
+                {% if '/search-page' in request.path %}
+                    <a href="/search-page" class="button active">Search through classifieds</a>
+                {% else %}
+                    <a href="/search-page" class="button">Search through classifieds</a>
+                {% endif %}
 
-            {% if '/add-classified' in request.path %}
-                <a href="/add-classified" class="button active">Submit a classified</a>
-            {% else %}
-                <a href="/add-classified" class="button">Submit a classified</a>
-            {% endif %}
+                {% if '/add-classified' in request.path %}
+                    <a href="/add-classified" class="button active">Submit a classified</a>
+                {% else %}
+                    <a href="/add-classified" class="button">Submit a classified</a>
+                {% endif %}
 
-            {% if '/view-posted/' in request.path %}
-                <a href="/view-posted/active" class="button active">View your posted classifieds</a>
-            {% else %}
-                <a href="/view-posted/active" class="button">View your posted classifieds</a>
-            {% endif %}
+                {% if '/view-posted/' in request.path %}
+                    <a href="/view-posted/active" class="button active">View your posted classifieds</a>
+                {% else %}
+                    <a href="/view-posted/active" class="button">View your posted classifieds</a>
+                {% endif %}
+            </div>
         </div>
         {% block internal %}
         {% endblock %}
