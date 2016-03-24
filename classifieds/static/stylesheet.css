@@ -1,24 +1,18 @@
 /* Home page table */
 div.table {
-    /*overflow: auto;*/
     font-family: Georgia, serif;
     border: none;
     padding: 1.5em 2em 1em 1em;
-    margin: 0em 2em 4em 2em;
-    width: 100%;
+    margin: 0em 0em 4em 2em;
 }
 
 div.singlePost {
     margin-bottom: 1em;
-    /*border: .0625em solid black;*/
-    /*border-radius: .3em;*/
     display: table;
-    /*width: 100%;*/
 }
 
 .row {
     display: table-row;
-    margin-right: 2em;
 }
 
 .cell {
@@ -26,6 +20,7 @@ div.singlePost {
     padding: .5em 1em .5em .5em;
     margin-right: .5em;
     max-width: 38.5em;
+
 }
 
 /*div#title {*/
@@ -54,14 +49,12 @@ div.singlePost {
 
 article {
     line-height: 120%;
-    /*padding-top: .1em;*/
 }
 
 .line-separator {
-    width: 90%;
     height: .0625em;
     background-color: #000000;
-    margin: 1em;
+    margin: 1em 1em 1em 0em;
 }
 
 body {
@@ -74,6 +67,7 @@ h1.baseTitle {
     color: #FFFFFF;
 }
 
+
 a {
     color: #0069AA !important;
     font-family: Gotham A, Gotham B, Helvetica, Arial, sans !important;
@@ -85,9 +79,10 @@ a:hover {
 
 a.button {
     margin-right: .125em;
-    /*border-radius: 5px;*/
     background-color: #0069AA;
     color: #FFFFFF !important;
+
+
 }
 
 a.button:hover {
@@ -104,14 +99,13 @@ a.button.active {
 
 .dropbtn {
     background-color: #0069AA !important;
-    margin: 0em 0em 0em;
+    margin: 0em 0em 0em 0em;
     border: none;
     cursor: pointer;
 }
 
 .top-right {
-    /*float: right;*/
-    margin: 0em 3em 0em 0em;
+    margin: 1em 0em 0em 0em;
     display: inline-block;
 }
 
@@ -198,6 +192,10 @@ form#classifieds {
 
     a:hover {
         color: #005285;
+    }
+
+    a.button {
+
     }
 
     a.button:hover {
