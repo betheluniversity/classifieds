@@ -63,10 +63,14 @@ body {
 
 h1.baseTitle {
     padding: 0em 3em 0em 0em;
-    text-align: left;
+    margin-bottom: .5em;
+    text-align: center;
     color: #FFFFFF;
 }
 
+div.centered {
+    text-align: center;
+}
 
 a {
     color: #0069AA !important;
@@ -81,8 +85,6 @@ a.button {
     margin-right: .125em;
     background-color: #0069AA;
     color: #FFFFFF !important;
-
-
 }
 
 a.button:hover {
@@ -105,8 +107,9 @@ a.button.active {
 }
 
 .top-right {
-    margin: 1em 0em 0em 0em;
+    margin: 1em 3em 2em 1em;
     display: inline-block;
+
 }
 
 .dropbtn:hover {
@@ -169,26 +172,45 @@ a.button.active {
 .padded {
     padding: 1em 3em 1em 3em;
     margin: 0em;
-    width: 100%;
+    /*width: 100%;*/
     background-color: #0F2C52;
 }
 
 /* Search page form */
 form#search {
-    margin: 20px 50px 50px 50px;
+    margin: 1em 3em 1em 3em;
     padding: .75em;
 }
 
 /* submit a classified page */
 form#classifieds {
-    margin: 20px 50px 50px 50px;
+    margin: 1em 3em 3em 3em;
     padding: .75em;
     /*position: absolute;*/
 }
 
+input[type=submit] {
+    font-family: Gotham A, Gotham B, Helvetica, Arial, sans !important;
+    color: #FFFFFF !important;
+    background-color: #0069AA;
+    border: none;
+    padding: 10px 15px 10px 15px;
+    letter-spacing: 0.75px;
+    font-size: 15px !important;
+}
+
+
 
 /* If webpage size becomes larger than 60em*/
 @media (min-width: 60em) {
+
+    h1.baseTitle {
+        text-align: left;
+    }
+
+    div.centered {
+        text-align: left;
+    }
 
     a:hover {
         color: #005285;
@@ -209,15 +231,4 @@ form#classifieds {
     .dropbtn:hover {
         background-color: #005285 !important;
     }
-}
-
-
-input[type=submit] {
-    font-family: Gotham A, Gotham B, Helvetica, Arial, sans !important;
-    color: #FFFFFF !important;
-    background-color: #0069AA;
-    border: none;
-    padding: 10px 15px 10px 15px;
-    letter-spacing: 0.75px;
-    font-size: 15px !important;
 }
