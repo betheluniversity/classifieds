@@ -25,6 +25,7 @@ div.singlePost {
     display: table-cell;
     padding: .5em 1em .5em .5em;
     margin-right: .5em;
+    max-width: 38.5em;
 }
 
 /*div#title {*/
