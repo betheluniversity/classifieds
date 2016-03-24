@@ -5,59 +5,66 @@ div.table {
     border: none;
     padding: 1.5em 2em 1em 1em;
     margin: 0em 2em 4em 2em;
+    width: 100%;
 }
 
 div.singlePost {
     margin-bottom: 1em;
-    /*border: .05em solid black;*/
-    /*border-radius: .2em;*/
+    /*border: .0625em solid black;*/
+    /*border-radius: .3em;*/
+    display: table;
+    /*width: 100%;*/
 }
 
-div.title {
-    width: 50%;
-    padding: .1em;
-    background-color: #2ca8ff;
+.row {
+    display: table-row;
+    margin-right: 2em;
 }
 
-div.titleItem {
-    width: 50%;
-    padding: .1em;
-    background-color: #0F2C52;
+.cell {
+    display: table-cell;
+    padding: .5em 1em .5em .5em;
+    margin-right: .5em;
 }
 
-div.description {
-    padding: .1em;
-    border: .05em;
-}
+/*div#title {*/
+    /*padding: .5em;*/
+/*}*/
 
-div.price {
-    padding: .1em;
-    border: .05em;
-}
+/*div#description {*/
+    /*padding: .5em;*/
+/*}*/
 
-div.date {
-    padding: .1em;
-    border: .05em;
-}
+/*div#price {*/
+    /*padding: .5em;*/
+/*}*/
 
-div.postedBy {
-    padding: .1em;
-    border: .05em;
-}
+/*div#date {*/
+    /*padding: .5em;*/
+/*}*/
 
-div.status {
-    padding: .1em;
-    border: .05em;
-}
+/*div#postedBy {*/
+    /*padding: .5em;*/
+/*}*/
+
+/*div#status {*/
+    /*padding: .5em;*/
+/*}*/
 
 article {
     line-height: 120%;
     /*padding-top: .1em;*/
 }
 
+.line-separator {
+    width: 90%;
+    height: .0625em;
+    background-color: #000000;
+    margin: 1em;
+}
+
 body {
     background-color: white;
-    width: 100%;
 }
 
 h1.baseTitle {
@@ -76,18 +83,18 @@ a:hover {
 }
 
 a.button {
-    margin-right: .1em;
+    margin-right: .125em;
     /*border-radius: 5px;*/
     background-color: #0069AA;
     color: #FFFFFF !important;
 }
 
 a.button:hover {
-    background-color: #005285;
+    background-color: #0069AA;
 }
 
 a.button.active {
-    border: #FFC600 solid 2px;
+    border: #FFC600 solid .125em;
 }
 
 .error{
@@ -108,7 +115,7 @@ a.button.active {
 }
 
 .dropbtn:hover {
-    background-color: #005285 !important;
+    background-color: #0069AA !important;
 }
 
 .dropdown-content {
@@ -188,6 +195,21 @@ form#classifieds {
 /* If webpage size becomes larger than 60em*/
 @media (min-width: 60em) {
 
+    a:hover {
+        color: #005285;
+    }
+
+    a.button:hover {
+        background-color: #005285;
+    }
+
+    .top-right {
+        float: right;
+    }
+
+    .dropbtn:hover {
+        background-color: #005285 !important;
+    }
 }
 
 

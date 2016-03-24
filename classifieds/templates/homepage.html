@@ -7,32 +7,49 @@
 {% block internal %}
 <div>
     {% if values.__len__() == 0 %}
-<p><span class="posts">There are no active posts to show.</span></p>
+        <p><span class="posts">There are no active posts to show.</span></p>
     {% else %}
 <div class="table">
 {% for val in values %}
     <div class="singlePost">
-        <div class="row1">
-            <div class="title">Title: </div>
-            <div class="titleItem"><a href="/view-classified/{{ val[0] }}">{{ val[1] }}</a></div>
+        <div class="row">
+            <div id="title" class="cell">Title: </div>
+            <div class="cell"><a href="/view-classified/{{ val[0] }}">{{ val[1] }}</a></div>
         </div>
-        <div class="description">Description: <article>{{ val[2] }}</article></div>
-        <div class="price">Price: {{ val[3] }}</div>
-        <div class="date">Date Posted: {{ val[4].date() }}</div>
-        <div class="postedBy">Posted By: <a href="/view-contact/{{ val[5] }}">{{ val[6] }}</a></div>
+        <div class="row">
+            <div id="description" class="cell">Description: </div>
+            <div class="cell"><article>{{ val[2] }}</article></div>
+        </div>
+        <div class="row">
+            <div id="price" class="cell">Price: </div>
+            <div class="cell">{{ val[3] }}</div>
+        </div>
+        <div class="row">
+            <div id="date" class="cell">Date Posted: </div>
+            <div class="cell">{{ val[4].date() }}</div>
+        </div>
+        <div class="row">
+            <div id="postedBy" class="cell">Posted By: </div>
+            <div class="cell"><a href="/view-contact/{{ val[5] }}">{{ val[6] }}</a></div>
+        </div>
         {% if showStatus == True %}
-            <div class="status">Status
-                {% if val[7] == True %}
-                Completed
-                {% elif val[8] == True %}
-                Expired
-                {% else %}
-                Active
-                {% endif %}
+            <div class="row">
+                <div id="status" class="cell">Status</div>
+                <div class="cell">
+                    {% if val[7] == True %}
+                    Completed
+                    {% elif val[8] == True %}
+                    Expired
+                    {% else %}
+                    Active
+                    {% endif %}
+                </div>
             </div>
         {% endif %}
     </div>
+<div class="line-separator"></div>
 {% endfor %}
+
 </div>
     {% endif %}
 </div>
