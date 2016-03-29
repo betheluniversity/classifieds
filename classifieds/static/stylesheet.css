@@ -24,30 +24,6 @@ div.singlePost {
 
 }
 
-/*div#title {*/
-    /*padding: .5em;*/
-/*}*/
-
-/*div#description {*/
-    /*padding: .5em;*/
-/*}*/
-
-/*div#price {*/
-    /*padding: .5em;*/
-/*}*/
-
-/*div#date {*/
-    /*padding: .5em;*/
-/*}*/
-
-/*div#postedBy {*/
-    /*padding: .5em;*/
-/*}*/
-
-/*div#status {*/
-    /*padding: .5em;*/
-/*}*/
-
 article {
     line-height: 120%;
 }
@@ -202,9 +178,35 @@ input[type=submit] {
     margin-bottom: 2.5em;
 }
 
+input {
+    max-width: 100%;
+}
+
+input#fname {
+    max-width: 60%;
+}
+
+input#lname {
+    max-width: 60%;
+}
+
+input#email {
+    max-width: 60%;
+}
+
+input#phone {
+    max-width: 60%;
+}
+
+textarea {
+    max-width: 100%;
+}
+
+select {
+    max-width: 100%;
+}
 
 span.posts {
-    width: 30%;
     float: left;
     padding: 0em 1em 15em 0em;
     margin-left: 3em;
@@ -213,13 +215,12 @@ span.posts {
     font-family: Georgia, serif;
 }
 
+p.note {
+    margin: 1em 3em 1em 3em;
+}
 
 /* If webpage size becomes larger than 60em*/
-@media (min-width: 60em) {
-
-    h1.baseTitle {
-        text-align: center;
-    }
+@media (min-width: 48em) {
 
     a:hover {
         color: #005285;
@@ -233,46 +234,23 @@ span.posts {
         background-color: #005285;
     }
 
-    .top-right {
-        float: right;
-    }
-
     .dropbtn:hover {
         background-color: #005285 !important;
     }
+
+    input {
+        max-width: 50%;
+    }
+
+    textarea {
+        max-width: 50%;
+    }
+
+    select {
+        max-width: 50%;
+    }
+
+    p.note {
+        max-width: 50%;
+    }
 }
-<<<<<<< HEAD
-=======
-
-
-input[type=submit] {
-    font-family: Gotham A, Gotham B, Helvetica, Arial, sans !important;
-    color: #FFFFFF !important;
-    background-color: #0069AA;
-    border: none;
-    padding: 10px 15px 10px 15px;
-    letter-spacing: 0.75px;
-    font-size: 15px !important;
-
-}
-
-#search input[type=submit]{
-    margin-bottom: 2.5em;
-}
-
-
-span.posts {
-    width: 30%;
-    float: left;
-    padding: 0px 15px 15px 0px;
-    margin-left: 50px;
-    margin-top: 20px;
-    margin-right: 50px;
-    font-family: Georgia, serif;
-}
-
-h1.baseTitle {
-    color: #FFFFFF;
-    font-family: Gotham A, Gotham B, Helvetica, Arial, sans;
-}
->>>>>>> origin/mobile-css
