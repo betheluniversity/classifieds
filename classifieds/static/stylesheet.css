@@ -63,10 +63,10 @@ body {
 }
 
 h1.baseTitle {
-    padding: 0em 3em 0em 0em;
     margin-bottom: .5em;
-    text-align: center;
+    text-align: left;
     color: #FFFFFF;
+    font-family: Gotham A, Gotham B, Helvetica, Arial, sans;
 }
 
 div.centered {
@@ -108,7 +108,7 @@ a.button.active {
 }
 
 .top-right {
-    margin: 1em 3em 2em 1em;
+    margin: 1em 3em 1em 0em;
     display: inline-block;
 
 }
@@ -173,7 +173,6 @@ a.button.active {
 .padded {
     padding: 1em 3em 1em 3em;
     margin: 0em;
-    /*width: 100%;*/
     background-color: #0F2C52;
 }
 
@@ -187,7 +186,6 @@ form#search {
 form#classifieds {
     margin: 1em 3em 3em 3em;
     padding: .75em;
-    /*position: absolute;*/
 }
 
 input[type=submit] {
@@ -195,11 +193,25 @@ input[type=submit] {
     color: #FFFFFF !important;
     background-color: #0069AA;
     border: none;
-    padding: 10px 15px 10px 15px;
+    padding: .625em 1em .625em 1em;
     letter-spacing: 0.75px;
-    font-size: 15px !important;
+    font-size: 1em !important;
 }
 
+#search input[type=submit]{
+    margin-bottom: 2.5em;
+}
+
+
+span.posts {
+    width: 30%;
+    float: left;
+    padding: 0em 1em 15em 0em;
+    margin-left: 3em;
+    margin-top: 1.25em;
+    margin-right: 3em;
+    font-family: Georgia, serif;
+}
 
 
 /* If webpage size becomes larger than 60em*/
@@ -228,36 +240,4 @@ input[type=submit] {
     .dropbtn:hover {
         background-color: #005285 !important;
     }
-}
-
-
-input[type=submit] {
-    font-family: Gotham A, Gotham B, Helvetica, Arial, sans !important;
-    color: #FFFFFF !important;
-    background-color: #0069AA;
-    border: none;
-    padding: 10px 15px 10px 15px;
-    letter-spacing: 0.75px;
-    font-size: 15px !important;
-
-}
-
-#search input[type=submit]{
-    margin-bottom: 2.5em;
-}
-
-
-span.posts {
-    width: 30%;
-    float: left;
-    padding: 0px 15px 15px 0px;
-    margin-left: 50px;
-    margin-top: 20px;
-    margin-right: 50px;
-    font-family: Georgia, serif;
-}
-
-h1.baseTitle {
-    color: #FFFFFF;
-    font-family: Gotham A, Gotham B, Helvetica, Arial, sans;
 }
