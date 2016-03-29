@@ -184,7 +184,7 @@ form#search {
 
 /* submit a classified page */
 form#classifieds {
-    margin: 1em 3em 3em 3em;
+    margin: 1em 3em 3em 2.38em;
     padding: .75em;
 }
 
@@ -241,3 +241,38 @@ span.posts {
         background-color: #005285 !important;
     }
 }
+<<<<<<< HEAD
+=======
+
+
+input[type=submit] {
+    font-family: Gotham A, Gotham B, Helvetica, Arial, sans !important;
+    color: #FFFFFF !important;
+    background-color: #0069AA;
+    border: none;
+    padding: 10px 15px 10px 15px;
+    letter-spacing: 0.75px;
+    font-size: 15px !important;
+
+}
+
+#search input[type=submit]{
+    margin-bottom: 2.5em;
+}
+
+
+span.posts {
+    width: 30%;
+    float: left;
+    padding: 0px 15px 15px 0px;
+    margin-left: 50px;
+    margin-top: 20px;
+    margin-right: 50px;
+    font-family: Georgia, serif;
+}
+
+h1.baseTitle {
+    color: #FFFFFF;
+    font-family: Gotham A, Gotham B, Helvetica, Arial, sans;
+}
+>>>>>>> origin/mobile-css
