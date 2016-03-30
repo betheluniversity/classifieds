@@ -152,12 +152,6 @@ a.button.active {
     background-color: #0F2C52;
 }
 
-/* Search page form */
-form#search {
-    margin: 1em 3em 1em 3em;
-    padding: .75em;
-}
-
 /* submit a classified page */
 form#classifieds {
     margin: 1em 3em 3em 2.38em;
@@ -237,20 +231,22 @@ p.note {
     .dropbtn:hover {
         background-color: #005285 !important;
     }
-
-    input {
-        max-width: 50%;
-    }
-
-    textarea {
-        max-width: 50%;
-    }
-
-    select {
-        max-width: 50%;
-    }
-
-    p.note {
-        max-width: 50%;
-    }
 }
+
+
+input {
+        max-width: 50%;
+}
+
+textarea {
+        max-width: 50%;
+}
+
+select {
+        max-width: 50%;
+}
+
+p.note {
+        max-width: 50%;
+    }
+
