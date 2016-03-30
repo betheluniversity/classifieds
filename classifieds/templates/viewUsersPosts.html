@@ -34,32 +34,71 @@
 {% if posts.__len__() == 0 %}
 <p class="noPosts">There are no active posts to show.</p>
     {% else %}
-<table class="sortable">
-    <tr>
-        <th>Title</th>
-        <th>Description</th>
-        <th>Price</th>
-        <th>Date Posted</th>
-        <th class="sorttable_nosort"></th>
-    </tr>
-{% for post in posts %}
-    <tr>
-        <td><a href="/view-classified/{{ post[0] }}">{{ post[1] }}</a></td>
-        <td><article>{{ post[2] }}</article></td>
-        <td>{{ post[3] }}</td>
-        <td>{{ post[4].date() }}</td>
-        <td>
-        {% if post[6] == False %}
-            {% if post[7] == True %}
-                <a href="/reactivate/{{ post[0] }}">Renew this ad</a>
-            {% else %}
-                <a href="/mark-complete/{{ post[0] }}">Mark as complete</a>
+    <div class="table">
+    {% for post in posts %}
+        <div class="singlePost">
+            <div class="row">
+                <div id="title" class="cell">Title:</div>
+                <div class="cell"><a href="/view-classified/{{ post[0] }}">{{ post[1] }}</a></div>
+            </div>
+            <div class="row">
+                <div id="description" class="cell">Description: </div>
+                <div class="cell"><article>{{ post[2] }}</article></div>
+            </div>
+            <div class="row">
+                <div id="price" class="cell">Price: </div>
+                <div class="cell">{{ post[3] }}</div>
+            </div>
+            <div class="row">
+                <div id="date" class="cell">Date Posted: </div>
+                <div class="cell">{{ post[4].date() }}</div>
+            </div>
+            {% if post[6] == False %}
+                {% if post[7] == True %}
+                    <div class="row">
+                        <div id="marked" class="cell">
+                            <a href="/reactivate/{{ post[0] }}">Renew this ad</a>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="row">
+                        <div id="marked" class="cell">
+                            <a href="/mark-complete/{{ post[0] }}">Mark as complete</a>
+                        </div>
+                    </div>
+                {% endif %}
             {% endif %}
-        {% endif %}
-        </td>
-    </tr>
-{% endfor %}
-</table>
+        </div>
+        <div class="line-separator"></div>
+    {% endfor %}
+    </div>
+
+{#<table class="sortable">#}
+{#    <tr>#}
+{#        <th>Title</th>#}
+{#        <th>Description</th>#}
+{#        <th>Price</th>#}
+{#        <th>Date Posted</th>#}
+{#        <th class="sorttable_nosort"></th>#}
+{#    </tr>#}
+{#{% for post in posts %}#}
+{#    <tr>#}
+{#        <td><a href="/view-classified/{{ post[0] }}">{{ post[1] }}</a></td>#}
+{#        <td><article>{{ post[2] }}</article></td>#}
+{#        <td>{{ post[3] }}</td>#}
+{#        <td>{{ post[4].date() }}</td>#}
+{#        <td>#}
+{#        {% if post[6] == False %}#}
+{#            {% if post[7] == True %}#}
+{#                <a href="/reactivate/{{ post[0] }}">Renew this ad</a>#}
+{#            {% else %}#}
+{#                <a href="/mark-complete/{{ post[0] }}">Mark as complete</a>#}
+{#            {% endif %}#}
+{#        {% endif %}#}
+{#        </td>#}
+{#    </tr>#}
+{#{% endfor %}#}
+{#</table>#}
     {% endif %}
 </div>
 {% endblock %}

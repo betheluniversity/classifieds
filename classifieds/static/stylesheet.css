@@ -4,7 +4,6 @@ div.table {
     border: none;
     padding: 1.5em 2em 1em 1em;
     margin: 0em 2em 4em 2em;
-    margin: 0em 0em 4em 2em;
 }
 
 div.singlePost {
@@ -32,6 +31,10 @@ article {
     height: .0625em;
     background-color: #000000;
     margin: 1em 1em 1em 0em;
+}
+
+#marked{
+    max-width: 2em;
 }
 
 body {
@@ -215,6 +218,7 @@ select {
     height: .625em;
     clear: both;
 }
+
 
 /* If webpage size becomes larger than 60em*/
 @media (min-width: 48em) {
