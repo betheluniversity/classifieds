@@ -145,7 +145,7 @@ a.button.active {
 }
 
 /* submit a classified page */
-form#classifieds {
+form {
     margin: 1em 3em 3em 2.38em;
     padding: .75em;
 }
@@ -161,8 +161,6 @@ input[type=submit] {
     margin-bottom: 1.25em;
 
 }
-
-
 
 input {
     max-width: 100%;
@@ -188,15 +186,14 @@ textarea {
     max-width: 100%;
 }
 
+textarea#input {
+    margin: -3em 0em 1.25em 0em;
+}
+
 select {
     max-width: 100%;
 }
 
-<<<<<<< Updated upstream
-
-
-=======
->>>>>>> Stashed changes
 /* footer */
 
 .footer {
