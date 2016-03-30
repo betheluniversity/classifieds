@@ -158,11 +158,11 @@ input[type=submit] {
     padding: .625em 1em .625em 1em;
     letter-spacing: 0.75px;
     font-size: 1em !important;
+    margin-bottom: 1.25em;
+
 }
 
-#search input[type=submit]{
-    margin-bottom: 2.5em;
-}
+
 
 input {
     max-width: 100%;
@@ -192,12 +192,7 @@ select {
     max-width: 100%;
 }
 
-/*span.posts {*/
-    /*float: left;*/
-    /*padding: .5em;*/
-    /*margin: 1.25em 3em 1.25em 3em;*/
-    /*font-family: Georgia, serif;*/
-/*}*/
+
 
 /* footer */
 
@@ -257,6 +252,3 @@ select {
     }
 
 }
-
-
-
