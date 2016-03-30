@@ -38,6 +38,13 @@ body {
     background-color: white;
 }
 
+#body {
+    min-height: 100%;
+    margin-bottom: -4em;
+    position: relative;
+}
+
+
 h1.baseTitle {
     margin-bottom: .5em;
     text-align: left;
@@ -47,6 +54,19 @@ h1.baseTitle {
 
 div.centered {
     text-align: left;
+}
+
+p {
+    font-family: Georgia, serif;
+}
+
+p.note {
+    margin: 1em 3em 0em 3em;
+}
+
+p.noPosts {
+    margin: 1em 3em 1em 3em;
+    padding-bottom: 5em;
 }
 
 a {
@@ -118,34 +138,6 @@ a.button.active {
     display: block;
 }
 
-/* footer */
-
-.footer {
-    position: relative;
-    background-color: #0F2C52;
-    height: 4em;
-}
-
-#foot_title {
-    font-family: Gotham A, Gotham B, Helvetica, Arial, sans;
-    text-align: center;
-    color: #f1f1f2;
-    padding-top: 1.4em;
-    font-size: .9em;
-    letter-spacing: 0.25px;
-}
-
-.clear_footer {
-    height: .625em;
-    clear: both;
-}
-
-#body {
-    min-height: 100%;
-    margin-bottom: -4em;
-    position: relative;
-}
-
 .padded {
     padding: 1em 3em 1em 3em;
     margin: 0em;
@@ -200,17 +192,33 @@ select {
     max-width: 100%;
 }
 
-span.posts {
-    float: left;
-    padding: 0em 1em 15em 0em;
-    margin-left: 3em;
-    margin-top: 1.25em;
-    margin-right: 3em;
-    font-family: Georgia, serif;
+/*span.posts {*/
+    /*float: left;*/
+    /*padding: .5em;*/
+    /*margin: 1.25em 3em 1.25em 3em;*/
+    /*font-family: Georgia, serif;*/
+/*}*/
+
+/* footer */
+
+.footer {
+    position: relative;
+    background-color: #0F2C52;
+    height: 4em;
 }
 
-p.note {
-    margin: 1em 3em 1em 3em;
+#foot_title {
+    font-family: Gotham A, Gotham B, Helvetica, Arial, sans;
+    text-align: center;
+    color: #f1f1f2;
+    padding-top: 1.4em;
+    font-size: .9em;
+    letter-spacing: 0.25px;
+}
+
+.clear_footer {
+    height: .625em;
+    clear: both;
 }
 
 /* If webpage size becomes larger than 60em*/
@@ -231,22 +239,24 @@ p.note {
     .dropbtn:hover {
         background-color: #005285 !important;
     }
-}
 
-
-input {
-        max-width: 50%;
-}
-
-textarea {
-        max-width: 50%;
-}
-
-select {
-        max-width: 50%;
-}
-
-p.note {
+    input {
         max-width: 50%;
     }
+
+    textarea {
+        max-width: 50%;
+    }
+
+    select {
+        max-width: 50%;
+    }
+
+    p.note {
+        max-width: 50%;
+    }
+
+}
+
+
 
