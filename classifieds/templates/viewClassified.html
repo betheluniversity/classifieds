@@ -6,7 +6,7 @@
 
 {% block internal %}
 {% if session['username'] == classified[5] %}
-    <div>
+    <div class="table">
         <table>
             <tr>
                 <td>Title:</td><td>{{ classified[1] }}</td>
@@ -48,7 +48,7 @@
 {% else %}
     {% if classified[8] == False %}
         {% if classified[9] == False %}
-            <div>
+            <div class="table">
                 <table>
                     <tr>
                         <td>Title:</td><td>{{ classified[1] }}</td>
