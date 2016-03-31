@@ -9,53 +9,45 @@
     {% if form.errors %}
         <span class="error">There were errors with your form submission.</span>
     {% endif %}
-<p class="note">Note: Any information put in here will be publicly viewable by anyone else using this website. This is done so
-    that if someone wants to contact you about an ad you post, they can view your info here.</p>
+<p class="note">
+    Note: Any information put in here will be publicly viewable by anyone else using this website. This is done so
+    that if someone wants to contact you about an ad you post, they can view your info here.<br>
+    <span class="star">* </span><span class="warning"> All fields are required</span>
+</p>
+
     <form id="classifieds" method="POST" action="/submit-contact">
-        <label for="firstname"><span style="color:red">* </span>First Name:</label>
-            <input type="text" name="fname" id="fname">
-        <label for="lastname"><span style="color:red">* </span>Last Name:</label>
-            <input type="text" name="lname" id="lname">
-        <label for="email"><span style="color:red">* </span>Email Address:</label>
-            <input type="text" name="email" id="email">
-        <label for="phonenum"><span style="color:red">* </span>Phone Number:</label>
-            <input type="text" name="phone" id="phone">
-        <input type="submit" value="Update"/>
+{% for field in form if field.widget.input_type != 'hidden' %}
+    <div>
+    {% if field.type != "SubmitField" %}
+        <div>{{ field.label }}</div>
+    {% else %}
+        <div></div>
+    {% endif %}
+        <div>
+            {% if info.__len__() > 0 %}
+                {% if loop.index0 == info.__len__() - 1 %}
+                    {{ field(size=20, value="Update") }}
+                {% else %}
+                    {{ field(size=20, value=info[loop.index0 + 1]) }}
+                {% endif %}
+            {% else %}
+                {{ field(size=20) }}
+            {% endif %}
+        </div>
+    </div>
+{% endfor %}
     </form>
+
+{#    <form id="classifieds" method="POST" action="/submit-contact">#}
+{#        <label for="firstname"><span style="color:red">* </span>First Name:</label>#}
+{#            <input type="text" name="fname" id="fname">#}
+{#        <label for="lastname"><span style="color:red">* </span>Last Name:</label>#}
+{#            <input type="text" name="lname" id="lname">#}
+{#        <label for="email"><span style="color:red">* </span>Email Address:</label>#}
+{#            <input type="text" name="email" id="email">#}
+{#        <label for="phonenum"><span style="color:red">* </span>Phone Number:</label>#}
+{#            <input type="text" name="phone" id="phone">#}
+{#        <input type="submit" value="Update"/>#}
+{#    </form>#}
 </div>
-{#{% endblock %}#}
-
-
-{#    <table>#}
-{#{% for field in form if field.widget.input_type != 'hidden' %}#}
-{#    <tr>#}
-{#    {% if field.type != "SubmitField" %}#}
-{#        <td>{{ field.label }}#}
-{#        {% if field.flags.required %}#}
-{#            <span style="color:red">*</span>#}
-{#        {% endif %}#}
-{#        {% for error in form.errors[field.name] %}#}
-{#            <span class="error">#}
-{#            {{ error }}#}
-{#            </span>#}
-{#        {% endfor %}#}
-{#        </td>#}
-{#    {% else %}#}
-{#        <td></td>#}
-{#    {% endif %}#}
-{#        <td>#}
-{#            {% if info.__len__() > 0 %}#}
-{#                {% if loop.index0 == info.__len__() - 1 %}#}
-{#                    {{ field(size=20, value="Update") }}#}
-{#                {% else %}#}
-{#                    {{ field(size=20, value=info[loop.index0 + 1]) }}#}
-{#                {% endif %}#}
-{#            {% else %}#}
-{#                {{ field(size=20) }}#}
-{#            {% endif %}#}
-{#        </td>#}
-{#    </tr>#}
-{#{% endfor %}#}
-{#    </table>#}
-
 {% endblock %}

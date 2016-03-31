@@ -64,7 +64,7 @@ p {
 }
 
 p.note {
-    margin: 1em 3em -1em 3em;
+    margin: 1em 3em -1.4em 3em;
 }
 
 p.noPosts {
@@ -148,6 +148,18 @@ a.button.active {
 }
 
 /* submit a classified page */
+
+span.star {
+    font-family: Georgia, serif;
+    font-size: .85em;
+    color: red;
+}
+
+span.warning {
+    font-style: italic;
+    font-size: .8em;
+}
+
 form {
     margin: 1em 3em 3em 2.38em;
     padding: .75em;
