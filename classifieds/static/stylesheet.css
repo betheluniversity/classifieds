@@ -231,6 +231,10 @@ select {
     clear: both;
 }
 
+.classified_description{
+    vertical-align: text-top;
+}
+
 
 /* If webpage size becomes larger than 60em*/
 @media (min-width: 48em) {
