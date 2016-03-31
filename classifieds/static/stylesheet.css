@@ -59,6 +59,16 @@ div.centered {
     text-align: left;
 }
 
+span.warning {
+    font-style: italic;
+    font-size: .8em;
+}
+
+form {
+    margin: 1em 3em 3em 2.38em;
+    padding: .75em;
+}
+
 p {
     font-family: Georgia, serif;
 }
@@ -153,16 +163,6 @@ span.star {
     font-family: Georgia, serif;
     font-size: .85em;
     color: red;
-}
-
-span.warning {
-    font-style: italic;
-    font-size: .8em;
-}
-
-form {
-    margin: 1em 3em 3em 2.38em;
-    padding: .75em;
 }
 
 input[type=submit] {
