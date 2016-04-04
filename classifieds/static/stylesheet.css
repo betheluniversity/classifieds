@@ -237,6 +237,10 @@ select {
     vertical-align: text-top;
 }
 
+.maxWordLength{
+    max-width: 35em;
+}
+
 
 /* If webpage size becomes larger than 60em*/
 @media (min-width: 48em) {
