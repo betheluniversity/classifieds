@@ -235,6 +235,10 @@ select {
     vertical-align: text-top;
 }
 
+.description{
+    max-width: 35em;
+}
+
 
 /* If webpage size becomes larger than 60em*/
 @media (min-width: 48em) {
