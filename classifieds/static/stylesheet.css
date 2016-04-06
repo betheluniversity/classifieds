@@ -116,6 +116,7 @@ a.button.active {
     margin: 0em 0em 0em 0em;
     border: none;
     cursor: pointer;
+    width: 12.5em;
 }
 
 .top-right {
@@ -132,7 +133,7 @@ a.button.active {
     display: none;
     position: absolute;
     z-index: 1;
-    width: 12.3em;
+    width: 12.5em;
     background-color: white;
     overflow: auto;
     box-shadow: 0em .5em 1em 0em rgba(0,0,0,0.2);
