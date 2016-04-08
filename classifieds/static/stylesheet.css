@@ -2,7 +2,7 @@
 div.table {
     font-family: Georgia, serif;
     border: none;
-    padding: 1.5em 2em 1em 1em;
+    padding: 1.5em 1em 1em 1em;
     margin: 0em 2em 4em 2em;
 }
 
@@ -17,6 +17,7 @@ div.singlePost {
 }
 
 .cell {
+    font-size: .95em;
     display: table-cell;
     padding: .5em 1em .5em .5em;
     margin-right: .5em;
@@ -31,7 +32,7 @@ article {
 .line-separator {
     height: .0625em;
     background-color: #000000;
-    margin: 1em 1em 1em 0em;
+    margin: 1em 0em 1em 0em;
 }
 
 #marked{
@@ -51,13 +52,14 @@ body {
 
 h1.baseTitle {
     margin-bottom: .5em;
-    text-align: left;
+    text-align: center;
     color: #FFFFFF;
     font-family: Gotham A, Gotham B, Helvetica, Arial, sans;
+    line-height: 120%;
 }
 
 div.centered {
-    text-align: left;
+    text-align: center;
 }
 
 span.warning {
@@ -85,6 +87,7 @@ p.noPosts {
 }
 
 a {
+    font-size: .95em;
     color: #0069AA !important;
     font-family: Gotham A, Gotham B, Helvetica, Arial, sans !important;
 }
@@ -94,6 +97,8 @@ a:hover {
 }
 
 a.button {
+    font-size: .78em;
+    box-shadow: 0em .5em 1em 0em rgba(0,0,0,0.2);
     margin-right: .125em;
     background-color: #0069AA;
     color: #FFFFFF !important;
@@ -112,17 +117,18 @@ a.button.active {
 }
 
 .dropbtn {
+    font-size: .9em;
     background-color: #0069AA !important;
-    margin: 0em 0em 0em 0em;
+    margin: 0em;
     border: none;
     cursor: pointer;
     width: 12.5em;
 }
 
 .top-right {
-    margin: 1em 3em 1em 0em;
+    font-size: .9em;
+    margin: 1em 0em 1em 0em;
     display: inline-block;
-
 }
 
 .dropbtn:hover {
@@ -130,6 +136,7 @@ a.button.active {
 }
 
 .dropdown-content {
+    text-align: left;
     display: none;
     position: absolute;
     z-index: 1;
@@ -154,7 +161,15 @@ a.button.active {
     display: block;
 }
 
+.view-padded {
+    text-align: center;
+    padding: .5em 3em 1em 3em;
+    margin: 0em;
+    background-color: #0F2C52;
+}
+
 .padded {
+    text-align: center;
     padding: 1em 3em 1em 3em;
     margin: 0em;
     background-color: #0F2C52;
@@ -169,13 +184,13 @@ span.star {
 }
 
 input[type=submit] {
+    font-size: .9em;
     font-family: Gotham A, Gotham B, Helvetica, Arial, sans !important;
     color: #FFFFFF !important;
     background-color: #0069AA;
     border: none;
     padding: .625em 1em .625em 1em;
     letter-spacing: 0.75px;
-    font-size: 1em !important;
     margin-bottom: 1.25em;
 
 }
@@ -244,18 +259,58 @@ select {
 
 
 /* If webpage size becomes larger than 60em*/
-@media (min-width: 48em) {
+@media (min-width: 55em) {
+
+    h1.baseTitle {
+        text-align: left;
+    }
+
+    /* Not sure if we want this one or not, specifically for iPad
+    /*.top-right {*/
+        /*float: right;*/
+        /*margin: .3em 0em 0em 0em;*/
+    /*}*/
+
+    .view-padded {
+        text-align: left;
+        padding: 0em 3em 1em 3em;
+        margin-top: -.5em;
+    }
+
+    .padded {
+        text-align: left;
+    }
+
+    div.centered {
+        text-align: left;
+    }
+
+    p {
+        font-size: 1em;
+    }
+
+    a {
+        font-size: 1em;
+    }
+
+    a.button {
+        font-size: 1em;
+    }
 
     a:hover {
         color: #005285;
     }
 
-    a.button {
-
-    }
-
     a.button:hover {
         background-color: #005285;
+    }
+
+    .dropbtn {
+        font-size: 1em;
+    }
+
+    .top-right {
+        font-size: 1em;
     }
 
     .dropbtn:hover {
@@ -278,4 +333,16 @@ select {
         max-width: 50%;
     }
 
+}
+
+@media (min-width: 72em) {
+
+    #nav {
+        text-align: right;
+    }
+
+    .top-right {
+        float: right;
+        margin: .3em 0em 0em 0em;
+    }
 }
