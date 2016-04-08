@@ -38,7 +38,7 @@
     <div id="body">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes"/>
         <div id="nav" class="padded">
-            <div id="user_menu" class="top-right">
+            <div id="user_menu" class="top-right dropdown">
                 <button class="dropbtn">Hello, {{ session['fullname'] }}!</button>
                 <div id="myDropdown" class="dropdown-content">
                 <a href="/view-contact/{{ session['username'] }}">View your profile</a>
