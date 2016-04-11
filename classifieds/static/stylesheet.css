@@ -140,7 +140,7 @@ a.button.active {
     display: none;
     position: absolute;
     z-index: 1;
-    width: 12.5em;
+    width: 12.51em;
     background-color: white;
     overflow: auto;
     box-shadow: 0em .5em 1em 0em rgba(0,0,0,0.2);
