@@ -266,6 +266,10 @@ select {
         color: #005285;
     }
 
+    .cell {
+        font-size: 1em;
+    }
+
     h1.baseTitle {
         text-align: left;
     }
