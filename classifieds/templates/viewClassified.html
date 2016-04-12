@@ -6,7 +6,7 @@
 
 {% block internal %}
 {% if session['username'] == classified[5] %}
-    <div class="table">
+    <div class="viewTable">
         <table>
             <tr>
                 <td>Title:</td><td class="maxWordLength">{{ classified[1] }}</td>
@@ -48,7 +48,7 @@
 {% else %}
     {% if classified[8] == False %}
         {% if classified[9] == False %}
-            <div class="table">
+            <div class="viewTable">
                 <table>
                     <tr>
                         <td>Title:</td><td class="maxWordLength">{{ classified[1] }}</td>
