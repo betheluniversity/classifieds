@@ -35,6 +35,13 @@
 <p class="noPosts">There are no active posts to show.</p>
     {% else %}
     <div class="table">
+        <div class="sorting">
+            <div class="centered">
+                <button class="button" class="pressed">Sort by Title</button>
+                <button class="button">Sort by Price</button>
+                <button class="button">Sort by Date</button>
+            </div>
+        </div>
     {% for post in posts %}
         <div class="singlePost">
             <div class="row">
@@ -72,33 +79,6 @@
         <div class="line-separator"></div>
     {% endfor %}
     </div>
-
-{#<table class="sortable">#}
-{#    <tr>#}
-{#        <th>Title</th>#}
-{#        <th>Description</th>#}
-{#        <th>Price</th>#}
-{#        <th>Date Posted</th>#}
-{#        <th class="sorttable_nosort"></th>#}
-{#    </tr>#}
-{#{% for post in posts %}#}
-{#    <tr>#}
-{#        <td><a href="/view-classified/{{ post[0] }}">{{ post[1] }}</a></td>#}
-{#        <td><article>{{ post[2] }}</article></td>#}
-{#        <td>{{ post[3] }}</td>#}
-{#        <td>{{ post[4].date() }}</td>#}
-{#        <td>#}
-{#        {% if post[6] == False %}#}
-{#            {% if post[7] == True %}#}
-{#                <a href="/reactivate/{{ post[0] }}">Renew this ad</a>#}
-{#            {% else %}#}
-{#                <a href="/mark-complete/{{ post[0] }}">Mark as complete</a>#}
-{#            {% endif %}#}
-{#        {% endif %}#}
-{#        </td>#}
-{#    </tr>#}
-{#{% endfor %}#}
-{#</table>#}
     {% endif %}
 </div>
 {% endblock %}

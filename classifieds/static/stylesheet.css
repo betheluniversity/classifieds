@@ -39,7 +39,7 @@ article {
 .line-separator {
     height: .0625em;
     background-color: #000000;
-    margin: 1em 0em 1em 0em;
+    margin: 1em 0em 1em .2em;
 }
 
 #marked{
@@ -74,7 +74,7 @@ span.warning {
 }
 
 form {
-    margin: 1em 3em 3em 2.38em;
+    margin: 1em 3em 3em 2.5em;
     padding: .75em;
 }
 
@@ -111,8 +111,21 @@ a.button {
     color: #FFFFFF !important;
 }
 
-a.button:hover {
+.button {
+    font-size: .78em;
+    box-shadow: 0em .5em 1em 0em rgba(0,0,0,0.2);
+    margin-right: .125em;
+    margin-left: .25em;
     background-color: #0069AA;
+    color: #FFFFFF !important;
+}
+
+button.pressed {
+    border: #FFC600 solid .125em;
+}
+
+.button:hover {
+    background-color: #005285;
 }
 
 a.button.active {
@@ -137,6 +150,7 @@ a.button.active {
     font-size: .9em;
     margin: 1em 0em 1em 0em;
     display: inline-block;
+    box-shadow: 0em .5em 1em 0em rgba(0,0,0,0.2);
 
 }
 
@@ -200,7 +214,6 @@ input[type=submit] {
     border: none;
     padding: .625em 1em .625em 1em;
     letter-spacing: 0.75px;
-    font-size: 1em !important;
     margin-bottom: 1.25em;
 
 }
@@ -283,11 +296,10 @@ select {
         text-align: left;
     }
 
-    /* Not sure if we want this one or not, specifically for iPad
-    /*.top-right {*/
-    /*float: right;*/
-    /*margin: .3em 0em 0em 0em;*/
-    /*}*/
+    /* Not sure if we want this one or not, specifically for iPad*/
+    .top-right {
+        margin: .3em 0em 1em .2em;
+    }
 
     .view-padded {
         text-align: left;
@@ -313,6 +325,10 @@ select {
 
     a.button {
         font-size: 1em;
+    }
+
+    .button {
+        font-size: .93em;
     }
 
     a.button:hover {
