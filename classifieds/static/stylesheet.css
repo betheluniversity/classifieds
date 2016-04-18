@@ -116,7 +116,7 @@ a.button {
     box-shadow: 0em .5em 1em 0em rgba(0,0,0,0.2);
     margin-right: .125em;
     margin-left: .25em;
-    background-color: #0069AA;
+    background-color: #0069AA !important;
     color: #FFFFFF !important;
 }
 
@@ -125,7 +125,7 @@ button.pressed {
 }
 
 .button:hover {
-    background-color: #005285;
+    background-color: #005285 !important;
 }
 
 a.button.active {
