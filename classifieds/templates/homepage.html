@@ -9,40 +9,57 @@
     {% if values.__len__() == 0 %}
         <p class="noPosts">There are no active posts to show.</p>
     {% else %}
-<div class="table">
+<div id="homeTable" class="table">
     <div class="sorting">
         <div class="centered">
             <button id="titleButton" class="button">Sort by Title</button>
+            <button id="descriptionButton" class="button">Sort by Description</button>
             <button id="priceButton" class="button">Sort by Price</button>
             <button id="dateButton" class="button">Sort by Date</button>
+            <button id="postedByButton" class="button">Sort by Posted By</button>
         </div>
+        <script>
+            document.getElementById("titleButton").addEventListener("click", function(){sortPosts(".title > a")});
+            document.getElementById("descriptionButton").addEventListener("click", function(){sortPosts(".description > article")});
+            document.getElementById("priceButton").addEventListener("click", function(){sortPosts(".price")});
+            document.getElementById("dateButton").addEventListener("click", function(){sortPosts(".date")});
+            document.getElementById("postedByButton").addEventListener("click", function(){sortPosts(".postedBy > a")});
+
+            function sortPosts(sortQuery) {
+                jQuery(".table > .singlePost").sort(function (a, b) {
+                    var upA = jQuery('> .row > ' + sortQuery, a).text().toUpperCase();
+                    var upB = jQuery('> .row > ' + sortQuery, b).text().toUpperCase();
+                    return upA > upB;
+                }).appendTo('.table');
+            };
+        </script>
     </div>
 {% for val in values %}
-    <div class="singlePost">
+    <div id="singlePost-{{ loop.index }}" class="singlePost">
         <div class="row">
             <div class="cell">Title: </div>
-            <div id="title" class="cell"><a href="/view-classified/{{ val[0] }}">{{ val[1] }}</a></div>
+            <div class="title cell"><a href="/view-classified/{{ val[0] }}">{{ val[1] }}</a></div>
         </div>
         <div class="row">
             <div class="cell">Description: </div>
-            <div id="description" class="cell"><article>{{ val[2] }}</article></div>
+            <div class="description cell"><article>{{ val[2] }}</article></div>
         </div>
         <div class="row">
             <div class="cell">Price: </div>
-            <div id="price" class="cell">{{ val[3] }}</div>
+            <div class="price cell">{{ val[3] }}</div>
         </div>
         <div class="row">
             <div class="cell">Date Posted: </div>
-            <div id="date" class="cell">{{ val[4].date() }}</div>
+            <div class="date cell">{{ val[4].date() }}</div>
         </div>
         <div class="row">
             <div class="cell">Posted By: </div>
-            <div id="postedBy" class="cell"><a href="/view-contact/{{ val[5] }}">{{ val[6] }}</a></div>
+            <div class="postedBy cell"><a href="/view-contact/{{ val[5] }}">{{ val[6] }}</a></div>
         </div>
         {% if showStatus == True %}
             <div class="row">
                 <div class="cell">Status</div>
-                <div id="status" class="cell">
+                <div class="status cell">
                     {% if val[7] == True %}
                     Completed
                     {% elif val[8] == True %}
@@ -53,10 +70,10 @@
                 </div>
             </div>
         {% endif %}
+    <div class="line-separator"></div>
     </div>
-<div class="line-separator"></div>
-{% endfor %}
 
+{% endfor %}
 </div>
     {% endif %}
 </div>

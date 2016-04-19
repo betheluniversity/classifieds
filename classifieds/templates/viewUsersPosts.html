@@ -36,47 +36,62 @@
     {% else %}
     <div class="table">
         <div class="sorting">
-            <div class="centered">
-                <button class="button" class="pressed">Sort by Title</button>
-                <button class="button">Sort by Price</button>
-                <button class="button">Sort by Date</button>
-            </div>
+        <div class="centered">
+            <button id="titleButton" class="button">Sort by Title</button>
+            <button id="descriptionButton" class="button">Sort by Description</button>
+            <button id="priceButton" class="button">Sort by Price</button>
+            <button id="dateButton" class="button">Sort by Date</button>
         </div>
+        <script>
+            document.getElementById("titleButton").addEventListener("click", function(){sortPosts(".title > a")});
+            document.getElementById("descriptionButton").addEventListener("click", function(){sortPosts(".description > article")});
+            document.getElementById("priceButton").addEventListener("click", function(){sortPosts(".price")});
+            document.getElementById("dateButton").addEventListener("click", function(){sortPosts(".date")});
+
+            function sortPosts(sortQuery) {
+                jQuery(".table > .singlePost").sort(function (a, b) {
+                    var upA = jQuery('> .row > ' + sortQuery, a).text().toUpperCase();
+                    var upB = jQuery('> .row > ' + sortQuery, b).text().toUpperCase();
+                    return upA > upB;
+                }).appendTo('.table');
+            };
+        </script>
+    </div>
     {% for post in posts %}
-        <div class="singlePost">
+        <div id="singlePost-{{ loop.index }}" class="singlePost">
             <div class="row">
-                <div id="title" class="cell">Title:</div>
-                <div class="cell"><a href="/view-classified/{{ post[0] }}">{{ post[1] }}</a></div>
+                <div class="cell">Title:</div>
+                <div class="title cell"><a href="/view-classified/{{ post[0] }}">{{ post[1] }}</a></div>
             </div>
             <div class="row">
-                <div id="description" class="cell">Description: </div>
-                <div class="cell"><article>{{ post[2] }}</article></div>
+                <div class="cell">Description: </div>
+                <div class="description cell"><article>{{ post[2] }}</article></div>
             </div>
             <div class="row">
-                <div id="price" class="cell">Price: </div>
-                <div class="cell">{{ post[3] }}</div>
+                <div class="cell">Price: </div>
+                <div class="price cell">{{ post[3] }}</div>
             </div>
             <div class="row">
-                <div id="date" class="cell">Date Posted: </div>
-                <div class="cell">{{ post[4].date() }}</div>
+                <div class="cell">Date Posted: </div>
+                <div class="date cell">{{ post[4].date() }}</div>
             </div>
             {% if post[6] == False %}
                 {% if post[7] == True %}
                     <div class="row">
-                        <div id="marked" class="cell">
+                        <div class="marked cell">
                             <a href="/reactivate/{{ post[0] }}">Renew this ad</a>
                         </div>
                     </div>
                 {% else %}
                     <div class="row">
-                        <div id="marked" class="cell">
+                        <div class="marked cell">
                             <a href="/mark-complete/{{ post[0] }}">Mark as complete</a>
                         </div>
                     </div>
                 {% endif %}
             {% endif %}
-        </div>
         <div class="line-separator"></div>
+        </div>
     {% endfor %}
     </div>
     {% endif %}

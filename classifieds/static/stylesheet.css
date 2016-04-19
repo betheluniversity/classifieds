@@ -13,6 +13,12 @@ div.viewTable{
     margin: 0em 2em 4em 2em;
 }
 
+.line-separator {
+    height: .0625em;
+    background-color: #000000;
+    margin: 1em 0em 1em .2em;
+}
+
 div.singlePost {
     margin-bottom: 1em;
     display: table;
@@ -29,25 +35,18 @@ div.singlePost {
     padding: .5em 1em .5em .5em;
     margin-right: .5em;
     max-width: 38.5em;
-
 }
 
 article {
     line-height: 120%;
 }
 
-.line-separator {
-    height: .0625em;
-    background-color: #000000;
-    margin: 1em 0em 1em .2em;
-}
-
-#marked{
+.marked{
     max-width: 2em;
 }
 
 body {
-    background-color: white;
+    background-color: #FFFFFF;
 }
 
 #body {
@@ -55,7 +54,6 @@ body {
     margin-bottom: -4em;
     position: relative;
 }
-
 
 h1.baseTitle {
     margin-bottom: .5em;

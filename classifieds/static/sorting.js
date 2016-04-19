@@ -2,16 +2,16 @@
  * Created by tih99924 on 4/15/16.
  */
 
-document.getElementById("titleButton").addEventListener("click", sorting);
+document.getElementById("titleButton").addEventListener("click", function(){sortPosts(".title > a")});
+            document.getElementById("descriptionButton").addEventListener("click", function(){sortPosts(".description > article")});
+            document.getElementById("priceButton").addEventListener("click", function(){sortPosts(".price")});
+            document.getElementById("dateButton").addEventListener("click", function(){sortPosts(".date")});
+            document.getElementById("postedByButton").addEventListener("click", function(){sortPosts(".postedBy > a")});
 
-function sorting() {
-
-    document.body.style.backgroundColor = "red";
-
-    //jQuery(".table > .singlePost > .row").sort(function (a, b) {
-    //    var upA = jQuery('#title', a).text().toUpperCase();
-    //    var upB = jQuery('#title', b).text().toUpperCase();
-    //    return upA > upB;
-    //}).appendTo('.table');
-
-};
+            function sortPosts(sortQuery) {
+                jQuery(".table > .singlePost").sort(function (a, b) {
+                    var upA = jQuery('> .row > ' + sortQuery, a).text().toUpperCase();
+                    var upB = jQuery('> .row > ' + sortQuery, b).text().toUpperCase();
+                    return upA > upB;
+                }).appendTo('.table');
+            };
