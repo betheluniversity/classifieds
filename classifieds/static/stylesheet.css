@@ -4,6 +4,7 @@ div.table {
     border: none;
     padding: 1.5em 1em 1em 1em;
     margin: 0em 2em 4em 2em;
+    /*font-size: .9em;*/
 }
 
 div.viewTable{
@@ -13,15 +14,15 @@ div.viewTable{
     margin: 0em 2em 4em 2em;
 }
 
-.line-separator {
+hr {
     height: .0625em;
     background-color: #000000;
-    margin: 1em 0em 1em .2em;
+
 }
 
 div.singlePost {
     margin-bottom: 1em;
-    display: table;
+    /*display: table;*/
     font-size: .9em;
 }
 
