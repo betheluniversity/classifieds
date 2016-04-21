@@ -41,14 +41,12 @@
             <button id="descriptionButtonAZ" class="button">Sort by Description A-Z</button>
             <button id="priceButtonAZ" class="button">Sort by Price</button>
             <button id="dateButtonAZ" class="button">Sort by Date</button>
-            <button id="postedByButtonAZ" class="button">Sort by Posted By A-Z</button>
         </div>
         <div class="centered">
             <button id="titleButtonZA" class="button">Reverse Title Order</button>
             <button id="descriptionButtonZA" class="button">Reverse Description Order</button>
             <button id="priceButtonZA" class="button">Reverse Price Order</button>
             <button id="dateButtonZA" class="button">Reverse Date Order</button>
-            <button id="postedByButtonZA" class="button">Reverse Posted By Order</button>
         </div>
         <script>
             document.getElementById("titleButtonAZ").addEventListener("click", function(){sortPosts(".title > a")});
@@ -59,8 +57,6 @@
             document.getElementById("priceButtonZA").addEventListener("click", function(){sortPostsReverse(".price")});
             document.getElementById("dateButtonAZ").addEventListener("click", function(){sortPosts(".date")});
             document.getElementById("dateButtonZA").addEventListener("click", function(){sortPostsReverse(".date")});
-            document.getElementById("postedByButtonAZ").addEventListener("click", function(){sortPosts(".postedBy > a")});
-            document.getElementById("postedByButtonZA").addEventListener("click", function(){sortPostsReverse(".postedBy > a")});
 
             function sortPosts(sortQuery) {
                 jQuery(".table > .singlePost").sort(function (a, b) {

@@ -9,33 +9,50 @@
     {% if values.__len__() == 0 %}
         <p class="noPosts">There are no active posts to show.</p>
     {% else %}
-<div id="homeTable" class="table">
+<div class="table">
     <div class="sorting">
         <div class="centered">
-            <button id="titleButtonAZ" class="button">Sort by Title A-Z</button>
-            <button id="descriptionButtonAZ" class="button">Sort by Description A-Z</button>
-            <button id="priceButtonAZ" class="button">Sort by Price</button>
-            <button id="dateButtonAZ" class="button">Sort by Date</button>
-            <button id="postedByButtonAZ" class="button">Sort by Posted By A-Z</button>
-        </div>
-        <div class="centered">
-            <button id="titleButtonZA" class="button">Reverse Title Order</button>
-            <button id="descriptionButtonZA" class="button">Reverse Description Order</button>
-            <button id="priceButtonZA" class="button">Reverse Price Order</button>
-            <button id="dateButtonZA" class="button">Reverse Date Order</button>
-            <button id="postedByButtonZA" class="button">Reverse Posted By Order</button>
+            <select class="selectSort">
+                <option>Select how to sort the postings</option>
+                <option id="titleAZ" value="sortByTitleAZ">Sort by Title A-Z</option>
+                <option id="titleZA" value="sortByTitleZA">Sort by Title Z-A</option>
+                <option id="descriptionAZ" value="sortByDescriptionAZ">Sort by Description A-Z</option>
+                <option id="descriptionZA" value="sortByDescriptionZA">Sort by Description Z-A</option>
+                <option id="priceAZ" value="sortByPrice">Sort by Price</option>
+                <option id="priceZA" value="reversePriceOrder">Reverse Price Order</option>
+                <option id="dateAZ" value="sortByDate">Sort by Date</option>
+                <option id="dateZA" value="reverseDateOrder">Reverse Date Order</option>
+                <option id="postedByAZ" value="sortByPostedByAZ">Sort by Posted By A-Z</option>
+                <option id="postedByZA" value="sortByPostedByZA">Sort by Posted By Z-A</option>
+            </select>
+{#            <select>#}
+{#                <option>Sort by Description A-Z</option>#}
+{#                <option>Sort by Description Z-A</option>#}
+{#            </select>#}
+{#            <select>#}
+{#                <option>Sort by Price</option>#}
+{#                <option>Reverse Price Order</option>#}
+{#            </select>#}
+{#            <select>#}
+{#                <option>Sort by Date</option>#}
+{#                <option>Reverse Date Order</option>#}
+{#            </select>#}
+{#            <select>#}
+{#                <option>Sort by Posted By A-Z</option>#}
+{#                <option>Sort by Posted By Z-A</option>#}
+{#            </select>#}
         </div>
         <script>
-            document.getElementById("titleButtonAZ").addEventListener("click", function(){sortPosts(".title > a")});
-            document.getElementById("titleButtonZA").addEventListener("click", function(){sortPostsReverse(".title > a")});
-            document.getElementById("descriptionButtonAZ").addEventListener("click", function(){sortPosts(".description > article")});
-            document.getElementById("descriptionButtonZA").addEventListener("click", function(){sortPostsReverse(".description > article")});
-            document.getElementById("priceButtonAZ").addEventListener("click", function(){sortPosts(".price")});
-            document.getElementById("priceButtonZA").addEventListener("click", function(){sortPostsReverse(".price")});
-            document.getElementById("dateButtonAZ").addEventListener("click", function(){sortPosts(".date")});
-            document.getElementById("dateButtonZA").addEventListener("click", function(){sortPostsReverse(".date")});
-            document.getElementById("postedByButtonAZ").addEventListener("click", function(){sortPosts(".postedBy > a")});
-            document.getElementById("postedByButtonZA").addEventListener("click", function(){sortPostsReverse(".postedBy > a")});
+            document.getElementById("titleAZ").addEventListener("click", function(){sortPosts(".title > a")});
+            document.getElementById("titleZA").addEventListener("click", function(){sortPostsReverse(".title > a")});
+            document.getElementById("descriptionAZ").addEventListener("click", function(){sortPosts(".description > article")});
+            document.getElementById("descriptionZA").addEventListener("click", function(){sortPostsReverse(".description > article")});
+            document.getElementById("priceAZ").addEventListener("click", function(){sortPosts(".price")});
+            document.getElementById("priceZA").addEventListener("click", function(){sortPostsReverse(".price")});
+            document.getElementById("dateAZ").addEventListener("click", function(){sortPosts(".date")});
+            document.getElementById("dateZA").addEventListener("click", function(){sortPostsReverse(".date")});
+            document.getElementById("postedByAZ").addEventListener("click", function(){sortPosts(".postedBy > a")});
+            document.getElementById("postedByZA").addEventListener("click", function(){sortPostsReverse(".postedBy > a")});
 
             function sortPosts(sortQuery) {
                 jQuery(".table > .singlePost").sort(function (a, b) {
@@ -54,6 +71,50 @@
             };
         </script>
     </div>
+{#    <div class="sorting">#}
+{#        <div class="centered">#}
+{#            <button id="titleButtonAZ" class="button">Sort by Title A-Z</button>#}
+{#            <button id="descriptionButtonAZ" class="button">Sort by Description A-Z</button>#}
+{#            <button id="priceButtonAZ" class="button">Sort by Price</button>#}
+{#            <button id="dateButtonAZ" class="button">Sort by Date</button>#}
+{#            <button id="postedByButtonAZ" class="button">Sort by Posted By A-Z</button>#}
+{#        </div>#}
+{#        <div class="centered">#}
+{#            <button id="titleButtonZA" class="button">Reverse Title Order</button>#}
+{#            <button id="descriptionButtonZA" class="button">Reverse Description Order</button>#}
+{#            <button id="priceButtonZA" class="button">Reverse Price Order</button>#}
+{#            <button id="dateButtonZA" class="button">Reverse Date Order</button>#}
+{#            <button id="postedByButtonZA" class="button">Reverse Posted By Order</button>#}
+{#        </div>#}
+{#        <script>#}
+{#            document.getElementById("titleButtonAZ").addEventListener("click", function(){sortPosts(".title > a")});#}
+{#            document.getElementById("titleButtonZA").addEventListener("click", function(){sortPostsReverse(".title > a")});#}
+{#            document.getElementById("descriptionButtonAZ").addEventListener("click", function(){sortPosts(".description > article")});#}
+{#            document.getElementById("descriptionButtonZA").addEventListener("click", function(){sortPostsReverse(".description > article")});#}
+{#            document.getElementById("priceButtonAZ").addEventListener("click", function(){sortPosts(".price")});#}
+{#            document.getElementById("priceButtonZA").addEventListener("click", function(){sortPostsReverse(".price")});#}
+{#            document.getElementById("dateButtonAZ").addEventListener("click", function(){sortPosts(".date")});#}
+{#            document.getElementById("dateButtonZA").addEventListener("click", function(){sortPostsReverse(".date")});#}
+{#            document.getElementById("postedByButtonAZ").addEventListener("click", function(){sortPosts(".postedBy > a")});#}
+{#            document.getElementById("postedByButtonZA").addEventListener("click", function(){sortPostsReverse(".postedBy > a")});#}
+{##}
+{#            function sortPosts(sortQuery) {#}
+{#                jQuery(".table > .singlePost").sort(function (a, b) {#}
+{#                    var upA = jQuery('> .row > ' + sortQuery, a).text().toUpperCase();#}
+{#                    var upB = jQuery('> .row > ' + sortQuery, b).text().toUpperCase();#}
+{#                    return upA > upB;#}
+{#                }).appendTo('.table');#}
+{#            };#}
+{##}
+{#            function sortPostsReverse(sortQuery) {#}
+{#                jQuery(".table > .singlePost").sort(function (a, b) {#}
+{#                    var upA = jQuery('> .row > ' + sortQuery, a).text().toUpperCase();#}
+{#                    var upB = jQuery('> .row > ' + sortQuery, b).text().toUpperCase();#}
+{#                    return upA < upB;#}
+{#                }).appendTo('.table');#}
+{#            };#}
+{#        </script>#}
+{#    </div>#}
 {% for val in values %}
     <div id="singlePost-{{ loop.index }}" class="singlePost">
         <div class="row">

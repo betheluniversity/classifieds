@@ -131,6 +131,14 @@ a.button.active {
     border: #FFC600 solid .125em;
 }
 
+select {
+    max-width: 100%;
+}
+
+select.selectSort {
+    width: 30%;
+}
+
 .error{
     color: red;
 }
@@ -242,10 +250,6 @@ textarea {
 
 textarea#input {
     margin: -2em 0em 1.25em 0em;
-}
-
-select {
-    max-width: 100%;
 }
 
 /* footer */
