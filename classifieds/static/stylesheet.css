@@ -137,6 +137,7 @@ select {
 
 select.selectSort {
     width: 30%;
+    min-width: 15em;
 }
 
 .error{
