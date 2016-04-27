@@ -24,6 +24,34 @@
 {#                <option id="dateZA" value="reverseDateOrder">Reverse Date Order</option>#}
 {#                <option id="postedByAZ" value="sortByPostedByAZ">Sort by Posted By A-Z</option>#}
 {#                <option id="postedByZA" value="sortByPostedByZA">Sort by Posted By Z-A</option>#}
+            <select class="selectSort">
+                <option>Sort Classifieds:</option>
+                <option id="titleAZ" value="sortByTitleAZ">Title (A-Z)</option>
+                <option id="titleZA" value="sortByTitleZA">Title (Z-A)</option>
+                <option id="descriptionAZ" value="sortByDescriptionAZ">Description (A-Z)</option>
+                <option id="descriptionZA" value="sortByDescriptionZA">Description (Z-A)</option>
+                <option id="priceAZ" value="sortByPrice">Price (High-Low)</option>
+                <option id="priceZA" value="reversePriceOrder">Price (Low-High)</option>
+                <option id="dateAZ" value="sortByDate">Date (Old-New)</option>
+                <option id="dateZA" value="reverseDateOrder">Date (New-Old)</option>
+                <option id="postedByAZ" value="sortByPostedByAZ">Author (A-Z)</option>
+                <option id="postedByZA" value="sortByPostedByZA">Author (Z-A)</option>
+            </select>
+{#            <select>#}
+{#                <option>Sort by Description A-Z</option>#}
+{#                <option>Sort by Description Z-A</option>#}
+{#            </select>#}
+{#            <select>#}
+{#                <option>Sort by Price</option>#}
+{#                <option>Reverse Price Order</option>#}
+{#            </select>#}
+{#            <select>#}
+{#                <option>Sort by Date</option>#}
+{#                <option>Reverse Date Order</option>#}
+{#            </select>#}
+{#            <select>#}
+{#                <option>Sort by Posted By A-Z</option>#}
+{#                <option>Sort by Posted By Z-A</option>#}
 {#            </select>#}
             <div class="centered">
                 <button id="titleAZ" class="button">Sort by Title A-Z</button>
@@ -72,7 +100,12 @@
 {#                jQuery(".table > .singlePost").sort(function (a, b) {#}
 {#                    var upA = jQuery('> .row > ' + sortQuery, a).text().toUpperCase();#}
 {#                    var upB = jQuery('> .row > ' + sortQuery, b).text().toUpperCase();#}
-{#                    return upA < upB;#}
+{#                    if (upA < upB) {#}
+{#                        return 1;#}
+{#                    }#}
+{#                    else{#}
+{#                        return -1;#}
+{#                    }#}
 {#                }).appendTo('.table');#}
 {#            };#}
         </script>
