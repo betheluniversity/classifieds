@@ -12,18 +12,6 @@
 <div class="table">
     <div class="sorting">
         <div class="centered">
-{#            <select class="selectSort">#}
-{#                <option>Select how to sort the postings</option>#}
-{#                <option id="titleAZ" value="sortByTitleAZ">Sort by Title A-Z</option>#}
-{#                <option id="titleZA" value="sortByTitleZA">Sort by Title Z-A</option>#}
-{#                <option id="descriptionAZ" value="sortByDescriptionAZ">Sort by Description A-Z</option>#}
-{#                <option id="descriptionZA" value="sortByDescriptionZA">Sort by Description Z-A</option>#}
-{#                <option id="priceAZ" value="sortByPrice">Sort by Price</option>#}
-{#                <option id="priceZA" value="reversePriceOrder">Reverse Price Order</option>#}
-{#                <option id="dateAZ" value="sortByDate">Sort by Date</option>#}
-{#                <option id="dateZA" value="reverseDateOrder">Reverse Date Order</option>#}
-{#                <option id="postedByAZ" value="sortByPostedByAZ">Sort by Posted By A-Z</option>#}
-{#                <option id="postedByZA" value="sortByPostedByZA">Sort by Posted By Z-A</option>#}
             <select class="selectSort">
                 <option>Sort Classifieds:</option>
                 <option id="titleAZ" value="sortByTitleAZ">Title (A-Z)</option>
@@ -37,60 +25,47 @@
                 <option id="postedByAZ" value="sortByPostedByAZ">Author (A-Z)</option>
                 <option id="postedByZA" value="sortByPostedByZA">Author (Z-A)</option>
             </select>
-{#            <select>#}
-{#                <option>Sort by Description A-Z</option>#}
-{#                <option>Sort by Description Z-A</option>#}
-{#            </select>#}
-{#            <select>#}
-{#                <option>Sort by Price</option>#}
-{#                <option>Reverse Price Order</option>#}
-{#            </select>#}
-{#            <select>#}
-{#                <option>Sort by Date</option>#}
-{#                <option>Reverse Date Order</option>#}
-{#            </select>#}
-{#            <select>#}
-{#                <option>Sort by Posted By A-Z</option>#}
-{#                <option>Sort by Posted By Z-A</option>#}
-{#            </select>#}
-            <div class="centered">
-                <button id="titleAZ" class="button">Sort by Title A-Z</button>
-                <button id="descriptionAZ" class="button">Sort by Description A-Z</button>
-                <button id="priceAZ" class="button">Sort by Price</button>
-                <button id="dateAZ" class="button">Sort by Date</button>
-                <button id="postedByAZ" class="button">Sort by PostedBy</button>
-            </div>
-            <div class="centered">
-                <button id="titleZA" class="button">Reverse Title Order</button>
-                <button id="descriptionZA" class="button">Reverse Description Order</button>
-                <button id="priceZA" class="button">Reverse Price Order</button>
-                <button id="dateZA" class="button">Reverse Date Order</button>
-                <button id="postedByZA" class="button">Reverse Posted By Order</button>
-            </div>
         </div>
         <script>
 {#            $( "#titleAZ" ).click(function() {#}
 {#                alert( "Handler for .click() called." );#}
 {#            });#}
-            document.getElementById("titleAZ").addEventListener("click", function(){sortPosts(".title > a", true)});
-            document.getElementById("titleZA").addEventListener("click", function(){sortPostsReverse(".title > a")});
-            document.getElementById("descriptionAZ").addEventListener("click", function(){sortPosts(".description > article")});
-            document.getElementById("descriptionZA").addEventListener("click", function(){sortPostsReverse(".description > article")});
-            document.getElementById("priceAZ").addEventListener("click", function(){sortPosts(".price")});
-            document.getElementById("priceZA").addEventListener("click", function(){sortPostsReverse(".price")});
-            document.getElementById("dateAZ").addEventListener("click", function(){sortPosts(".date")});
-            document.getElementById("dateZA").addEventListener("click", function(){sortPostsReverse(".date")});
-            document.getElementById("postedByAZ").addEventListener("click", function(){sortPosts(".postedBy > a")});
-            document.getElementById("postedByZA").addEventListener("click", function(){sortPostsReverse(".postedBy > a")});
+            console.log("test");
 
+            $(".selectSort").change(function(){
+                console.log("test");
+                if ($(".selectSort option:selected").text() == "Title (A-Z)")
+                    sortPosts(".title > a", true);
+                else if ($(".selectSort option:selected").text() == "Title (Z-A)")
+                    sortPosts(".title > a", false);
+                else if ($(".selectSort option:selected").text() == "Description (A-Z)")
+                    sortPosts(".description > article", true);
+                else if ($(".selectSort option:selected").text() == "Description (Z-A)")
+                    sortPosts(".description > article", false);
+                else if ($(".selectSort option:selected").text() == "Price (High-Low)")
+                    sortPosts(".price", true);
+                else if ($(".selectSort option:selected").text() == "Price (Low-High)")
+                    sortPosts(".price", false);
+                else if ($(".selectSort option:selected").text() == "Date (Old-New)")
+                    sortPosts(".date", true);
+                else if ($(".selectSort option:selected").text() == "Date (New-Old)")
+                    sortPosts(".date", false);
+                else if ($(".selectSort option:selected").text() == "Author (A-Z)")
+                    sortPosts(".postedBy > a", true);
+                else if ($(".selectSort option:selected").text() == "Author (Z-A)")
+                    sortPosts(".postedBy > a", false);
+            });
+
+            console.log("test");
             function sortPosts(sortQuery, reverse) {
+
                 jQuery(".table > .singlePost").sort(function (a, b) {
                     var upA = jQuery('> .row > ' + sortQuery, a).text().toUpperCase();
                     var upB = jQuery('> .row > ' + sortQuery, b).text().toUpperCase();
-                    if (upA < upB) {
-                        return -1;
+                    if (upA > upB && reverse == true) {
+                        return 1;
                     }
-                    else {
+                    else if (upA < upB && reverse == false) {
                         return 1;
                     }
                 }).appendTo('.table');
