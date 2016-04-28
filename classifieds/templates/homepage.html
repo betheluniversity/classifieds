@@ -30,10 +30,10 @@
 {#            $( "#titleAZ" ).click(function() {#}
 {#                alert( "Handler for .click() called." );#}
 {#            });#}
-            console.log("test");
+            console.log("test1");
 
             $(".selectSort").change(function(){
-                console.log("test");
+                console.log("inFunction");
                 if ($(".selectSort option:selected").text() == "Title (A-Z)")
                     sortPosts(".title > a", true);
                 else if ($(".selectSort option:selected").text() == "Title (Z-A)")
@@ -56,7 +56,6 @@
                     sortPosts(".postedBy > a", false);
             });
 
-            console.log("test");
             function sortPosts(sortQuery, reverse) {
 
                 jQuery(".table > .singlePost").sort(function (a, b) {
@@ -67,6 +66,9 @@
                     }
                     else if (upA < upB && reverse == false) {
                         return 1;
+                    }
+                    else{
+                        return -1;
                     }
                 }).appendTo('.table');
             };
