@@ -136,6 +136,7 @@ select {
 }
 
 select.selectSort {
+    margin-left: .45em;
     width: 30%;
     min-width: 15em;
 }
