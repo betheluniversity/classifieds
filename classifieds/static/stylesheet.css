@@ -14,8 +14,6 @@ div.viewTable{
     margin: 0em 2em 4em 2em;
 }
 
-
-
 hr {
     height: .0625em;
     background-color: #000000;
@@ -77,12 +75,12 @@ p {
     font-size: .9em;
 }
 
-p.baseTitle {
-    margin-bottom: .5em;
-    text-align: left;
-    color: #FFFFFF;
-    font-family: Gotham A, Gotham B, Helvetica, Arial, sans;
-}
+/*p.baseTitle {*/
+    /*margin-bottom: .5em;*/
+    /*text-align: left;*/
+    /*color: #FFFFFF;*/
+    /*font-family: Gotham A, Gotham B, Helvetica, Arial, sans;*/
+/*}*/
 
 p.note {
     margin: 1em 3em -1.4em 3.4em;
@@ -116,10 +114,10 @@ a.button {
     float: left;
     font-size: .78em;
     border-radius: .25em;
+    /*margin-top: 1em;*/
+    /*margin-bottom: 0em;*/
     /*box-shadow: 0em .5em 1em 0em rgba(0,0,0,0.2);*/
-    /*margin-right: .125em;*/
     /*margin-left: .25em;*/
-    /*border-right: .0625em solid #005280;*/
     background-color: #0F2C52 !important;
     color: #FFFFFF !important;
 }
@@ -137,6 +135,12 @@ a.button {
 a.button.active {
     background-color: #0069AA !important;
     /*border: #FFC600 solid .125em;*/
+}
+
+img.logo {
+    float: left;
+    width: 5em;
+    height: 2em;
 }
 
 ul {
@@ -217,14 +221,14 @@ select.selectSort {
 
 .view-padded {
     text-align: center;
-    padding: .5em 3em 1em 3em;
-    margin: 0em;
+    /*padding: .5em 3em 1em 3em;*/
+    /*margin: 0em;*/
     background-color: #0F2C52;
 }
 
 .padded {
     text-align: right;
-    padding: 1em 3em 1em 3em;
+    padding: .9em 0em 0em 0em;
     margin: 0em;
     background-color: #0F2C52;
 }
