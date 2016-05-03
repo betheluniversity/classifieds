@@ -82,6 +82,10 @@ p {
     /*font-family: Gotham A, Gotham B, Helvetica, Arial, sans;*/
 /*}*/
 
+.logo{
+    margin: .5em 1em .5em 1em;
+}
+
 p.note {
     margin: 1em 3em -1.4em 3.4em;
 }
