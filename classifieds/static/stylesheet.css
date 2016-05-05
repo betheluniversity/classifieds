@@ -151,7 +151,6 @@ img.logo {
     float: left;
     width: 15.5em;
     height: 3.5em;
-<<<<<<< HEAD
     margin-right: 1.5em;
 }
 
@@ -208,9 +207,6 @@ select.selectSort {
     color: red;
 }
 
-<<<<<<< HEAD
-.dropbtn {
-=======
 #user_menu {
     float: right;
     margin: .1em 1em .1em 1em;
@@ -226,7 +222,6 @@ select.selectSort {
 /*}*/
 
 .dropbtn{
->>>>>>> origin/mobile-css
     font-size: .9em;
     border-radius: .25em;
     background-color: #0069AA;
