@@ -10,53 +10,62 @@
     <script src="../static/sorttable.js"></script>
     <script src="../static/readmore.js"></script>
     <script src="../static/sorting.js"></script>
-    <script src="../static/vertical-menu.js"></script>
 {% endblock %}
 
 {% block body_content %}
     <div id="body">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes"/>
-    <div class="padded">
-        <img class="logo" src="/static/bethel-classifieds-logo.png">
-        <ul class="padded">
-            <li>
-                {% if request.path == '/' %}
-                    <a href="/" class="button active">Home</a>
-                {% else %}
-                    <a href="/" class="button">Home</a>
-                {% endif %}
-            </li>
-            <li>
-                {% if '/search-page' in request.path %}
-                    <a href="/search-page" class="button active">Search through classifieds</a>
-                {% else %}
-                    <a href="/search-page" class="button">Search through classifieds</a>
-                {% endif %}
-            </li>
-            <li>
-                {% if '/add-classified' in request.path %}
-                    <a href="/add-classified" class="button active">Submit a classified</a>
-                {% else %}
-                    <a href="/add-classified" class="button">Submit a classified</a>
-                {% endif %}
-            </li>
-            <li>
-                {% if '/view-posted/' in request.path %}
-                    <a href="/view-posted/active" class="button active">View your posted classifieds</a>
-                {% else %}
-                    <a href="/view-posted/active" class="button">View your posted classifieds</a>
-                {% endif %}
-            </li>
-            <div id="user_menu" class="top-right dropdown">
-                <button class="dropbtn">Hello, {{ session['fullname'] }}!</button>
-                <div id="myDropdown" class="dropdown-content">
-                    <a href="/view-contact/{{ session['username'] }}">View your profile</a>
-                    <a href="/feedback">Provide feedback</a>
-                    <a href="/logout">Sign out</a>
-                </div>
+        <div id="menu" class="nav-menu">
+            <div class="inner">
+                <nav class="global-nav">
+                    <ul>
+                        <li>
+                            {% if request.path == '/' %}
+                                <a href="/" class="button active">Home</a>
+                            {% else %}
+                                <a href="/" class="button">Home</a>
+                            {% endif %}
+                        </li>
+                        <li>
+                            {% if '/search-page' in request.path %}
+                                <a href="/search-page" class="button active">Search through classifieds</a>
+                            {% else %}
+                                <a href="/search-page" class="button">Search through classifieds</a>
+                            {% endif %}
+                        </li>
+                        <li>
+                            {% if '/add-classified' in request.path %}
+                                <a href="/add-classified" class="button active">Submit a classified</a>
+                            {% else %}
+                                <a href="/add-classified" class="button">Submit a classified</a>
+                            {% endif %}
+                        </li>
+                        <li>
+                            {% if '/view-posted/' in request.path %}
+                                <a href="/view-posted/active" class="button active">View your posted classifieds</a>
+                            {% else %}
+                                <a href="/view-posted/active" class="button">View your posted classifieds</a>
+                            {% endif %}
+                        </li>
+                    </ul>
+                </nav>
             </div>
-        </ul>
-    </div>
+        </div>
+        <div class="global-banner">
+            <div class="inner">
+                <div><img class="logo" src="/static/bethel-classifieds-logo.png"></div>
+                <div id="user_menu" class="top-right dropdown">
+                    <button class="dropbtn">Hello, {{ session['fullname'] }}!</button>
+                    <div id="myDropdown" class="dropdown-content">
+                        <a href="/view-contact/{{ session['username'] }}">View your profile</a>
+                        <a href="/feedback">Provide feedback</a>
+                        <a href="/logout">Sign out</a>
+                    </div>
+                </div>
+                <div><a href="#" class="showMenu">MENU</a></div>
+            </div>
+        </div>
+
 
 
 {#        <div id="nav" class="padded">#}
