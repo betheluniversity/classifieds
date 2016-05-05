@@ -122,11 +122,6 @@ a.button {
     color: #FFFFFF !important;
 }
 
-/*Not needed*/
-/*button.pressed {*/
-    /*border: #FFC600 solid .125em;*/
-/*}*/
-
 .button:hover {
     background-color: #0069AA !important;
     /*background-color: #005285 !important;*/
@@ -244,7 +239,7 @@ select.selectSort {
     text-align: right;
     padding: .9em 0em 0em 0em;
     margin: 0em;
-    background-color: #0F2C52;
+    background-color: #0F2C52 !important;
 }
 
 /* submit a classified page */
@@ -354,6 +349,7 @@ textarea#input {
 
     .padded {
         text-align: left;
+        padding: .9em 0em 0em 0em;
     }
 
     div.centered {
