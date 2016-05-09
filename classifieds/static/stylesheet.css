@@ -140,6 +140,11 @@ a.button {
     color: #FFFFFF !important;
 }
 
+/*Not needed*/
+/*button.pressed {*/
+    /*border: #FFC600 solid .125em;*/
+/*}*/
+
 .button:hover {
     background-color: #0069AA !important;
     /*background-color: #005285 !important;*/
@@ -152,6 +157,7 @@ a.button.active {
 
 img.logo {
     float: left;
+<<<<<<< HEAD
     width: 15.5em;
     height: 3.5em;
     margin-right: 1.5em;
@@ -172,6 +178,10 @@ img.logo {
 
 .nav-menu {
     background-color: #0F2C52;
+=======
+    width: 5em;
+    height: 2em;
+>>>>>>> parent of 99ac8ab... Changes for menu bar (in progress)
 }
 
 .inner {
@@ -281,6 +291,23 @@ select.selectSort {
     display: block;
 }
 
+<<<<<<< HEAD
+=======
+.view-padded {
+    text-align: center;
+    /*padding: .5em 3em 1em 3em;*/
+    /*margin: 0em;*/
+    background-color: #0F2C52;
+}
+
+.padded {
+    text-align: right;
+    padding: .9em 0em 0em 0em;
+    margin: 0em;
+    background-color: #0F2C52;
+}
+
+>>>>>>> parent of 99ac8ab... Changes for menu bar (in progress)
 /* submit a classified page */
 
 span.star {
@@ -390,7 +417,6 @@ textarea#input {
 
     .padded {
         text-align: left;
-        padding: .9em 0em 0em 0em;
     }
 
     div.centered {
