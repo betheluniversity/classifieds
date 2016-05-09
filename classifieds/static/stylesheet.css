@@ -26,10 +26,10 @@ div.viewTable{
     background-color: #0F2C52;
 }
 
-.global-banner {
+#nav {
     background: #0F2C52;
     position: relative;
-    padding: 0;
+    padding: .5em;
     width: 100%;
 }
 
@@ -122,7 +122,6 @@ a:hover {
 
 a.button {
     text-align: left;
-    width: 120%;
     font-size: .78em ;
     padding: .75em 0em .75em .7em;
     background-color: #0F2C52;
@@ -132,7 +131,7 @@ a.button {
 .button {
     font-size: .78em;
     /*border-radius: .25em;*/
-    margin: 0em;
+    margin: .3em;
     background-color: #0F2C52 !important;
     color: #FFFFFF !important;
 }
@@ -154,41 +153,15 @@ img.logo {
     margin-right: 1.5em;
 }
 
-.nav-menu  {
-    position: fixed;
-    top: 0;
-    right: 0;
-    width: 15em;
-    height: 100%;
-    min-height: 100%;
-    overflow: hidden;
-    backface-visibility: hidden;
-}
-
-.nav-menu {
-    background-color: #0F2C52;
-}
-
-.inner {
-    max-width: 75em;
-    margin-left: auto;
-    margin-right: auto;
-    overflow: hidden;
-    margin: 0em 1em 0em 1em;
-}
-
 ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
-    width: 200px;
-    background-color: #0F2C52;
+    overflow: hidden;
 }
 
 li {
-    display: block;
-    background-color: #0F2C52;
-    text-decoration: none;
+    float: left;
 }
 
 select {
@@ -402,17 +375,6 @@ textarea#input {
 
     a.button:hover {
         background-color: #005285;
-    }
-
-    ul {
-        list-style-type: none;
-        margin: 0em;
-        padding: 0em;
-        overflow: hidden;
-    }
-
-    li {
-        float: left;
     }
 
     .dropbtn {
