@@ -101,6 +101,10 @@ p {
     /*font-family: Gotham A, Gotham B, Helvetica, Arial, sans;*/
 /*}*/
 
+.logo{
+    margin: .5em 1em .5em 1em;
+}
+
 p.note {
     margin: 1em 3em -1.4em 3.4em;
 }
@@ -153,6 +157,41 @@ img.logo {
     margin-right: 1.5em;
 }
 
+<<<<<<< HEAD
+=======
+.nav-menu  {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 15em;
+    height: 100%;
+    min-height: 100%;
+    overflow: hidden;
+    backface-visibility: hidden;
+}
+
+.nav-menu {
+    background-color: #0F2C52;
+}
+
+.inner {
+    max-width: 75em;
+    margin-left: auto;
+    margin-right: auto;
+    overflow: hidden;
+<<<<<<< HEAD
+<<<<<<< HEAD
+    margin: 0em 1em 0em 1em;
+=======
+>>>>>>> parent of 41e97ac... Merge remote-tracking branch 'origin/mobile-css' into mobile-css
+=======
+=======
+    margin: 0em 1em 0em 1em;
+>>>>>>> origin/mobile-css
+>>>>>>> parent of ec0a787... update
+}
+
+>>>>>>> origin/mobile-css
 ul {
     list-style-type: none;
     margin: 0;
@@ -178,6 +217,7 @@ select.selectSort {
     color: red;
 }
 
+<<<<<<< HEAD
 #user_menu {
     float: right;
     margin: .1em 1em .1em 1em;
@@ -193,14 +233,15 @@ select.selectSort {
 /*}*/
 
 .dropbtn{
+=======
+.dropbtn {
+>>>>>>> parent of 41e97ac... Merge remote-tracking branch 'origin/mobile-css' into mobile-css
     font-size: .9em;
-    border-radius: .25em;
-    background-color: #0069AA;
-    color: #FFFFFF;
-    cursor: pointer;
-    width: 12.5em;
+    background-color: #0F2C52 !important;
+    margin: 0em;
     border: none;
-    margin: 0em 0em .25em 0em;
+    cursor: pointer;
+    width: 13.9em;
 }
 
 .top-right {
@@ -210,17 +251,16 @@ select.selectSort {
     display: inline-block;
 }
 
-/*.dropbtn:hover {*/
-    /*background-color: #0069AA !important;*/
-/*}*/
+.dropbtn:hover {
+    background-color: #0069AA !important;
+}
 
 .dropdown-content {
-    margin-top: -.2em;
     text-align: left;
     display: none;
     position: absolute;
     z-index: 1;
-    width: 11.3em;
+    width: 12.51em;
     background-color: white;
     overflow: auto;
     box-shadow: 0em .5em 1em 0em rgba(0,0,0,0.2);
@@ -378,9 +418,8 @@ textarea#input {
     }
 
     .dropbtn {
-        font-size: .9em;
+        font-size: .92em;
         width: 12.5em;
-        margin: 0em 0em 0.25em 0em;
     }
 
     .top-right {
@@ -394,7 +433,6 @@ textarea#input {
 
     .dropdown-content {
         text-align: left;
-        width: 11.25em;
     }
 
     input {
