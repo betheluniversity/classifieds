@@ -4,7 +4,6 @@ div.table {
     border: none;
     padding: 1.5em 1em 1em 1em;
     margin: 0em 2em 4em 2em;
-    /*font-size: .9em;*/
 }
 
 div.viewTable{
@@ -31,7 +30,7 @@ div.singlePost {
 }
 
 .cell {
-    font-size: .95em;
+    font-size: .9em;
     display: table-cell;
     padding: .5em 1em .5em .5em;
     margin-right: .5em;
@@ -57,7 +56,7 @@ body {
 }
 
 div.centered {
-    text-align: center;
+    text-align: left;
 }
 
 span.warning {
@@ -106,34 +105,27 @@ a:hover {
 }
 
 a.button {
-    font-size: .78em;
-    /*box-shadow: 0em .5em 1em 0em rgba(0,0,0,0.2);*/
-    /*margin-right: .125em;*/
-    /*margin-left: .25em;*/
+    font-size: .85em;
+    padding: 1em 1em 1em 1em;
     background-color: #0F2C52;
     color: #FFFFFF !important;
 }
 
 .button {
     float: left;
-    font-size: .78em;
+    font-size: .85em;
     border-radius: .25em;
-    /*margin-top: 1em;*/
-    /*margin-bottom: 0em;*/
-    /*box-shadow: 0em .5em 1em 0em rgba(0,0,0,0.2);*/
-    /*margin-left: .25em;*/
+    transition: 0s background-color;
     background-color: #0F2C52 !important;
     color: #FFFFFF !important;
 }
 
 .button:hover {
-    background-color: #0069AA !important;
-    /*background-color: #005285 !important;*/
+    background: rgba(0,105,170,0.5) !important;
 }
 
 a.button.active {
-    background-color: #0069AA !important;
-    /*border: #FFC600 solid .125em;*/
+    background: rgba(0,105,170,0.5) !important;
 }
 
 img.logo {
@@ -173,8 +165,10 @@ select.selectSort {
 
 .dropbtn {
     font-size: .9em;
+    border-radius: .25em;
+    transition: 0s background-color;
     background-color: #0F2C52 !important;
-    margin: 0em;
+    margin: 0em 2em 0em 0em;
     border: none;
     cursor: pointer;
     width: 13.9em;
@@ -182,14 +176,11 @@ select.selectSort {
 
 .top-right {
     font-size: .9em;
-    /*margin: 1em 0em 1em 0em;*/
     display: inline-block;
-    /*box-shadow: 0em .5em 1em 0em rgba(0,0,0,0.2);*/
-
 }
 
 .dropbtn:hover {
-    background-color: #0069AA !important;
+    background: rgba(0,105,170,0.5) !important;
 }
 
 .dropdown-content {
@@ -220,8 +211,6 @@ select.selectSort {
 
 .view-padded {
     text-align: center;
-    /*padding: .5em 3em 1em 3em;*/
-    /*margin: 0em;*/
     background-color: #0F2C52;
 }
 
@@ -292,8 +281,8 @@ textarea#input {
     font-family: Gotham A, Gotham B, Helvetica, Arial, sans;
     text-align: center;
     color: #f1f1f2;
-    padding-top: 1.4em;
-    font-size: .9em;
+    padding-top: 1.8em;
+    font-size: .78em;
     letter-spacing: 0.25px;
 }
 
@@ -312,14 +301,14 @@ textarea#input {
 
 
 /* If webpage size becomes larger than 60em*/
-@media (min-width: 48em) {
+@media (min-width: 71em) {
 
     a:hover {
         color: #005285;
     }
 
     .cell {
-        font-size: 1em;
+        font-size: .92em;
     }
 
     p.baseTitle {
@@ -362,6 +351,17 @@ textarea#input {
         font-size: .92em;
     }
 
+    ul {
+        list-style-type: none;
+        margin: 0em;
+        padding: 0em;
+        overflow: hidden;
+    }
+
+    li {
+        float: left;
+    }
+
     a.button:hover {
         background-color: #005285;
     }
@@ -373,11 +373,6 @@ textarea#input {
 
     .top-right {
         font-size: .92em;
-    }
-
-    .dropbtn:hover {
-        background-color: #0069AA !important;
-        /*background-color: #005285 !important;*/
     }
 
     .dropdown-content {
@@ -400,14 +395,4 @@ textarea#input {
         max-width: 50%;
     }
 
-}
-
-@media (min-width: 72em) {
-    #nav {
-        text-align: right;
-    }
-    .top-right {
-        /*float: right;*/
-        /*margin: .3em 0em 0em 0em;*/
-    }
 }
