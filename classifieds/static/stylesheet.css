@@ -126,11 +126,6 @@ a.button {
     color: #FFFFFF !important;
 }
 
-/*Not needed*/
-/*button.pressed {*/
-    /*border: #FFC600 solid .125em;*/
-/*}*/
-
 .button:hover {
     background: rgba(0,105,170,0.5) !important;
 }
@@ -222,20 +217,6 @@ select.selectSort {
 
 .show {
     display: block;
-}
-
-.view-padded {
-    text-align: center;
-    /*padding: .5em 3em 1em 3em;*/
-    /*margin: 0em;*/
-    background-color: #0F2C52;
-}
-
-.padded {
-    text-align: right;
-    padding: .9em 0em 0em 0em;
-    margin: 0em;
-    background-color: #0F2C52;
 }
 
 /* submit a classified page */
