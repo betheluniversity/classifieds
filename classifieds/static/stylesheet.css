@@ -20,19 +20,8 @@ div.viewTable{
 
 .padded {
     text-align: right;
-    padding: .5em;
-    background-color: #0F2C52;
-    height: 5em;
-}
-
-.global-banner {
-    width: 100%;
-}
-
-#nav {
-    background: #0F2C52;
-    position: relative;
-    padding: .3em;
+    padding: .9em 0em 0em 0em;
+    background-color: #0F2C52 !important;
 }
 
 hr {
@@ -43,7 +32,6 @@ hr {
 
 div.singlePost {
     margin-bottom: 1em;
-    /*display: table;*/
     font-size: .9em;
 }
 
@@ -120,29 +108,19 @@ a:hover {
 }
 
 a.button {
-<<<<<<< HEAD
     font-size: .85em;
     padding: 1em 1em 1em 1em;
-=======
     text-align: left;
-    font-size: .78em ;
-    padding: .75em;
-    margin-top: 1em;
->>>>>>> origin/mobile-css
+    margin-top: 0em;
     background-color: #0F2C52;
     color: #FFFFFF !important;
 }
 
 .button {
-<<<<<<< HEAD
     float: left;
     font-size: .85em;
     border-radius: .25em;
-=======
-    font-size: .78em;
-    border-radius: .25em;
     margin: 0em;
->>>>>>> origin/mobile-css
     transition: 0s background-color;
     background-color: #0F2C52 !important;
     color: #FFFFFF !important;
@@ -161,28 +139,6 @@ img.logo {
     width: 15.5em;
     height: 3.5em;
     margin-right: 1.5em;
-}
-
-/*.nav-menu  {*/
-    /*position: fixed;*/
-    /*top: 0;*/
-    /*right: 0;*/
-    /*width: 15em;*/
-    /*height: 100%;*/
-    /*min-height: 100%;*/
-    /*overflow: hidden;*/
-    /*backface-visibility: hidden;*/
-/*}*/
-
-/*.nav-menu {*/
-    /*background-color: #0F2C52;*/
-/*}*/
-
-.inner {
-    max-width: 75em;
-    margin-left: auto;
-    margin-right: auto;
-    overflow: hidden;
 }
 
 ul {
@@ -217,7 +173,6 @@ select.selectSort {
 
 .dropbtn {
     font-size: .9em;
-<<<<<<< HEAD
     border-radius: .25em;
     transition: 0s background-color;
     background-color: #0F2C52 !important;
@@ -225,10 +180,6 @@ select.selectSort {
     border: none;
     cursor: pointer;
     width: 13.9em;
-=======
-    transition: 0s background-color;
-    background-color: #0F2C52 !important;
->>>>>>> origin/mobile-css
 }
 
 .top-right {
@@ -268,21 +219,6 @@ select.selectSort {
     display: block;
 }
 
-<<<<<<< HEAD
-.view-padded {
-    text-align: center;
-    background-color: #0F2C52;
-}
-
-.padded {
-    text-align: right;
-    padding: .9em 0em 0em 0em;
-    margin: 0em;
-    background-color: #0F2C52 !important;
-}
-
-=======
->>>>>>> origin/mobile-css
 /* submit a classified page */
 
 span.star {
@@ -363,11 +299,7 @@ textarea#input {
 
 
 /* If webpage size becomes larger than 60em*/
-<<<<<<< HEAD
 @media (min-width: 71em) {
-=======
-@media only screen and (min-width: 48em) {
->>>>>>> origin/mobile-css
 
     a:hover {
         color: #005285;
@@ -381,13 +313,6 @@ textarea#input {
         text-align: left;
     }
 
-    /*!* Not sure if we want this one or not, specifically for iPad*!*/
-    /*.top-right {*/
-        /*margin: .3em 0em 1em .2em;*/
-    /*}*/
-
-
-
     .view-padded {
         text-align: left;
         padding: 0em 3em 1em 3em;
@@ -396,7 +321,6 @@ textarea#input {
 
     .padded {
         text-align: left;
-        padding: .9em 0em 0em 0em;
     }
 
     div.centered {
