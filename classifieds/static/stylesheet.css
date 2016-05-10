@@ -141,54 +141,11 @@ a.button.active {
 
 img.logo {
     float: left;
-<<<<<<< HEAD
     width: 15.5em;
     height: 3.5em;
     margin-right: 1.5em;
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-.nav-menu  {
-    position: fixed;
-    top: 0;
-    right: 0;
-    width: 15em;
-    height: 100%;
-    min-height: 100%;
-    overflow: hidden;
-    backface-visibility: hidden;
-}
-
-.nav-menu {
-    background-color: #0F2C52;
-=======
-    width: 5em;
-    height: 2em;
->>>>>>> parent of 99ac8ab... Changes for menu bar (in progress)
-}
-
-.inner {
-    max-width: 75em;
-    margin-left: auto;
-    margin-right: auto;
-    overflow: hidden;
-<<<<<<< HEAD
-<<<<<<< HEAD
-    margin: 0em 1em 0em 1em;
-=======
->>>>>>> parent of 41e97ac... Merge remote-tracking branch 'origin/mobile-css' into mobile-css
-=======
-=======
-    margin: 0em 1em 0em 1em;
->>>>>>> origin/mobile-css
->>>>>>> parent of ec0a787... update
-}
-
->>>>>>> origin/mobile-css
-=======
->>>>>>> origin/mobile-css
 ul {
     list-style-type: none;
     margin: 0;
@@ -267,8 +224,6 @@ select.selectSort {
     display: block;
 }
 
-<<<<<<< HEAD
-=======
 .view-padded {
     text-align: center;
     /*padding: .5em 3em 1em 3em;*/
@@ -283,7 +238,6 @@ select.selectSort {
     background-color: #0F2C52;
 }
 
->>>>>>> parent of 99ac8ab... Changes for menu bar (in progress)
 /* submit a classified page */
 
 span.star {
