@@ -7,44 +7,165 @@
 {% block internal %}
 <div>
     {% if values.__len__() == 0 %}
-There are no active posts to show.
+        <p class="noPosts">There are no active posts to show.</p>
     {% else %}
-<table class="sortable">
-    <thead>
-        <tr>
-            <th>Title</th>
-            <th>Description</th>
-            <th>Price</th>
-            <th>Date Posted</th>
-            <th>Posted By</th>
-            {% if showStatus == True %}
-            <th>Status</th>
-            {% endif %}
-        </tr>
-    </thead>
-    <tbody>
+<div class="table">
+    <div class="sorting">
+        <div class="centered">
+            <select class="selectSort">
+                <option>Sort Classifieds:</option>
+                <option id="titleAZ" value="sortByTitleAZ">Title (A-Z)</option>
+                <option id="titleZA" value="sortByTitleZA">Title (Z-A)</option>
+                <option id="descriptionAZ" value="sortByDescriptionAZ">Description (A-Z)</option>
+                <option id="descriptionZA" value="sortByDescriptionZA">Description (Z-A)</option>
+                <option id="priceAZ" value="sortByPrice">Price (High-Low)</option>
+                <option id="priceZA" value="reversePriceOrder">Price (Low-High)</option>
+                <option id="dateAZ" value="sortByDate">Date (Old-New)</option>
+                <option id="dateZA" value="reverseDateOrder">Date (New-Old)</option>
+                <option id="postedByAZ" value="sortByPostedByAZ">Author (A-Z)</option>
+                <option id="postedByZA" value="sortByPostedByZA">Author (Z-A)</option>
+            </select>
+        </div>
+        <script>
+            $(".selectSort").change(function(){
+                console.log("inFunction");
+                if ($(".selectSort option:selected").text() == "Title (A-Z)")
+                    sortPosts(".title > a", true);
+                else if ($(".selectSort option:selected").text() == "Title (Z-A)")
+                    sortPosts(".title > a", false);
+                else if ($(".selectSort option:selected").text() == "Description (A-Z)")
+                    sortPosts(".description > article", true);
+                else if ($(".selectSort option:selected").text() == "Description (Z-A)")
+                    sortPosts(".description > article", false);
+                else if ($(".selectSort option:selected").text() == "Price (High-Low)")
+                    sortPosts(".price", true);
+                else if ($(".selectSort option:selected").text() == "Price (Low-High)")
+                    sortPosts(".price", false);
+                else if ($(".selectSort option:selected").text() == "Date (Old-New)")
+                    sortPosts(".date", true);
+                else if ($(".selectSort option:selected").text() == "Date (New-Old)")
+                    sortPosts(".date", false);
+                else if ($(".selectSort option:selected").text() == "Author (A-Z)")
+                    sortPosts(".postedBy > a", true);
+                else if ($(".selectSort option:selected").text() == "Author (Z-A)")
+                    sortPosts(".postedBy > a", false);
+            });
+
+            {# Sort the divs #}
+            function sortPosts(sortQuery, reverse) {
+
+                jQuery(".table > .singlePost").sort(function (a, b) {
+                    var upA = jQuery('> .row > ' + sortQuery, a).text().toUpperCase();
+                    var upB = jQuery('> .row > ' + sortQuery, b).text().toUpperCase();
+                    if (upA > upB && reverse == true) {
+                        return 1;
+                    }
+                    else if (upA < upB && reverse == false) {
+                        return 1;
+                    }
+                    else{
+                        return -1;
+                    }
+                }).appendTo('.table');
+            };
+
+{#            function sortPostsReverse(sortQuery) {#}
+{#                jQuery(".table > .singlePost").sort(function (a, b) {#}
+{#                    var upA = jQuery('> .row > ' + sortQuery, a).text().toUpperCase();#}
+{#                    var upB = jQuery('> .row > ' + sortQuery, b).text().toUpperCase();#}
+{#                    if (upA < upB) {#}
+{#                        return 1;#}
+{#                    }#}
+{#                    else{#}
+{#                        return -1;#}
+{#                    }#}
+{#                }).appendTo('.table');#}
+        </script>
+    </div>
+{#    <div class="sorting">#}
+{#        <div class="centered">#}
+{#            <button id="titleButtonAZ" class="button">Sort by Title A-Z</button>#}
+{#            <button id="descriptionButtonAZ" class="button">Sort by Description A-Z</button>#}
+{#            <button id="priceButtonAZ" class="button">Sort by Price</button>#}
+{#            <button id="dateButtonAZ" class="button">Sort by Date</button>#}
+{#            <button id="postedByButtonAZ" class="button">Sort by Posted By A-Z</button>#}
+{#        </div>#}
+{#        <div class="centered">#}
+{#            <button id="titleButtonZA" class="button">Reverse Title Order</button>#}
+{#            <button id="descriptionButtonZA" class="button">Reverse Description Order</button>#}
+{#            <button id="priceButtonZA" class="button">Reverse Price Order</button>#}
+{#            <button id="dateButtonZA" class="button">Reverse Date Order</button>#}
+{#            <button id="postedByButtonZA" class="button">Reverse Posted By Order</button>#}
+{#        </div>#}
+{#        <script>#}
+{#            document.getElementById("titleButtonAZ").addEventListener("click", function(){sortPosts(".title > a")});#}
+{#            document.getElementById("titleButtonZA").addEventListener("click", function(){sortPostsReverse(".title > a")});#}
+{#            document.getElementById("descriptionButtonAZ").addEventListener("click", function(){sortPosts(".description > article")});#}
+{#            document.getElementById("descriptionButtonZA").addEventListener("click", function(){sortPostsReverse(".description > article")});#}
+{#            document.getElementById("priceButtonAZ").addEventListener("click", function(){sortPosts(".price")});#}
+{#            document.getElementById("priceButtonZA").addEventListener("click", function(){sortPostsReverse(".price")});#}
+{#            document.getElementById("dateButtonAZ").addEventListener("click", function(){sortPosts(".date")});#}
+{#            document.getElementById("dateButtonZA").addEventListener("click", function(){sortPostsReverse(".date")});#}
+{#            document.getElementById("postedByButtonAZ").addEventListener("click", function(){sortPosts(".postedBy > a")});#}
+{#            document.getElementById("postedByButtonZA").addEventListener("click", function(){sortPostsReverse(".postedBy > a")});#}
+{##}
+{#            function sortPosts(sortQuery) {#}
+{#                jQuery(".table > .singlePost").sort(function (a, b) {#}
+{#                    var upA = jQuery('> .row > ' + sortQuery, a).text().toUpperCase();#}
+{#                    var upB = jQuery('> .row > ' + sortQuery, b).text().toUpperCase();#}
+{#                    return upA > upB;#}
+{#                }).appendTo('.table');#}
+{#            };#}
+{##}
+{#            function sortPostsReverse(sortQuery) {#}
+{#                jQuery(".table > .singlePost").sort(function (a, b) {#}
+{#                    var upA = jQuery('> .row > ' + sortQuery, a).text().toUpperCase();#}
+{#                    var upB = jQuery('> .row > ' + sortQuery, b).text().toUpperCase();#}
+{#                    return upA < upB;#}
+{#                }).appendTo('.table');#}
+{#            };#}
+{#        </script>#}
+{#    </div>#}
 {% for val in values %}
-        <tr>
-            <td><a href="/view-classified/{{ val[0] }}">{{ val[1] }}</a></td>
-            <td><article>{{ val[2] }}</article></td>
-            <td>{{ val[3] }}</td>
-            <td>{{ val[4].date() }}</td>
-            <td><a href="/view-contact/{{ val[5] }}">{{ val[6] }}</a></td>
-            {% if showStatus == True %}
-            <td>
-                {% if val[7] == True %}
-                Completed
-                {% elif val[8] == True %}
-                Expired
-                {% else %}
-                Active
-                {% endif %}
-            </td>
-            {% endif %}
-        </tr>
+    <div id="singlePost-{{ loop.index }}" class="singlePost">
+        <div class="row">
+            <div class="cell">Title: </div>
+            <div class="title cell"><a href="/view-classified/{{ val[0] }}">{{ val[1] }}</a></div>
+        </div>
+        <div class="row">
+            <div class="cell">Description: </div>
+            <div class="description cell"><article>{{ val[2] }}</article></div>
+        </div>
+        <div class="row">
+            <div class="cell">Price: </div>
+            <div class="price cell">{{ val[3] }}</div>
+        </div>
+        <div class="row">
+            <div class="cell">Date Posted: </div>
+            <div class="date cell">{{ val[4].date() }}</div>
+        </div>
+        <div class="row">
+            <div class="cell">Posted By: </div>
+            <div class="postedBy cell"><a href="/view-contact/{{ val[5] }}">{{ val[6] }}</a></div>
+        </div>
+        {% if showStatus == True %}
+            <div class="row">
+                <div class="cell">Status</div>
+                <div class="status cell">
+                    {% if val[7] == True %}
+                    Completed
+                    {% elif val[8] == True %}
+                    Expired
+                    {% else %}
+                    Active
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+    <hr/>
+    </div>
 {% endfor %}
-    </tbody>
-</table>
+</div>
     {% endif %}
 </div>
 {% endblock %}
