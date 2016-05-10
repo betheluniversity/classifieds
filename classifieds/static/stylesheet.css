@@ -173,9 +173,18 @@ img.logo {
     /*backface-visibility: hidden;*/
 /*}*/
 
+<<<<<<< HEAD
 /*.nav-menu {*/
     /*background-color: #0F2C52;*/
 /*}*/
+=======
+.inner {
+    max-width: 75em;
+    margin-left: auto;
+    margin-right: auto;
+    overflow: hidden;
+}
+>>>>>>> parent of 41e97ac... Merge remote-tracking branch 'origin/mobile-css' into mobile-css
 
 ul {
     list-style-type: none;
@@ -202,6 +211,7 @@ select.selectSort {
     color: red;
 }
 
+<<<<<<< HEAD
 #user_menu {
     float: right;
     margin: .1em 1em .1em 1em;
@@ -211,6 +221,12 @@ select.selectSort {
     font-size: .9em;
     transition: 0s background-color;
     background-color: #0F2C52 !important;
+=======
+.dropbtn {
+    font-size: .9em;
+    background-color: #0F2C52 !important;
+    margin: 0em;
+>>>>>>> parent of 41e97ac... Merge remote-tracking branch 'origin/mobile-css' into mobile-css
     border: none;
     cursor: pointer;
     width: 13.9em;
@@ -227,7 +243,10 @@ select.selectSort {
 }
 
 .dropdown-content {
+<<<<<<< HEAD
     margin: 0em;
+=======
+>>>>>>> parent of 41e97ac... Merge remote-tracking branch 'origin/mobile-css' into mobile-css
     text-align: left;
     display: none;
     position: absolute;
