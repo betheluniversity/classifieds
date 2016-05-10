@@ -14,8 +14,7 @@
 
 {% block body_content %}
     <div id="body">
-
-    <div class="global-banner">
+        <div class="global-banner">
 {#            <div class="inner">#}
 {#                <div><img class="logo" src="/static/bethel-classifieds-logo.png"></div>#}
 {#                <div id="user_menu" class="top-right dropdown">#}
@@ -69,15 +68,7 @@
 
 
         <div id="nav" class="padded">
-        <div><img class="logo" src="/static/bethel-classifieds-logo.png"></div>
-        <div id="user_menu" class="top-right dropdown">
-                    <button class="dropbtn">Hello, {{ session['fullname'] }}!</button>
-                    <div id="myDropdown" class="dropdown-content">
-                    <a href="/view-contact/{{ session['username'] }}">View your profile</a>
-                    <a href="/feedback">Provide feedback</a>
-                    <a href="/logout">Sign out</a>
-                </div>
-            </div>
+            <img class="logo" src="/static/bethel-classifieds-logo.png">
             <div class="mainButtons">
                 <ul>
                     <li>
@@ -110,6 +101,15 @@
                     </li>
                 </ul>
             </div>
+            <div id="user_menu" class="top-right dropdown">
+                <button class="dropbtn">Hello, {{ session['fullname'] }}!</button>
+                <div id="myDropdown" class="dropdown-content">
+                    <a href="/view-contact/{{ session['username'] }}">View your profile</a>
+                    <a href="/feedback">Provide feedback</a>
+                    <a href="/logout">Sign out</a>
+                </div>
+            </div>
+        </div>
         </div>
         {% block internal %}
         {% endblock %}
@@ -126,8 +126,8 @@
             });
         </script>
         <div class="clear_footer"></div>
-    </div>
     <div class="footer">
         <p id="foot_title">Bethel University est. 1871 | Classifieds</p>
+    </div>
     </div>
 {% endblock %}

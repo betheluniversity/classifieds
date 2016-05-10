@@ -21,16 +21,19 @@ div.viewTable{
 
 .padded {
     text-align: right;
-    padding: .9em 0em 0em 0em;
-    margin: 0em;
+    padding: .5em;
     background-color: #0F2C52;
+    height: 5em;
+}
+
+.global-banner {
+    width: 100%;
 }
 
 #nav {
     background: #0F2C52;
     position: relative;
-    padding: .5em;
-    width: 100%;
+    padding: .3em;
 }
 
 hr {
@@ -127,15 +130,17 @@ a:hover {
 a.button {
     text-align: left;
     font-size: .78em ;
-    padding: .75em 0em .75em .7em;
+    padding: .75em;
+    margin-top: 1em;
     background-color: #0F2C52;
     color: #FFFFFF !important;
 }
 
 .button {
     font-size: .78em;
-    /*border-radius: .25em;*/
-    margin: .3em;
+    border-radius: .25em;
+    margin: 0em;
+    transition: 0s background-color;
     background-color: #0F2C52 !important;
     color: #FFFFFF !important;
 }
@@ -157,41 +162,21 @@ img.logo {
     margin-right: 1.5em;
 }
 
-<<<<<<< HEAD
-=======
-.nav-menu  {
-    position: fixed;
-    top: 0;
-    right: 0;
-    width: 15em;
-    height: 100%;
-    min-height: 100%;
-    overflow: hidden;
-    backface-visibility: hidden;
-}
+/*.nav-menu  {*/
+    /*position: fixed;*/
+    /*top: 0;*/
+    /*right: 0;*/
+    /*width: 15em;*/
+    /*height: 100%;*/
+    /*min-height: 100%;*/
+    /*overflow: hidden;*/
+    /*backface-visibility: hidden;*/
+/*}*/
 
-.nav-menu {
-    background-color: #0F2C52;
-}
+/*.nav-menu {*/
+    /*background-color: #0F2C52;*/
+/*}*/
 
-.inner {
-    max-width: 75em;
-    margin-left: auto;
-    margin-right: auto;
-    overflow: hidden;
-<<<<<<< HEAD
-<<<<<<< HEAD
-    margin: 0em 1em 0em 1em;
-=======
->>>>>>> parent of 41e97ac... Merge remote-tracking branch 'origin/mobile-css' into mobile-css
-=======
-=======
-    margin: 0em 1em 0em 1em;
->>>>>>> origin/mobile-css
->>>>>>> parent of ec0a787... update
-}
-
->>>>>>> origin/mobile-css
 ul {
     list-style-type: none;
     margin: 0;
@@ -217,28 +202,15 @@ select.selectSort {
     color: red;
 }
 
-<<<<<<< HEAD
 #user_menu {
     float: right;
     margin: .1em 1em .1em 1em;
 }
 
-/*.dropbtn {*/
-    /*font-size: .9em;*/
-    /*background-color: #0F2C52 !important;*/
-    /*margin: 0em;*/
-    /*border: none;*/
-    /*cursor: pointer;*/
-    /*width: 13.9em;*/
-/*}*/
-
-.dropbtn{
-=======
 .dropbtn {
->>>>>>> parent of 41e97ac... Merge remote-tracking branch 'origin/mobile-css' into mobile-css
     font-size: .9em;
+    transition: 0s background-color;
     background-color: #0F2C52 !important;
-    margin: 0em;
     border: none;
     cursor: pointer;
     width: 13.9em;
@@ -246,7 +218,6 @@ select.selectSort {
 
 .top-right {
     float: right;
-    margin: 1em;
     font-size: .9em;
     display: inline-block;
 }
@@ -256,6 +227,7 @@ select.selectSort {
 }
 
 .dropdown-content {
+    margin: 0em;
     text-align: left;
     display: none;
     position: absolute;
