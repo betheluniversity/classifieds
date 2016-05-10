@@ -4,7 +4,6 @@ div.table {
     border: none;
     padding: 1.5em 1em 1em 1em;
     margin: 0em 2em 4em 2em;
-    /*font-size: .9em;*/
 }
 
 div.viewTable{
@@ -22,15 +21,7 @@ div.viewTable{
 .padded {
     text-align: right;
     padding: .9em 0em 0em 0em;
-    margin: 0em;
-    background-color: #0F2C52;
-}
-
-#nav {
-    background: #0F2C52;
-    position: relative;
-    padding: .5em;
-    width: 100%;
+    background-color: #0F2C52 !important;
 }
 
 hr {
@@ -41,7 +32,6 @@ hr {
 
 div.singlePost {
     margin-bottom: 1em;
-    /*display: table;*/
     font-size: .9em;
 }
 
@@ -50,7 +40,7 @@ div.singlePost {
 }
 
 .cell {
-    font-size: .95em;
+    font-size: .9em;
     display: table-cell;
     padding: .5em 1em .5em .5em;
     margin-right: .5em;
@@ -76,7 +66,7 @@ body {
 }
 
 div.centered {
-    text-align: center;
+    text-align: left;
 }
 
 span.warning {
@@ -93,13 +83,6 @@ p {
     font-family: Georgia, serif;
     font-size: .9em;
 }
-
-/*p.baseTitle {*/
-    /*margin-bottom: .5em;*/
-    /*text-align: left;*/
-    /*color: #FFFFFF;*/
-    /*font-family: Gotham A, Gotham B, Helvetica, Arial, sans;*/
-/*}*/
 
 .logo{
     margin: .5em 1em .5em 1em;
@@ -125,17 +108,20 @@ a:hover {
 }
 
 a.button {
+    font-size: .85em;
+    padding: 1em 1em 1em 1em;
     text-align: left;
-    font-size: .78em ;
-    padding: .75em 0em .75em .7em;
+    margin-top: 0em;
     background-color: #0F2C52;
     color: #FFFFFF !important;
 }
 
 .button {
-    font-size: .78em;
-    /*border-radius: .25em;*/
-    margin: .3em;
+    float: left;
+    font-size: .85em;
+    border-radius: .25em;
+    margin: 0em;
+    transition: 0s background-color;
     background-color: #0F2C52 !important;
     color: #FFFFFF !important;
 }
@@ -146,13 +132,11 @@ a.button {
 /*}*/
 
 .button:hover {
-    background-color: #0069AA !important;
-    /*background-color: #005285 !important;*/
+    background: rgba(0,105,170,0.5) !important;
 }
 
 a.button.active {
-    background-color: #0069AA !important;
-    /*border: #FFC600 solid .125em;*/
+    background: rgba(0,105,170,0.5) !important;
 }
 
 img.logo {
@@ -163,6 +147,7 @@ img.logo {
     margin-right: 1.5em;
 }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 .nav-menu  {
@@ -202,6 +187,8 @@ img.logo {
 }
 
 >>>>>>> origin/mobile-css
+=======
+>>>>>>> origin/mobile-css
 ul {
     list-style-type: none;
     margin: 0;
@@ -227,28 +214,17 @@ select.selectSort {
     color: red;
 }
 
-<<<<<<< HEAD
 #user_menu {
     float: right;
     margin: .1em 1em .1em 1em;
 }
 
-/*.dropbtn {*/
-    /*font-size: .9em;*/
-    /*background-color: #0F2C52 !important;*/
-    /*margin: 0em;*/
-    /*border: none;*/
-    /*cursor: pointer;*/
-    /*width: 13.9em;*/
-/*}*/
-
-.dropbtn{
-=======
 .dropbtn {
->>>>>>> parent of 41e97ac... Merge remote-tracking branch 'origin/mobile-css' into mobile-css
     font-size: .9em;
+    border-radius: .25em;
+    transition: 0s background-color;
     background-color: #0F2C52 !important;
-    margin: 0em;
+    margin: 0em 2em 0em 0em;
     border: none;
     cursor: pointer;
     width: 13.9em;
@@ -256,16 +232,16 @@ select.selectSort {
 
 .top-right {
     float: right;
-    margin: 1em;
     font-size: .9em;
     display: inline-block;
 }
 
 .dropbtn:hover {
-    background-color: #0069AA !important;
+    background: rgba(0,105,170,0.5) !important;
 }
 
 .dropdown-content {
+    margin: 0em;
     text-align: left;
     display: none;
     position: absolute;
@@ -368,8 +344,8 @@ textarea#input {
     font-family: Gotham A, Gotham B, Helvetica, Arial, sans;
     text-align: center;
     color: #f1f1f2;
-    padding-top: 1.4em;
-    font-size: .9em;
+    padding-top: 1.8em;
+    font-size: .78em;
     letter-spacing: 0.25px;
 }
 
@@ -388,26 +364,19 @@ textarea#input {
 
 
 /* If webpage size becomes larger than 60em*/
-@media only screen and (min-width: 48em) {
+@media (min-width: 71em) {
 
     a:hover {
         color: #005285;
     }
 
     .cell {
-        font-size: 1em;
+        font-size: .92em;
     }
 
     p.baseTitle {
         text-align: left;
     }
-
-    /*!* Not sure if we want this one or not, specifically for iPad*!*/
-    /*.top-right {*/
-        /*margin: .3em 0em 1em .2em;*/
-    /*}*/
-
-
 
     .view-padded {
         text-align: left;
@@ -439,6 +408,17 @@ textarea#input {
         font-size: .92em;
     }
 
+    ul {
+        list-style-type: none;
+        margin: 0em;
+        padding: 0em;
+        overflow: hidden;
+    }
+
+    li {
+        float: left;
+    }
+
     a.button:hover {
         background-color: #005285;
     }
@@ -450,11 +430,6 @@ textarea#input {
 
     .top-right {
         font-size: .92em;
-    }
-
-    .dropbtn:hover {
-        background-color: #0069AA !important;
-        /*background-color: #005285 !important;*/
     }
 
     .dropdown-content {
@@ -477,14 +452,4 @@ textarea#input {
         max-width: 50%;
     }
 
-}
-
-@media (min-width: 72em) {
-    #nav {
-        text-align: right;
-    }
-    .top-right {
-        /*float: right;*/
-        /*margin: .3em 0em 0em 0em;*/
-    }
 }
