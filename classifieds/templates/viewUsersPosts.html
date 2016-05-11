@@ -6,33 +6,33 @@
 
 {% block internal %}
 <div>
-    <ul class="padded">
-        <li>
+    <ul>
+        <li class="first-button">
             {% if '/all' in request.path %}
-                <a href="/view-posted/all" class="button active">All your posts</a>
+                <a href="/view-posted/all" class="button active posts">All your posts</a>
             {% else %}
-                <a href="/view-posted/all" class="button">All your posts</a>
+                <a href="/view-posted/all" class="button posts">All your posts</a>
             {% endif %}
         </li>
         <li>
             {% if '/active' in request.path %}
-                <a href="/view-posted/active" class="button active">All active posts</a>
+                <a href="/view-posted/active" class="button active posts">All active posts</a>
             {% else %}
-                <a href="/view-posted/active" class="button">All active posts</a>
+                <a href="/view-posted/active" class="button posts">All active posts</a>
             {% endif %}
         <li>
         </li>
             {% if '/completed' in request.path %}
-                <a href="/view-posted/completed" class="button active">All completed posts</a>
+                <a href="/view-posted/completed" class="button active posts">All completed posts</a>
             {% else %}
-                <a href="/view-posted/completed" class="button">All completed posts</a>
+                <a href="/view-posted/completed" class="button posts">All completed posts</a>
             {% endif %}
         <li>
         </li>
             {% if '/expired' in request.path %}
-                <a href="/view-posted/expired" class="button active">All expired posts</a>
+                <a href="/view-posted/expired" class="button active posts">All expired posts</a>
             {% else %}
-                <a href="/view-posted/expired" class="button">All expired posts</a>
+                <a href="/view-posted/expired" class="button posts">All expired posts</a>
             {% endif %}
         </li>
     </ul>

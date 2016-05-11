@@ -20,7 +20,7 @@ div.viewTable{
 }
 
 .padded {
-    height: 5em;
+    height: 5.5em;
     text-align: right;
     padding: .9em 0em 0em 0em;
     background-color: #0F2C52 !important;
@@ -33,7 +33,7 @@ hr {
 
 div.singlePost {
     margin-bottom: 1em;
-    font-size: .9em;
+    font-size: .85em;
 }
 
 .row {
@@ -81,7 +81,6 @@ form {
 
 p {
     font-family: Georgia, serif;
-    /*font-size: .85em;*/
 }
 
 
@@ -104,10 +103,10 @@ a:hover {
 }
 
 a.button {
-    font-size: .9em;
+    font-size: .85em;
     padding: 1em 1em 1em 1em;
     text-align: left;
-    margin-top: 0em;
+    margin-top: .9em;
     background-color: #0F2C52;
     color: #FFFFFF !important;
 }
@@ -115,7 +114,7 @@ a.button {
 .button {
     float: left;
     border-radius: .25em;
-    margin: 0em .5em 0em .5em;
+    margin: 0em .25em 0em .25em;
     transition: 0s background-color;
     background-color: #0F2C52 !important;
     color: #FFFFFF !important;
@@ -127,6 +126,14 @@ a.button {
 
 a.button.active {
     background: rgba(0,105,170,0.5) !important;
+}
+
+.button.posts:hover {
+    background-color: #0069AA !important;
+}
+
+a.button.active.posts {
+    background-color: #0069AA !important;
 }
 
 img.logo {
@@ -147,6 +154,10 @@ li {
     float: left;
 }
 
+li.first-button {
+    margin-left: 1.3em;
+}
+
 select {
     max-width: 100%;
 }
@@ -155,24 +166,20 @@ select.selectSort {
     margin-left: .45em;
     width: 30%;
     min-width: 15em;
-    font-size: .9em;
+    font-size: .85em;
 }
 
 .error{
     color: red;
 }
 
-#user_menu {
-    float: right;
-    margin: .1em 1em .1em 1em;
-}
-
 .dropbtn {
-    font-size: .9em;
+    padding: 1em;
+    font-size: .85em;
     border-radius: .25em;
     transition: 0s background-color;
     background: rgba(0,105,170,0.5) !important;
-    margin: 0em 2em 0em 0em;
+    margin: .87em 2em 0em 0em;
     border: none;
     cursor: pointer;
     width: 13.9em;
@@ -188,7 +195,7 @@ select.selectSort {
 }
 
 .dropdown-content {
-    font-size: .9em;
+    font-size: .85em;
     margin: 0em;
     text-align: left;
     display: none;
@@ -224,7 +231,7 @@ span.star {
 }
 
 input[type=submit] {
-    font-size: .9em;
+    font-size: .85em;
     font-family: Gotham A, Gotham B, Helvetica, Arial, sans !important;
     color: #FFFFFF !important;
     background-color: #0069AA;
