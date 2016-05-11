@@ -84,9 +84,6 @@ p {
     font-size: .9em;
 }
 
-.logo{
-    margin: .5em 1em .5em 1em;
-}
 
 p.note {
     margin: 1em 3em -1.4em 3.4em;
@@ -120,7 +117,7 @@ a.button {
     float: left;
     font-size: .85em;
     border-radius: .25em;
-    margin: 0em;
+    margin: 0em .5em 0em .5em;
     transition: 0s background-color;
     background-color: #0F2C52 !important;
     color: #FFFFFF !important;
@@ -138,7 +135,7 @@ img.logo {
     float: left;
     width: 15.5em;
     height: 3.5em;
-    margin-right: 1.5em;
+    margin: .5em 1em .5em 1em;
 }
 
 ul {
@@ -175,7 +172,7 @@ select.selectSort {
     font-size: .9em;
     border-radius: .25em;
     transition: 0s background-color;
-    background-color: #0F2C52 !important;
+    background: rgba(0,105,170,0.5) !important;
     margin: 0em 2em 0em 0em;
     border: none;
     cursor: pointer;
@@ -205,7 +202,7 @@ select.selectSort {
 }
 
 .dropdown-content a {
-    padding: .75em 1em 1em 2.5em;
+    padding: .75em 1em 1em 2.25em;
     color: #0069AA;
     text-decoration: none;
     display: block;
@@ -369,6 +366,11 @@ textarea#input {
 
     .dropdown-content {
         text-align: left;
+        width: 11.5em;
+    }
+
+    .dropdown-content a {
+        padding: .75em 0em 1em 1.75em;
     }
 
     input {
