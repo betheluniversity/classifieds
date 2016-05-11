@@ -6,142 +6,60 @@
 
 {% block internal %}
 <div>
-    <ul class="padded">
-        <li>
-            {% if '/all' in request.path %}
-                <a href="/view-posted/all" class="button active">All your posts</a>
-            {% else %}
-                <a href="/view-posted/all" class="button">All your posts</a>
-            {% endif %}
-        </li>
-        <li>
-            {% if '/active' in request.path %}
-                <a href="/view-posted/active" class="button active">All active posts</a>
-            {% else %}
-                <a href="/view-posted/active" class="button">All active posts</a>
-            {% endif %}
-        <li>
-        </li>
-            {% if '/completed' in request.path %}
-                <a href="/view-posted/completed" class="button active">All completed posts</a>
-            {% else %}
-                <a href="/view-posted/completed" class="button">All completed posts</a>
-            {% endif %}
-        <li>
-        </li>
-            {% if '/expired' in request.path %}
-                <a href="/view-posted/expired" class="button active">All expired posts</a>
-            {% else %}
-                <a href="/view-posted/expired" class="button">All expired posts</a>
-            {% endif %}
-        </li>
-    </ul>
+    <div class="padded">
+        {% if '/all' in request.path %}
+            <a href="/view-posted/all" class="button active">All your posts</a>
+        {% else %}
+            <a href="/view-posted/all" class="button">All your posts</a>
+        {% endif %}
+
+        {% if '/active' in request.path %}
+            <a href="/view-posted/active" class="button active">All active posts</a>
+        {% else %}
+            <a href="/view-posted/active" class="button">All active posts</a>
+        {% endif %}
+
+        {% if '/completed' in request.path %}
+            <a href="/view-posted/completed" class="button active">All completed posts</a>
+        {% else %}
+            <a href="/view-posted/completed" class="button">All completed posts</a>
+        {% endif %}
+
+        {% if '/expired' in request.path %}
+            <a href="/view-posted/expired" class="button active">All expired posts</a>
+        {% else %}
+            <a href="/view-posted/expired" class="button">All expired posts</a>
+        {% endif %}
+    </div>
 {% if posts.__len__() == 0 %}
-<p class="noPosts">There are no active posts to show.</p>
+There are no active posts to show.
     {% else %}
-    <div class="table">
-        <div class="sorting">
-            <div class="centered">
-                <select class="selectSort">
-                    <option>Sort Classifieds:</option>
-                    <option id="titleAZ" value="sortByTitleAZ">Title (A-Z)</option>
-                    <option id="titleZA" value="sortByTitleZA">Title (Z-A)</option>
-                    <option id="descriptionAZ" value="sortByDescriptionAZ">Description (A-Z)</option>
-                    <option id="descriptionZA" value="sortByDescriptionZA">Description (Z-A)</option>
-                    <option id="priceAZ" value="sortByPrice">Price (High-Low)</option>
-                    <option id="priceZA" value="reversePriceOrder">Price (Low-High)</option>
-                    <option id="dateAZ" value="sortByDate">Date (Old-New)</option>
-                    <option id="dateZA" value="reverseDateOrder">Date (New-Old)</option>
-                    <option id="postedByAZ" value="sortByPostedByAZ">Author (A-Z)</option>
-                    <option id="postedByZA" value="sortByPostedByZA">Author (Z-A)</option>
-                </select>
-            </div>
-        <script>
-{#            $( "#titleAZ" ).click(function() {#}
-{#                alert( "Handler for .click() called." );#}
-{#            });#}
-            console.log("test1");
-
-            $(".selectSort").change(function(){
-                console.log("inFunction");
-                if ($(".selectSort option:selected").text() == "Title (A-Z)")
-                    sortPosts(".title > a", true);
-                else if ($(".selectSort option:selected").text() == "Title (Z-A)")
-                    sortPosts(".title > a", false);
-                else if ($(".selectSort option:selected").text() == "Description (A-Z)")
-                    sortPosts(".description > article", true);
-                else if ($(".selectSort option:selected").text() == "Description (Z-A)")
-                    sortPosts(".description > article", false);
-                else if ($(".selectSort option:selected").text() == "Price (High-Low)")
-                    sortPosts(".price", true);
-                else if ($(".selectSort option:selected").text() == "Price (Low-High)")
-                    sortPosts(".price", false);
-                else if ($(".selectSort option:selected").text() == "Date (Old-New)")
-                    sortPosts(".date", true);
-                else if ($(".selectSort option:selected").text() == "Date (New-Old)")
-                    sortPosts(".date", false);
-                else if ($(".selectSort option:selected").text() == "Author (A-Z)")
-                    sortPosts(".postedBy > a", true);
-                else if ($(".selectSort option:selected").text() == "Author (Z-A)")
-                    sortPosts(".postedBy > a", false);
-            });
-
-            function sortPosts(sortQuery, reverse) {
-
-                jQuery(".table > .singlePost").sort(function (a, b) {
-                    var upA = jQuery('> .row > ' + sortQuery, a).text().toUpperCase();
-                    var upB = jQuery('> .row > ' + sortQuery, b).text().toUpperCase();
-                    if (upA > upB && reverse == true) {
-                        return 1;
-                    }
-                    else if (upA < upB && reverse == false) {
-                        return 1;
-                    }
-                    else{
-                        return -1;
-                    }
-                }).appendTo('.table');
-            };
-
-        </script>
-    </div>
-    {% for post in posts %}
-        <div id="singlePost-{{ loop.index }}" class="singlePost">
-            <div class="row">
-                <div class="cell">Title:</div>
-                <div class="title cell"><a href="/view-classified/{{ post[0] }}">{{ post[1] }}</a></div>
-            </div>
-            <div class="row">
-                <div class="cell">Description: </div>
-                <div class="description cell"><article>{{ post[2] }}</article></div>
-            </div>
-            <div class="row">
-                <div class="cell">Price: </div>
-                <div class="price cell">{{ post[3] }}</div>
-            </div>
-            <div class="row">
-                <div class="cell">Date Posted: </div>
-                <div class="date cell">{{ post[4].date() }}</div>
-            </div>
-            {% if post[6] == False %}
-                {% if post[7] == True %}
-                    <div class="row">
-                        <div class="marked cell">
-                            <a href="/reactivate/{{ post[0] }}">Renew this ad</a>
-                        </div>
-                    </div>
-                {% else %}
-                    <div class="row">
-                        <div class="marked cell">
-                            <a href="/mark-complete/{{ post[0] }}">Mark as complete</a>
-                        </div>
-                    </div>
-                {% endif %}
+<table class="sortable">
+    <tr>
+        <th>Title</th>
+        <th>Description</th>
+        <th>Price</th>
+        <th>Date Posted</th>
+        <th class="sorttable_nosort"></th>
+    </tr>
+{% for post in posts %}
+    <tr>
+        <td><a href="/view-classified/{{ post[0] }}">{{ post[1] }}</a></td>
+        <td><article>{{ post[2] }}</article></td>
+        <td>{{ post[3] }}</td>
+        <td>{{ post[4].date() }}</td>
+        <td>
+        {% if post[6] == False %}
+            {% if post[7] == True %}
+                <a href="/reactivate/{{ post[0] }}">Renew this ad</a>
+            {% else %}
+                <a href="/mark-complete/{{ post[0] }}">Mark as complete</a>
             {% endif %}
-        <div class="line-separator"></div>
-        </div>
-    {% endfor %}
-    </div>
+        {% endif %}
+        </td>
+    </tr>
+{% endfor %}
+</table>
     {% endif %}
 </div>
 {% endblock %}

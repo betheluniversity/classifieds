@@ -6,7 +6,7 @@
 
 {% block internal %}
 <div>
-    <form id="classifieds" action="/search" method="post">
+    <form action="/search" method="post">
         <label for="title">Title contains:</label><input type="text" name="title" id="title">
         <label for="description">Description contains:</label><input type="text" name="description" id="description">
         <label for="categories">In any of these categories:</label>
@@ -29,7 +29,7 @@
             <option value="tools">Tools</option>
             <option value="toys-games">Toys/Games</option>
             <option value="video-gaming">Video Gaming</option>
-        </select><br>
+        </select>
         <input type="submit" value="Search"/>
     </form>
 </div>

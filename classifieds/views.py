@@ -136,11 +136,11 @@ class View(FlaskView):
     @route("/mark-complete/<id>")
     def mark_complete(self, id):
         mark_entry_as_complete(id, session['username'])
-        return redirect('/view-posted/active')
+        return redirect('/viewPosted/active')
 
     def reactivate(self, id):
         mark_entry_as_active(id, session['username'])
-        return redirect('/view-posted/expired')
+        return redirect('/viewPosted/expired')
 
     # This method is to be used by the crontab job; it should be called every night at midnight, and mark all posts that
     # expired during that day as expired.

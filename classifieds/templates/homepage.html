@@ -7,8 +7,9 @@
 {% block internal %}
 <div>
     {% if values.__len__() == 0 %}
-        <p class="noPosts">There are no active posts to show.</p>
+There are no active posts to show.
     {% else %}
+<<<<<<< HEAD
 <div class="table">
     <div class="sorting">
         <div class="centered">
@@ -131,46 +132,44 @@
 {#            };#}
 {#        </script>#}
 {#    </div>#}
+=======
+<table class="sortable">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Date Posted</th>
+            <th>Posted By</th>
+            {% if showStatus == True %}
+            <th>Status</th>
+            {% endif %}
+        </tr>
+    </thead>
+    <tbody>
+>>>>>>> parent of 25d6c0b... Merge pull request #1 from betheluniversity/mobile-css
 {% for val in values %}
-    <div id="singlePost-{{ loop.index }}" class="singlePost">
-        <div class="row">
-            <div class="cell">Title: </div>
-            <div class="title cell"><a href="/view-classified/{{ val[0] }}">{{ val[1] }}</a></div>
-        </div>
-        <div class="row">
-            <div class="cell">Description: </div>
-            <div class="description cell"><article>{{ val[2] }}</article></div>
-        </div>
-        <div class="row">
-            <div class="cell">Price: </div>
-            <div class="price cell">{{ val[3] }}</div>
-        </div>
-        <div class="row">
-            <div class="cell">Date Posted: </div>
-            <div class="date cell">{{ val[4].date() }}</div>
-        </div>
-        <div class="row">
-            <div class="cell">Posted By: </div>
-            <div class="postedBy cell"><a href="/view-contact/{{ val[5] }}">{{ val[6] }}</a></div>
-        </div>
-        {% if showStatus == True %}
-            <div class="row">
-                <div class="cell">Status</div>
-                <div class="status cell">
-                    {% if val[7] == True %}
-                    Completed
-                    {% elif val[8] == True %}
-                    Expired
-                    {% else %}
-                    Active
-                    {% endif %}
-                </div>
-            </div>
-        {% endif %}
-    <hr/>
-    </div>
+        <tr>
+            <td><a href="/view-classified/{{ val[0] }}">{{ val[1] }}</a></td>
+            <td><article>{{ val[2] }}</article></td>
+            <td>{{ val[3] }}</td>
+            <td>{{ val[4].date() }}</td>
+            <td><a href="/view-contact/{{ val[5] }}">{{ val[6] }}</a></td>
+            {% if showStatus == True %}
+            <td>
+                {% if val[7] == True %}
+                Completed
+                {% elif val[8] == True %}
+                Expired
+                {% else %}
+                Active
+                {% endif %}
+            </td>
+            {% endif %}
+        </tr>
 {% endfor %}
-</div>
+    </tbody>
+</table>
     {% endif %}
 </div>
 {% endblock %}
