@@ -44,7 +44,7 @@ div.singlePost {
     display: table-cell;
     padding: .5em 1em .5em .5em;
     margin-right: .5em;
-    max-width: 49em;
+    max-width: 38.5em;
 }
 
 article {
@@ -172,10 +172,10 @@ select.selectSort {
 }
 
 .dropbtn {
-    font-size: .85em;
+    font-size: .9em;
     border-radius: .25em;
     transition: 0s background-color;
-    background: rgba(0,105,170,0.5) !important;
+    background-color: #0F2C52 !important;
     margin: 0em 2em 0em 0em;
     border: none;
     cursor: pointer;
@@ -198,14 +198,14 @@ select.selectSort {
     display: none;
     position: absolute;
     z-index: 1;
-    width: 11.8em;
+    width: 12.51em;
     background-color: white;
     overflow: auto;
     box-shadow: 0em .5em 1em 0em rgba(0,0,0,0.2);
 }
 
 .dropdown-content a {
-    padding: .75em 1.5em 1em 1.5em;
+    padding: .75em 1em 1em 2.5em;
     color: #0069AA;
     text-decoration: none;
     display: block;
@@ -360,7 +360,7 @@ textarea#input {
 
     .dropbtn {
         font-size: .92em;
-        width: 13.9em;
+        width: 12.5em;
     }
 
     .top-right {
@@ -369,12 +369,6 @@ textarea#input {
 
     .dropdown-content {
         text-align: left;
-        width: 12.75em;
-
-    }
-
-    .dropdown-content a {
-        padding: .75em 1em 1em 2.5em;
     }
 
     input {
