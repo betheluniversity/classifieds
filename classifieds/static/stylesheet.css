@@ -32,12 +32,21 @@ hr {
 }
 
 div.menu-bar {
+    position: relative;
     float: left;
-    margin-left: 3.15em;
+    margin-left: 2.9em;
+}
+
+div.second-bar {
+    position: relative;
+    float: left;
+    margin-left: 2.9em;
+    margin-bottom: 2em;
+    width: 100%;
 }
 
 div.centered {
-    text-align: center;
+    text-align: left;
 }
 
 img.logo {
@@ -181,10 +190,10 @@ select.selectSort {
 .dropbtn {
     padding: 1em;
     font-size: .85em;
-    /*border-radius: .25em;*/
+    border-radius: .25em;
     transition: 0s background-color;
     background: rgba(0,105,170,0.5) !important;
-    margin: .9em 2em 0em 4.05em;
+    margin: .9em 2em 0em 3.7em;
     border: none;
     cursor: pointer;
     width: 16.2em;
@@ -201,7 +210,7 @@ select.selectSort {
 
 .dropdown-content {
     font-size: .85em;
-    margin: 0em 0em 0em 4.05em;
+    margin: 0em 0em 0em 3.7em;
     text-align: left;
     display: none;
     position: absolute;
@@ -315,6 +324,10 @@ textarea#input {
         float: right;
     }
 
+    div.centered {
+        text-align: left;
+    }
+
     ul {
         list-style-type: none;
         margin: 0em;
@@ -335,10 +348,6 @@ textarea#input {
 /* If webpage size becomes larger than 60em*/
 @media (min-width: 75em) {
 
-    p.baseTitle {
-        text-align: left;
-    }
-
     .view-padded {
         text-align: left;
         padding: 0em 3em 1em 3em;
@@ -350,21 +359,8 @@ textarea#input {
         height: 5em;
     }
 
-    div.centered {
-        text-align: left;
-    }
-
     .top-right {
         /*font-size: .92em;*/
-    }
-
-    .dropdown-content {
-        text-align: left;
-        width: 11.5em;
-    }
-
-    .dropdown-content a {
-        padding: .75em 0em 1em 1.75em;
     }
 
     input {

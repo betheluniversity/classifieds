@@ -6,7 +6,7 @@
 
 {% block internal %}
 <div>
-    <div class="menu-bar posts centered"><ul>
+    <div class="second-bar"><ul>
         <li>
             {% if '/all' in request.path %}
                 <a href="/view-posted/all" class="button active posts">All your posts</a>
@@ -57,10 +57,6 @@
                 </select>
             </div>
         <script>
-{#            $( "#titleAZ" ).click(function() {#}
-{#                alert( "Handler for .click() called." );#}
-{#            });#}
-            console.log("test1");
 
             $(".selectSort").change(function(){
                 console.log("inFunction");
