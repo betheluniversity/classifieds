@@ -181,7 +181,7 @@ select.selectSort {
 .dropbtn {
     padding: 1em;
     font-size: .85em;
-    /*border-radius: .25em;*/
+    border-radius: .25em;
     transition: 0s background-color;
     background: rgba(0,105,170,0.5) !important;
     margin: .9em 2em 0em 4.05em;
@@ -315,6 +315,20 @@ textarea#input {
         float: right;
     }
 
+    .dropbtn{
+        width: 11.5em;
+        border-radius: .25em;
+    }
+
+    .dropdown-content {
+        text-align: left;
+        width: 11.5em;
+    }
+
+    .dropdown-content a {
+        padding: .75em 0em 1em 1.25em;
+    }
+
     ul {
         list-style-type: none;
         margin: 0em;
@@ -350,6 +364,8 @@ textarea#input {
         height: 5em;
     }
 
+
+
     div.centered {
         text-align: left;
     }
@@ -358,14 +374,7 @@ textarea#input {
         /*font-size: .92em;*/
     }
 
-    .dropdown-content {
-        text-align: left;
-        width: 11.5em;
-    }
 
-    .dropdown-content a {
-        padding: .75em 0em 1em 1.75em;
-    }
 
     input {
         max-width: 50%;
