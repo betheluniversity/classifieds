@@ -20,7 +20,7 @@ div.viewTable{
 }
 
 .padded {
-    height: 5.5em;
+    height: 23.4em;
     text-align: right;
     padding: .9em 0em 0em 0em;
     background-color: #0F2C52 !important;
@@ -29,6 +29,34 @@ div.viewTable{
 hr {
     height: .0625em;
     /*background-color: #000000;*/
+}
+
+div.menu-bar {
+    float: left;
+    margin-left: 3.15em;
+}
+
+div.centered {
+    text-align: center;
+}
+
+img.logo {
+    float: left;
+    width: 15.5em;
+    height: 3.5em;
+    margin: .3em 1em .5em 2.4em;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+li a {
+    width: 16.2em;
+    float: left;
 }
 
 div.singlePost {
@@ -63,10 +91,6 @@ body {
     min-height: 100%;
     margin-bottom: -4em;
     position: relative;
-}
-
-div.centered {
-    text-align: left;
 }
 
 span.warning {
@@ -106,7 +130,7 @@ a.button {
     font-size: .85em;
     padding: 1em 1em 1em 1em;
     text-align: left;
-    margin-top: .9em;
+    margin: .9em .25em 0em .25em;
     background-color: #0F2C52;
     color: #FFFFFF !important;
 }
@@ -114,7 +138,6 @@ a.button {
 .button {
     float: left;
     border-radius: .25em;
-    margin: 0em .25em 0em .25em;
     transition: 0s background-color;
     background-color: #0F2C52 !important;
     color: #FFFFFF !important;
@@ -128,34 +151,16 @@ a.button.active {
     background: rgba(0,105,170,0.5) !important;
 }
 
+div.posts {
+    margin-bottom: 2em;
+}
+
 .button.posts:hover {
     background-color: #0069AA !important;
 }
 
 a.button.active.posts {
     background-color: #0069AA !important;
-}
-
-img.logo {
-    float: left;
-    width: 15.5em;
-    height: 3.5em;
-    margin: .5em 1em .5em 1em;
-}
-
-ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-}
-
-li {
-    float: left;
-}
-
-li.first-button {
-    margin-left: 1.3em;
 }
 
 select {
@@ -176,17 +181,17 @@ select.selectSort {
 .dropbtn {
     padding: 1em;
     font-size: .85em;
-    border-radius: .25em;
+    /*border-radius: .25em;*/
     transition: 0s background-color;
     background: rgba(0,105,170,0.5) !important;
-    margin: .87em 2em 0em 0em;
+    margin: .9em 2em 0em 4.05em;
     border: none;
     cursor: pointer;
-    width: 13.9em;
+    width: 16.2em;
 }
 
 .top-right {
-    float: right;
+    float: left;
     display: inline-block;
 }
 
@@ -196,12 +201,12 @@ select.selectSort {
 
 .dropdown-content {
     font-size: .85em;
-    margin: 0em;
+    margin: 0em 0em 0em 4.05em;
     text-align: left;
     display: none;
     position: absolute;
     z-index: 1;
-    width: 12.51em;
+    width: 16.2em;
     background-color: white;
     overflow: auto;
     box-shadow: 0em .5em 1em 0em rgba(0,0,0,0.2);
@@ -300,13 +305,35 @@ textarea#input {
     max-width: 35em;
 }
 
+@media (min-width: 44.2em) {
+
+    .padded {
+        height: 10em;
+    }
+
+    .top-right {
+        float: right;
+    }
+
+    ul {
+        list-style-type: none;
+        margin: 0em;
+        padding: 0em;
+        overflow: hidden;
+    }
+
+    li a {
+        width: auto;
+    }
+
+    li {
+        float: left;
+    }
+}
+
 
 /* If webpage size becomes larger than 60em*/
-@media (min-width: 71em) {
-
-    a:hover {
-        color: #005285;
-    }
+@media (min-width: 75em) {
 
     p.baseTitle {
         text-align: left;
@@ -320,46 +347,11 @@ textarea#input {
 
     .padded {
         text-align: left;
+        height: 5em;
     }
 
     div.centered {
         text-align: left;
-    }
-
-    /*p {*/
-        /*font-size: .92em;*/
-    /*}*/
-
-    /*a {*/
-        /*font-size: .92em;*/
-    /*}*/
-
-    /*a.button {*/
-        /*font-size: .92em;*/
-    /*}*/
-
-    /*.button {*/
-        /*font-size: .92em;*/
-    /*}*/
-
-    ul {
-        list-style-type: none;
-        margin: 0em;
-        padding: 0em;
-        overflow: hidden;
-    }
-
-    li {
-        float: left;
-    }
-
-    a.button:hover {
-        background-color: #005285;
-    }
-
-    .dropbtn {
-        /*font-size: .92em;*/
-        width: 12.5em;
     }
 
     .top-right {

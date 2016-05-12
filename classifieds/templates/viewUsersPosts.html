@@ -6,8 +6,8 @@
 
 {% block internal %}
 <div>
-    <ul>
-        <li class="first-button">
+    <div class="menu-bar posts centered"><ul>
+        <li>
             {% if '/all' in request.path %}
                 <a href="/view-posted/all" class="button active posts">All your posts</a>
             {% else %}
@@ -21,21 +21,21 @@
                 <a href="/view-posted/active" class="button posts">All active posts</a>
             {% endif %}
         <li>
-        </li>
+        <li>
             {% if '/completed' in request.path %}
                 <a href="/view-posted/completed" class="button active posts">All completed posts</a>
             {% else %}
                 <a href="/view-posted/completed" class="button posts">All completed posts</a>
             {% endif %}
-        <li>
         </li>
+        <li>
             {% if '/expired' in request.path %}
                 <a href="/view-posted/expired" class="button active posts">All expired posts</a>
             {% else %}
                 <a href="/view-posted/expired" class="button posts">All expired posts</a>
             {% endif %}
         </li>
-    </ul>
+    </ul></div>
 {% if posts.__len__() == 0 %}
 <p class="noPosts">There are no active posts to show.</p>
     {% else %}

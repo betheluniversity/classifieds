@@ -17,7 +17,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes"/>
     <div class="padded">
         <img class="logo" src="/static/bethel-classifieds-logo.png">
-        <div><ul>
+        <div id="user_menu" class="top-right dropdown">
+            <button class="dropbtn">Hello, {{ session['fullname'] }}!</button>
+            <div id="myDropdown" class="dropdown-content">
+                <a href="/view-contact/{{ session['username'] }}">View your profile</a>
+                <a href="/feedback">Provide feedback</a>
+                <a href="/logout">Sign out</a>
+            </div>
+        </div>
+        <div class="menu-bar"><ul>
             <li>
                 {% if request.path == '/' %}
                     <a href="/" class="button active">Home</a>
@@ -46,14 +54,6 @@
                     <a href="/view-posted/active" class="button">View your posted classifieds</a>
                 {% endif %}
             </li>
-            <div id="user_menu" class="top-right dropdown">
-                <button class="dropbtn">Hello, {{ session['fullname'] }}!</button>
-                <div id="myDropdown" class="dropdown-content">
-                    <a href="/view-contact/{{ session['username'] }}">View your profile</a>
-                    <a href="/feedback">Provide feedback</a>
-                    <a href="/logout">Sign out</a>
-                </div>
-            </div>
         </ul></div>
     </div>
         {% block internal %}
