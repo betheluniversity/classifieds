@@ -37,7 +37,7 @@ div.menu-bar {
 }
 
 div.centered {
-    text-align: center;
+    text-align: left;
 }
 
 img.logo {
@@ -305,7 +305,7 @@ textarea#input {
     max-width: 35em;
 }
 
-@media (min-width: 44.2em) {
+@media (min-width: 46em) {
 
     .padded {
         height: 10em;
@@ -347,7 +347,7 @@ textarea#input {
 
 
 /* If webpage size becomes larger than 60em*/
-@media (min-width: 75em) {
+@media (min-width: 79.85em) {
 
     p.baseTitle {
         text-align: left;
