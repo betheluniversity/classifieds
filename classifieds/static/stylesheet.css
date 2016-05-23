@@ -32,8 +32,17 @@ hr {
 }
 
 div.menu-bar {
+    position: relative;
     float: left;
-    margin-left: 3.15em;
+    margin-left: 2.9em;
+}
+
+div.second-bar {
+    position: relative;
+    float: left;
+    margin-left: 2.9em;
+    margin-bottom: 2em;
+    width: 100%;
 }
 
 div.centered {
@@ -184,7 +193,11 @@ select.selectSort {
     border-radius: .25em;
     transition: 0s background-color;
     background: rgba(0,105,170,0.5) !important;
+<<<<<<< HEAD
     margin: .9em 1em 0em 4.05em;
+=======
+    margin: .9em 2em 0em 3.7em;
+>>>>>>> origin/mobile-css
     border: none;
     cursor: pointer;
     width: 16.2em;
@@ -201,7 +214,7 @@ select.selectSort {
 
 .dropdown-content {
     font-size: .85em;
-    margin: 0em 0em 0em 4.05em;
+    margin: 0em 0em 0em 3.7em;
     text-align: left;
     display: none;
     position: absolute;
@@ -315,6 +328,7 @@ textarea#input {
         float: right;
     }
 
+<<<<<<< HEAD
     .dropbtn{
         width: 11.5em;
         border-radius: .25em;
@@ -327,6 +341,10 @@ textarea#input {
 
     .dropdown-content a {
         padding: .75em 0em 1em 1.25em;
+=======
+    div.centered {
+        text-align: left;
+>>>>>>> origin/mobile-css
     }
 
     ul {
@@ -349,10 +367,6 @@ textarea#input {
 /* If webpage size becomes larger than 60em*/
 @media (min-width: 79em) {
 
-    p.baseTitle {
-        text-align: left;
-    }
-
     .view-padded {
         text-align: left;
         padding: 0em 3em 1em 3em;
@@ -364,18 +378,24 @@ textarea#input {
         height: 5em;
     }
 
+<<<<<<< HEAD
 
 
     div.centered {
         text-align: left;
     }
 
+=======
+>>>>>>> origin/mobile-css
     .top-right {
         /*font-size: .92em;*/
     }
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> origin/mobile-css
     input {
         max-width: 50%;
     }
