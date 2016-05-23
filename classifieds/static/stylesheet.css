@@ -184,7 +184,7 @@ select.selectSort {
     border-radius: .25em;
     transition: 0s background-color;
     background: rgba(0,105,170,0.5) !important;
-    margin: .9em 2em 0em 4.05em;
+    margin: .9em 1em 0em 4.05em;
     border: none;
     cursor: pointer;
     width: 16.2em;
@@ -305,7 +305,7 @@ textarea#input {
     max-width: 35em;
 }
 
-@media (min-width: 46em) {
+@media (min-width: 46.5em) {
 
     .padded {
         height: 10em;
@@ -347,7 +347,7 @@ textarea#input {
 
 
 /* If webpage size becomes larger than 60em*/
-@media (min-width: 79.85em) {
+@media (min-width: 79em) {
 
     p.baseTitle {
         text-align: left;
