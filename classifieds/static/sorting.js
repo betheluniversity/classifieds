@@ -4,7 +4,7 @@
  * viewing the user posts
  */
 
-            $(".selectSort").change(function(){
+         $(".selectSort").change(function(){
                 console.log("inFunction");
                 if ($(".selectSort option:selected").text() == "Title (A-Z)")
                     sortPosts(".title > a", true);
@@ -44,3 +44,5 @@
                     }
                 }).appendTo('.table');
             };
+
+

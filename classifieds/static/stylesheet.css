@@ -42,7 +42,7 @@ div.second-bar {
     float: left;
     margin-left: 2.9em;
     margin-bottom: 2em;
-    width: 100%;
+    width: 90%;
 }
 
 div.centered {
@@ -84,6 +84,7 @@ div.singlePost {
     max-width: 38.5em;
 }
 
+/* the description of a post */
 article {
     line-height: 120%;
 }
@@ -193,11 +194,7 @@ select.selectSort {
     border-radius: .25em;
     transition: 0s background-color;
     background: rgba(0,105,170,0.5) !important;
-<<<<<<< HEAD
-    margin: .9em 1em 0em 4.05em;
-=======
     margin: .9em 2em 0em 3.7em;
->>>>>>> origin/mobile-css
     border: none;
     cursor: pointer;
     width: 16.2em;
@@ -328,7 +325,6 @@ textarea#input {
         float: right;
     }
 
-<<<<<<< HEAD
     .dropbtn{
         width: 11.5em;
         border-radius: .25em;
@@ -341,10 +337,10 @@ textarea#input {
 
     .dropdown-content a {
         padding: .75em 0em 1em 1.25em;
-=======
+    }
+
     div.centered {
         text-align: left;
->>>>>>> origin/mobile-css
     }
 
     ul {
@@ -365,7 +361,11 @@ textarea#input {
 
 
 /* If webpage size becomes larger than 60em*/
-@media (min-width: 79em) {
+@media (min-width: 78.35em) {
+
+    .noPosts{
+        float: left;
+    }
 
     .view-padded {
         text-align: left;
@@ -378,24 +378,14 @@ textarea#input {
         height: 5em;
     }
 
-<<<<<<< HEAD
-
-
     div.centered {
         text-align: left;
     }
 
-=======
->>>>>>> origin/mobile-css
     .top-right {
         /*font-size: .92em;*/
     }
 
-<<<<<<< HEAD
-
-
-=======
->>>>>>> origin/mobile-css
     input {
         max-width: 50%;
     }
