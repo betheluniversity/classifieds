@@ -123,7 +123,7 @@ def send_expired_email(username):
     msg['To'] = contact.email
 
     s = smtplib.SMTP('localhost')
-    s.sendmail("no-reply@bethel.edu", [contact.email], msg.as_string())
+    s.sendmail("classifieds@bethel.edu", [contact.email], msg.as_string())
     s.quit()
 
 
