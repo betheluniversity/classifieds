@@ -6,36 +6,36 @@
 
 {% block internal %}
 <div>
-    <ul class="padded">
+    <div class="second-bar"><ul>
         <li>
             {% if '/all' in request.path %}
-                <a href="/view-posted/all" class="button active">All your posts</a>
+                <a href="/view-posted/all" class="button active posts">All your posts</a>
             {% else %}
-                <a href="/view-posted/all" class="button">All your posts</a>
+                <a href="/view-posted/all" class="button posts">All your posts</a>
             {% endif %}
         </li>
         <li>
             {% if '/active' in request.path %}
-                <a href="/view-posted/active" class="button active">All active posts</a>
+                <a href="/view-posted/active" class="button active posts">All active posts</a>
             {% else %}
-                <a href="/view-posted/active" class="button">All active posts</a>
+                <a href="/view-posted/active" class="button posts">All active posts</a>
             {% endif %}
         <li>
-        </li>
+        <li>
             {% if '/completed' in request.path %}
-                <a href="/view-posted/completed" class="button active">All completed posts</a>
+                <a href="/view-posted/completed" class="button active posts">All completed posts</a>
             {% else %}
-                <a href="/view-posted/completed" class="button">All completed posts</a>
+                <a href="/view-posted/completed" class="button posts">All completed posts</a>
             {% endif %}
+        </li>
         <li>
-        </li>
             {% if '/expired' in request.path %}
-                <a href="/view-posted/expired" class="button active">All expired posts</a>
+                <a href="/view-posted/expired" class="button active posts">All expired posts</a>
             {% else %}
-                <a href="/view-posted/expired" class="button">All expired posts</a>
+                <a href="/view-posted/expired" class="button posts">All expired posts</a>
             {% endif %}
         </li>
-    </ul>
+    </ul></div>
 {% if posts.__len__() == 0 %}
 <p class="noPosts">There are no active posts to show.</p>
     {% else %}
@@ -56,54 +56,6 @@
                     <option id="postedByZA" value="sortByPostedByZA">Author (Z-A)</option>
                 </select>
             </div>
-        <script>
-{#            $( "#titleAZ" ).click(function() {#}
-{#                alert( "Handler for .click() called." );#}
-{#            });#}
-            console.log("test1");
-
-            $(".selectSort").change(function(){
-                console.log("inFunction");
-                if ($(".selectSort option:selected").text() == "Title (A-Z)")
-                    sortPosts(".title > a", true);
-                else if ($(".selectSort option:selected").text() == "Title (Z-A)")
-                    sortPosts(".title > a", false);
-                else if ($(".selectSort option:selected").text() == "Description (A-Z)")
-                    sortPosts(".description > article", true);
-                else if ($(".selectSort option:selected").text() == "Description (Z-A)")
-                    sortPosts(".description > article", false);
-                else if ($(".selectSort option:selected").text() == "Price (High-Low)")
-                    sortPosts(".price", true);
-                else if ($(".selectSort option:selected").text() == "Price (Low-High)")
-                    sortPosts(".price", false);
-                else if ($(".selectSort option:selected").text() == "Date (Old-New)")
-                    sortPosts(".date", true);
-                else if ($(".selectSort option:selected").text() == "Date (New-Old)")
-                    sortPosts(".date", false);
-                else if ($(".selectSort option:selected").text() == "Author (A-Z)")
-                    sortPosts(".postedBy > a", true);
-                else if ($(".selectSort option:selected").text() == "Author (Z-A)")
-                    sortPosts(".postedBy > a", false);
-            });
-
-            function sortPosts(sortQuery, reverse) {
-
-                jQuery(".table > .singlePost").sort(function (a, b) {
-                    var upA = jQuery('> .row > ' + sortQuery, a).text().toUpperCase();
-                    var upB = jQuery('> .row > ' + sortQuery, b).text().toUpperCase();
-                    if (upA > upB && reverse == true) {
-                        return 1;
-                    }
-                    else if (upA < upB && reverse == false) {
-                        return 1;
-                    }
-                    else{
-                        return -1;
-                    }
-                }).appendTo('.table');
-            };
-
-        </script>
     </div>
     {% for post in posts %}
         <div id="singlePost-{{ loop.index }}" class="singlePost">
@@ -138,7 +90,7 @@
                     </div>
                 {% endif %}
             {% endif %}
-        <div class="line-separator"></div>
+        <hr/>
         </div>
     {% endfor %}
     </div>
