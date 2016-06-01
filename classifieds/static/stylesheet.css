@@ -14,11 +14,6 @@ div.viewTable{
     margin: 0em 2em 4em 2em;
 }
 
-.view-padded {
-    text-align: center;
-    background-color: #0F2C52;
-}
-
 .padded {
     height: 23.4em;
     text-align: right;
@@ -28,20 +23,21 @@ div.viewTable{
 
 hr {
     height: .0625em;
-    /*background-color: #000000;*/
 }
 
 div.menu-bar {
     position: relative;
     float: left;
     margin-left: 2.9em;
+    margin-bottom: 2em;
+    width: 90%;
 }
 
 div.second-bar {
     position: relative;
     float: left;
     margin-left: 2.9em;
-    margin-bottom: 2em;
+    margin-bottom: 1.5em;
     width: 90%;
 }
 
@@ -53,7 +49,7 @@ img.logo {
     float: left;
     width: 15.5em;
     height: 3.5em;
-    margin: .3em 1em .5em 2.4em;
+    margin: .3em 1em .5em 3em;
 }
 
 ul {
@@ -86,7 +82,7 @@ div.singlePost {
 
 /* the description of a post */
 article {
-    line-height: 120%;
+    line-height: 130%;
 }
 
 .marked{
@@ -115,6 +111,7 @@ form {
 
 p {
     font-family: Georgia, serif;
+    font-size: .95em;
 }
 
 
@@ -123,8 +120,9 @@ p.note {
 }
 
 p.noPosts {
-    margin: 1em 3em 1em 3.4em;
+    margin: 0em 3em 1em 3.4em;
     padding-bottom: 5em;
+    float: left;
 }
 
 a {
@@ -315,10 +313,15 @@ textarea#input {
     max-width: 35em;
 }
 
-@media (min-width: 46.5em) {
-
+@media (min-width: 32.5em) {
     .padded {
-        height: 10em;
+        height: 16.5em;
+    }
+}
+
+@media (min-width: 39.1em) {
+    .padded {
+        height: 13em;
     }
 
     .top-right {
@@ -328,6 +331,13 @@ textarea#input {
     .dropbtn{
         width: 11.5em;
         border-radius: .25em;
+    }
+}
+
+@media (min-width: 48em) {
+
+    .padded {
+        height: 10em;
     }
 
     .dropdown-content {
@@ -359,31 +369,15 @@ textarea#input {
     }
 }
 
-
-/* If webpage size becomes larger than 60em*/
-@media (min-width: 78.35em) {
-
-    .noPosts{
-        float: left;
-    }
-
-    .view-padded {
-        text-align: left;
-        padding: 0em 3em 1em 3em;
-        margin-top: -.5em;
-    }
+/* If webpage size becomes larger than em*/
+@media (min-width: 75em) {
 
     .padded {
         text-align: left;
-        height: 5em;
     }
 
     div.centered {
         text-align: left;
-    }
-
-    .top-right {
-        /*font-size: .92em;*/
     }
 
     input {
