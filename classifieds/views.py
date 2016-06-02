@@ -17,22 +17,22 @@ class View(FlaskView):
     # This URL is only for rendering to a channel in BLink
     @route("/blink-classifieds")
     def blink_classifieds(self):
-        return render_template("blinkTemplate.html", values=get_homepage(), showStatus=False)
+        return render_template("blink_template.html", values=get_homepage(), showStatus=False)
 
     # This URL is to get the classified ad form so that the user can fill it out and submit it to the DB
     @route("/add-classified")
     def add_classified(self):
         if contact_exists_in_db(session['username']):
-            return render_template("classifiedForm.html", form=ClassifiedForm())
+            return render_template("classified_form.html", form=ClassifiedForm())
         else:
             error_message = "You don't exist in the contacts database yet, and as such you cannot submit a classified."
-            return render_template("errorPage.html", error=error_message)
+            return render_template("error_page.html", error=error_message)
 
     # Because their contact entry in the DB should be added automatically by the init_user function the first time they
     # log in to classifieds, I only made a page to edit their contact info.
     @route("/edit-contact")
     def edit_contact(self):
-        return render_template("contactForm.html", form=ContactForm(), info=get_contact(session['username']))
+        return render_template("contact_form.html", form=ContactForm(), info=get_contact(session['username']))
 
     # This is a post method that takes the classified form's contents, parses them, validates, and if it passes, it adds
     # it to the DB and then returns to the page if it was successful or not.
@@ -42,7 +42,7 @@ class View(FlaskView):
         form = ClassifiedForm(form_contents)
         isValid = form.validate()
         if not isValid:
-            return render_template("classifiedForm.html", form=form)
+            return render_template("classified_form.html", form=form)
         storage = {}
         for key in form_contents:
             if key == "submit":
@@ -59,7 +59,7 @@ class View(FlaskView):
         # Add that object to the database
         add_classified(storage['title'], storage['description'], storage['price'], storage['categories'], session['username'])
         message = "Classified ad successfully posted!"
-        return render_template("confirmationPage.html", message=message)
+        return render_template("confirmation_page.html", message=message)
 
     # Similarly to submit_ad, this method parses the contact form's contents, validates, and updates the DB's entry for
     # the user.
@@ -69,31 +69,31 @@ class View(FlaskView):
         form = ContactForm(storage)
         isValid = form.validate()
         if not isValid:
-            return render_template("contactForm.html", form=form)
+            return render_template("contact_form.html", form=form)
         # Add that object to the database
         add_contact(session['username'], storage['first_name'], storage['last_name'], storage['email'], storage['phone_number'])
         message = "Contact information successfully updated!"
-        return render_template("confirmationPage.html", message=message)
+        return render_template("confirmation_page.html", message=message)
 
     # This method is pretty straightforward, just checks if the id they're requesting exists. If it does, it renders it.
     # The render itself takes care of the ad's expired/completed status, if it's the original poster, etc.
     @route("/view-classified/<id>")
     def view_classified(self, id):
         if classified_exists_in_db(id):
-            return render_template("viewClassified.html", classified=view_classified(id))
+            return render_template("view_classified.html", classified=view_classified(id))
         else:
             error_message = "That classified id number doesn't exist in the contacts database."
-            return render_template("errorPage.html", error=error_message)
+            return render_template("error_page.html", error=error_message)
 
     # Similarly to viewClassified, this method checks if the username exists. If it does, it has the render function do
     # the work.
     @route("/view-contact/<username>")
     def view_contact(self, username):
         if contact_exists_in_db(username):
-            return render_template("viewContact.html", to_view=get_contact(username))
+            return render_template("view_contact.html", to_view=get_contact(username))
         else:
             error_message = "That username doesn't exist in the contacts database."
-            return render_template("errorPage.html", error=error_message)
+            return render_template("error_page.html", error=error_message)
 
     # This method is more or less a 'hub' for all the various ways that a poster would like to view the posts that
     # they've made. This passes on what type of posts they want to see, the DB does the filtering and returns the list,
@@ -101,15 +101,15 @@ class View(FlaskView):
     @route("/view-posted/<selector>")
     def view_posted(self, selector):
         if contact_exists_in_db(session['username']):
-            return render_template("viewUsersPosts.html", posts=filter_posts(session['username'], selector))
+            return render_template("view_users_posts.html", posts=filter_posts(session['username'], selector))
         else:
             error_message = "You don't exist in the contacts database yet, and as such you don't have any posts to view."
-            return render_template("errorPage.html", error=error_message)
+            return render_template("error_page.html", error=error_message)
 
     # Really straightforward method, simply renders the search page.
     @route("/search-page")
     def search_page(self):
-        return render_template("searchPage.html")
+        return render_template("search_page.html")
 
     # This method does a bit of work in preparation of the DB query; it creates a dictionary of search terms that are
     # keyed to match the keyword arguments of the DB search method in forms. If they're searching for a single word,
@@ -163,4 +163,4 @@ class View(FlaskView):
         send_feedback_email(request.form, session['username'])
         message = "Thank you for submitting feedback! We'll take a look at your message and try to make the " \
                   "site better for everyone!"
-        return render_template("confirmationPage.html", message=message)
+        return render_template("confirmation_page.html", message=message)

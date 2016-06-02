@@ -175,6 +175,10 @@ select {
     max-width: 100%;
 }
 
+select#categories {
+    height: 10.5em !important;
+}
+
 select.selectSort {
     margin-left: .45em;
     width: 30%;

@@ -8,7 +8,6 @@
 {% block head_add %}
 
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-    <script src="../static/sorttable.js"></script>
     <script src="../static/readmore.js"></script>
 
 {% endblock %}
@@ -36,23 +35,23 @@
             </li>
             <li>
                 {% if '/search-page' in request.path %}
-                    <a href="/search-page" class="button active">Search through classifieds</a>
+                    <a href="/search-page" class="button active">Search</a>
                 {% else %}
-                    <a href="/search-page" class="button">Search through classifieds</a>
+                    <a href="/search-page" class="button">Search</a>
                 {% endif %}
             </li>
             <li>
                 {% if '/add-classified' in request.path %}
-                    <a href="/add-classified" class="button active">Submit a classified</a>
+                    <a href="/add-classified" class="button active">Submit</a>
                 {% else %}
-                    <a href="/add-classified" class="button">Submit a classified</a>
+                    <a href="/add-classified" class="button">Submit</a>
                 {% endif %}
             </li>
             <li>
                 {% if '/view-posted/' in request.path %}
-                    <a href="/view-posted/active" class="button active">View your posted classifieds</a>
+                    <a href="/view-posted/active" class="button active">My Classifieds</a>
                 {% else %}
-                    <a href="/view-posted/active" class="button">View your posted classifieds</a>
+                    <a href="/view-posted/active" class="button">My Classifieds</a>
                 {% endif %}
             </li>
         </ul></div>

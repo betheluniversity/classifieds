@@ -1,4 +1,4 @@
-{% extends "classifieds-base.html" %}
+{% extends "classifieds_base.html" %}
 
 {% block subpage_title %}
     | Submit a new classified ad
@@ -18,8 +18,8 @@
     <label for="title">Title:</label><input type="text" name="title" id="title">
     <label for="description">Description:</label>
         <textarea type="text" name="description" id="description"></textarea>
-    <label for="price">Price:</label><input type="text" name="price" id="price">
-    <label for="categories">Categories: </label>
+    <label for="price">Price (start with a '$'):</label><input type="text" name="price" id="price">
+    <label for="categories">Categories (select multiple if needed): </label>
     <select name="categories" id="categories" class="largeselect" style="height:auto;" name="categories" multiple="">
         <option value="appliances">Appliances</option>
         <option value="baby-kids">Baby/Kids</option>
@@ -44,42 +44,3 @@
 </form>
 </div>
 {% endblock %}
-
-{#<form id="classifieds" method="POST" action="/submit-ad">#}
-{#    <table class="submit">#}
-{#{% for field in form if field.widget.input_type != 'hidden' %}#}
-{#    <tr>#}
-{#    {% if field.type != "SubmitField" %}#}
-{#        <td>{{ field.label }}#}
-{#        {% if field.flags.required %}#}
-{#            <span style="color:red">*</span>#}
-{##}
-{#        {% endif %}#}
-{#        {% for error in form.errors[field.name] %}#}
-{#            <span class="error">#}
-{#            {{ error }}#}
-{#            </span>#}
-{#        {% endfor %}#}
-{#        </td>#}
-{#    {% else %}#}
-{#        <td></td>#}
-{#    {% endif %}#}
-{##}
-{#    <td>#}
-{#    {% if field.type == "SelectMultipleField" %}#}
-{#        {{ field(style="height:auto;", class="largeselect") }}#}
-{##}
-{#    {% elif field.type == "SelectField" %}#}
-{#        {{ field() }}#}
-{##}
-{#    {% elif field.type == "TextAreaField" %}#}
-{#        {{ field(style="height:auto;") }}#}
-{##}
-{#    {% else %}#}
-{#        {{ field(size=20) }}#}
-{##}
-{#    {% endif %}#}
-{#    </td></tr>#}
-{#{% endfor %}#}
-{#    </table>#}
-{#</form>#}

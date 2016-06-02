@@ -1,4 +1,4 @@
-{% extends "classifieds-base.html" %}
+{% extends "classifieds_base.html" %}
 
 {% block subpage_title %}
     | View your posts
@@ -9,9 +9,9 @@
     <div class="second-bar"><ul>
         <li>
             {% if '/all' in request.path %}
-                <a href="/view-posted/all" class="button active posts">All your posts</a>
+                <a href="/view-posted/all" class="button active posts">All posts</a>
             {% else %}
-                <a href="/view-posted/all" class="button posts">All your posts</a>
+                <a href="/view-posted/all" class="button posts">All posts</a>
             {% endif %}
         </li>
         <li>

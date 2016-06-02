@@ -3,10 +3,6 @@ from config import ADMINS
 from db_utilities import *
 from wtforms import Form, StringField, SelectMultipleField, TextAreaField, SubmitField, validators, ValidationError
 
-# TODO: the top buttons in classifieds-base.html overlap when the window is too narrow
-
-# TODO: make it all look pretty
-
 # TODO: implement crontab expire job
 # This will run at 12:01am every night and call the URL to expire all the 180-day old posts
 # 1 0 * * * wget https://classifieds.bethel.edu/expire
