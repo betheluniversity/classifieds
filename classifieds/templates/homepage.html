@@ -31,7 +31,7 @@
     <div id="singlePost-{{ loop.index }}" class="singlePost">
         <div class="row">
             <div class="cell">Title: </div>
-            <div class="title cell"><a href="/view-classified/{{ val[0] }}">{{ val[1] }}</a></div>
+            <div class="title cell"><a href="{{ url_for('View:view_classified', id = val[0]) }}">{{ val[1] }}</a></div>
         </div>
         <div class="row">
             <div class="cell">Description: </div>
@@ -47,7 +47,7 @@
         </div>
         <div class="row">
             <div class="cell">Posted By: </div>
-            <div class="postedBy cell"><a href="/view-contact/{{ val[5] }}">{{ val[6] }}</a></div>
+            <div class="postedBy cell"><a href="{{ url_for('View:view_contact', username = val[5]) }}">{{ val[6] }}</a></div>
         </div>
         {% if showStatus == True %}
             <div class="row">

@@ -31,7 +31,7 @@
                 </td>
             </tr>
             <tr>
-                <td>Listed by:</td><td class="maxWordLength"><a href="/view-contact/{{ classified[5] }}">{{ classified[6] }}</a></td>
+                <td>Listed by:</td><td class="maxWordLength"><a href="{{ url_for('View:view_contact', username = classified[5]) }}">{{ classified[6] }}</a></td>
             </tr>
             <tr>
                 <td>Date listed:</td><td>{{ classified[7].date() }}</td>
@@ -39,9 +39,9 @@
         </table>
         {% if classified[8] == False %}
             {% if classified[9] == False %}
-                <a href="/mark-complete/{{ classified[0] }}">Mark as complete</a>
+                <a href="{{ url_for('View:mark_complete', id = classified[0]) }}">Mark as complete</a>
             {% else %}
-                <a href="/reactivate/{{ classified[0] }}">Renew this ad</a>
+                <a href="{{ url_for('View:reactivate', id = classified[0]) }}">Renew this ad</a>
             {% endif %}
         {% endif %}
     </div>
@@ -73,7 +73,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>Listed by:</td><td class="maxWordLength"><a href="/view-contact/{{ classified[5] }}">{{ classified[6] }}</a></td>
+                        <td>Listed by:</td><td class="maxWordLength"><a href="{{ url_for('View:view_contact', username = classified[5]) }}">{{ classified[6] }}</a></td>
                     </tr>
                     <tr>
                         <td>Date listed:</td><td>{{ classified[7].date() }}</td>

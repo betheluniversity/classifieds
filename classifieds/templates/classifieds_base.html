@@ -20,38 +20,38 @@
         <div id="user_menu" class="top-right dropdown">
             <button class="dropbtn">Hello, {{ session['fullname'] }}!</button>
             <div class="dropdown-content">
-                <a href="/view-contact/{{ session['username'] }}">View your profile</a>
-                <a href="/feedback">Provide feedback</a>
-                <a href="/logout">Sign out</a>
+                <a href="{{ url_for('View:view_contact', username = session['username']) }}">View your profile</a>
+                <a href="{{ url_for('View:feedback') }}">Provide feedback</a>
+                <a href="{{ url_for('View:logout') }}">Sign out</a>
             </div>
         </div>
         <div class="menu-bar"><ul>
             <li>
                 {% if request.path == '/' %}
-                    <a href="/" class="button active">Home</a>
+                    <a href="{{ url_for('View:index') }}" class="button active">Home</a>
                 {% else %}
-                    <a href="/" class="button">Home</a>
+                    <a href="{{ url_for('View:index') }}" class="button">Home</a>
                 {% endif %}
             </li>
             <li>
                 {% if '/search-page' in request.path %}
-                    <a href="/search-page" class="button active">Search</a>
+                    <a href="{{ url_for('View:search_page') }}" class="button active">Search</a>
                 {% else %}
-                    <a href="/search-page" class="button">Search</a>
+                    <a href="{{ url_for('View:search_page') }}" class="button">Search</a>
                 {% endif %}
             </li>
             <li>
                 {% if '/add-classified' in request.path %}
-                    <a href="/add-classified" class="button active">Submit</a>
+                    <a href="{{ url_for('View:add_classified') }}" class="button active">Submit</a>
                 {% else %}
-                    <a href="/add-classified" class="button">Submit</a>
+                    <a href="{{ url_for('View:add_classified') }}" class="button">Submit</a>
                 {% endif %}
             </li>
             <li>
                 {% if '/view-posted/' in request.path %}
-                    <a href="/view-posted/active" class="button active">My Classifieds</a>
+                    <a href="{{ url_for('View:view_posted', selector = 'active') }}" class="button active">My Classifieds</a>
                 {% else %}
-                    <a href="/view-posted/active" class="button">My Classifieds</a>
+                    <a href="{{ url_for('View:view_posted', selector = 'active') }}" class="button">My Classifieds</a>
                 {% endif %}
             </li>
         </ul></div>

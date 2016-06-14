@@ -1,6 +1,6 @@
 from classifieds.forms import get_homepage, view_classified, filter_posts, query_database, \
     send_feedback_email, ClassifiedForm, ContactForm
-from db_utilities import *
+from classifieds_controller import *
 from flask import request, render_template, session, redirect
 from flask.ext.classy import FlaskView, route
 

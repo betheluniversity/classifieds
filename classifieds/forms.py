@@ -1,6 +1,6 @@
 import re
 from config import ADMINS
-from db_utilities import *
+from classifieds_controller import *
 from wtforms import Form, StringField, SelectMultipleField, TextAreaField, SubmitField, validators, ValidationError
 
 # TODO: implement crontab expire job
