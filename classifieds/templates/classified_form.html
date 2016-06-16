@@ -6,41 +6,47 @@
 
 {% block internal %}
 <div>
-    {% if form.errors %}
-        <span class="error">There were errors with your form submission.</span>
-    {% endif %}
+    <p class="page-title">Submit a Posting</p>
+    <p class="page-info">Submit your own Classified Posting.</br>
+        Please be as descriptive as possible to help viewers find and understand your posting.</br>
+        All of your postings will expire in 180 days.</p>
 
-<p class="note">
-    <span class="star">* </span><span class="warning"> All fields are required</span>
-</p>
+        {% if form.errors %}
+            <span class="error">There were errors with your form submission.</span>
+        {% endif %}
 
-<form id="classifieds" method="POST" action="/submit-ad">
-    <label for="title">Title:</label><input type="text" name="title" id="title">
-    <label for="description">Description:</label>
-        <textarea type="text" name="description" id="description"></textarea>
-    <label for="price">Price (start with a '$'):</label><input type="text" name="price" id="price">
-    <label for="categories">Categories (select multiple if needed): </label>
-    <select name="categories" id="categories" class="largeselect" style="height:auto;" name="categories" multiple="">
-        <option value="appliances">Appliances</option>
-        <option value="baby-kids">Baby/Kids</option>
-        <option value="books">Books</option>
-        <option value="cds-dvds">CDs/DVDs</option>
-        <option value="cars-trucks">Cars/Trucks</option>
-        <option value="clothes-accessories">Clothes/Accessories</option>
-        <option value="computer">Computer</option>
-        <option value="electronics">Electronics</option>
-        <option value="furniture">Furniture</option>
-        <option value="general">General</option>
-        <option value="housing">Housing</option>
-        <option value="jewelry">Jewelry</option>
-        <option value="musical-instruments">Musical Instruments</option>
-        <option value="photo-video">Photo/Video</option>
-        <option value="tickets">Tickets</option>
-        <option value="tools">Tools</option>
-        <option value="toys-games">Toys/Games</option>
-        <option value="video-gaming">Video Gaming</option>
-    </select><br>
-    <input type="submit" value="Submit"/>
-</form>
+    <p class="note">
+    {#    <span class="warning"> Classified postings will expire in 180 days</span></br>#}
+        <span class="star">* </span><span class="warning"> All fields are required</span>
+    </p>
+
+    <form id="classifieds" method="POST" action="/submit-ad">
+        <label for="title">Title:</label><input type="text" name="title" id="title">
+        <label for="description">Description:</label>
+            <textarea type="text" name="description" id="description"></textarea>
+        <label for="price">Price (start with a '$'):</label><input type="text" name="price" id="price">
+        <label for="categories">Categories (select multiple if needed): </label>
+        <select name="categories" id="categories" class="largeselect" style="height:auto;" name="categories" multiple="">
+            <option value="appliances">Appliances</option>
+            <option value="baby-kids">Baby/Kids Items</option>
+            <option value="books">Books</option>
+            <option value="cds-dvds">CDs/DVDs</option>
+            <option value="cars-trucks">Cars/Trucks</option>
+            <option value="clothes-accessories">Clothes/Accessories</option>
+            <option value="computer">Computer</option>
+            <option value="electronics">Electronics</option>
+            <option value="furniture">Furniture</option>
+            <option value="general">General</option>
+            <option value="housing">Housing</option>
+            <option value="jewelry">Jewelry</option>
+            <option value="musical-instruments">Musical Instruments</option>
+            <option value="photo-video">Photo/Video</option>
+            <option value="tickets">Tickets</option>
+            <option value="tools">Tools</option>
+            <option value="toys-games">Toys/Games</option>
+            <option value="video-gaming">Video Gaming</option>
+        </select><br>
+        <input type="submit" value="Submit"/>
+    </form>
 </div>
 {% endblock %}

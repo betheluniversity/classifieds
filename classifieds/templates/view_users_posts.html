@@ -6,6 +6,11 @@
 
 {% block internal %}
 <div>
+    <p class="page-title">My Classified Postings</p>
+    <p class="page-info my-postings">All of your Classified Postings.</br>
+        View all of your posting based on whether or not they are active, complete, or expired.</br>
+        You can also mark postings as completed if they are not longer needed.</p>
+
     <div class="second-bar"><ul>
         <li>
             {% if '/all' in request.path %}
@@ -43,7 +48,6 @@
         <div class="sorting">
             <div class="centered">
                 <select class="selectSort">
-                    <option>Sort Classifieds:</option>
                     <option id="titleAZ" value="sortByTitleAZ">Title (A-Z)</option>
                     <option id="titleZA" value="sortByTitleZA">Title (Z-A)</option>
                     <option id="descriptionAZ" value="sortByDescriptionAZ">Description (A-Z)</option>

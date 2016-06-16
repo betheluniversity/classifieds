@@ -52,6 +52,14 @@ img.logo {
     margin: .3em 1em .5em 3em;
 }
 
+
+img.icon {
+    float: left;
+    width: 1.5em;
+    height: 1.5em;
+    margin: -.2em .6em 0em 0em;
+}
+
 ul {
     list-style-type: none;
     margin: 0;
@@ -114,6 +122,23 @@ p {
     font-size: .95em;
 }
 
+p.search {
+    margin-bottom: -.5em !important;
+}
+
+p.my-postings {
+    margin-bottom: .7em !important;
+}
+
+p.page-title {
+    font-family: Gotham A, Gotham B, Helvetica, Arial, sans !important;
+    font-size: 2.5em;
+    margin: .3em 0em 0em 1.3em;
+}
+
+p.page-info {
+    margin: .5em 0em 0em 3.5em;
+}
 
 p.note {
     margin: 1em 3em -1.4em 3.4em;
@@ -231,6 +256,10 @@ select.selectSort {
     display: block;
 }
 
+.dropdown-content a:first-child {
+    padding-top: 1.5em !important;
+}
+
 .top-right:hover .dropdown-content {
     display: block;
 }
@@ -321,6 +350,13 @@ textarea#input {
     .padded {
         height: 16.5em;
     }
+
+    /*img.logo {*/
+        /*float: left;*/
+        /*width: 22em;*/
+        /*height: 5em;*/
+        /*margin: .3em 1em .5em 3em;*/
+    /*}*/
 }
 
 @media (min-width: 39.1em) {
@@ -332,9 +368,18 @@ textarea#input {
         float: right;
     }
 
-    .dropbtn{
-        width: 11.5em;
+    .dropbtn {
+        width: 12.5em;
         border-radius: .25em;
+    }
+
+    .dropdown-content {
+        text-align: left;
+        width: 12.5em;
+    }
+
+    .dropdown-content a {
+        padding: .75em 0em 1em 1.25em;
     }
 }
 
@@ -342,15 +387,6 @@ textarea#input {
 
     .padded {
         height: 10em;
-    }
-
-    .dropdown-content {
-        text-align: left;
-        width: 11.5em;
-    }
-
-    .dropdown-content a {
-        padding: .75em 0em 1em 1.25em;
     }
 
     div.centered {
@@ -378,6 +414,7 @@ textarea#input {
 
     .padded {
         text-align: left;
+        /*height: 12em;*/
     }
 
     div.centered {
@@ -399,5 +436,12 @@ textarea#input {
     p.note {
         max-width: 50%;
     }
+
+    /*img.logo {*/
+        /*float: left;*/
+        /*width: 25em;*/
+        /*height: 5.5em;*/
+        /*margin: .3em 1em .5em 3em;*/
+    /*}*/
 
 }

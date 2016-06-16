@@ -6,13 +6,17 @@
 
 {% block internal %}
 <div>
+    <p class="page-title">Search Postings</p>
+    <p class="page-info search">Search through the Classified Postings by Title,
+        Description, and/or Category of the posting.</p>
+
     <form id="classifieds" action="/search" method="post">
         <label for="title">Title contains:</label><input type="text" name="title" id="title">
         <label for="description">Description contains:</label><input type="text" name="description" id="description">
         <label for="categories">In any of these categories:</label>
         <select name="categories" id="categories" class="largeselect" style="height:auto;" name="categories" multiple="">
             <option value="appliances">Appliances</option>
-            <option value="baby-kids">Baby/Kids</option>
+            <option value="baby-kids">Baby/Kids Items</option>
             <option value="books">Books</option>
             <option value="cds-dvds">CDs/DVDs</option>
             <option value="cars-trucks">Cars/Trucks</option>

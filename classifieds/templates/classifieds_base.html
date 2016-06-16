@@ -18,7 +18,7 @@
     <div class="padded">
         <img class="logo" src="/static/bethel-classifieds-logo.png">
         <div id="user_menu" class="top-right dropdown">
-            <button class="dropbtn">Hello, {{ session['fullname'] }}!</button>
+            <button class="dropbtn"><img class="icon" src="/static/drop-down-icon.png">Hello, {{ session['fullname'] }}!</button>
             <div class="dropdown-content">
                 <a href="{{ url_for('View:view_contact', username = session['username']) }}">View your profile</a>
                 <a href="{{ url_for('View:feedback') }}">Provide feedback</a>

@@ -6,67 +6,70 @@
 
 {% block internal %}
 <div>
-    {% if values.__len__() == 0 %}
-        <p class="noPosts">There are no active posts to show.</p>
-    {% else %}
-<div class="table">
-    <div class="sorting">
-        <div class="centered">
-            <select class="selectSort">
-                <option>Sort Classifieds:</option>
-                <option id="titleAZ" value="sortByTitleAZ">Title (A-Z)</option>
-                <option id="titleZA" value="sortByTitleZA">Title (Z-A)</option>
-                <option id="descriptionAZ" value="sortByDescriptionAZ">Description (A-Z)</option>
-                <option id="descriptionZA" value="sortByDescriptionZA">Description (Z-A)</option>
-                <option id="priceAZ" value="sortByPrice">Price (High-Low)</option>
-                <option id="priceZA" value="reversePriceOrder">Price (Low-High)</option>
-                <option id="dateAZ" value="sortByDate">Date (Old-New)</option>
-                <option id="dateZA" value="reverseDateOrder">Date (New-Old)</option>
-                <option id="postedByAZ" value="sortByPostedByAZ">Author (A-Z)</option>
-                <option id="postedByZA" value="sortByPostedByZA">Author (Z-A)</option>
-            </select>
-        </div>
-    </div>
-{% for val in values %}
-    <div id="singlePost-{{ loop.index }}" class="singlePost">
-        <div class="row">
-            <div class="cell">Title: </div>
-            <div class="title cell"><a href="{{ url_for('View:view_classified', id = val[0]) }}">{{ val[1] }}</a></div>
-        </div>
-        <div class="row">
-            <div class="cell">Description: </div>
-            <div class="description cell"><article>{{ val[2] }}</article></div>
-        </div>
-        <div class="row">
-            <div class="cell">Price: </div>
-            <div class="price cell">{{ val[3] }}</div>
-        </div>
-        <div class="row">
-            <div class="cell">Date Posted: </div>
-            <div class="date cell">{{ val[4].date() }}</div>
-        </div>
-        <div class="row">
-            <div class="cell">Posted By: </div>
-            <div class="postedBy cell"><a href="{{ url_for('View:view_contact', username = val[5]) }}">{{ val[6] }}</a></div>
-        </div>
-        {% if showStatus == True %}
-            <div class="row">
-                <div class="cell">Status</div>
-                <div class="status cell">
-                    {% if val[7] == True %}
-                    Completed
-                    {% elif val[8] == True %}
-                    Expired
-                    {% else %}
-                    Active
-                    {% endif %}
-                </div>
+    <p class="page-title">Classified Postings</p>
+    <p class="page-info">All of the Classified Postings.</br>
+        Choose how you would like to sort the postings, search through and contact</br>
+        who posted them to get more information.</p>
+        {% if values.__len__() == 0 %}
+            <p class="noPosts">There are no active posts to show.</p>
+        {% else %}
+    <div class="table">
+        <div class="sorting">
+            <div class="centered">
+                <select class="selectSort">
+                    <option id="titleAZ" value="sortByTitleAZ">Title (A-Z)</option>
+                    <option id="titleZA" value="sortByTitleZA">Title (Z-A)</option>
+                    <option id="descriptionAZ" value="sortByDescriptionAZ">Description (A-Z)</option>
+                    <option id="descriptionZA" value="sortByDescriptionZA">Description (Z-A)</option>
+                    <option id="priceAZ" value="sortByPrice">Price (High-Low)</option>
+                    <option id="priceZA" value="reversePriceOrder">Price (Low-High)</option>
+                    <option id="dateAZ" value="sortByDate">Date (Old-New)</option>
+                    <option id="dateZA" value="reverseDateOrder">Date (New-Old)</option>
+                    <option id="postedByAZ" value="sortByPostedByAZ">Author (A-Z)</option>
+                    <option id="postedByZA" value="sortByPostedByZA">Author (Z-A)</option>
+                </select>
             </div>
-        {% endif %}
-    <hr/>
+        </div>
+    {% for val in values %}
+        <div id="singlePost-{{ loop.index }}" class="singlePost">
+            <div class="row">
+                <div class="cell">Title: </div>
+                <div class="title cell"><a href="{{ url_for('View:view_classified', id = val[0]) }}">{{ val[1] }}</a></div>
+            </div>
+            <div class="row">
+                <div class="cell">Description: </div>
+                <div class="description cell"><article>{{ val[2] }}</article></div>
+            </div>
+            <div class="row">
+                <div class="cell">Price: </div>
+                <div class="price cell">{{ val[3] }}</div>
+            </div>
+            <div class="row">
+                <div class="cell">Date Posted: </div>
+                <div class="date cell">{{ val[4].date() }}</div>
+            </div>
+            <div class="row">
+                <div class="cell">Posted By: </div>
+                <div class="postedBy cell"><a href="{{ url_for('View:view_contact', username = val[5]) }}">{{ val[6] }}</a></div>
+            </div>
+            {% if showStatus == True %}
+                <div class="row">
+                    <div class="cell">Status</div>
+                    <div class="status cell">
+                        {% if val[7] == True %}
+                        Completed
+                        {% elif val[8] == True %}
+                        Expired
+                        {% else %}
+                        Active
+                        {% endif %}
+                    </div>
+                </div>
+            {% endif %}
+        <hr/>
+        </div>
+    {% endfor %}
     </div>
-{% endfor %}
-</div>
-    {% endif %}
+        {% endif %}
 </div>
 {% endblock %}
