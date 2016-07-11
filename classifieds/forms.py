@@ -1,11 +1,9 @@
 import re
-from config import ADMINS
-from db_utilities import *
+from classifieds import app
+from category_list import category_list
+
+from classifieds_controller import *
 from wtforms import Form, StringField, SelectMultipleField, TextAreaField, SubmitField, validators, ValidationError
-
-# TODO: the top buttons in classifieds-base.html overlap when the window is too narrow
-
-# TODO: make it all look pretty
 
 # TODO: implement crontab expire job
 # This will run at 12:01am every night and call the URL to expire all the 180-day old posts
@@ -86,26 +84,6 @@ class ClassifiedForm(Form):
     title = StringField('Title:', [validators.DataRequired(), validators.Length(max=100)])
     description = TextAreaField('Description:', [validators.DataRequired(), validators.Length(max=1000)])
     price = StringField('Price:', [validators.DataRequired(), validators.Length(max=50)])
-    category_list = [
-        ("appliances", "Appliances"),
-        ("baby-kids", "Baby / Kids"),
-        ("books", "Books (including Textbooks)"),
-        ("cds-dvds", "CDs / DVDs"),
-        ("cars-trucks", "Cars / Trucks"),
-        ("clothes-accessories", "Clothes and Accessories"),
-        ("computer", "Computer"),
-        ("electronics", "Electronics"),
-        ("furniture", "Furniture"),
-        ("general", "General"),
-        ("housing", "Housing"),
-        ("jewelry", "Jewelry"),
-        ("musical-instruments", "Musical Instruments"),
-        ("photo-video", "Photo / Video"),
-        ("tickets", "Tickets"),
-        ("tools", "Tools"),
-        ("toys-games", "Toys / Games"),
-        ("video-gaming", "Video Gaming")
-    ]
     categories = SelectMultipleField('Categories:', [validators.DataRequired()], choices=category_list)
     submit = SubmitField("Submit")
 
@@ -123,8 +101,8 @@ def send_feedback_email(form_contents, username):
     msg = MIMEText(form_contents['input'])
     msg['Subject'] = "Feedback regarding classifieds.xp.bethel.edu from " + username
     msg['From'] = username + "@bethel.edu"
-    msg['To'] = ADMINS
+    msg['To'] = app.config['ADMINS']
 
     s = smtplib.SMTP('localhost')
-    s.sendmail(username + "@bethel.edu", ADMINS, msg.as_string())
+    s.sendmail(username + "@bethel.edu", app.config['ADMINS'], msg.as_string())
     s.quit()

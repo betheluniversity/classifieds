@@ -1,0 +1,447 @@
+/* Home page table */
+
+div.table {
+    font-family: Georgia, serif;
+    border: none;
+    padding: 1.5em 1em 1em 1em;
+    margin: 0em 2em 4em 2em;
+}
+
+div.viewTable{
+    font-family: Georgia, serif;
+    border: none;
+    padding: 1.5em 1em 1em 1.4em;
+    margin: 0em 2em 4em 2em;
+}
+
+.padded {
+    height: 23.4em;
+    text-align: right;
+    padding: .9em 0em 0em 0em;
+    background-color: #0F2C52 !important;
+}
+
+hr {
+    height: .0625em;
+}
+
+div.menu-bar {
+    position: relative;
+    float: left;
+    margin-left: 2.9em;
+    margin-bottom: 2em;
+    width: 90%;
+}
+
+div.second-bar {
+    position: relative;
+    float: left;
+    margin-left: 2.9em;
+    margin-bottom: 1.5em;
+    width: 90%;
+}
+
+div.centered {
+    text-align: left;
+}
+
+img.logo {
+    float: left;
+    width: 15.5em;
+    height: 3.5em;
+    margin: .3em 1em .5em 3em;
+}
+
+
+img.icon {
+    float: left;
+    width: 1.5em;
+    height: 1.5em;
+    margin: -.2em .6em 0em 0em;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+li a {
+    width: 16.2em;
+    float: left;
+}
+
+div.singlePost {
+    margin-bottom: 1em;
+    font-size: .85em;
+}
+
+.row {
+    display: table-row;
+}
+
+.cell {
+    display: table-cell;
+    padding: .5em 1em .5em .5em;
+    margin-right: .5em;
+    max-width: 38.5em;
+}
+
+/* the description of a post */
+article {
+    line-height: 130%;
+}
+
+.marked{
+    max-width: 2em;
+}
+
+body {
+    background-color: #FFFFFF;
+}
+
+#body {
+    min-height: 100%;
+    margin-bottom: -4em;
+    position: relative;
+}
+
+span.warning {
+    font-style: italic;
+    font-size: .8em;
+}
+
+form {
+    margin: 1em 3em 3em 2.5em;
+    padding: .75em;
+}
+
+p {
+    font-family: Georgia, serif;
+    font-size: .95em;
+}
+
+p.search {
+    margin-bottom: -.5em !important;
+}
+
+p.my-postings {
+    margin-bottom: .7em !important;
+}
+
+p.page-title {
+    font-family: Gotham A, Gotham B, Helvetica, Arial, sans !important;
+    font-size: 2.5em;
+    margin: .3em 0em 0em 1.3em;
+}
+
+p.page-info {
+    margin: .5em 0em 0em 3.5em;
+}
+
+p.note {
+    margin: 1em 3em -1.4em 3.4em;
+}
+
+p.noPosts {
+    margin: 0em 3em 1em 3.4em;
+    padding-bottom: 5em;
+    float: left;
+}
+
+a {
+    color: #0069AA !important;
+    font-family: Gotham A, Gotham B, Helvetica, Arial, sans !important;
+}
+
+a:hover {
+    color: #005285 !important;
+}
+
+a.button {
+    font-size: .85em;
+    padding: 1em 1em 1em 1em;
+    text-align: left;
+    margin: .9em .25em 0em .25em;
+    background-color: #0F2C52;
+    color: #FFFFFF !important;
+}
+
+.button {
+    float: left;
+    border-radius: .25em;
+    transition: 0s background-color;
+    background-color: #0F2C52 !important;
+    color: #FFFFFF !important;
+}
+
+.button:hover {
+    background: rgba(0,105,170,0.5) !important;
+}
+
+a.button.active {
+    background: rgba(0,105,170,0.5) !important;
+}
+
+div.posts {
+    margin-bottom: 2em;
+}
+
+.button.posts:hover {
+    background-color: #0069AA !important;
+}
+
+a.button.active.posts {
+    background-color: #0069AA !important;
+}
+
+select {
+    max-width: 100%;
+}
+
+select#categories {
+    height: 10.5em !important;
+}
+
+select.selectSort {
+    margin-left: .45em;
+    width: 30%;
+    min-width: 15em;
+    font-size: .85em;
+}
+
+.error{
+    color: red;
+}
+
+.dropbtn {
+    padding: 1em;
+    font-size: .85em;
+    border-radius: .25em;
+    transition: 0s background-color;
+    background: rgba(0,105,170,0.5) !important;
+    margin: .9em 2em 0em 3.7em;
+    border: none;
+    cursor: pointer;
+    width: 16.2em;
+}
+
+.top-right {
+    float: left;
+    display: inline-block;
+}
+
+.dropbtn:hover {
+    background: rgba(0,105,170,0.5) !important;
+}
+
+.dropdown-content {
+    font-size: .85em;
+    margin: 0em 0em 0em 3.7em;
+    text-align: left;
+    display: none;
+    position: absolute;
+    z-index: 1;
+    width: 16.2em;
+    background-color: white;
+    overflow: auto;
+    box-shadow: 0em .5em 1em 0em rgba(0,0,0,0.2);
+}
+
+.dropdown-content a {
+    padding: .75em 1em 1em 2.25em;
+    color: #0069AA;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:first-child {
+    padding-top: 1.5em !important;
+}
+
+.top-right:hover .dropdown-content {
+    display: block;
+}
+
+.show {
+    display: block;
+}
+
+/* submit a classified page */
+
+span.star {
+    font-family: Georgia, serif;
+    font-size: .85em;
+    color: red;
+}
+
+input[type=submit] {
+    font-size: .85em;
+    font-family: Gotham A, Gotham B, Helvetica, Arial, sans !important;
+    color: #FFFFFF !important;
+    background-color: #0069AA;
+    border: none;
+    padding: .625em 1em .625em 1em;
+    letter-spacing: 0.75px;
+    margin-bottom: 1.25em;
+
+}
+
+input {
+    max-width: 100%;
+}
+
+input#fname {
+    max-width: 60%;
+}
+
+input#lname {
+    max-width: 60%;
+}
+
+input#email {
+    max-width: 60%;
+}
+
+input#phone {
+    max-width: 60%;
+}
+
+textarea {
+    max-width: 100%;
+}
+
+textarea#input {
+    margin: -2em 0em 1.25em 0em;
+}
+
+/* footer */
+
+.footer {
+    position: relative;
+    background-color: #0F2C52;
+    height: 4em;
+}
+
+#foot_title {
+    font-family: Gotham A, Gotham B, Helvetica, Arial, sans;
+    text-align: center;
+    color: #f1f1f2;
+    padding-top: 1.8em;
+    font-size: .78em;
+    letter-spacing: 0.25px;
+}
+
+.clear_footer {
+    height: .625em;
+    clear: both;
+}
+
+.classified_description{
+    vertical-align: text-top;
+}
+
+.maxWordLength{
+    max-width: 35em;
+}
+
+@media (min-width: 32.5em) {
+    .padded {
+        height: 16.5em;
+    }
+
+    /*img.logo {*/
+        /*float: left;*/
+        /*width: 22em;*/
+        /*height: 5em;*/
+        /*margin: .3em 1em .5em 3em;*/
+    /*}*/
+}
+
+@media (min-width: 39.1em) {
+    .padded {
+        height: 13em;
+    }
+
+    .top-right {
+        float: right;
+    }
+
+    .dropbtn {
+        width: 12.5em;
+        border-radius: .25em;
+    }
+
+    .dropdown-content {
+        text-align: left;
+        width: 12.5em;
+    }
+
+    .dropdown-content a {
+        padding: .75em 0em 1em 1.25em;
+    }
+}
+
+@media (min-width: 48em) {
+
+    .padded {
+        height: 10em;
+    }
+
+    div.centered {
+        text-align: left;
+    }
+
+    ul {
+        list-style-type: none;
+        margin: 0em;
+        padding: 0em;
+        overflow: hidden;
+    }
+
+    li a {
+        width: auto;
+    }
+
+    li {
+        float: left;
+    }
+}
+
+/* If webpage size becomes larger than em*/
+@media (min-width: 75em) {
+
+    .padded {
+        text-align: left;
+        /*height: 12em;*/
+    }
+
+    div.centered {
+        text-align: left;
+    }
+
+    input {
+        max-width: 50%;
+    }
+
+    textarea {
+        max-width: 50%;
+    }
+
+    select {
+        max-width: 50%;
+    }
+
+    p.note {
+        max-width: 50%;
+    }
+
+    /*img.logo {*/
+        /*float: left;*/
+        /*width: 25em;*/
+        /*height: 5.5em;*/
+        /*margin: .3em 1em .5em 3em;*/
+    /*}*/
+
+}
