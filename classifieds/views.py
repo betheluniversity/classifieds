@@ -117,6 +117,7 @@ class View(FlaskView):
     # list that gets dealt with by the DB's search method.
     @route("/search", methods=['POST'])
     def search(self):
+        # todo why cast request.form to dict?
         storage = dict(request.form)
         storage['title'] = storage['title'][0].split(" ")
         storage['description'] = storage['description'][0].split(" ")
