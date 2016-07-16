@@ -40,6 +40,15 @@
                 <a href="{{ url_for('View:view_posted', selector = 'expired') }}" class="button posts">All expired posts</a>
             {% endif %}
         </li>
+        {% if session['isAdmin'] %}
+        <li>
+            {% if '/external' in request.path %}
+                <a href="{{ url_for('View:view_posted', selector = 'external') }}" class="button active posts">All external posts</a>
+            {% else %}
+                <a href="{{ url_for('View:view_posted', selector = 'external') }}" class="button posts">All external posts</a>
+            {% endif %}
+        </li>
+        {% endif %}
     </ul></div>
 {% if posts.__len__() == 0 %}
 <p class="noPosts">There are no active posts to show.</p>

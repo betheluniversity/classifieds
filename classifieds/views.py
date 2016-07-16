@@ -1,7 +1,7 @@
-from classifieds.forms import get_homepage, view_classified, filter_posts, query_database, \
+from forms import get_homepage, view_classified, filter_posts, query_database, \
     send_feedback_email, ClassifiedForm, ContactForm
 from classifieds_controller import *
-from flask import request, render_template, session, redirect
+from flask import request, render_template, session, redirect, abort
 from flask.ext.classy import FlaskView, route
 
 
@@ -23,7 +23,17 @@ class View(FlaskView):
     @route("/add-classified")
     def add_classified(self):
         if contact_exists_in_db(session['username']):
-            return render_template("classified_form.html", form=ClassifiedForm())
+            return render_template("classified_form.html", form=ClassifiedForm(), external_submission=False)
+        else:
+            error_message = "You don't exist in the contacts database yet, and as such you cannot submit a classified."
+            return render_template("error_page.html", error=error_message)
+
+    @route("/add-external")
+    def add_external_classified(self):
+        if contact_exists_in_db(session['username']):
+            if not contact_is_admin(session['username']):
+                return abort(404)
+            return render_template("classified_form.html", form=ClassifiedForm(), external_submission=True)
         else:
             error_message = "You don't exist in the contacts database yet, and as such you cannot submit a classified."
             return render_template("error_page.html", error=error_message)
@@ -32,7 +42,15 @@ class View(FlaskView):
     # log in to classifieds, I only made a page to edit their contact info.
     @route("/edit-contact")
     def edit_contact(self):
-        return render_template("contact_form.html", form=ContactForm(), info=get_contact(session['username']))
+        return render_template("contact_form.html", form=ContactForm(),
+                               info=get_contact(session['username']), external=False)
+
+    @route("/add-external-contact")
+    def add_external_contact(self):
+        if contact_is_admin(session['username']):
+            return render_template("contact_form.html", form=ContactForm(), info=["", "", "", "", ""], external=True)
+        else:
+            return abort(404)
 
     # This is a post method that takes the classified form's contents, parses them, validates, and if it passes, it adds
     # it to the DB and then returns to the page if it was successful or not.
@@ -56,8 +74,11 @@ class View(FlaskView):
             else:
                 parsed_values = raw_values[0]
             storage[key] = parsed_values
+        if not contact_exists_in_db(storage['submitters_username']):
+            return render_template("classified_form.html", form=form)
         # Add that object to the database
-        add_classified(storage['title'], storage['description'], storage['price'], storage['categories'], session['username'])
+        add_classified(storage['title'], storage['description'], storage['price'], storage['categories'],
+                       storage['submitters_username'])
         message = "Classified ad successfully posted!"
         return render_template("confirmation_page.html", message=message)
 
@@ -71,9 +92,16 @@ class View(FlaskView):
         if not isValid:
             return render_template("contact_form.html", form=form)
         # Add that object to the database
-        add_contact(session['username'], storage['first_name'], storage['last_name'], storage['email'], storage['phone_number'])
-        message = "Contact information successfully updated!"
-        return render_template("confirmation_page.html", message=message)
+        if storage['external']:
+            add_contact(storage['email'], storage['first_name'], storage['last_name'], storage['email'],
+                        storage['phone_number'])
+            message = "External contact information successfully added!"
+            return render_template("confirmation_page.html", message=message)
+        else:
+            add_contact(session['username'], storage['first_name'], storage['last_name'], storage['email'],
+                        storage['phone_number'])
+            message = "Contact information successfully updated!"
+            return render_template("confirmation_page.html", message=message)
 
     # This method is pretty straightforward, just checks if the id they're requesting exists. If it does, it renders it.
     # The render itself takes care of the ad's expired/completed status, if it's the original poster, etc.
@@ -100,6 +128,10 @@ class View(FlaskView):
     # and they all get rendered the same way.
     @route("/view-posted/<selector>")
     def view_posted(self, selector):
+        if selector not in ["all", "active", "completed", "expired", "external"]:
+            return abort(404)
+        if selector == "external" and not contact_is_admin(session['username']):
+            return abort(404)
         if contact_exists_in_db(session['username']):
             return render_template("view_users_posts.html", posts=filter_posts(session['username'], selector))
         else:
@@ -117,7 +149,8 @@ class View(FlaskView):
     # list that gets dealt with by the DB's search method.
     @route("/search", methods=['POST'])
     def search(self):
-        # todo why cast request.form to dict?
+        # Casted to dictionary because request.form is an ImmutableDictionary, and I need it to be mutable for the next
+        # lines where I change the values
         storage = dict(request.form)
         storage['title'] = storage['title'][0].split(" ")
         storage['description'] = storage['description'][0].split(" ")
@@ -153,14 +186,52 @@ class View(FlaskView):
     def logout(self):
         return redirect("https://auth.bethel.edu/cas/logout")
 
+    @route("/manage-privileges")
+    def manage_admins(self):
+        # TODO: I'd like to make the table in this form sortable, like the main page.
+        if not contact_is_admin(session['username']):
+            return abort(404)
+        else:
+            return render_template("user_permissions_form.html", non_admins=get_non_admins(), admins=get_admins())
+
+    @route("/group-promote", methods=['POST'])
+    def group_promote(self):
+        if contact_is_admin(session['username']):
+            storage = request.form
+            for key in storage:
+                make_admin(storage[key])
+            return redirect('/manage-privileges')
+        else:
+            return abort(404)
+
+    @route("/single-promote", methods=['POST'])
+    def single_promote(self):
+        if contact_is_admin(session['username']):
+            storage = request.form
+            make_admin(storage['promotee'])
+            return redirect('/manage-privileges')
+        else:
+            return abort(404)
+
+    @route("/group-demote", methods=['POST'])
+    def group_demote(self):
+        if contact_is_admin(session['username']):
+            storage = request.form
+            for key in storage:
+                remove_admin(storage[key])
+            return redirect('/manage-privileges')
+        else:
+            return abort(404)
+
     # These last two methods are designed to be here only temporarily. They allow the users to submit feedback about the
     # site, whether it's a feature suggestion or bugfix.
     def feedback(self):
         return render_template("feedback.html")
 
-    #
+    # Arbitrary comment
     @route("/submit-feedback", methods=['POST'])
     def submit_feedback(self):
+        print request.form
         send_feedback_email(request.form, session['username'])
         message = "Thank you for submitting feedback! We'll take a look at your message and try to make the " \
                   "site better for everyone!"

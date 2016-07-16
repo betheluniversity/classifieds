@@ -264,6 +264,10 @@ select.selectSort {
     display: block;
 }
 
+.admin:hover .dropdown-content {
+    display: block;
+}
+
 .show {
     display: block;
 }

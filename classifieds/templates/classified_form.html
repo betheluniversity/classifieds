@@ -7,12 +7,16 @@
 {% block internal %}
 <div>
     <p class="page-title">Submit a Posting</p>
+    {% if external_submission %}
+    <p class="page-info">Submit someone else's Classified Posting.</br>
+    {% else %}
     <p class="page-info">Submit your own Classified Posting.</br>
-        Please be as descriptive as possible to help viewers find and understand your posting.</br>
-        All of your postings will expire in 180 days.</p>
+    {% endif %}
+        Please be as descriptive as possible to help viewers find and understand the posting.</br>
+        All postings will expire in 180 days.</p>
 
         {% if form.errors %}
-            <span class="error">There were errors with your form submission.</span>
+            <span class="error">There were errors with the form submission.</span>
         {% endif %}
 
     <p class="note">
@@ -20,7 +24,12 @@
         <span class="star">* </span><span class="warning"> All fields are required</span>
     </p>
 
-    <form id="classifieds" method="POST" action="/submit-ad">
+    <form id="classified" method="POST" action="/submit-ad">
+        {% if external_submission %}
+        <label for="submitters_username">Email of external poster:</label><input type="text" id="submitters_username" name="submitters_username"/>
+        {% else %}
+        <input type="hidden" name="submitters_username" value="{{ session['username'] }}"/>
+        {% endif %}
         <label for="title">Title:</label><input type="text" name="title" id="title">
         <label for="description">Description:</label>
             <textarea type="text" name="description" id="description"></textarea>

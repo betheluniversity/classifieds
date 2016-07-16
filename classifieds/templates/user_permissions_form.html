@@ -1,0 +1,64 @@
+{% extends "classifieds_base.html" %}
+
+{% block subpage_title %}
+    | Update your contact info
+{% endblock %}
+
+{% block internal %}
+<div>
+    <form id="group_promotion" method="POST" action="/group-promote">
+        <table>
+            <thead>
+                <tr>
+                    <td>Username</td>
+                    <td>First name</td>
+                    <td>Last name</td>
+                    <td>Make Admin?</td>
+                </tr>
+            </thead>
+            <tbody>
+        {% for non_admin in non_admins %}
+                <tr>
+                    <td> {{ non_admin['username'] }} </td>
+                    <td> {{ non_admin['first_name'] }} </td>
+                    <td> {{ non_admin['last_name'] }} </td>
+                    <td><input type="checkbox" name="nonAdmin{{ loop.index }}" value="{{ non_admin['username'] }}"/></td>
+                </tr>
+        {% endfor %}
+            </tbody>
+        </table>
+        <input type="submit" value="Make the checked users admins for classifieds"/>
+    </form>
+
+    <form id="group_demotion" method="POST" action="/group-demote">
+        <table>
+            <thead>
+                <tr>
+                    <td>Username</td>
+                    <td>First name</td>
+                    <td>Last name</td>
+                    <td>Remove Admin?</td>
+                </tr>
+            </thead>
+            <tbody>
+        {% for admin in admins %}
+            {% if admin['username'] != session['username'] %}
+                <tr>
+                    <td> {{ admin['username'] }} </td>
+                    <td> {{ admin['first_name'] }} </td>
+                    <td> {{ admin['last_name'] }} </td>
+                    <td><input type="checkbox" name="admin{{ loop.index }}" value="{{ admin['username'] }}"/></td>
+                </tr>
+            {% endif %}
+        {% endfor %}
+            </tbody>
+        </table>
+        <input type="submit" value="Remove admin priveleges for checked users"/>
+    </form>
+
+    <form id="single_promotion" method="POST" action="/single-promote">
+        <label for="promote_by_username"></label><input type="text" name="promotee" id="promote_by_username"/>
+        <input type="submit" value="Promote this single user"/>
+    </form>
+</div>
+{% endblock %}

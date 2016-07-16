@@ -1,6 +1,7 @@
 import datetime
 import smtplib
 from email.mime.text import MIMEText
+
 from classifieds import db, Classifieds, Contacts
 from sqlalchemy import or_, desc
 
@@ -129,6 +130,40 @@ def send_expired_email(username):
 
 def contact_exists_in_db(username):
     return len(list(Contacts.query.filter(Contacts.username.like(username)).all())) > 0
+
+
+def contact_is_admin(username):
+    return Contacts.query.filter(Contacts.username.like(username)).first().isAdmin
+
+
+def get_non_admins():
+    non_admins = Contacts.query.all()
+    to_return = []
+    for na in non_admins:
+        if not na.isAdmin:
+            to_return += [{'username': na.username, 'first_name': na.first_name, 'last_name': na.last_name}]
+    return to_return
+
+
+def get_admins():
+    admins = Contacts.query.all()
+    to_return = []
+    for a in admins:
+        if a.isAdmin:
+            to_return += [{'username': a.username, 'first_name': a.first_name, 'last_name': a.last_name}]
+    return to_return
+
+
+def make_admin(username):
+    contact_to_change = Contacts.query.filter(Contacts.username.like(username)).first()
+    contact_to_change.isAdmin = True
+    db.session.commit()
+
+
+def remove_admin(username):
+    contact_to_change = Contacts.query.filter(Contacts.username.like(username)).first()
+    contact_to_change.isAdmin = False
+    db.session.commit()
 
 
 def classified_exists_in_db(id):

@@ -1,9 +1,11 @@
 import re
-from classifieds import app
-from category_list import category_list
 
-from classifieds_controller import *
+from classifieds import app
 from wtforms import Form, StringField, SelectMultipleField, TextAreaField, SubmitField, validators, ValidationError
+
+from category_list import category_list
+from classifieds_controller import *
+
 
 # TODO: implement crontab expire job
 # This will run at 12:01am every night and call the URL to expire all the 180-day old posts
@@ -46,6 +48,8 @@ def filter_posts(username, selector):
         entries = search_classifieds(username=username, completed=True)
     elif selector == "expired":
         entries = search_classifieds(username=username, completed=False, expired=True)
+    elif selector == "external":
+        entries = search_classifieds(username=u"%@%")
 
     for entry in entries:
         to_send += [[entry[0].id, entry[0].title, entry[0].description, entry[0].price, entry[0].dateAdded,
@@ -93,7 +97,7 @@ class ContactForm(Form):
     last_name = StringField('Last Name:', [validators.DataRequired(), validators.Length(max=30)])
     email = StringField('Email address:', [validators.DataRequired(), validators.Email()])
     phone_number = StringField('Phone Number:', [validators.DataRequired(), phone_validator()])
-    submit = SubmitField("Submit")
+    submit = SubmitField("Update")
 
 
 # A temporary method for the early stages of the new website so that users have a convenient way to provide feedback

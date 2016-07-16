@@ -54,6 +54,18 @@
                     <a href="{{ url_for('View:view_posted', selector = 'active') }}" class="button">My Classifieds</a>
                 {% endif %}
             </li>
+            {% if is_user_admin() %}
+            <li>
+                <div id="admin_menu" class="admin dropdown">
+                    <button class="dropbtn"><img class="icon" src="/static/drop-down-icon.png">Administrator Functions</button>
+                    <div class="dropdown-content">
+                        <a href="{{ url_for('View:manage_admins') }}">Manage user privilege levels</a>
+                        <a href="{{ url_for('View:add_external_contact') }}">Add a non-BCA contact</a>
+                        <a href="{{ url_for('View:add_external_classified') }}">Submit a non-BCA user's post</a>
+                    </div>
+                </div>
+            </li>
+            {% endif %}
         </ul></div>
     </div>
         {% block internal %}

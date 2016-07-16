@@ -1,6 +1,7 @@
 import ast
 import datetime
 import urllib2
+
 from flask import Flask, session, request, current_app
 from flask.ext.sqlalchemy import SQLAlchemy
 
@@ -15,7 +16,7 @@ class Classifieds(db.Model):
     description = db.Column(db.String(1000), nullable=False)
     price = db.Column(db.String(50), nullable=False)
     categories = db.Column(db.String(200), nullable=False)
-    username = db.Column(db.String(8), db.ForeignKey('contacts.username'))
+    username = db.Column(db.String(30), db.ForeignKey('contacts.username'))
     dateAdded = db.Column(db.DateTime, nullable=False)
     completed = db.Column(db.Boolean, nullable=False)
     expired = db.Column(db.Boolean, nullable=False)
@@ -35,11 +36,12 @@ class Classifieds(db.Model):
 
 
 class Contacts(db.Model):
-    username = db.Column(db.String(8), primary_key=True)
+    username = db.Column(db.String(30), primary_key=True)
     first_name = db.Column(db.String(20), nullable=False)
     last_name = db.Column(db.String(30), nullable=False)
     email = db.Column(db.String(50), nullable=False)
     phone_number = db.Column(db.String(15), nullable=False)
+    isAdmin = db.Column(db.Boolean, nullable=False, default=False)
 
     def __init__(self, username, first, last, email, phone):
         self.username = username
@@ -47,6 +49,7 @@ class Contacts(db.Model):
         self.last_name = last
         self.email = email
         self.phone_number = phone
+        self.isAdmin = False
 
     def __repr__(self):
         return "<Contact %s>" % self.username
@@ -88,3 +91,13 @@ def init_user():
                                email=username + "@bethel.edu", phone="")
         db.session.add(new_contact)
         db.session.commit()
+
+
+from classifieds_controller import contact_is_admin
+
+
+def is_user_admin():
+    return contact_is_admin(session['username'])
+
+
+app.jinja_env.globals.update(is_user_admin=is_user_admin)
