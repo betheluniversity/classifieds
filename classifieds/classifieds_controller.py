@@ -47,14 +47,14 @@ def get_contact(username):
 
 def mark_entry_as_complete(entry_id, username):
     entry_to_update = Classifieds.query.filter(Classifieds.id.like(entry_id)).first()
-    if entry_to_update.username == username:
+    if entry_to_update.username == username or contact_is_admin(username):
         entry_to_update.completed = True
         db.session.commit()
 
 
 def mark_entry_as_active(entry_id, username):
     entry_to_update = Classifieds.query.filter(Classifieds.id.like(entry_id)).first()
-    if entry_to_update.username == username:
+    if entry_to_update.username == username or contact_is_admin(username):
         entry_to_update.dateAdded = datetime.datetime.now()
         entry_to_update.expired = False
         db.session.commit()

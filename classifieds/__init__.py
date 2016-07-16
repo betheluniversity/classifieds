@@ -9,6 +9,8 @@ app = Flask(__name__)
 app.config.from_object('config')
 db = SQLAlchemy(app)
 
+# TODO: maybe change the external post submission email field to a dropdown list of external emails?
+
 
 class Classifieds(db.Model):
     id = db.Column(db.Integer, primary_key=True)
