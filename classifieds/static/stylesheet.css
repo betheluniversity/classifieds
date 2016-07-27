@@ -7,7 +7,7 @@ div.table {
     margin: 0em 2em 4em 2em;
 }
 
-div.viewTable{
+div.viewTable {
     font-family: Georgia, serif;
     border: none;
     padding: 1.5em 1em 1em 1.4em;
@@ -15,7 +15,7 @@ div.viewTable{
 }
 
 .padded {
-    height: 23.4em;
+    height: 26.4em;
     text-align: right;
     padding: .9em 0em 0em 0em;
     background-color: #0F2C52 !important;
@@ -51,7 +51,6 @@ img.logo {
     height: 3.5em;
     margin: .3em 1em .5em 3em;
 }
-
 
 img.icon {
     float: left;
@@ -93,7 +92,7 @@ article {
     line-height: 130%;
 }
 
-.marked{
+.marked {
     max-width: 2em;
 }
 
@@ -177,11 +176,11 @@ a.button {
 }
 
 .button:hover {
-    background: rgba(0,105,170,0.5) !important;
+    background: rgba(0, 105, 170, 0.5) !important;
 }
 
 a.button.active {
-    background: rgba(0,105,170,0.5) !important;
+    background: rgba(0, 105, 170, 0.5) !important;
 }
 
 div.posts {
@@ -211,7 +210,7 @@ select.selectSort {
     font-size: .85em;
 }
 
-.error{
+.error {
     color: red;
 }
 
@@ -220,8 +219,20 @@ select.selectSort {
     font-size: .85em;
     border-radius: .25em;
     transition: 0s background-color;
-    background: rgba(0,105,170,0.5) !important;
+    background: rgba(0, 105, 170, 0.5) !important;
     margin: .9em 2em 0em 3.7em;
+    border: none;
+    cursor: pointer;
+    width: 16.2em;
+}
+
+.dropbtn-admin {
+    padding: 1em 1em .8em 1em;
+    font-size: .85em;
+    border-radius: .25em;
+    transition: 0s background-color;
+    background: rgba(0, 105, 170, 0.5) !important;
+    margin: .9em .25em 0em .25em;
     border: none;
     cursor: pointer;
     width: 16.2em;
@@ -232,8 +243,26 @@ select.selectSort {
     display: inline-block;
 }
 
+.admin {
+    float: left;
+    display: inline-block;
+}
+
 .dropbtn:hover {
-    background: rgba(0,105,170,0.5) !important;
+    background: rgba(0, 105, 170, 0.5) !important;
+}
+
+.dropdown-content-admin {
+    font-size: .85em;
+    margin: 0em 0em 0em 0.25em !important;
+    text-align: left;
+    display: none;
+    position: relative;
+    z-index: 1;
+    width: 16.2em !important;
+    background-color: white;
+    overflow: auto;
+    box-shadow: 0em .5em 1em 0em rgba(0, 0, 0, 0.2);
 }
 
 .dropdown-content {
@@ -246,11 +275,11 @@ select.selectSort {
     width: 16.2em;
     background-color: white;
     overflow: auto;
-    box-shadow: 0em .5em 1em 0em rgba(0,0,0,0.2);
+    box-shadow: 0em .5em 1em 0em rgba(0, 0, 0, 0.2);
 }
 
 .dropdown-content a {
-    padding: .75em 1em 1em 2.25em;
+    padding: .75em 1em 1em 1.5em;
     color: #0069AA;
     text-decoration: none;
     display: block;
@@ -342,30 +371,30 @@ textarea#input {
     clear: both;
 }
 
-.classified_description{
+.classified_description {
     vertical-align: text-top;
 }
 
-.maxWordLength{
+.maxWordLength {
     max-width: 35em;
 }
 
 @media (min-width: 32.5em) {
     .padded {
-        height: 16.5em;
+        height: 19.5em;
     }
 
     /*img.logo {*/
-        /*float: left;*/
-        /*width: 22em;*/
-        /*height: 5em;*/
-        /*margin: .3em 1em .5em 3em;*/
+    /*float: left;*/
+    /*width: 22em;*/
+    /*height: 5em;*/
+    /*margin: .3em 1em .5em 3em;*/
     /*}*/
 }
 
 @media (min-width: 39.1em) {
     .padded {
-        height: 13em;
+        height: 16.5em;
     }
 
     .top-right {
@@ -442,10 +471,10 @@ textarea#input {
     }
 
     /*img.logo {*/
-        /*float: left;*/
-        /*width: 25em;*/
-        /*height: 5.5em;*/
-        /*margin: .3em 1em .5em 3em;*/
+    /*float: left;*/
+    /*width: 25em;*/
+    /*height: 5.5em;*/
+    /*margin: .3em 1em .5em 3em;*/
     /*}*/
 
 }

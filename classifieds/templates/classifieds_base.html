@@ -14,60 +14,69 @@
 
 {% block body_content %}
     <div id="body">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes"/>
-    <div class="padded">
-        <img class="logo" src="/static/bethel-classifieds-logo.png">
-        <div id="user_menu" class="top-right dropdown">
-            <button class="dropbtn"><img class="icon" src="/static/drop-down-icon.png">Hello, {{ session['fullname'] }}!</button>
-            <div class="dropdown-content">
-                <a href="{{ url_for('View:view_contact', username = session['username']) }}">View your profile</a>
-                <a href="{{ url_for('View:feedback') }}">Provide feedback</a>
-                <a href="{{ url_for('View:logout') }}">Sign out</a>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes"/>
+        <div class="padded">
+            <img class="logo" src="/static/bethel-classifieds-logo.png">
+            <div id="user_menu" class="top-right">
+                <button class="dropbtn"><img class="icon"
+                                             src="/static/drop-down-icon.png">Hello, {{ session['fullname'] }}!
+                </button>
+                <div class="dropdown-content">
+                    <a href="{{ url_for('View:view_contact', username = session['username']) }}">View your profile</a>
+                    <a href="{{ url_for('View:feedback') }}">Provide feedback</a>
+                    <a href="{{ url_for('View:logout') }}">Sign out</a>
+                </div>
+            </div>
+            <div class="menu-bar">
+                <ul>
+                    {% if is_user_admin() %}
+                        <li>
+                            <div id="admin_menu" class="admin">
+                                <button class="dropbtn-admin"><img class="icon" src="/static/drop-down-icon.png">Administrator
+                                    Functions
+                                </button>
+                                <div class="dropdown-content dropdown-content-admin">
+                                    <a href="{{ url_for('View:manage_admins') }}">Manage user privilege levels</a>
+                                    <a href="{{ url_for('View:add_external_contact') }}">Add a non-BCA contact</a>
+                                    <a href="{{ url_for('View:add_external_classified') }}">Submit a non-BCA user's
+                                        post</a>
+                                </div>
+                            </div>
+                        </li>
+                    {% endif %}
+                    <li>
+                        {% if request.path == '/' %}
+                            <a href="{{ url_for('View:index') }}" class="button active">Home</a>
+                        {% else %}
+                            <a href="{{ url_for('View:index') }}" class="button">Home</a>
+                        {% endif %}
+                    </li>
+                    <li>
+                        {% if '/search-page' in request.path %}
+                            <a href="{{ url_for('View:search_page') }}" class="button active">Search</a>
+                        {% else %}
+                            <a href="{{ url_for('View:search_page') }}" class="button">Search</a>
+                        {% endif %}
+                    </li>
+                    <li>
+                        {% if '/add-classified' in request.path %}
+                            <a href="{{ url_for('View:add_classified') }}" class="button active">Submit</a>
+                        {% else %}
+                            <a href="{{ url_for('View:add_classified') }}" class="button">Submit</a>
+                        {% endif %}
+                    </li>
+                    <li>
+                        {% if '/view-posted/' in request.path %}
+                            <a href="{{ url_for('View:view_posted', selector = 'active') }}" class="button active">My
+                                Classifieds</a>
+                        {% else %}
+                            <a href="{{ url_for('View:view_posted', selector = 'active') }}" class="button">My
+                                Classifieds</a>
+                        {% endif %}
+                    </li>
+                </ul>
             </div>
         </div>
-        <div class="menu-bar"><ul>
-            <li>
-                {% if request.path == '/' %}
-                    <a href="{{ url_for('View:index') }}" class="button active">Home</a>
-                {% else %}
-                    <a href="{{ url_for('View:index') }}" class="button">Home</a>
-                {% endif %}
-            </li>
-            <li>
-                {% if '/search-page' in request.path %}
-                    <a href="{{ url_for('View:search_page') }}" class="button active">Search</a>
-                {% else %}
-                    <a href="{{ url_for('View:search_page') }}" class="button">Search</a>
-                {% endif %}
-            </li>
-            <li>
-                {% if '/add-classified' in request.path %}
-                    <a href="{{ url_for('View:add_classified') }}" class="button active">Submit</a>
-                {% else %}
-                    <a href="{{ url_for('View:add_classified') }}" class="button">Submit</a>
-                {% endif %}
-            </li>
-            <li>
-                {% if '/view-posted/' in request.path %}
-                    <a href="{{ url_for('View:view_posted', selector = 'active') }}" class="button active">My Classifieds</a>
-                {% else %}
-                    <a href="{{ url_for('View:view_posted', selector = 'active') }}" class="button">My Classifieds</a>
-                {% endif %}
-            </li>
-            {% if is_user_admin() %}
-            <li>
-                <div id="admin_menu" class="admin dropdown">
-                    <button class="dropbtn"><img class="icon" src="/static/drop-down-icon.png">Administrator Functions</button>
-                    <div class="dropdown-content">
-                        <a href="{{ url_for('View:manage_admins') }}">Manage user privilege levels</a>
-                        <a href="{{ url_for('View:add_external_contact') }}">Add a non-BCA contact</a>
-                        <a href="{{ url_for('View:add_external_classified') }}">Submit a non-BCA user's post</a>
-                    </div>
-                </div>
-            </li>
-            {% endif %}
-        </ul></div>
-    </div>
         {% block internal %}
         {% endblock %}
         <script>
@@ -75,17 +84,17 @@
                 moreLink: '<a href="#">Read more...</a>',
                 lessLink: '<a href="#">Read less</a>',
                 collapsedHeight: 36,
-                afterToggle: function(trigger, element, expanded) {
-                    if(! expanded) { // The "Close" link was clicked
+                afterToggle: function (trigger, element, expanded) {
+                    if (!expanded) { // The "Close" link was clicked
                         $('html, body').animate({scrollTop: element.offset().top}, {duration: 100});
                     }
                 }
             });
         </script>
-    {# links sorting JS file to HTML (only way this file would work)   #}
-    <script src="../static/sorting.js"></script>
-    <div class="clear_footer"></div>
-        </div>
+        {# links sorting JS file to HTML (only way this file would work)   #}
+        <script src="../static/sorting.js"></script>
+        <div class="clear_footer"></div>
+    </div>
 
     <div class="footer">
         <p id="foot_title">Bethel University est. 1871 | Classifieds</p>
