@@ -175,6 +175,12 @@ a.button {
     color: #FFFFFF !important;
 }
 
+a.button-danger {
+    background-color: red !important;
+    color: #FFFFFF !important;
+}
+
+
 .button:hover {
     background: rgba(0, 105, 170, 0.5) !important;
 }

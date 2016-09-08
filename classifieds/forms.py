@@ -31,6 +31,8 @@ def get_homepage():
 def view_classified(id):
     toReturn = Classifieds.query.filter(Classifieds.id.like(id)).first()
     contact = Contacts.query.filter(Contacts.username.like(toReturn.username)).first()
+
+    # todo make this a dict.
     return [toReturn.id, toReturn.title, toReturn.description, toReturn.price, toReturn.categories,
             contact.username, contact.first_name + " " + contact.last_name, toReturn.dateAdded, toReturn.completed, toReturn.expired]
 

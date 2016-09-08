@@ -12,7 +12,8 @@ class View(FlaskView):
 
     # This method doesn't need the actual word index; just the base URL will work to return the homepage
     def index(self):
-        return render_template("homepage.html", values=get_homepage(), showStatus=False)
+        is_admin = contact_is_admin(session['username'])
+        return render_template("homepage.html", values=get_homepage(), showStatus=False, is_admin=is_admin)
 
     # This URL is only for rendering to a channel in BLink
     @route("/blink-classifieds")
@@ -222,6 +223,22 @@ class View(FlaskView):
             return redirect('/manage-privileges')
         else:
             return abort(404)
+
+    @route("/delete-confirm/<classified_id>")
+    def delete_confirm(self, classified_id):
+        if not contact_is_admin(session['username']):
+            return abort(404)
+        return render_template('delete-confirm.html', classified_id=classified_id,
+                               classified=view_classified(classified_id))
+
+    @route("/delete-classified/<classified_id>")
+    def delete_classified(self, classified_id):
+        if not contact_is_admin(session['username']):
+            return abort(404)
+
+        delete_classfieid(classified_id)
+
+        return redirect('/')
 
     # These last two methods are designed to be here only temporarily. They allow the users to submit feedback about the
     # site, whether it's a feature suggestion or bugfix.

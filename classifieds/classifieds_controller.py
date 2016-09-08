@@ -166,5 +166,12 @@ def remove_admin(username):
     db.session.commit()
 
 
+def delete_classfieid(classified_id):
+    deleted = Classifieds.query.filter_by(id=classified_id).delete()
+    db.session.commit()
+    return deleted
+
+
 def classified_exists_in_db(id):
+    # todo use syntax like delete_classfieid method
     return len(list(Classifieds.query.filter(Classifieds.id.like(id)).all())) > 0

@@ -7,10 +7,11 @@
 {% block internal %}
 <div>
     <p class="page-title">Classified Postings</p>
+
     <p class="page-info">All of the Classified Postings.</br>
         Choose how you would like to sort the postings, search through and contact</br>
         who posted them to get more information.</p>
-        {% if values.__len__() == 0 %}
+        {% if values|length == 0 %}
             <p class="noPosts">There are no active posts to show.</p>
         {% else %}
     <div class="table">
@@ -65,6 +66,11 @@
                         {% endif %}
                     </div>
                 </div>
+            {% endif %}
+            {% if is_admin %}
+                <div class="row">
+                    <div class="title cell"><a class="button" href="{{ url_for('View:delete_confirm', classified_id = val[0]) }}">Delete</a></div>
+            </div>
             {% endif %}
         <hr/>
         </div>
