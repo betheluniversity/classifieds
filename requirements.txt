@@ -4,4 +4,5 @@ Flask-Classy
 Flask-WTF
 Flask-SQLAlchemy
 migrate
+raven[flask]
 WTForms

@@ -6,7 +6,7 @@ FOUNDATION_USE_MINIFIED = False
 FOUNDATION_USE_CDN = True
 
 ##emails
-ADMINS = [']
+ADMINS = ['']
 
 # sqlalchemy
 SQLALCHEMY_DATABASE_URI = ''
@@ -17,5 +17,7 @@ SECRET_KEY = ''
 
 ENVIRON = ''
 TEST_USER = ''
+
+SENTRY_URL = ''
 
 CACHE_DEFAULT_TIMEOUT = 300

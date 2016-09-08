@@ -9,6 +9,9 @@ app = Flask(__name__)
 app.config.from_object('config')
 db = SQLAlchemy(app)
 
+from raven.contrib.flask import Sentry
+sentry = Sentry(app, dsn=app.config['SENTRY_URL'])
+
 # TODO: maybe change the external post submission email field to a dropdown list of external emails?
 
 
@@ -66,7 +69,6 @@ View.register(app)
 def before_request():
     try:
         init_user()
-        app.logger.info(session['username'])
     except:
         app.logger.info("failed to init")
 
