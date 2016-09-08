@@ -93,7 +93,7 @@ class View(FlaskView):
         if not isValid:
             return render_template("contact_form.html", form=form)
         # Add that object to the database
-        if storage['external']:
+        if storage['external'] == 'True':  # this is a string of a boolean because its coming form the form.
             add_contact(storage['email'], storage['first_name'], storage['last_name'], storage['email'],
                         storage['phone_number'])
             message = "External contact information successfully added!"
