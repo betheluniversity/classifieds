@@ -106,7 +106,7 @@ class ContactForm(Form):
 def send_feedback_email(form_contents, username):
     msg = MIMEText(form_contents['input'])
     msg['Subject'] = "Feedback regarding classifieds.xp.bethel.edu from " + username
-    msg['From'] = username + "@bethel.edu"
+    msg['From'] = "classifieds@bethel.edu"
     msg['To'] = app.config['ADMINS']
 
     s = smtplib.SMTP('localhost')
