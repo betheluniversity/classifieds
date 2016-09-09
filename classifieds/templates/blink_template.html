@@ -25,7 +25,7 @@ There are no active posts to show.
     <tbody>
 {% for val in values[0:5] %}
         <tr>
-            <td><a href="https://classifieds.xp.bethel.edu/view-classified/{{ val[0] }}">{{ val[1] }}</a></td>
+            <td><a href="https://classifieds.bethel.edu/view-classified/{{ val[0] }}">{{ val[1] }}</a></td>
             <td><article>{{ val[2] }}</article></td>
             <td>{{ val[3] }}</td>
             <td>{{ val[4].date() }}</td>
@@ -46,6 +46,10 @@ There are no active posts to show.
     </tbody>
 </table>
     {% endif %}
+</div>
+<div>
+    <a href="https://classifieds.bethel.edu/add-classified">Submit</a> |
+    <a href="https://classifieds.bethel.edu">View All</a>
 </div>
 </body>
 </html>
