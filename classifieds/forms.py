@@ -105,7 +105,7 @@ class ContactForm(Form):
 # A temporary method for the early stages of the new website so that users have a convenient way to provide feedback
 def send_feedback_email(form_contents, username):
     msg = MIMEText(form_contents['input'])
-    msg['Subject'] = "Feedback regarding classifieds.xp.bethel.edu from " + username
+    msg['Subject'] = "Feedback regarding classifieds.bethel.edu from " + username
     msg['From'] = "classifieds@bethel.edu"
     msg['To'] = app.config['ADMINS']
 
