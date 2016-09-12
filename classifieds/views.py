@@ -111,7 +111,7 @@ class View(FlaskView):
         if classified_exists_in_db(id):
             return render_template("view_classified.html", classified=view_classified(id))
         else:
-            error_message = "That classified id number doesn't exist in the contacts database."
+            error_message = "That classified id number doesn't exist in the classifieds database."
             return render_template("error_page.html", error=error_message)
 
     # Similarly to viewClassified, this method checks if the username exists. If it does, it has the render function do

@@ -29,7 +29,7 @@ div.menu-bar {
     position: relative;
     float: left;
     margin-left: 2.9em;
-    margin-bottom: 2em;
+    margin-bottom: 0.8em;
     width: 90%;
 }
 
@@ -160,7 +160,7 @@ a:hover {
 
 a.button {
     font-size: .85em;
-    padding: 1em 1em 1em 1em;
+    padding: 1em 1em 0.8em 1em;
     text-align: left;
     margin: .9em .25em 0em .25em;
     background-color: #0F2C52;
