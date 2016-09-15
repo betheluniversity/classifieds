@@ -13,6 +13,8 @@ from raven.contrib.flask import Sentry
 sentry = Sentry(app, dsn=app.config['SENTRY_URL'])
 
 # TODO: maybe change the external post submission email field to a dropdown list of external emails?
+# TODO: add a way to view by category, so that when someone is viewing a post, they can click on the category it was
+#       posted in and view similar posts
 
 
 class Classifieds(db.Model):
