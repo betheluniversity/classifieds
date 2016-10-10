@@ -3,14 +3,14 @@ import datetime
 import urllib2
 
 from flask import Flask, session, request, current_app
-from flask.ext.sqlalchemy import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.config.from_object('config')
 db = SQLAlchemy(app)
 
-from raven.contrib.flask import Sentry
-sentry = Sentry(app, dsn=app.config['SENTRY_URL'])
+#from raven.contrib.flask import Sentry
+#sentry = Sentry(app, dsn=app.config['SENTRY_URL'])
 
 # TODO: maybe change the external post submission email field to a dropdown list of external emails?
 # TODO: add a way to view by category, so that when someone is viewing a post, they can click on the category it was

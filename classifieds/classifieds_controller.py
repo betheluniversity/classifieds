@@ -133,8 +133,10 @@ def contact_exists_in_db(username):
 
 
 def contact_is_admin(username):
-    return Contacts.query.filter(Contacts.username.like(username)).first().isAdmin
-
+    query = Contacts.username.like(username)
+    result = Contacts.query.filter(query)
+    #return Contacts.query.filter(Contacts.username.like(username)).first().isAdmin
+    return result.first().isAdmin
 
 def get_non_admins():
     non_admins = Contacts.query.all()

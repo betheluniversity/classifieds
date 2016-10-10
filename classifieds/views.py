@@ -2,7 +2,7 @@ from forms import get_homepage, view_classified, filter_posts, query_database, \
     send_feedback_email, ClassifiedForm, ContactForm
 from classifieds_controller import *
 from flask import request, render_template, session, redirect, abort
-from flask.ext.classy import FlaskView, route
+from flask_classy import FlaskView, route
 
 
 # This Flask-Classy object is simply named "View" because Flask-Classy takes whatever is in front of View and makes it
