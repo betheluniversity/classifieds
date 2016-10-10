@@ -1,23 +1,23 @@
 import os
-_basedir = os.path.abspath(os.path.dirname(__file__))
+basedir = os.path.abspath(os.path.dirname(__file__))
+
+##DB stuff
+SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'app.db')
+SQLALCHEMY_MIGRATE_REPO = os.path.join(basedir, 'db_repository')
 
 ##Foundation configs
-FOUNDATION_USE_MINIFIED = False
+FOUNDATION_USE_MINIFIED = True
 FOUNDATION_USE_CDN = True
 
 ##emails
-ADMINS = ['']
-
-# sqlalchemy
-SQLALCHEMY_DATABASE_URI = ''
-SQLALCHEMY_MIGRATE_REPO = ''
-
-secret_key = ''
-SECRET_KEY = ''
-
-ENVIRON = ''
-TEST_USER = ''
+ADMINS = ''
+secret_key = ""
+SECRET_KEY = ""
 
 SENTRY_URL = ''
+
+
+ENVIRON = ""
+TEST_USER = ''
 
 CACHE_DEFAULT_TIMEOUT = 300
