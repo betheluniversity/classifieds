@@ -1,8 +1,8 @@
-argparse
 Flask
 Flask-Classy
-Flask-WTF
 Flask-SQLAlchemy
+Flask-WTF
 migrate
 raven[flask]
-WTForms
+alembic
+dataset
