@@ -64,7 +64,7 @@
                         <td>
                             {% for cat in classified[4].split(";") %}
                                 {% for word in cat.split("-") %}
-                                    {{ word.capitalize() }}
+                                    <a href = "https://classifieds.bethel.edu">{{ word.capitalize() }}</a>
                                     {% if cat.split("-").index(word) < cat.split("-").__len__() - 1 %}
                                         /
                                     {% endif %}

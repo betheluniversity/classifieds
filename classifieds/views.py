@@ -13,6 +13,7 @@ class View(FlaskView):
     # This method doesn't need the actual word index; just the base URL will work to return the homepage
     def index(self):
         is_admin = contact_is_admin(session['username'])
+
         return render_template("homepage.html", values=get_homepage(), showStatus=False, is_admin=is_admin)
 
     # This URL is only for rendering to a channel in BLink
@@ -149,23 +150,24 @@ class View(FlaskView):
     # that word is bounded by the DB's wildcard character, '%'. If there are multiple search terms, it splits it into a
     # list that gets dealt with by the DB's search method.
     @route("/search", methods=['POST'])
+    @route("/search/<category>", methods=['GET'])
     def search(self):
         # Casted to dictionary because request.form is an ImmutableDictionary, and I need it to be mutable for the next
         # lines where I change the values
-        storage = dict(request.form)
-        storage['title'] = storage['title'][0].split(" ")
-        storage['description'] = storage['description'][0].split(" ")
-        to_send = {}
-        for key in storage:
-            if len(storage[key]) == 1:
-                if len(storage[key][0]) > 0:
-                    to_send[key] = u'%' + storage[key][0] + u'%'
-            else:
-                to_send[key] = storage[key]
-        to_send['expired'] = False
-        to_send['completed'] = False
-        return render_template("homepage.html", values=query_database(to_send), showStatus=False)
-
+        if request.method == 'POST':
+            storage = dict(request.form)
+            storage['title'] = storage['title'][0].split(" ")
+            storage['description'] = storage['description'][0].split(" ")
+            to_send = {}
+            for key in storage:
+                if len(storage[key]) == 1:
+                    if len(storage[key][0]) > 0:
+                        to_send[key] = u'%' + storage[key][0] + u'%'
+                else:
+                    to_send[key] = storage[key]
+            to_send['expired'] = False
+            to_send['completed'] = False
+            return render_template("homepage.html", values=query_database(to_send), showStatus=False)
     # A pretty straightforward pair of methods; if the poster calls this URL via a link on the pages, it will change
     # that value appropriately in the DB.
     @route("/mark-complete/<id>")
