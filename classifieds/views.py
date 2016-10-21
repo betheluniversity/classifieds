@@ -151,14 +151,14 @@ class View(FlaskView):
     # list that gets dealt with by the DB's search method.
     @route("/search", methods=['POST'])
     @route("/search/<category>", methods=['GET'])
-    def search(self):
+    def search(self, category=None):
         # Casted to dictionary because request.form is an ImmutableDictionary, and I need it to be mutable for the next
         # lines where I change the values
+        to_send = {}
         if request.method == 'POST':
             storage = dict(request.form)
             storage['title'] = storage['title'][0].split(" ")
             storage['description'] = storage['description'][0].split(" ")
-            to_send = {}
             for key in storage:
                 if len(storage[key]) == 1:
                     if len(storage[key][0]) > 0:
@@ -167,6 +167,9 @@ class View(FlaskView):
                     to_send[key] = storage[key]
             to_send['expired'] = False
             to_send['completed'] = False
+            return render_template("homepage.html", values=query_database(to_send), showStatus=False)
+        else:
+            to_send['categories'] = [category]
             return render_template("homepage.html", values=query_database(to_send), showStatus=False)
     # A pretty straightforward pair of methods; if the poster calls this URL via a link on the pages, it will change
     # that value appropriately in the DB.
