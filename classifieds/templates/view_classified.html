@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block internal %}
-{% if session['username'] == classified[5] %}
+{% if session['username'] == classified[5] or (classified[8] == False and classified[9] == False) %}
     <div class="viewTable">
         <table>
             <tr>
@@ -22,7 +22,7 @@
                 <td>
                     {% for cat in classified[4].split(";") %}
                         {% for word in cat.split("-") %}
-                            {{ word.capitalize() }}
+                            <a href = "/search/{{ word.capitalize }}">{{ word.capitalize() }}</a>
                             {% if cat.split("-").index(word) < cat.split("-").__len__() - 1 %}
                                 /
                             {% endif %}
@@ -37,7 +37,7 @@
                 <td>Date listed:</td><td>{{ classified[7].date() }}</td>
             </tr>
         </table>
-        {% if classified[8] == False %}
+        {% if session['username'] == classified[5] and classified[8] == False %}
             {% if classified[9] == False %}
                 <a href="{{ url_for('View:mark_complete', id = classified[0]) }}">Mark as complete</a>
             {% else %}
@@ -45,46 +45,50 @@
             {% endif %}
         {% endif %}
     </div>
-{% else %}
-    {% if classified[8] == False %}
-        {% if classified[9] == False %}
-            <div class="viewTable">
-                <table>
-                    <tr>
-                        <td>Title:</td><td class="maxWordLength">{{ classified[1] }}</td>
-                    </tr>
-                    <tr>
-                        <td class="classified_description">Description:</td><td class="maxWordLength">{{ classified[2] }}</td>
-                    </tr>
-                    <tr>
-                        <td>Price:</td><td class="maxWordLength">{{ classified[3] }}</td>
-                    </tr>
-                    <tr>
-                        <td>Categories:</td>
-                        <td>
-                            {% for cat in classified[4].split(";") %}
-                                {% for word in cat.split("-") %}
-                                    <a href = "/search/{{ word.capitalize }}">{{ word.capitalize() }}</a>
-                                    {% if cat.split("-").index(word) < cat.split("-").__len__() - 1 %}
-                                        /
-                                    {% endif %}
-                                {% endfor %}<br/>
-                            {% endfor %}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Listed by:</td><td class="maxWordLength"><a href="{{ url_for('View:view_contact', username = classified[5]) }}">{{ classified[6] }}</a></td>
-                    </tr>
-                    <tr>
-                        <td>Date listed:</td><td>{{ classified[7].date() }}</td>
-                    </tr>
-                </table>
-            </div>
-        {% else %}
-            <div>This classified has expired; it hasn't been completed in over 180 days</div>
-        {% endif %}
-    {% else %}
-        <div>This classified has been marked as completed.</div>
-    {% endif %}
+{% elif classified[8] == True %}
+    <div>This classified has been marked as completed.</div>
+{% elif classified[9] == True %}
+    <div>This classified has expired; it hasn't been completed in over 180 days</div>
+
+{#    {% if classified[8] == False %}#}
+{#        {% if classified[9] == False %}#}
+{#            <div class="viewTable">#}
+{#                <table>#}
+{#                    <tr>#}
+{#                        <td>Title:</td><td class="maxWordLength">{{ classified[1] }}</td>#}
+{#                    </tr>#}
+{#                    <tr>#}
+{#                        <td class="classified_description">Description:</td><td class="maxWordLength">{{ classified[2] }}</td>#}
+{#                    </tr>#}
+{#                    <tr>#}
+{#                        <td>Price:</td><td class="maxWordLength">{{ classified[3] }}</td>#}
+{#                    </tr>#}
+{#                    <tr>#}
+{#                        <td>Categories:</td>#}
+{#                        <td>#}
+{#                            {% for cat in classified[4].split(";") %}#}
+{#                                {% for word in cat.split("-") %}#}
+{#                                    <a href = "/search/{{ word.capitalize }}">{{ word.capitalize() }}</a>#}
+{#                                    {% if cat.split("-").index(word) < cat.split("-").__len__() - 1 %}#}
+{#                                        /#}
+{#                                    {% endif %}#}
+{#                                {% endfor %}<br/>#}
+{#                            {% endfor %}#}
+{#                        </td>#}
+{#                    </tr>#}
+{#                    <tr>#}
+{#                        <td>Listed by:</td><td class="maxWordLength"><a href="{{ url_for('View:view_contact', username = classified[5]) }}">{{ classified[6] }}</a></td>#}
+{#                    </tr>#}
+{#                    <tr>#}
+{#                        <td>Date listed:</td><td>{{ classified[7].date() }}</td>#}
+{#                    </tr>#}
+{#                </table>#}
+{#            </div>#}
+{#        {% else %}#}
+{#            <div>This classified has expired; it hasn't been completed in over 180 days</div>#}
+{#        {% endif %}#}
+{#    {% else %}#}
+{#        <div>This classified has been marked as completed.</div>#}
+{#    {% endif %}#}
 {% endif %}
 {% endblock %}
