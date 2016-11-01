@@ -22,10 +22,11 @@
                 <td>
                     {% for cat in classified[4].split(";") %}
                         {% for word in cat.split("-") %}
-                            <a href = "/search/{{ word.capitalize }}">{{ word.capitalize() }}</a>
+                            <a href = "/search/{{ word }}">{{ word.capitalize() }}
                             {% if cat.split("-").index(word) < cat.split("-").__len__() - 1 %}
                                 /
                             {% endif %}
+                            </a>
                         {% endfor %}<br/>
                     {% endfor %}
                 </td>
