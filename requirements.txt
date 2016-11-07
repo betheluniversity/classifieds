@@ -6,3 +6,4 @@ migrate
 raven[flask]
 alembic
 dataset
+blinker

@@ -2,7 +2,7 @@ import datetime
 import smtplib
 from email.mime.text import MIMEText
 
-from classifieds import db, Classifieds, Contacts
+from classifieds import db, Posts, Contacts
 from sqlalchemy import or_, desc
 
 
@@ -11,10 +11,10 @@ from sqlalchemy import or_, desc
 # or less void methods that change specific entries in the database for functionality purposes.
 
 
-def add_classified(title, description, price, categories, username):
-    new_classified = Classifieds(title=title, desc=description, price=price, categories=categories, username=username)
+def add_post(title, description, price, categories, username):
+    new_post = Posts(title=title, desc=description, price=price, categories=categories, username=username)
     try:
-        db.session.add(new_classified)
+        db.session.add(new_post)
         db.session.commit()
     except:
         return False
@@ -55,71 +55,83 @@ def update_contact(username, first_name, last_name, email, phone_number):
 
 
 def get_contact(username):
-    toReturn = Contacts.query.filter(Contacts.username.like(username)).first()
-    return [toReturn.username, toReturn.first_name, toReturn.last_name, toReturn.email, toReturn.phone_number]
+    contact = Contacts.query.filter(Contacts.username.like(username)).first()
+    to_return = {
+        'username': contact.username,
+        'first_name': contact.first_name,
+        'last_name': contact.last_name,
+        'email': contact.email,
+        'phone_number': contact.phone_number
+    }
+    return to_return
 
 
 def mark_entry_as_complete(entry_id, username):
-    entry_to_update = Classifieds.query.filter(Classifieds.id.like(entry_id)).first()
+    entry_to_update = Posts.query.filter(Posts.id.like(entry_id)).first()
     if entry_to_update.username == username or contact_is_admin(username):
         entry_to_update.completed = True
         db.session.commit()
 
 
 def mark_entry_as_active(entry_id, username):
-    entry_to_update = Classifieds.query.filter(Classifieds.id.like(entry_id)).first()
+    entry_to_update = Posts.query.filter(Posts.id.like(entry_id)).first()
     if entry_to_update.username == username or contact_is_admin(username):
         entry_to_update.dateAdded = datetime.datetime.now()
         entry_to_update.expired = False
         db.session.commit()
 
-
+# TODO: re-work this search function to work with the new categories table
 # If we want to change this over to pagination at a later date, I'm putting in commented code that should get you
 # started on it.
-def search_classifieds(title=u"%", description=u"%", categories=u"%", username=u"%", completed=u"%", expired=u"%"):
+def search_posts(title=u"%", description=u"%", categories=u"%", username=u"%", completed=u"%", expired=u"%"):
     # def search_classifieds(title=u"%", description=u"%", categories=u"%", username=u"%", completed=u"%", expired=u"%",
     #                        max_results=50, page_no=1):
     if isinstance(title, list):
-        titles = Classifieds.title.like(u'%' + title[0] + u'%')
+        titles = Posts.title.like(u'%' + title[0] + u'%')
         for term in title[1:]:
-            titles = or_(titles, Classifieds.title.like(u'%' + term + u'%'))
+            titles = or_(titles, Posts.title.like(u'%' + term + u'%'))
     else:
-        titles = Classifieds.title.like(title)
+        titles = Posts.title.like(title)
 
     if isinstance(description, list):
-        descriptions = Classifieds.description.like(u'%' + description[0] + u'%')
+        descriptions = Posts.description.like(u'%' + description[0] + u'%')
         for term in description[1:]:
-            descriptions = or_(descriptions, Classifieds.description.like(u'%' + term + u'%'))
+            descriptions = or_(descriptions, Posts.description.like(u'%' + term + u'%'))
     else:
-        descriptions = Classifieds.description.like(description)
+        descriptions = Posts.description.like(description)
 
-    if isinstance(categories, list):
-        or_categories = Classifieds.categories.like(u'%' + categories[0] + u'%')
-        for term in categories[1:]:
-            or_categories = or_(or_categories, Classifieds.categories.like(u'%' + term + u'%'))
-    else:
-        or_categories = Classifieds.categories.like(categories)
+    # if isinstance(categories, list):
+    #     or_categories = Posts.categories.like(u'%' + categories[0] + u'%')
+    #     for term in categories[1:]:
+    #         or_categories = or_(or_categories, Posts.categories.like(u'%' + term + u'%'))
+    # else:
+    #     or_categories = Posts.categories.like(categories)
 
     if completed == u"%":
-        completed = Classifieds.completed.like(completed)
+        completed = Posts.completed.like(completed)
     elif isinstance(completed, bool):
-        completed = Classifieds.completed == completed
+        completed = Posts.completed == completed
 
     if expired == u"%":
-        expired = Classifieds.expired.like(expired)
+        expired = Posts.expired.like(expired)
     elif isinstance(expired, bool):
-        expired = Classifieds.expired == expired
+        expired = Posts.expired == expired
 
-    return Classifieds.query.join(Contacts, Contacts.username == Classifieds.username).add_columns(Contacts.first_name,
-        Contacts.last_name).order_by(desc(Classifieds.dateAdded)).filter(
-            titles, descriptions, or_categories, Classifieds.username.like(username),
+    return Posts.query.join(Contacts, Contacts.username == Posts.username).add_columns(Contacts.first_name,
+        Contacts.last_name).order_by(desc(Posts.dateAdded)).filter(
+            titles, descriptions, Posts.username.like(username),
             completed, expired
     ).all()
     # ).limit(max_results).offset(max_results * (page_no - 1)).all()
 
 
+def get_category_list():
+    # TODO: implement a "SELECT * FROM CATEGORIES;" query here
+    return []
+
+
 def expire_old_posts():
-    all_entries = search_classifieds(completed=False, expired=False)
+    all_entries = search_posts(completed=False, expired=False)
     for entry in all_entries:
         now = datetime.datetime.now().date()
         then = entry.dateAdded.date()
@@ -155,7 +167,7 @@ def get_non_admins():
     to_return = []
     for na in non_admins:
         if not na.isAdmin:
-            to_return += [{'username': na.username, 'first_name': na.first_name, 'last_name': na.last_name}]
+            to_return.append({'username': na.username, 'first_name': na.first_name, 'last_name': na.last_name})
     return to_return
 
 
@@ -164,7 +176,7 @@ def get_admins():
     to_return = []
     for a in admins:
         if a.isAdmin:
-            to_return += [{'username': a.username, 'first_name': a.first_name, 'last_name': a.last_name}]
+            to_return.append({'username': a.username, 'first_name': a.first_name, 'last_name': a.last_name})
     return to_return
 
 
@@ -181,7 +193,7 @@ def remove_admin(username):
 
 
 def delete_classfieid(classified_id):
-    deleted = Classifieds.query.filter_by(id=classified_id).delete()
+    deleted = Posts.query.filter_by(id=classified_id).delete()
     db.session.commit()
     return deleted
 

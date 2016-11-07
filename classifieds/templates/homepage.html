@@ -6,10 +6,10 @@
 
 {% block internal %}
 <div>
-    <p class="page-title">Classified Postings</p>
+    <p class="page-title">Listings</p>
 
-    <p class="page-info">All of the Classified Postings.</br>
-        Choose how you would like to sort the postings, search through and contact</br>
+    <p class="page-info">All of the listings.</br>
+        Choose how you would like to sort the listings, search through and contact</br>
         who posted them to get more information.</p>
         {% if values|length == 0 %}
             <p class="noPosts">There are no active posts to show.</p>
@@ -25,7 +25,7 @@
                     <option id="priceAZ" value="sortByPrice">Price (High-Low)</option>
                     <option id="priceZA" value="reversePriceOrder">Price (Low-High)</option>
                     <option id="dateAZ" value="sortByDate">Date (Old-New)</option>
-                    <option id="dateZA" value="reverseDateOrder">Date (New-Old)</option>
+                    <option id="dateZA" value="reverseDateOrder" selected="selected">Date (New-Old)</option>
                     <option id="postedByAZ" value="sortByPostedByAZ">Author (A-Z)</option>
                     <option id="postedByZA" value="sortByPostedByZA">Author (Z-A)</option>
                 </select>
@@ -35,31 +35,31 @@
         <div id="singlePost-{{ loop.index }}" class="singlePost">
             <div class="row">
                 <div class="cell">Title: </div>
-                <div class="title cell"><a href="{{ url_for('View:view_classified', id = val[0]) }}">{{ val[1] }}</a></div>
+                <div class="title cell"><a href="{{ url_for('View:view_post', id = val['id']) }}">{{ val['title'] }}</a></div>
             </div>
             <div class="row">
                 <div class="cell">Description: </div>
-                <div class="description cell"><article>{{ val[2] }}</article></div>
+                <div class="description cell"><article>{{ val['description'] }}</article></div>
             </div>
             <div class="row">
                 <div class="cell">Price: </div>
-                <div class="price cell">{{ val[3] }}</div>
+                <div class="price cell">{{ val['price'] }}</div>
             </div>
             <div class="row">
                 <div class="cell">Date Posted: </div>
-                <div class="date cell">{{ val[4].date() }}</div>
+                <div class="date cell">{{ val['dateAdded'].date() }}</div>
             </div>
             <div class="row">
                 <div class="cell">Posted By: </div>
-                <div class="postedBy cell"><a href="{{ url_for('View:view_contact', username = val[5]) }}">{{ val[6] }}</a></div>
+                <div class="postedBy cell"><a href="{{ url_for('View:view_contact', username = val['username']) }}">{{ val['full_name'] }}</a></div>
             </div>
             {% if showStatus == True %}
                 <div class="row">
                     <div class="cell">Status:</div>
                     <div class="status cell">
-                        {% if val[7] == True %}
+                        {% if val['completed'] == True %}
                         Completed
-                        {% elif val[8] == True %}
+                        {% elif val['expired'] == True %}
                         Expired
                         {% else %}
                         Active
@@ -69,7 +69,7 @@
             {% endif %}
             {% if is_admin %}
                 <div class="row">
-                    <div class="title cell"><a class="button" href="{{ url_for('View:delete_confirm', classified_id = val[0]) }}">Delete</a></div>
+                    <div class="title cell"><a class="button" href="{{ url_for('View:delete_confirm', classified_id = val['id']) }}">Delete</a></div>
             </div>
             {% endif %}
         <hr/>

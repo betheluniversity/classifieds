@@ -3,38 +3,50 @@ import re
 from classifieds import app
 from wtforms import Form, StringField, SelectMultipleField, TextAreaField, SubmitField, validators, ValidationError
 
-from category_list import category_list
 from classifieds_controller import *
-
-
-# TODO: implement crontab expire job
-# This will run at 12:01am every night and call the URL to expire all the 180-day old posts
-# 1 0 * * * wget https://classifieds.bethel.edu/expire
-
-# Feature suggestion: upload images for a post?
 
 
 # This method gets all the active posts, sorts them from most recent to least recent, then returns them as a list to be
 # rendered
 def get_homepage():
-    entries = search_classifieds(expired=False, completed=False)
-    toSend = []
+    entries = search_posts(expired=False, completed=False)
+    to_send = []
     for entry in entries:
         if not entry[0].expired:
-            toSend += [[entry[0].id, entry[0].title, entry[0].description, entry[0].price, entry[0].dateAdded,
-                        entry[0].username, entry[1] + " " + entry[2], entry[0].completed, entry[0].expired]]
-    return toSend
+            entry_dictionary = {
+                'id': entry[0].id,
+                'title': entry[0].title,
+                'description': entry[0].description,
+                'price': entry[0].price,
+                'dateAdded': entry[0].dateAdded,
+                'username': entry[0].username,
+                'fullName': entry[1] + " " + entry[2],
+                'completed': entry[0].completed,
+                'expired': entry[0].expired
+            }
+            to_send.append(entry_dictionary)
+    return to_send
 
 
 # This method takes the unique identifier of an ad in the DB, then returns it and all its details so that the rendering
 # can be done intelligently (e.g., if the poster is viewing it, if it's expired or completed, etc.)
-def view_classified(id):
-    toReturn = Classifieds.query.filter(Classifieds.id.like(id)).first()
-    contact = Contacts.query.filter(Contacts.username.like(toReturn.username)).first()
+def view_post(id):
+    post = Posts.query.filter(Posts.id.like(id)).first()
+    contact = Contacts.query.filter(Contacts.username.like(post.username)).first()
 
-    # todo make this a dict.
-    return [toReturn.id, toReturn.title, toReturn.description, toReturn.price, toReturn.categories,
-            contact.username, contact.first_name + " " + contact.last_name, toReturn.dateAdded, toReturn.completed, toReturn.expired]
+    to_return = {
+        'id': post.id,
+        'title': post.title,
+        'description': post.description,
+        'price': post.price,
+        'dateAdded': post.dateAdded,
+        'username': post.username,
+        'fullName': contact.first_name + " " + contact.last_name,
+        'completed': post.completed,
+        'expired': post.expired
+    }
+
+    return to_return
 
 
 # This method is used for when a poster is looking at all the ads that they've posted, and allows them to sort by the
@@ -43,20 +55,30 @@ def filter_posts(username, selector):
     to_send = []
     entries = []
     if selector == "all":
-        entries = search_classifieds(username=username)
+        entries = search_posts(username=username)
     elif selector == "active":
-        entries = search_classifieds(username=username, completed=False, expired=False)
+        entries = search_posts(username=username, completed=False, expired=False)
     elif selector == "completed":
-        entries = search_classifieds(username=username, completed=True)
+        entries = search_posts(username=username, completed=True)
     elif selector == "expired":
-        entries = search_classifieds(username=username, completed=False, expired=True)
+        entries = search_posts(username=username, completed=False, expired=True)
     elif selector == "external":
-        entries = search_classifieds(username=u"%@%")
+        entries = search_posts(username=u"%@%")
 
     for entry in entries:
-        to_send += [[entry[0].id, entry[0].title, entry[0].description, entry[0].price, entry[0].dateAdded,
-                     entry[1] + " " + entry[2], entry[0].completed, entry[0].expired]]
-    to_send = sorted(to_send, key=lambda entry: entry[0])
+        entry_dictionary = {
+            'id': entry[0].id,
+            'title': entry[0].title,
+            'description': entry[0].description,
+            'price': entry[0].price,
+            'dateAdded': entry[0].dateAdded,
+            'username': entry[0].username,
+            'fullName': entry[1] + " " + entry[2],
+            'completed': entry[0].completed,
+            'expired': entry[0].expired
+        }
+        to_send.append(entry_dictionary)
+    to_send = sorted(to_send, key=lambda entry: entry['id'])
     return to_send
 
 
@@ -64,12 +86,21 @@ def filter_posts(username, selector):
 # terms. If no term is given for a certain column, it will search for the wildcard '%'. All other search terms will be
 # searched in a way so that it will do partial matches as well as full matches.
 def query_database(params):
-    entries = search_classifieds(**params)
-    toSend = []
+    entries = search_posts(**params)
+    to_send = []
     for entry in entries:
-        toSend += [[entry[0].id, entry[0].title, entry[0].description, entry[0].price, entry[0].dateAdded,
-                    entry[0].username, entry[1] + " " + entry[2]]]
-    return toSend
+        entry_dictionary = {
+            'id': entry[0].id,
+            'title': entry[0].title,
+            'price': entry[0].price,
+            'dateAdded': entry[0].dateAdded,
+            'username': entry[0].username,
+            'fullName': entry[1] + " " + entry[2],
+            'completed': entry[0].completed,
+            'expired': entry[0].expired
+        }
+        to_send.append(entry_dictionary)
+    return to_send
 
 
 # This is a custom validator that I made to make sure that they put in valid phone numbers into their Contact form
@@ -86,11 +117,11 @@ def phone_validator():
 
 
 # 2 WTForm objects that are used in rendering. Each Field in this object corresponds to the user-input columns in the DB
-class ClassifiedForm(Form):
+class PostForm(Form):
     title = StringField('Title:', [validators.DataRequired(), validators.Length(max=100)])
     description = TextAreaField('Description:', [validators.DataRequired(), validators.Length(max=1000)])
     price = StringField('Price:', [validators.DataRequired(), validators.Length(max=50)])
-    categories = SelectMultipleField('Categories:', [validators.DataRequired()], choices=category_list)
+    categories = SelectMultipleField('Categories:', [validators.DataRequired()], choices=get_category_list())
     submit = SubmitField("Submit")
 
 
@@ -100,6 +131,12 @@ class ContactForm(Form):
     email = StringField('Email address:', [validators.DataRequired(), validators.Email()])
     phone_number = StringField('Phone Number:', [validators.DataRequired(), phone_validator()])
     submit = SubmitField("Update")
+
+
+class CategoryForm(Form):
+    category_html = StringField('HTML version of the category:', [validators.DataRequired(), validators.Length(max=50)])
+    category_human = StringField('Human-friendly version of the category:', [validators.DataRequired(), validators.Length(max=50)])
+    submit = SubmitField("Submit")
 
 
 # A temporary method for the early stages of the new website so that users have a convenient way to provide feedback

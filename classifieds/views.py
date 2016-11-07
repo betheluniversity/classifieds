@@ -1,5 +1,5 @@
-from forms import get_homepage, view_classified, filter_posts, query_database, \
-    send_feedback_email, ClassifiedForm, ContactForm
+from forms import get_homepage, view_post, filter_posts, query_database, \
+    send_feedback_email, PostForm, ContactForm
 from classifieds_controller import *
 from flask import request, render_template, session, redirect, abort
 from flask.ext.classy import FlaskView, route
@@ -16,27 +16,37 @@ class View(FlaskView):
         return render_template("homepage.html", values=get_homepage(), showStatus=False, is_admin=is_admin)
 
     # This URL is only for rendering to a channel in BLink
-    @route("/blink-classifieds")
-    def blink_classifieds(self):
+    @route("/blink-posts")
+    def blink_posts(self):
         return render_template("blink_template.html", values=get_homepage(), showStatus=False)
 
     # This URL is to get the classified ad form so that the user can fill it out and submit it to the DB
-    @route("/add-classified")
-    def add_classified(self):
+    @route("/add-post")
+    def add_post(self):
         if contact_exists_in_db(session['username']):
-            return render_template("classified_form.html", form=ClassifiedForm(), external_submission=False)
+            return render_template("post_form.html", form=PostForm(), external_submission=False)
         else:
-            error_message = "You don't exist in the contacts database yet, and as such you cannot submit a classified."
+            error_message = "You don't exist in the contacts database yet, and as such you cannot submit a post."
             return render_template("error_page.html", error=error_message)
 
     @route("/add-external")
-    def add_external_classified(self):
+    def add_external_post(self):
         if contact_exists_in_db(session['username']):
             if not contact_is_admin(session['username']):
                 return abort(404)
-            return render_template("classified_form.html", form=ClassifiedForm(), external_submission=True)
+            return render_template("post_form.html", form=PostForm(), external_submission=True)
         else:
-            error_message = "You don't exist in the contacts database yet, and as such you cannot submit a classified."
+            error_message = "You don't exist in the contacts database yet, and as such you cannot submit a post."
+            return render_template("error_page.html", error=error_message)
+
+    @route("/add-category")
+    def add_new_category(self):
+        if contact_exists_in_db(session['username']):
+            if not contact_is_admin(session['username']):
+                return abort(404)
+            return render_template("category_form.html", form=CategoryForm(), external_submission=True)
+        else:
+            error_message = "You don't exist in the contacts database yet, and as such you cannot submit a post."
             return render_template("error_page.html", error=error_message)
 
     # Because their contact entry in the DB should be added automatically by the init_user function the first time they
@@ -55,13 +65,13 @@ class View(FlaskView):
 
     # This is a post method that takes the classified form's contents, parses them, validates, and if it passes, it adds
     # it to the DB and then returns to the page if it was successful or not.
-    @route("/submit-ad", methods=['POST'])
-    def submit_ad(self):
+    @route("/submit", methods=['POST'])
+    def submit_post(self):
         form_contents = request.form
-        form = ClassifiedForm(form_contents)
+        form = PostForm(form_contents)
         isValid = form.validate()
         if not isValid:
-            return render_template("classified_form.html", form=form)
+            return render_template("post_form.html", form=form)
         storage = {}
         for key in form_contents:
             if key == "submit":
@@ -76,11 +86,12 @@ class View(FlaskView):
                 parsed_values = raw_values[0]
             storage[key] = parsed_values
         if not contact_exists_in_db(storage['submitters_username']):
-            return render_template("classified_form.html", form=form)
+            error_message = "You don't exist in the contacts database yet, and as such you cannot submit a post."
+            return render_template("error_page.html", error=error_message)
         # Add that object to the database
-        add_classified(storage['title'], storage['description'], storage['price'], storage['categories'],
+        add_post(storage['title'], storage['description'], storage['price'], storage['categories'],
                        storage['submitters_username'])
-        message = "Classified ad successfully posted!"
+        message = "Post successfully submitted!"
         return render_template("confirmation_page.html", message=message)
 
     # Similarly to submit_ad, this method parses the contact form's contents, validates, and updates the DB's entry for
@@ -106,12 +117,12 @@ class View(FlaskView):
 
     # This method is pretty straightforward, just checks if the id they're requesting exists. If it does, it renders it.
     # The render itself takes care of the ad's expired/completed status, if it's the original poster, etc.
-    @route("/view-classified/<id>")
-    def view_classified(self, id):
-        if classified_exists_in_db(id):
-            return render_template("view_classified.html", classified=view_classified(id))
+    @route("/view-post/<id>")
+    def view_post(self, id):
+        if post_exists_in_db(id):
+            return render_template("view_post.html", classified=view_post(id))
         else:
-            error_message = "That classified id number doesn't exist in the classifieds database."
+            error_message = "That post id number doesn't exist in the posts database."
             return render_template("error_page.html", error=error_message)
 
     # Similarly to viewClassified, this method checks if the username exists. If it does, it has the render function do
@@ -188,7 +199,7 @@ class View(FlaskView):
         return redirect("https://auth.bethel.edu/cas/logout")
 
     @route("/manage-privileges")
-    def manage_admins(self):
+    def manage_privileges(self):
         # TODO: I'd like to make the table in this form sortable, like the main page.
         if not contact_is_admin(session['username']):
             return abort(404)
@@ -224,19 +235,19 @@ class View(FlaskView):
         else:
             return abort(404)
 
-    @route("/delete-confirm/<classified_id>")
-    def delete_confirm(self, classified_id):
+    @route("/delete-confirm/<post_id>")
+    def delete_confirm(self, post_id):
         if not contact_is_admin(session['username']):
             return abort(404)
-        return render_template('delete-confirm.html', classified_id=classified_id,
-                               classified=view_classified(classified_id))
+        return render_template('delete-confirm.html', post_id=post_id,
+                               post=view_post(post_id))
 
-    @route("/delete-classified/<classified_id>")
-    def delete_classified(self, classified_id):
+    @route("/delete-post/<post_id>")
+    def delete_post(self, post_id):
         if not contact_is_admin(session['username']):
             return abort(404)
 
-        delete_classfieid(classified_id)
+        delete_classfieid(post_id)
 
         return redirect('/')
 

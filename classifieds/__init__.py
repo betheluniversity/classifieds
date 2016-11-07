@@ -7,22 +7,18 @@ from flask.ext.sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.config.from_object('config')
+app.config.from_object('app_settings')
 db = SQLAlchemy(app)
 
 from raven.contrib.flask import Sentry
 sentry = Sentry(app, dsn=app.config['SENTRY_URL'])
 
-# TODO: maybe change the external post submission email field to a dropdown list of external emails?
-# TODO: add a way to view by category, so that when someone is viewing a post, they can click on the category it was
-#       posted in and view similar posts
 
-
-class Classifieds(db.Model):
+class Posts(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
     description = db.Column(db.String(1000), nullable=False)
     price = db.Column(db.String(50), nullable=False)
-    categories = db.Column(db.String(200), nullable=False)
     username = db.Column(db.String(30), db.ForeignKey('contacts.username'))
     dateAdded = db.Column(db.DateTime, nullable=False)
     completed = db.Column(db.Boolean, nullable=False)
@@ -60,6 +56,29 @@ class Contacts(db.Model):
 
     def __repr__(self):
         return "<Contact %s>" % self.username
+
+
+class Categories(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    categoryForHtml = db.Column(db.String(50), nullable=False)
+    categoryForHumans = db.Column(db.String(50), nullable=False)
+
+    def __init__(self, category_html, category_human):
+        self.categoryForHtml = category_html
+        self.categoryForHumans = category_human
+
+    def __repr__(self):
+        return "<Category '%s'>" % self.categoryForHumans
+
+
+class PostCategories(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    postId = db.Column(db.Integer, db.ForeignKey('posts.id'))
+    categoryId = db.Column(db.Integer, db.ForeignKey('categories.id'))
+
+    def __init__(self, post_id, category_id):
+        self.postId = post_id
+        self.categoryId = category_id
 
 
 # This import needs to be after app and db's creation, as they get imported into views.py, from which this imports.

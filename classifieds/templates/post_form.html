@@ -1,0 +1,47 @@
+{% extends "classifieds_base.html" %}
+
+{% block subpage_title %}
+    | Submit a new post
+{% endblock %}
+
+{% block internal %}
+<div>
+    <p class="page-title">Submit a Posting</p>
+    {% if external_submission %}
+    <p class="page-info">Submit someone else's post.</br>
+    {% else %}
+    <p class="page-info">Submit your own post.</br>
+    {% endif %}
+        Please be as descriptive as possible to help viewers find and understand the posting.</br>
+        All postings will automatically expire in 180 days.</p>
+
+        {% if form.errors %}
+            <span class="error">There were errors with the form submission.</span>
+        {% endif %}
+
+    <p class="note">
+    {#    <span class="warning"> Postings will expire in 180 days</span></br>#}
+        <span class="star">* </span><span class="warning"> All fields are required</span>
+    </p>
+
+    <form id="post" method="POST" action="/submit-ad">
+        {% if external_submission %}
+        <label for="submitters_username">Email of external poster:</label>
+        <input type="text" id="submitters_username" name="submitters_username"/>
+        {% else %}
+        <input type="hidden" name="submitters_username" value="{{ session['username'] }}"/>
+        {% endif %}
+        <label for="title">Title:</label><input type="text" name="title" id="title">
+        <label for="description">Description:</label>
+            <textarea type="text" name="description" id="description"></textarea>
+        <label for="price">Price (start with a '$'):</label><input type="text" name="price" id="price">
+        <label for="categories">Categories (select multiple if needed): </label>
+        <select name="categories" id="categories" class="largeselect" style="height:auto;" name="categories" multiple="">
+            {% for category_pair in categories %}
+            <option value="{{ category_pair['category_html'] }}">{{ category_pair['category_human'] }}</option>
+            {% endfor %}
+        </select><br>
+        <input type="submit" value="Submit"/>
+    </form>
+</div>
+{% endblock %}
