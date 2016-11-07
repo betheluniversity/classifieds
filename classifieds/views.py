@@ -169,6 +169,8 @@ class View(FlaskView):
             to_send['completed'] = False
             return render_template("homepage.html", values=query_database(to_send), showStatus=False)
         else:
+            to_send['expired'] = False
+            to_send['completed'] = False
             to_send['categories'] = [category]
             return render_template("homepage.html", values=query_database(to_send), showStatus=False)
     # A pretty straightforward pair of methods; if the poster calls this URL via a link on the pages, it will change
