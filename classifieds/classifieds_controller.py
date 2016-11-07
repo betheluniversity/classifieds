@@ -22,7 +22,23 @@ def add_classified(title, description, price, categories, username):
 
 
 def add_contact(username, first_name, last_name, email, phone_number):
-    # If the username is already in here, it should update the rest of the info.
+    # If the username is already in here, it should fail.
+    try:
+        existing_info = Contacts.query.filter(Contacts.username.like(username)).first()
+        if existing_info is None:
+            new_contact = Contacts(username=username, first=first_name, last=last_name, email=email,
+                                   phone=phone_number)
+            db.session.add(new_contact)
+            db.session.commit()
+            return True
+        else:
+            return False
+    except:
+        return False
+
+
+def update_contact(username, first_name, last_name, email, phone_number):
+    # If the username is not already in here, it should fail
     try:
         existing_info = Contacts.query.filter(Contacts.username.like(username)).first()
         if existing_info is not None:
@@ -30,14 +46,12 @@ def add_contact(username, first_name, last_name, email, phone_number):
             existing_info.last_name = last_name
             existing_info.email = email
             existing_info.phone_number = phone_number
+            db.session.commit()
+            return True
         else:
-            new_contact = Contacts(username=username, first=first_name, last=last_name, email=email,
-                                   phone=phone_number)
-            db.session.add(new_contact)
-        db.session.commit()
+            return False
     except:
         return False
-    return True
 
 
 def get_contact(username):

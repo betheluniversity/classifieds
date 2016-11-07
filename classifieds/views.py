@@ -100,7 +100,7 @@ class View(FlaskView):
             message = "External contact information successfully added!"
             return render_template("confirmation_page.html", message=message)
         else:
-            add_contact(session['username'], storage['first_name'], storage['last_name'], storage['email'],
+            update_contact(session['username'], storage['first_name'], storage['last_name'], storage['email'],
                         storage['phone_number'])
             message = "Contact information successfully updated!"
             return render_template("confirmation_page.html", message=message)
