@@ -155,6 +155,8 @@ class View(FlaskView):
         # Casted to dictionary because request.form is an ImmutableDictionary, and I need it to be mutable for the next
         # lines where I change the values
         to_send = {}
+        to_send['expired'] = False
+        to_send['completed'] = False
         if request.method == 'POST':
             storage = dict(request.form)
             storage['title'] = storage['title'][0].split(" ")
@@ -165,14 +167,10 @@ class View(FlaskView):
                         to_send[key] = u'%' + storage[key][0] + u'%'
                 else:
                     to_send[key] = storage[key]
-            to_send['expired'] = False
-            to_send['completed'] = False
-            return render_template("homepage.html", values=query_database(to_send), showStatus=False)
         else:
-            to_send['expired'] = False
-            to_send['completed'] = False
             to_send['categories'] = [category]
-            return render_template("homepage.html", values=query_database(to_send), showStatus=False)
+        return render_template("homepage.html", values=query_database(to_send), showStatus=False)
+
     # A pretty straightforward pair of methods; if the poster calls this URL via a link on the pages, it will change
     # that value appropriately in the DB.
     @route("/mark-complete/<id>")
