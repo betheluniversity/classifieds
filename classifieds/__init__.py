@@ -1,88 +1,21 @@
 import ast
-import datetime
 import urllib2
-
 from flask import Flask, session, request, current_app
 from flask_sqlalchemy import SQLAlchemy
+from raven.contrib.flask import Sentry
+
 
 app = Flask(__name__)
 app.config.from_object('config')
 app.config.from_object('app_settings')
 db = SQLAlchemy(app)
-
-from raven.contrib.flask import Sentry
 sentry = Sentry(app, dsn=app.config['SENTRY_URL'])
 
 
-class Posts(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(100), nullable=False)
-    description = db.Column(db.String(1000), nullable=False)
-    price = db.Column(db.String(50), nullable=False)
-    username = db.Column(db.String(30), db.ForeignKey('contacts.username'))
-    dateAdded = db.Column(db.DateTime, nullable=False)
-    completed = db.Column(db.Boolean, nullable=False)
-    expired = db.Column(db.Boolean, nullable=False)
-
-    def __init__(self, title, desc, price, categories, username):
-        self.title = title
-        self.description = desc
-        self.price = price
-        self.categories = categories
-        self.username = username
-        self.dateAdded = datetime.datetime.now()
-        self.completed = False
-        self.expired = False
-
-    def __repr__(self):
-        return "<Classified #%(0)s: %(1)s>" % {'0': self.id, '1': self.title}
-
-
-class Contacts(db.Model):
-    username = db.Column(db.String(30), primary_key=True)
-    first_name = db.Column(db.String(20), nullable=False)
-    last_name = db.Column(db.String(30), nullable=False)
-    email = db.Column(db.String(50), nullable=False)
-    phone_number = db.Column(db.String(15), nullable=False)
-    isAdmin = db.Column(db.Boolean, nullable=False, default=False)
-
-    def __init__(self, username, first, last, email, phone):
-        self.username = username
-        self.first_name = first
-        self.last_name = last
-        self.email = email
-        self.phone_number = phone
-        self.isAdmin = False
-
-    def __repr__(self):
-        return "<Contact %s>" % self.username
-
-
-class Categories(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    categoryForHtml = db.Column(db.String(50), nullable=False)
-    categoryForHumans = db.Column(db.String(50), nullable=False)
-
-    def __init__(self, category_html, category_human):
-        self.categoryForHtml = category_html
-        self.categoryForHumans = category_human
-
-    def __repr__(self):
-        return "<Category '%s'>" % self.categoryForHumans
-
-
-class PostCategories(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    postId = db.Column(db.Integer, db.ForeignKey('posts.id'))
-    categoryId = db.Column(db.Integer, db.ForeignKey('categories.id'))
-
-    def __init__(self, post_id, category_id):
-        self.postId = post_id
-        self.categoryId = category_id
-
-
 # This import needs to be after app and db's creation, as they get imported into views.py, from which this imports.
-from classifieds.views import View
+from models import Contacts
+from views import View
+from controller import contact_is_admin
 View.register(app)
 
 
@@ -116,9 +49,6 @@ def init_user():
                                email=username + "@bethel.edu", phone="")
         db.session.add(new_contact)
         db.session.commit()
-
-
-from classifieds_controller import contact_is_admin
 
 
 def is_user_admin():

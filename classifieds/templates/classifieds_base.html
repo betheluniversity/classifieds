@@ -36,8 +36,8 @@
                                     Functions
                                 </button>
                                 <div class="dropdown-content dropdown-content-admin">
-                                    <a href="{{ url_for('View:manage_admins') }}">Manage user privilege levels</a>
-                                    <a href="{{ url_for('View:add_category') }}">Add a new category</a>
+                                    <a href="{{ url_for('View:manage_privileges') }}">Manage user privilege levels</a>
+                                    <a href="{{ url_for('View:add_new_category') }}">Add a new category</a>
                                     <a href="{{ url_for('View:add_external_contact') }}">Add a non-BCA contact</a>
                                     <a href="{{ url_for('View:add_external_post') }}">Submit a non-BCA user's
                                         post</a>
@@ -60,7 +60,7 @@
                         {% endif %}
                     </li>
                     <li>
-                        {% if '/add-classified' in request.path %}
+                        {% if '/add-post' in request.path %}
                             <a href="{{ url_for('View:add_post') }}" class="button active">Submit</a>
                         {% else %}
                             <a href="{{ url_for('View:add_post') }}" class="button">Submit</a>
@@ -69,10 +69,10 @@
                     <li>
                         {% if '/view-posted/' in request.path %}
                             <a href="{{ url_for('View:view_posted', selector = 'active') }}" class="button active">My
-                                Classifieds</a>
+                                Listings</a>
                         {% else %}
                             <a href="{{ url_for('View:view_posted', selector = 'active') }}" class="button">My
-                                Classifieds</a>
+                                Listings</a>
                         {% endif %}
                     </li>
                 </ul>

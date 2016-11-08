@@ -1,0 +1,71 @@
+import datetime
+from classifieds import db
+
+
+class Posts(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100), nullable=False)
+    description = db.Column(db.String(1000), nullable=False)
+    price = db.Column(db.String(50), nullable=False)
+    username = db.Column(db.String(30), db.ForeignKey('contacts.username'))
+    date_added = db.Column(db.DateTime, nullable=False)
+    completed = db.Column(db.Boolean, nullable=False)
+    expired = db.Column(db.Boolean, nullable=False)
+
+    def __init__(self, title, desc, price, username):
+        self.title = title
+        self.description = desc
+        self.price = price
+        self.username = username
+        self.date_added = datetime.datetime.now()
+        self.completed = False
+        self.expired = False
+
+    def __repr__(self):
+        return "<Post #%(0)s: %(1)s>" % {'0': self.id, '1': self.title}
+
+
+class Contacts(db.Model):
+    username = db.Column(db.String(30), primary_key=True)
+    first_name = db.Column(db.String(20), nullable=False)
+    last_name = db.Column(db.String(30), nullable=False)
+    email = db.Column(db.String(50), nullable=False)
+    phone_number = db.Column(db.String(15), nullable=False)
+    is_admin = db.Column(db.Boolean, nullable=False, default=False)
+
+    def __init__(self, username, first, last, email, phone):
+        self.username = username
+        self.first_name = first
+        self.last_name = last
+        self.email = email
+        self.phone_number = phone
+        self.is_admin = False
+
+    def __repr__(self):
+        return "<Contact %s>" % self.username
+
+
+class Categories(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    category_for_html = db.Column(db.String(50), nullable=False)
+    category_for_humans = db.Column(db.String(50), nullable=False)
+
+    def __init__(self, category_html, category_human):
+        self.category_for_html = category_html
+        self.category_for_humans = category_human
+
+    def __repr__(self):
+        return "<Category '%s'>" % self.category_for_humans
+
+
+class PostCategories(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    post_id = db.Column(db.Integer, db.ForeignKey('posts.id'))
+    category_id = db.Column(db.Integer, db.ForeignKey('categories.id'))
+
+    def __init__(self, new_post_id, new_category_id):
+        self.post_id = new_post_id
+        self.category_id = new_category_id
+
+    def __repr__(self):
+        return "<Post #%(0)s => Category #%(1)s>" % {'0': self.post_id, '1': self.category_id}

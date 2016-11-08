@@ -47,7 +47,7 @@
             </div>
             <div class="row">
                 <div class="cell">Date Posted: </div>
-                <div class="date cell">{{ val['dateAdded'].date() }}</div>
+                <div class="date cell">{{ val['date_added'].date() }}</div>
             </div>
             <div class="row">
                 <div class="cell">Posted By: </div>
@@ -69,7 +69,7 @@
             {% endif %}
             {% if is_admin %}
                 <div class="row">
-                    <div class="title cell"><a class="button" href="{{ url_for('View:delete_confirm', classified_id = val['id']) }}">Delete</a></div>
+                    <div class="title cell"><a class="button" href="{{ url_for('View:delete_confirm', post_id = val['id']) }}">Delete</a></div>
             </div>
             {% endif %}
         <hr/>

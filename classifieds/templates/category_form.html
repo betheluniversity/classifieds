@@ -9,14 +9,8 @@
     {% if form.errors %}
         <span class="error">There were errors with your form submission.</span>
     {% endif %}
-<p class="note">
-    Note: Any information put in here will be publicly viewable by anyone else using this website. This is done so
-    that if someone wants to contact you about an ad you post, they can view your info here.<br>
-    <span class="star">* </span><span class="warning"> All fields are required</span>
-</p>
 
-    <form id="contact" method="POST" action="/submit-contact">
-        <input type="hidden" name="external" value="{{ external }}"/>
+    <form id="contact" method="POST" action="/submit-category">
 {% for field in form if field.widget.input_type != 'hidden' %}
     <div>
     {% if field.type != "SubmitField" %}

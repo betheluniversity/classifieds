@@ -1,6 +1,5 @@
-from forms import get_homepage, view_post, filter_posts, query_database, \
-    send_feedback_email, PostForm, ContactForm
-from classifieds_controller import *
+from forms import *
+from controller import *
 from flask import request, render_template, session, redirect, abort
 from flask_classy import FlaskView, route
 
@@ -13,7 +12,6 @@ class View(FlaskView):
     # This method doesn't need the actual word index; just the base URL will work to return the homepage
     def index(self):
         is_admin = contact_is_admin(session['username'])
-
         return render_template("homepage.html", values=get_homepage(), showStatus=False, is_admin=is_admin)
 
     # This URL is only for rendering to a channel in BLink
@@ -25,7 +23,8 @@ class View(FlaskView):
     @route("/add-post")
     def add_post(self):
         if contact_exists_in_db(session['username']):
-            return render_template("post_form.html", form=PostForm(), external_submission=False)
+            return render_template("post_form.html", form=PostForm(), categories=get_category_list(),
+                                   external_submission=False)
         else:
             error_message = "You don't exist in the contacts database yet, and as such you cannot submit a post."
             return render_template("error_page.html", error=error_message)
@@ -66,34 +65,31 @@ class View(FlaskView):
 
     # This is a post method that takes the classified form's contents, parses them, validates, and if it passes, it adds
     # it to the DB and then returns to the page if it was successful or not.
-    @route("/submit", methods=['POST'])
+    @route("/submit-post", methods=['POST'])
     def submit_post(self):
         form_contents = request.form
         form = PostForm(form_contents)
-        isValid = form.validate()
-        if not isValid:
+        is_valid = form.validate()
+        if not is_valid:
             return render_template("post_form.html", form=form)
-        storage = {}
-        for key in form_contents:
-            if key == "submit":
-                continue
-            raw_values = form_contents.getlist(key)
-            if len(raw_values) > 1:
-                parsed_values = ""
-                for val in raw_values:
-                    parsed_values += val + ";"
-                parsed_values = parsed_values[:-1]  # Remove last semicolon; unnecessary
-            else:
-                parsed_values = raw_values[0]
-            storage[key] = parsed_values
-        if not contact_exists_in_db(storage['submitters_username']):
+        data_for_new_post = {
+            'username': form_contents.get('submitters_username'),
+            'title': form_contents.get('title'),
+            'description': form_contents.get('description'),
+            'price': form_contents.get('price'),
+            'categories_list': form_contents.getlist('categories')
+        }
+        if not contact_exists_in_db(data_for_new_post['username']):
             error_message = "You don't exist in the contacts database yet, and as such you cannot submit a post."
             return render_template("error_page.html", error=error_message)
-        # Add that object to the database
-        add_post(storage['title'], storage['description'], storage['price'], storage['categories'],
-                       storage['submitters_username'])
-        message = "Post successfully submitted!"
-        return render_template("confirmation_page.html", message=message)
+
+        successfully_submitted = add_post(**data_for_new_post)
+        if successfully_submitted:
+            message = "Post successfully submitted!"
+            return render_template("confirmation_page.html", message=message)
+        else:
+            error_message = "The post did not get added correctly. Please try again."
+            return render_template("error_page.html", error=error_message)
 
     # Similarly to submit_ad, this method parses the contact form's contents, validates, and updates the DB's entry for
     # the user.
@@ -105,7 +101,7 @@ class View(FlaskView):
         if not isValid:
             return render_template("contact_form.html", form=form)
         # Add that object to the database
-        if storage['external'] == 'True':  # this is a string of a boolean because its coming form the form.
+        if storage['external'] == 'True':  # this is a string of a boolean because its coming from the form.
             add_contact(storage['email'], storage['first_name'], storage['last_name'], storage['email'],
                         storage['phone_number'])
             message = "External contact information successfully added!"
@@ -116,12 +112,23 @@ class View(FlaskView):
             message = "Contact information successfully updated!"
             return render_template("confirmation_page.html", message=message)
 
+    @route("/submit-category", methods=['POST'])
+    def submit_category(self):
+        storage = request.form
+        form = CategoryForm(storage)
+        isValid = form.validate()
+        if not isValid:
+            return render_template("category_form.html", form=form)
+        add_category(storage['category_html'], storage['category_human'])
+        message = "Category successfully added!"
+        return render_template("confirmation_page.html", message=message)
+
     # This method is pretty straightforward, just checks if the id they're requesting exists. If it does, it renders it.
     # The render itself takes care of the ad's expired/completed status, if it's the original poster, etc.
     @route("/view-post/<id>")
     def view_post(self, id):
         if post_exists_in_db(id):
-            return render_template("view_post.html", classified=view_post(id))
+            return render_template("view_post.html", post=view_post(id), categories=get_post_categories(id))
         else:
             error_message = "That post id number doesn't exist in the posts database."
             return render_template("error_page.html", error=error_message)
@@ -154,7 +161,7 @@ class View(FlaskView):
     # Really straightforward method, simply renders the search page.
     @route("/search-page")
     def search_page(self):
-        return render_template("search_page.html")
+        return render_template("search_page.html", categories=get_category_list())
 
     # This method does a bit of work in preparation of the DB query; it creates a dictionary of search terms that are
     # keyed to match the keyword arguments of the DB search method in forms. If they're searching for a single word,
@@ -163,21 +170,19 @@ class View(FlaskView):
     @route("/search", methods=['POST'])
     @route("/search/<category>", methods=['GET'])
     def search(self, category=None):
-        # Casted to dictionary because request.form is an ImmutableDictionary, and I need it to be mutable for the next
-        # lines where I change the values
-        to_send = {}
-        to_send['expired'] = False
-        to_send['completed'] = False
+        to_send = {
+            'expired': False,
+            'completed': False
+        }
         if request.method == 'POST':
-            storage = dict(request.form)
-            storage['title'] = storage['title'][0].split(" ")
-            storage['description'] = storage['description'][0].split(" ")
-            for key in storage:
-                if len(storage[key]) == 1:
-                    if len(storage[key][0]) > 0:
-                        to_send[key] = u'%' + storage[key][0] + u'%'
-                else:
-                    to_send[key] = storage[key]
+            storage = request.form
+            if len(storage['title']) > 0:
+                to_send['title'] = [u"%" + word + u"%" for word in storage['title'].split(" ")]
+            if len(storage['description']) > 0:
+                to_send['description'] = [u"%" + word + u"%" for word in storage['description'].split(" ")]
+            category_list = storage.getlist('categories')
+            if len(category_list) > 0:
+                to_send['categories'] = category_list
         else:
             to_send['categories'] = [category]
         return render_template("homepage.html", values=query_database(to_send), showStatus=False)
@@ -244,7 +249,7 @@ class View(FlaskView):
     def delete_confirm(self, post_id):
         if not contact_is_admin(session['username']):
             return abort(404)
-        return render_template('delete-confirm.html', post_id=post_id,
+        return render_template('delete_confirm.html', post_id=post_id,
                                post=view_post(post_id))
 
     @route("/delete-post/<post_id>")
@@ -252,7 +257,7 @@ class View(FlaskView):
         if not contact_is_admin(session['username']):
             return abort(404)
 
-        delete_classfieid(post_id)
+        delete_post(post_id)
 
         return redirect('/')
 

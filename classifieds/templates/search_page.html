@@ -15,24 +15,9 @@
         <label for="description">Description contains:</label><input type="text" name="description" id="description">
         <label for="categories">In any of these categories:</label>
         <select name="categories" id="categories" class="largeselect" style="height:auto;" name="categories" multiple="">
-            <option value="appliances">Appliances</option>
-            <option value="baby-kids">Baby/Kids Items</option>
-            <option value="books">Books</option>
-            <option value="cds-dvds">CDs/DVDs</option>
-            <option value="cars-trucks">Cars/Trucks</option>
-            <option value="clothes-accessories">Clothes/Accessories</option>
-            <option value="computer">Computer</option>
-            <option value="electronics">Electronics</option>
-            <option value="furniture">Furniture</option>
-            <option value="general">General</option>
-            <option value="housing">Housing</option>
-            <option value="jewelry">Jewelry</option>
-            <option value="musical-instruments">Musical Instruments</option>
-            <option value="photo-video">Photo/Video</option>
-            <option value="tickets">Tickets</option>
-            <option value="tools">Tools</option>
-            <option value="toys-games">Toys/Games</option>
-            <option value="video-gaming">Video Gaming</option>
+            {% for category_pair in categories %}
+            <option value="{{ category_pair['category_html'] }}">{{ category_pair['category_human'] }}</option>
+            {% endfor %}
         </select><br>
         <input type="submit" value="Search"/>
     </form>
