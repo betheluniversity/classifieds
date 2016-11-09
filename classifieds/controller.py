@@ -2,10 +2,10 @@ import datetime
 import smtplib
 from collections import OrderedDict
 from email.mime.text import MIMEText
+from sqlalchemy import asc, desc, or_
 
 from classifieds import app, db
 from models import Posts, Contacts, Categories, PostCategories
-from sqlalchemy import asc, desc, or_
 
 
 # In general, these methods simply enable loose coupling between the database and the server. Some take in the
@@ -16,12 +16,12 @@ from sqlalchemy import asc, desc, or_
 #                                                    Alter Posts                                                      #
 #######################################################################################################################
 
-def add_post(title, description, price, username, categories_list):
+def add_post(new_title, new_description, new_price, username, new_categories_list):
     try:
-        new_post = Posts(title=title, desc=description, price=price, username=username)
+        new_post = Posts(title=new_title, desc=new_description, price=new_price, username=username)
         db.session.add(new_post)
         new_post_id = Posts.query.order_by(desc(Posts.id)).first().id
-        for category in categories_list:
+        for category in new_categories_list:
             category_id = Categories.query.filter(Categories.category_for_html == category).first().id
             row_to_add = PostCategories(new_category_id=category_id, new_post_id=new_post_id)
             db.session.add(row_to_add)
@@ -39,7 +39,7 @@ def mark_entry_as_complete(entry_id, username):
         db.session.commit()
 
 
-def mark_entry_as_active(entry_id, username):
+def renew_entry(entry_id, username):
     entry_to_update = Posts.query.filter(Posts.id.like(entry_id)).first()
     if entry_to_update.username == username or contact_is_admin(username):
         entry_to_update.date_added = datetime.datetime.now()
@@ -48,9 +48,9 @@ def mark_entry_as_active(entry_id, username):
 
 
 def expire_old_posts():
-    all_entries = search_posts(completed=False, expired=False)
-    for key in all_entries:
-        entry = all_entries[key]['post']
+    all_active_entries = search_posts(completed=False, expired=False)
+    for key in all_active_entries:
+        entry = all_active_entries[key]['post']
         now = datetime.datetime.now().date()
         then = entry.date_added.date()
         if (now - then).days >= 180:
@@ -70,8 +70,6 @@ def delete_post(post_id):
 #######################################################################################################################
 
 
-# This method takes the unique identifier of an ad in the DB, then returns it and all its details so that the rendering
-# can be done intelligently (e.g., if the poster is viewing it, if it's expired or completed, etc.)
 def view_post(post_id):
     post = Posts.query.filter(Posts.id.like(post_id)).first()
     contact = Contacts.query.filter(Contacts.username.like(post.username)).first()
@@ -89,8 +87,8 @@ def view_post(post_id):
 
 
 def post_exists_in_db(post_id):
-    # TODO: use syntax like delete_post method
-    return len(list(Posts.query.filter(Posts.id.like(post_id)).all())) > 0
+    posts = Posts.query(Posts.id.like(post_id)).all()
+    return len(list(posts)) > 0
 
 
 #######################################################################################################################
@@ -162,7 +160,8 @@ def get_contact(username):
 
 
 def contact_exists_in_db(username):
-    return len(list(Contacts.query.filter(Contacts.username.like(username)).all())) > 0
+    contacts = Contacts.query.filter(Contacts.username.like(username)).all()
+    return len(list(contacts)) > 0
 
 
 def contact_is_admin(username):
@@ -170,21 +169,15 @@ def contact_is_admin(username):
 
 
 def get_non_admins():
-    non_admins = Contacts.query.all()
-    to_return = []
-    for na in non_admins:
-        if not na.is_admin:
-            to_return.append({'username': na.username, 'first_name': na.first_name, 'last_name': na.last_name})
-    return to_return
+    non_admins = Contacts.query.filter(not Contacts.is_admin).all()
+    return [{'username': na.username, 'first_name': na.first_name, 'last_name': na.last_name}
+            for na in non_admins]
 
 
 def get_admins():
-    admins = Contacts.query.all()
-    to_return = []
-    for a in admins:
-        if a.is_admin:
-            to_return.append({'username': a.username, 'first_name': a.first_name, 'last_name': a.last_name})
-    return to_return
+    admins = Contacts.query.filter(Contacts.is_admin).all()
+    return [{'username': a.username, 'first_name': a.first_name, 'last_name': a.last_name}
+            for a in admins]
 
 
 #######################################################################################################################
@@ -240,19 +233,28 @@ def get_post_categories(post_id):
 def search_posts(title=[u"%"], description=[u"%"], categories=[u"%"], username=u"%", completed=u"%", expired=u"%",
                  sort_date_descending=True):
     # def search_classifieds(title=u"%", description=u"%", categories=u"%", username=u"%", completed=u"%", expired=u"%",
-    #                        max_results=50, page_no=1):
+    #                        sort_date_descending=True, max_results=50, page_no=1):
+
+    # There's always a list of titles; by default it's only the wildcard, but this will search for any title that
+    # contains any word in the list
     titles = Posts.title.like(title[0])
     for term in title[1:]:
         titles = or_(titles, Posts.title.like(term))
 
+    # Similar to title, description searches for wildcard by default, but can search for any descriptions that contain
+    # any word in its list
     descriptions = Posts.description.like(description[0])
     for term in description[1:]:
         descriptions = or_(descriptions, Posts.description.like(term))
 
+    # This filter functions similarly to title and description, but instead searches for exact matches between any of
+    # the html_categories passed in by the list and the Categories table
     or_categories = Categories.category_for_html.like(categories[0])
     for term in categories[1:]:
         or_categories = or_(or_categories, Categories.category_for_html.like(term))
 
+    # If a boolean value is specified, only return posts that match that value. Otherwise, it searches for a wildcard,
+    # allowing it to return rows with either True or False values
     if isinstance(completed, bool):
         is_completed = Posts.completed == completed
     else:
@@ -263,11 +265,15 @@ def search_posts(title=[u"%"], description=[u"%"], categories=[u"%"], username=u
     else:
         is_expired = Posts.expired.like(expired)
 
+    # Home page and search results return with most recent date at the top, but viewing user's posts should have the
+    # oldest date at the top. By having the sort done in this method, it clears up the code elsewhere.
     if sort_date_descending:
         ordering = desc(Posts.date_added)
     else:
         ordering = asc(Posts.date_added)
 
+    # This monstrosity is what joins all 4 tables together properly, adds the filters as specified above, and then runs
+    # the resultant query.
     all_results = db.session.query(Posts, Contacts, PostCategories, Categories
         ).join(Contacts, Contacts.username == Posts.username
         ).join(PostCategories, PostCategories.post_id == Posts.id
@@ -281,7 +287,7 @@ def search_posts(title=[u"%"], description=[u"%"], categories=[u"%"], username=u
             is_completed,
             is_expired
         ).all()
-    # ).limit(max_results).offset(max_results * (page_no - 1)).all()
+    #   ).limit(max_results).offset(max_results * (page_no - 1)).all()
 
     # Each row returned is a tuple of the following:
     # (non-unique post, non-unique contact, unique post_category, non-unique category)
@@ -319,8 +325,6 @@ def make_template_friendly_results(search_results):
     return to_send
 
 
-# This method is used for when a poster is looking at all the ads that they've posted, and allows them to sort by the
-# status of the post, whether it's active, completed, expired, or all statuses
 def filter_posts(username, selector):
     search_params = {
         'username': username,
@@ -345,16 +349,11 @@ def filter_posts(username, selector):
     return make_template_friendly_results(entries)
 
 
-# A nice, generalized query method. Given a dictionary of kwargs, it will search through the existing DB for matching
-# terms. If no term is given for a certain column, it will search for the wildcard '%'. All other search terms will be
-# searched in a way so that it will do partial matches as well as full matches.
 def query_database(params):
     entries = search_posts(**params)
     return make_template_friendly_results(entries)
 
 
-# This method gets all the active posts, sorts them from most recent to least recent, then returns them as a list to be
-# rendered
 def get_homepage():
     return query_database({'expired': False, 'completed': False})
 
@@ -372,7 +371,6 @@ def send_expired_email(username):
     s.quit()
 
 
-# A temporary method for the early stages of the new website so that users have a convenient way to provide feedback
 def send_feedback_email(form_contents, username):
     msg = MIMEText(form_contents['input'])
     msg['Subject'] = "Feedback regarding classifieds.bethel.edu from " + username

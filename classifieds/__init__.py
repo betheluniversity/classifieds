@@ -1,6 +1,6 @@
 import ast
 import urllib2
-from flask import Flask, session, request, current_app
+from flask import current_app, Flask, request, session
 from flask_sqlalchemy import SQLAlchemy
 from raven.contrib.flask import Sentry
 

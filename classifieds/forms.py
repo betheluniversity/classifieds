@@ -1,6 +1,7 @@
 import re
 from controller import get_category_list
-from wtforms import Form, StringField, SelectMultipleField, TextAreaField, SubmitField, validators, ValidationError
+from wtforms import Form, SelectMultipleField, StringField, SubmitField, TextAreaField, ValidationError, validators
+
 
 # This is a custom validator that I made to make sure that they put in valid phone numbers into their Contact form
 def phone_validator():

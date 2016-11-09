@@ -1,7 +1,7 @@
-from forms import *
 from controller import *
-from flask import request, render_template, session, redirect, abort
+from flask import abort, redirect, render_template, request, session
 from flask_classy import FlaskView, route
+from forms import *
 
 
 # This Flask-Classy object is simply named "View" because Flask-Classy takes whatever is in front of View and makes it
@@ -19,7 +19,7 @@ class View(FlaskView):
     def blink_posts(self):
         return render_template("blink_template.html", values=get_homepage(), showStatus=False)
 
-    # This URL is to get the classified ad form so that the user can fill it out and submit it to the DB
+    # This URL is to get the post form so that the user can fill it out and submit it to the DB
     @route("/add-post")
     def add_post(self):
         if contact_exists_in_db(session['username']):
@@ -29,6 +29,7 @@ class View(FlaskView):
             error_message = "You don't exist in the contacts database yet, and as such you cannot submit a post."
             return render_template("error_page.html", error=error_message)
 
+    # This is used by administrators to submit a post to the DB that is from a person who does not have a BCA account
     @route("/add-external")
     def add_external_post(self):
         if contact_exists_in_db(session['username']):
@@ -39,6 +40,7 @@ class View(FlaskView):
             error_message = "You don't exist in the contacts database yet, and as such you cannot submit a post."
             return render_template("error_page.html", error=error_message)
 
+    # For administrators to add a new category that everyone can choose from in their submissions
     @route("/add-category")
     def add_new_category(self):
         if contact_exists_in_db(session['username']):
@@ -56,6 +58,8 @@ class View(FlaskView):
         return render_template("contact_form.html", form=ContactForm(),
                                info=get_contact(session['username']), external=False)
 
+    # For administrators to add people who do not have a BCA account to the DB so that people who click on their posts
+    # can contact them, instead of the admins.
     @route("/add-external-contact")
     def add_external_contact(self):
         if contact_is_admin(session['username']):
@@ -63,8 +67,8 @@ class View(FlaskView):
         else:
             return abort(404)
 
-    # This is a post method that takes the classified form's contents, parses them, validates, and if it passes, it adds
-    # it to the DB and then returns to the page if it was successful or not.
+    # This is a post method that takes the post form's contents, parses them, validates, and if it passes, it adds
+    # it to the DB and then returns if it was successful or not.
     @route("/submit-post", methods=['POST'])
     def submit_post(self):
         form_contents = request.form
@@ -91,8 +95,9 @@ class View(FlaskView):
             error_message = "The post did not get added correctly. Please try again."
             return render_template("error_page.html", error=error_message)
 
-    # Similarly to submit_ad, this method parses the contact form's contents, validates, and updates the DB's entry for
-    # the user.
+    # Similarly to /submit-post, this method parses the contact form's contents, validates, and updates the DB's entry
+    # for the user. If they're already in the DB, it edits their info. If an administrator is adding an external
+    # contact, it adds the new information.
     @route("/submit-contact", methods=['POST'])
     def submit_contact(self):
         storage = request.form
@@ -100,8 +105,8 @@ class View(FlaskView):
         isValid = form.validate()
         if not isValid:
             return render_template("contact_form.html", form=form)
-        # Add that object to the database
-        if storage['external'] == 'True':  # this is a string of a boolean because its coming from the form.
+
+        if storage['external'] == 'True':  # this is a string of a boolean because it's coming from the form.
             add_contact(storage['email'], storage['first_name'], storage['last_name'], storage['email'],
                         storage['phone_number'])
             message = "External contact information successfully added!"
@@ -112,6 +117,7 @@ class View(FlaskView):
             message = "Contact information successfully updated!"
             return render_template("confirmation_page.html", message=message)
 
+    # The corresponding post method to /add-category
     @route("/submit-category", methods=['POST'])
     def submit_category(self):
         storage = request.form
@@ -124,7 +130,7 @@ class View(FlaskView):
         return render_template("confirmation_page.html", message=message)
 
     # This method is pretty straightforward, just checks if the id they're requesting exists. If it does, it renders it.
-    # The render itself takes care of the ad's expired/completed status, if it's the original poster, etc.
+    # The template renderer itself takes care of the ad's expired/completed status, if it's the original poster, etc.
     @route("/view-post/<id>")
     def view_post(self, id):
         if post_exists_in_db(id):
@@ -133,7 +139,7 @@ class View(FlaskView):
             error_message = "That post id number doesn't exist in the posts database."
             return render_template("error_page.html", error=error_message)
 
-    # Similarly to viewClassified, this method checks if the username exists. If it does, it has the render function do
+    # Similarly to /view-post, this method checks if the username exists. If it does, it has the render function do
     # the work.
     @route("/view-contact/<username>")
     def view_contact(self, username):
@@ -145,7 +151,7 @@ class View(FlaskView):
 
     # This method is more or less a 'hub' for all the various ways that a poster would like to view the posts that
     # they've made. This passes on what type of posts they want to see, the DB does the filtering and returns the list,
-    # and they all get rendered the same way.
+    # and they all get rendered the same way. This is how administrators can view all external posts in one area.
     @route("/view-posted/<selector>")
     def view_posted(self, selector):
         if selector not in ["all", "active", "completed", "expired", "external"]:
@@ -164,9 +170,9 @@ class View(FlaskView):
         return render_template("search_page.html", categories=get_category_list())
 
     # This method does a bit of work in preparation of the DB query; it creates a dictionary of search terms that are
-    # keyed to match the keyword arguments of the DB search method in forms. If they're searching for a single word,
-    # that word is bounded by the DB's wildcard character, '%'. If there are multiple search terms, it splits it into a
-    # list that gets dealt with by the DB's search method.
+    # keyed to match the keyword arguments of the DB search method in forms. It creates a list of all the words being
+    # searched for, and pads both sides of the title words and description words with a '%' for partial matching in the
+    # DB. Categories, on the other hand, have to have an exact match. It can only return active posts.
     @route("/search", methods=['POST'])
     @route("/search/<category>", methods=['GET'])
     def search(self, category=None):
@@ -195,7 +201,7 @@ class View(FlaskView):
         return redirect('/view-posted/active')
 
     def reactivate(self, id):
-        mark_entry_as_active(id, session['username'])
+        renew_entry(id, session['username'])
         return redirect('/view-posted/expired')
 
     # This method is to be used by the crontab job; it should be called every night at midnight, and mark all posts that
@@ -208,6 +214,9 @@ class View(FlaskView):
     def logout(self):
         return redirect("https://auth.bethel.edu/cas/logout")
 
+    # Used by administrators to manage the privilege levels of people who are not them. Any admin can promote any
+    # non-admin to admin level, and any admin can demote any admin except themselves. This way, there is ALWAYS at least
+    # one administrator.
     @route("/manage-privileges")
     def manage_privileges(self):
         # TODO: I'd like to make the table in this form sortable, like the main page.
@@ -216,6 +225,7 @@ class View(FlaskView):
         else:
             return render_template("user_permissions_form.html", non_admins=get_non_admins(), admins=get_admins())
 
+    # Used to promote a group of non-admins to admin level
     @route("/group-promote", methods=['POST'])
     def group_promote(self):
         if contact_is_admin(session['username']):
@@ -226,6 +236,7 @@ class View(FlaskView):
         else:
             return abort(404)
 
+    # Used to promote a single non-admin to admin level using their username
     @route("/single-promote", methods=['POST'])
     def single_promote(self):
         if contact_is_admin(session['username']):
@@ -235,6 +246,7 @@ class View(FlaskView):
         else:
             return abort(404)
 
+    # Used to demote a group of admins down to non-admin level
     @route("/group-demote", methods=['POST'])
     def group_demote(self):
         if contact_is_admin(session['username']):
@@ -245,6 +257,7 @@ class View(FlaskView):
         else:
             return abort(404)
 
+    # Asks the administrator to confirm that they want to delete a specific post
     @route("/delete-confirm/<post_id>")
     def delete_confirm(self, post_id):
         if not contact_is_admin(session['username']):
@@ -252,6 +265,7 @@ class View(FlaskView):
         return render_template('delete_confirm.html', post_id=post_id,
                                post=view_post(post_id))
 
+    # Allows administrators to delete posts that do not comply with BU standards
     @route("/delete-post/<post_id>")
     def delete_post(self, post_id):
         if not contact_is_admin(session['username']):
