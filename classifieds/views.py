@@ -9,6 +9,10 @@ from forms import *
 # To avoid that, I put nothing in front of "View" so now all the URLs will have the form classifieds.bethel.edu/url-name
 class View(FlaskView):
 
+    ###################################################################################################################
+    #                                        Endpoints that display lists of posts                                    #
+    ###################################################################################################################
+
     # This method doesn't need the actual word index; just the base URL will work to return the homepage
     def index(self):
         is_admin = contact_is_admin(session['username'])
@@ -18,136 +22,6 @@ class View(FlaskView):
     @route("/blink-posts")
     def blink_posts(self):
         return render_template("blink_template.html", values=get_homepage(), showStatus=False)
-
-    # This URL is to get the post form so that the user can fill it out and submit it to the DB
-    @route("/add-post")
-    def add_post(self):
-        if contact_exists_in_db(session['username']):
-            return render_template("post_form.html", form=PostForm(), categories=get_category_list(),
-                                   external_submission=False)
-        else:
-            error_message = "You don't exist in the contacts database yet, and as such you cannot submit a post."
-            return render_template("error_page.html", error=error_message)
-
-    # This is used by administrators to submit a post to the DB that is from a person who does not have a BCA account
-    @route("/add-external")
-    def add_external_post(self):
-        if contact_exists_in_db(session['username']):
-            if not contact_is_admin(session['username']):
-                return abort(404)
-            return render_template("post_form.html", form=PostForm(), external_submission=True)
-        else:
-            error_message = "You don't exist in the contacts database yet, and as such you cannot submit a post."
-            return render_template("error_page.html", error=error_message)
-
-    # For administrators to add a new category that everyone can choose from in their submissions
-    @route("/add-category")
-    def add_new_category(self):
-        if contact_exists_in_db(session['username']):
-            if not contact_is_admin(session['username']):
-                return abort(404)
-            return render_template("category_form.html", form=CategoryForm(), external_submission=True)
-        else:
-            error_message = "You don't exist in the contacts database yet, and as such you cannot submit a post."
-            return render_template("error_page.html", error=error_message)
-
-    # Because their contact entry in the DB should be added automatically by the init_user function the first time they
-    # log in to classifieds, I only made a page to edit their contact info.
-    @route("/edit-contact")
-    def edit_contact(self):
-        return render_template("contact_form.html", form=ContactForm(),
-                               info=get_contact(session['username']), external=False)
-
-    # For administrators to add people who do not have a BCA account to the DB so that people who click on their posts
-    # can contact them, instead of the admins.
-    @route("/add-external-contact")
-    def add_external_contact(self):
-        if contact_is_admin(session['username']):
-            return render_template("contact_form.html", form=ContactForm(), info=["", "", "", "", ""], external=True)
-        else:
-            return abort(404)
-
-    # This is a post method that takes the post form's contents, parses them, validates, and if it passes, it adds
-    # it to the DB and then returns if it was successful or not.
-    @route("/submit-post", methods=['POST'])
-    def submit_post(self):
-        form_contents = request.form
-        form = PostForm(form_contents)
-        is_valid = form.validate()
-        if not is_valid:
-            return render_template("post_form.html", form=form)
-        data_for_new_post = {
-            'username': form_contents.get('submitters_username'),
-            'title': form_contents.get('title'),
-            'description': form_contents.get('description'),
-            'price': form_contents.get('price'),
-            'categories_list': form_contents.getlist('categories')
-        }
-        if not contact_exists_in_db(data_for_new_post['username']):
-            error_message = "You don't exist in the contacts database yet, and as such you cannot submit a post."
-            return render_template("error_page.html", error=error_message)
-
-        successfully_submitted = add_post(**data_for_new_post)
-        if successfully_submitted:
-            message = "Post successfully submitted!"
-            return render_template("confirmation_page.html", message=message)
-        else:
-            error_message = "The post did not get added correctly. Please try again."
-            return render_template("error_page.html", error=error_message)
-
-    # Similarly to /submit-post, this method parses the contact form's contents, validates, and updates the DB's entry
-    # for the user. If they're already in the DB, it edits their info. If an administrator is adding an external
-    # contact, it adds the new information.
-    @route("/submit-contact", methods=['POST'])
-    def submit_contact(self):
-        storage = request.form
-        form = ContactForm(storage)
-        isValid = form.validate()
-        if not isValid:
-            return render_template("contact_form.html", form=form)
-
-        if storage['external'] == 'True':  # this is a string of a boolean because it's coming from the form.
-            add_contact(storage['email'], storage['first_name'], storage['last_name'], storage['email'],
-                        storage['phone_number'])
-            message = "External contact information successfully added!"
-            return render_template("confirmation_page.html", message=message)
-        else:
-            update_contact(session['username'], storage['first_name'], storage['last_name'], storage['email'],
-                        storage['phone_number'])
-            message = "Contact information successfully updated!"
-            return render_template("confirmation_page.html", message=message)
-
-    # The corresponding post method to /add-category
-    @route("/submit-category", methods=['POST'])
-    def submit_category(self):
-        storage = request.form
-        form = CategoryForm(storage)
-        isValid = form.validate()
-        if not isValid:
-            return render_template("category_form.html", form=form)
-        add_category(storage['category_html'], storage['category_human'])
-        message = "Category successfully added!"
-        return render_template("confirmation_page.html", message=message)
-
-    # This method is pretty straightforward, just checks if the id they're requesting exists. If it does, it renders it.
-    # The template renderer itself takes care of the ad's expired/completed status, if it's the original poster, etc.
-    @route("/view-post/<id>")
-    def view_post(self, id):
-        if post_exists_in_db(id):
-            return render_template("view_post.html", post=view_post(id), categories=get_post_categories(id))
-        else:
-            error_message = "That post id number doesn't exist in the posts database."
-            return render_template("error_page.html", error=error_message)
-
-    # Similarly to /view-post, this method checks if the username exists. If it does, it has the render function do
-    # the work.
-    @route("/view-contact/<username>")
-    def view_contact(self, username):
-        if contact_exists_in_db(username):
-            return render_template("view_contact.html", to_view=get_contact(username))
-        else:
-            error_message = "That username doesn't exist in the contacts database."
-            return render_template("error_page.html", error=error_message)
 
     # This method is more or less a 'hub' for all the various ways that a poster would like to view the posts that
     # they've made. This passes on what type of posts they want to see, the DB does the filtering and returns the list,
@@ -193,6 +67,58 @@ class View(FlaskView):
             to_send['categories'] = [category]
         return render_template("homepage.html", values=query_database(to_send), showStatus=False)
 
+    ###################################################################################################################
+    #                                                  Post endpoints                                                 #
+    ###################################################################################################################
+
+    # This method is pretty straightforward, just checks if the id they're requesting exists. If it does, it renders it.
+    # The template renderer itself takes care of the ad's expired/completed status, if it's the original poster, etc.
+    @route("/view-post/<id>")
+    def view_post(self, id):
+        if post_exists_in_db(id):
+            return render_template("view_post.html", post=view_post(id), categories=get_post_categories(id))
+        else:
+            error_message = "That post id number doesn't exist in the posts database."
+            return render_template("error_page.html", error=error_message)
+
+    # This URL is to get the post form so that the user can fill it out and submit it to the DB
+    @route("/add-post")
+    def add_post(self):
+        if contact_exists_in_db(session['username']):
+            return render_template("post_form.html", form=PostForm(), categories=get_category_list(),
+                                   external_submission=False)
+        else:
+            error_message = "You don't exist in the contacts database yet, and as such you cannot submit a post."
+            return render_template("error_page.html", error=error_message)
+
+    # This is a post method that takes the post form's contents, parses them, validates, and if it passes, it adds
+    # it to the DB and then returns if it was successful or not.
+    @route("/submit-post", methods=['POST'])
+    def submit_post(self):
+        form_contents = request.form
+        form = PostForm(form_contents)
+        is_valid = form.validate()
+        if not is_valid:
+            return render_template("post_form.html", form=form)
+        data_for_new_post = {
+            'username': form_contents.get('submitters_username'),
+            'title': form_contents.get('title'),
+            'description': form_contents.get('description'),
+            'price': form_contents.get('price'),
+            'categories_list': form_contents.getlist('categories')
+        }
+        if not contact_exists_in_db(data_for_new_post['username']):
+            error_message = "You don't exist in the contacts database yet, and as such you cannot submit a post."
+            return render_template("error_page.html", error=error_message)
+
+        successfully_submitted = add_post(**data_for_new_post)
+        if successfully_submitted:
+            message = "Post successfully submitted!"
+            return render_template("confirmation_page.html", message=message)
+        else:
+            error_message = "The post did not get added correctly. Please try again."
+            return render_template("error_page.html", error=error_message)
+
     # A pretty straightforward pair of methods; if the poster calls this URL via a link on the pages, it will change
     # that value appropriately in the DB.
     @route("/mark-complete/<id>")
@@ -200,19 +126,100 @@ class View(FlaskView):
         mark_entry_as_complete(id, session['username'])
         return redirect('/view-posted/active')
 
-    def reactivate(self, id):
+    def renew(self, id):
         renew_entry(id, session['username'])
         return redirect('/view-posted/expired')
 
-    # This method is to be used by the crontab job; it should be called every night at midnight, and mark all posts that
-    # expired during that day as expired.
-    def expire(self):
-        expire_old_posts()
-        return "Old posts expired"
+    ###################################################################################################################
+    #                                                Contact endpoints                                                #
+    ###################################################################################################################
 
-    # This method is simply to allow them to sign out of CAS Auth as well as the classifieds site itself.
-    def logout(self):
-        return redirect("https://auth.bethel.edu/cas/logout")
+    # Similarly to /view-post, this method checks if the username exists. If it does, it has the render function do
+    # the work.
+    @route("/view-contact/<username>")
+    def view_contact(self, username):
+        if contact_exists_in_db(username):
+            return render_template("view_contact.html", to_view=get_contact(username))
+        else:
+            error_message = "That username doesn't exist in the contacts database."
+            return render_template("error_page.html", error=error_message)
+
+    # Because their contact entry in the DB should be added automatically by the init_user function the first time they
+    # log in to classifieds, I only made a page to edit their contact info.
+    @route("/edit-contact")
+    def edit_contact(self):
+        return render_template("contact_form.html", form=ContactForm(),
+                               info=get_contact(session['username']), external=False)
+
+    # Similarly to /submit-post, this method parses the contact form's contents, validates, and updates the DB's entry
+    # for the user. If they're already in the DB, it edits their info. If an administrator is adding an external
+    # contact, it adds the new information.
+    @route("/submit-contact", methods=['POST'])
+    def submit_contact(self):
+        storage = request.form
+        form = ContactForm(storage)
+        isValid = form.validate()
+        if not isValid:
+            return render_template("contact_form.html", form=form)
+
+        if storage['external'] == 'True':  # this is a string of a boolean because it's coming from the form.
+            add_contact(storage['email'], storage['first_name'], storage['last_name'], storage['email'],
+                        storage['phone_number'])
+            message = "External contact information successfully added!"
+            return render_template("confirmation_page.html", message=message)
+        else:
+            update_contact(session['username'], storage['first_name'], storage['last_name'], storage['email'],
+                           storage['phone_number'])
+            message = "Contact information successfully updated!"
+            return render_template("confirmation_page.html", message=message)
+
+    ###################################################################################################################
+    #                                                 Admin endpoints                                                 #
+    ###################################################################################################################
+
+    # For administrators to add people who do not have a BCA account to the DB so that people who click on their posts
+    # can contact them, instead of the admins.
+    @route("/add-external-contact")
+    def add_external_contact(self):
+        if contact_is_admin(session['username']):
+            return render_template("contact_form.html", form=ContactForm(), info=["", "", "", "", ""],
+                                   external=True)
+        else:
+            return abort(404)
+
+    # This is used by administrators to submit a post to the DB that is from a person who does not have a BCA account
+    @route("/add-external")
+    def add_external_post(self):
+        if contact_exists_in_db(session['username']):
+            if not contact_is_admin(session['username']):
+                return abort(404)
+            return render_template("post_form.html", form=PostForm(), external_submission=True)
+        else:
+            error_message = "You don't exist in the contacts database yet, and as such you cannot submit a post."
+            return render_template("error_page.html", error=error_message)
+
+    # For administrators to add a new category that everyone can choose from in their submissions
+    @route("/add-category")
+    def add_new_category(self):
+        if contact_exists_in_db(session['username']):
+            if not contact_is_admin(session['username']):
+                return abort(404)
+            return render_template("category_form.html", form=CategoryForm(), external_submission=True)
+        else:
+            error_message = "You don't exist in the contacts database yet, and as such you cannot submit a post."
+            return render_template("error_page.html", error=error_message)
+
+    # The corresponding post method to /add-category
+    @route("/submit-category", methods=['POST'])
+    def submit_category(self):
+        storage = request.form
+        form = CategoryForm(storage)
+        isValid = form.validate()
+        if not isValid:
+            return render_template("category_form.html", form=form)
+        add_category(storage['category_html'], storage['category_human'])
+        message = "Category successfully added!"
+        return render_template("confirmation_page.html", message=message)
 
     # Used by administrators to manage the privilege levels of people who are not them. Any admin can promote any
     # non-admin to admin level, and any admin can demote any admin except themselves. This way, there is ALWAYS at least
@@ -274,6 +281,20 @@ class View(FlaskView):
         delete_post(post_id)
 
         return redirect('/')
+
+    ###################################################################################################################
+    #                                                  Utility endpoints                                              #
+    ###################################################################################################################
+
+    # This method is to be used by the crontab job; it should be called every night at midnight, and mark all posts that
+    # expired during that day as expired.
+    def expire(self):
+        expire_old_posts()
+        return "Old posts expired"
+
+    # This method is simply to allow them to sign out of CAS Auth as well as the classifieds site itself.
+    def logout(self):
+        return redirect("https://auth.bethel.edu/cas/logout")
 
     # These last two methods are designed to be here only temporarily. They allow the users to submit feedback about the
     # site, whether it's a feature suggestion or bugfix.

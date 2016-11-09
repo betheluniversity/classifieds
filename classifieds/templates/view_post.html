@@ -36,7 +36,7 @@
             {% if post['expired'] == False %}
                 <a href="{{ url_for('View:mark_complete', id = post['id']) }}">Mark as complete</a>
             {% else %}
-                <a href="{{ url_for('View:reactivate', id = post['id']) }}">Renew this ad</a>
+                <a href="{{ url_for('View:renew', id = post['id']) }}">Renew this ad</a>
             {% endif %}
         {% endif %}
     </div>

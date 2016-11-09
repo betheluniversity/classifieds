@@ -92,7 +92,7 @@
                 {% if post['expired'] == True %}
                     <div class="row">
                         <div class="marked cell">
-                            <a href="{{ url_for('View:reactivate', id = post['id']) }}">Renew this ad</a>
+                            <a href="{{ url_for('View:renew', id = post['id']) }}">Renew this ad</a>
                         </div>
                     </div>
                 {% else %}

@@ -358,6 +358,11 @@ def get_homepage():
     return query_database({'expired': False, 'completed': False})
 
 
+#######################################################################################################################
+#                                                   Email Methods                                                     #
+#######################################################################################################################
+
+
 def send_expired_email(username):
     contact = Contacts.query.filter(Contacts.username.like(username)).first()
 
