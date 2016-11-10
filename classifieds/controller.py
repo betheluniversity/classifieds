@@ -87,7 +87,7 @@ def view_post(post_id):
 
 
 def post_exists_in_db(post_id):
-    posts = Posts.query(Posts.id.like(post_id)).all()
+    posts = Posts.query.filter(Posts.id.like(post_id)).all()
     return len(list(posts)) > 0
 
 

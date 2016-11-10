@@ -73,10 +73,10 @@ class View(FlaskView):
 
     # This method is pretty straightforward, just checks if the id they're requesting exists. If it does, it renders it.
     # The template renderer itself takes care of the ad's expired/completed status, if it's the original poster, etc.
-    @route("/view-post/<id>")
-    def view_post(self, id):
-        if post_exists_in_db(id):
-            return render_template("view_post.html", post=view_post(id), categories=get_post_categories(id))
+    @route("/view-post/<post_id>")
+    def view_post(self, post_id):
+        if post_exists_in_db(post_id):
+            return render_template("view_post.html", post=view_post(post_id), categories=get_post_categories(post_id))
         else:
             error_message = "That post id number doesn't exist in the posts database."
             return render_template("error_page.html", error=error_message)
@@ -90,6 +90,10 @@ class View(FlaskView):
         else:
             error_message = "You don't exist in the contacts database yet, and as such you cannot submit a post."
             return render_template("error_page.html", error=error_message)
+
+    @route("/edit-post/<post_id>")
+    def edit_post(self, post_id):
+        return "In development"
 
     # This is a post method that takes the post form's contents, parses them, validates, and if it passes, it adds
     # it to the DB and then returns if it was successful or not.
