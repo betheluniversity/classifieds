@@ -11,30 +11,7 @@
     {% endif %}
 
     <form id="contact" method="POST" action="/submit-category">
-{% for field in form if field.widget.input_type != 'hidden' %}
-    <div>
-    {% if field.type != "SubmitField" %}
-        <div>{{ field.label }}</div>
-    {% else %}
-        <div></div>
-    {% endif %}
-        <div>
-            {% if info | length > 0 %}
-                {% if loop.index0 == info | length - 1 %}
-                    {% if external %}
-                        {{ field(size=20, value="Submit") }}
-                    {% else %}
-                        {{ field(size=20) }}
-                    {% endif %}
-                {% else %}
-                    {{ field(size=20, value=info[loop.index0 + 1]) }}
-                {% endif %}
-            {% else %}
-                {{ field(size=20) }}
-            {% endif %}
-        </div>
-    </div>
-{% endfor %}
+        {{ form.render_to_html() | safe }}
     </form>
 </div>
 {% endblock %}

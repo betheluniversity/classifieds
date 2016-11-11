@@ -3,6 +3,7 @@ import smtplib
 from collections import OrderedDict
 from email.mime.text import MIMEText
 from sqlalchemy import asc, desc, or_
+from werkzeug.datastructures import ImmutableMultiDict
 
 from classifieds import app, db
 from models import Posts, Contacts, Categories, PostCategories
@@ -68,6 +69,14 @@ def delete_post(post_id):
 #######################################################################################################################
 #                                                     Get Posts                                                       #
 #######################################################################################################################
+
+
+def get_post_form_data(post_id):
+    to_return = view_post(post_id)
+    to_return['categories'] = []
+    for cat in get_post_categories(post_id):
+        to_return['categories'].append(cat['category_html'])
+    return ImmutableMultiDict(to_return)
 
 
 def view_post(post_id):
@@ -146,6 +155,10 @@ def remove_admin(username):
 #######################################################################################################################
 #                                                    Get Contacts                                                     #
 #######################################################################################################################
+
+
+def get_contact_form_data(username):
+    return ImmutableMultiDict(get_contact(username))
 
 
 def get_contact(username):

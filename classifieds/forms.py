@@ -1,5 +1,6 @@
 import re
 from controller import get_category_list
+from flask import render_template
 from wtforms import Form, SelectMultipleField, StringField, SubmitField, TextAreaField, ValidationError, validators
 
 
@@ -16,8 +17,14 @@ def phone_validator():
     return _phone
 
 
+class RenderableForm(Form):
+
+    def render_to_html(self):
+        return render_template("general_form.html", fields=self._fields.iteritems())
+
+
 # 3 WTForm objects that are used in rendering. Each Field in this object corresponds to the user-input columns in the DB
-class PostForm(Form):
+class PostForm(RenderableForm):
     title = StringField('Title:', [validators.DataRequired(), validators.Length(max=100)])
     description = TextAreaField('Description:', [validators.DataRequired(), validators.Length(max=1000)])
     price = StringField('Price:', [validators.DataRequired(), validators.Length(max=50)])
@@ -26,15 +33,15 @@ class PostForm(Form):
     submit = SubmitField("Submit")
 
 
-class ContactForm(Form):
+class ContactForm(RenderableForm):
     first_name = StringField('First Name:', [validators.DataRequired(), validators.Length(max=20)])
     last_name = StringField('Last Name:', [validators.DataRequired(), validators.Length(max=30)])
     email = StringField('Email address:', [validators.DataRequired(), validators.Email()])
     phone_number = StringField('Phone Number:', [validators.DataRequired(), phone_validator()])
-    submit = SubmitField("Update")
+    submit = SubmitField("Submit")
 
 
-class CategoryForm(Form):
+class CategoryForm(RenderableForm):
     category_html = StringField('HTML version of the category:', [validators.DataRequired(), validators.Length(max=50)])
     category_human = StringField('Human-friendly version of the category:', [validators.DataRequired(), validators.Length(max=50)])
     submit = SubmitField("Submit")

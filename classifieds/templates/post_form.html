@@ -31,17 +31,7 @@
         {% else %}
         <input type="hidden" name="submitters_username" value="{{ session['username'] }}"/>
         {% endif %}
-        <label for="title">Title:</label><input type="text" name="title" id="title">
-        <label for="description">Description:</label>
-            <textarea type="text" name="description" id="description"></textarea>
-        <label for="price">Price (start with a '$'):</label><input type="text" name="price" id="price">
-        <label for="categories">Categories (select multiple if needed): </label>
-        <select name="categories" id="categories" class="largeselect" style="height:auto;" name="categories" multiple="">
-            {% for category_pair in categories %}
-            <option value="{{ category_pair['category_html'] }}">{{ category_pair['category_human'] }}</option>
-            {% endfor %}
-        </select><br>
-        <input type="submit" value="Submit"/>
+        {{ form.render_to_html() | safe }}
     </form>
 </div>
 {% endblock %}

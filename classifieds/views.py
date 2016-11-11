@@ -85,21 +85,34 @@ class View(FlaskView):
     @route("/add-post")
     def add_post(self):
         if contact_exists_in_db(session['username']):
-            return render_template("post_form.html", form=PostForm(), categories=get_category_list(),
-                                   external_submission=False)
+            return render_template("post_form.html", form=PostForm(), external_submission=False)
         else:
             error_message = "You don't exist in the contacts database yet, and as such you cannot submit a post."
             return render_template("error_page.html", error=error_message)
 
     @route("/edit-post/<post_id>")
     def edit_post(self, post_id):
-        return "In development"
+        if contact_exists_in_db(session['username']):
+            if post_exists_in_db(post_id):
+                if True:  # allowed_to_edit_post(post_id, session['username']):
+                    return render_template("post_form.html", form=PostForm(get_post_form_data(post_id)),
+                                           external_submission=False)
+                else:
+                    error_message = "You don't have permission to edit that post."
+                    return render_template("error_page.html", error=error_message)
+            else:
+                error_message = "That post id number doesn't exist in the posts database."
+                return render_template("error_page.html", error=error_message)
+        else:
+            error_message = "You don't exist in the contacts database yet, and as such you cannot submit a post."
+            return render_template("error_page.html", error=error_message)
 
     # This is a post method that takes the post form's contents, parses them, validates, and if it passes, it adds
     # it to the DB and then returns if it was successful or not.
     @route("/submit-post", methods=['POST'])
     def submit_post(self):
         form_contents = request.form
+        print form_contents
         form = PostForm(form_contents)
         is_valid = form.validate()
         if not is_valid:
@@ -152,8 +165,8 @@ class View(FlaskView):
     # log in to classifieds, I only made a page to edit their contact info.
     @route("/edit-contact")
     def edit_contact(self):
-        return render_template("contact_form.html", form=ContactForm(),
-                               info=get_contact(session['username']), external=False)
+        return render_template("contact_form.html", form=ContactForm(get_contact_form_data(session['username'])),
+                               external=False)
 
     # Similarly to /submit-post, this method parses the contact form's contents, validates, and updates the DB's entry
     # for the user. If they're already in the DB, it edits their info. If an administrator is adding an external
@@ -181,18 +194,8 @@ class View(FlaskView):
     #                                                 Admin endpoints                                                 #
     ###################################################################################################################
 
-    # For administrators to add people who do not have a BCA account to the DB so that people who click on their posts
-    # can contact them, instead of the admins.
-    @route("/add-external-contact")
-    def add_external_contact(self):
-        if contact_is_admin(session['username']):
-            return render_template("contact_form.html", form=ContactForm(), info=["", "", "", "", ""],
-                                   external=True)
-        else:
-            return abort(404)
-
     # This is used by administrators to submit a post to the DB that is from a person who does not have a BCA account
-    @route("/add-external")
+    @route("/add-external-post")
     def add_external_post(self):
         if contact_exists_in_db(session['username']):
             if not contact_is_admin(session['username']):
@@ -201,6 +204,43 @@ class View(FlaskView):
         else:
             error_message = "You don't exist in the contacts database yet, and as such you cannot submit a post."
             return render_template("error_page.html", error=error_message)
+
+    @route("/edit-external-post")
+    def edit_external_post(self):
+        # TODO
+        return ""
+
+    # Asks the administrator to confirm that they want to delete a specific post
+    @route("/delete-post-confirm/<post_id>")
+    def delete_post_confirm(self, post_id):
+        if not contact_is_admin(session['username']):
+            return abort(404)
+        return render_template('delete_confirm.html', post_id=post_id,
+                               post=view_post(post_id))
+
+    # Allows administrators to delete posts that do not comply with BU standards
+    @route("/delete-post/<post_id>")
+    def delete_post(self, post_id):
+        if not contact_is_admin(session['username']):
+            return abort(404)
+
+        delete_post(post_id)
+
+        return redirect('/')
+
+    # For administrators to add people who do not have a BCA account to the DB so that people who click on their posts
+    # can contact them, instead of the admins.
+    @route("/add-external-contact")
+    def add_external_contact(self):
+        if contact_is_admin(session['username']):
+            return render_template("contact_form.html", form=ContactForm(), external=True)
+        else:
+            return abort(404)
+
+    @route("/edit-external-contact")
+    def edit_external_contact(self):
+        # TODO
+        return ""
 
     # For administrators to add a new category that everyone can choose from in their submissions
     @route("/add-category")
@@ -212,6 +252,21 @@ class View(FlaskView):
         else:
             error_message = "You don't exist in the contacts database yet, and as such you cannot submit a post."
             return render_template("error_page.html", error=error_message)
+
+    @route("/edit-category")
+    def edit_category(self):
+        # TODO
+        return ""
+
+    @route("/delete-category-confirm")
+    def delete_category_confirm(self):
+        # TODO
+        return ""
+
+    @route("/delete-category/<category_id>")
+    def delete_category(sel, category_id):
+        # TODO
+        return ""
 
     # The corresponding post method to /add-category
     @route("/submit-category", methods=['POST'])
@@ -268,23 +323,6 @@ class View(FlaskView):
         else:
             return abort(404)
 
-    # Asks the administrator to confirm that they want to delete a specific post
-    @route("/delete-confirm/<post_id>")
-    def delete_confirm(self, post_id):
-        if not contact_is_admin(session['username']):
-            return abort(404)
-        return render_template('delete_confirm.html', post_id=post_id,
-                               post=view_post(post_id))
-
-    # Allows administrators to delete posts that do not comply with BU standards
-    @route("/delete-post/<post_id>")
-    def delete_post(self, post_id):
-        if not contact_is_admin(session['username']):
-            return abort(404)
-
-        delete_post(post_id)
-
-        return redirect('/')
 
     ###################################################################################################################
     #                                                  Utility endpoints                                              #
