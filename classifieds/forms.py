@@ -20,7 +20,7 @@ def phone_validator():
 class RenderableForm(Form):
 
     def render_to_html(self):
-        return render_template("general_form.html", fields=self._fields.iteritems())
+        return render_template("forms/general_form.html", fields=self._fields.iteritems())
 
 
 # 3 WTForm objects that are used in rendering. Each Field in this object corresponds to the user-input columns in the DB

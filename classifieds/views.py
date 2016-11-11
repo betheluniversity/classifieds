@@ -85,7 +85,7 @@ class View(FlaskView):
     @route("/add-post")
     def add_post(self):
         if contact_exists_in_db(session['username']):
-            return render_template("post_form.html", form=PostForm(), external_submission=False)
+            return render_template("forms/post_form.html", form=PostForm(), external_submission=False)
         else:
             error_message = "You don't exist in the contacts database yet, and as such you cannot submit a post."
             return render_template("error_page.html", error=error_message)
@@ -95,7 +95,7 @@ class View(FlaskView):
         if contact_exists_in_db(session['username']):
             if post_exists_in_db(post_id):
                 if True:  # allowed_to_edit_post(post_id, session['username']):
-                    return render_template("post_form.html", form=PostForm(get_post_form_data(post_id)),
+                    return render_template("forms/post_form.html", form=PostForm(get_post_form_data(post_id)),
                                            external_submission=False)
                 else:
                     error_message = "You don't have permission to edit that post."
@@ -116,7 +116,7 @@ class View(FlaskView):
         form = PostForm(form_contents)
         is_valid = form.validate()
         if not is_valid:
-            return render_template("post_form.html", form=form)
+            return render_template("forms/post_form.html", form=form)
         data_for_new_post = {
             'username': form_contents.get('submitters_username'),
             'title': form_contents.get('title'),
@@ -165,7 +165,7 @@ class View(FlaskView):
     # log in to classifieds, I only made a page to edit their contact info.
     @route("/edit-contact")
     def edit_contact(self):
-        return render_template("contact_form.html", form=ContactForm(get_contact_form_data(session['username'])),
+        return render_template("forms/contact_form.html", form=ContactForm(get_contact_form_data(session['username'])),
                                external=False)
 
     # Similarly to /submit-post, this method parses the contact form's contents, validates, and updates the DB's entry
@@ -177,7 +177,7 @@ class View(FlaskView):
         form = ContactForm(storage)
         isValid = form.validate()
         if not isValid:
-            return render_template("contact_form.html", form=form)
+            return render_template("forms/contact_form.html", form=form)
 
         if storage['external'] == 'True':  # this is a string of a boolean because it's coming from the form.
             add_contact(storage['email'], storage['first_name'], storage['last_name'], storage['email'],
@@ -200,7 +200,7 @@ class View(FlaskView):
         if contact_exists_in_db(session['username']):
             if not contact_is_admin(session['username']):
                 return abort(404)
-            return render_template("post_form.html", form=PostForm(), external_submission=True)
+            return render_template("forms/post_form.html", form=PostForm(), external_submission=True)
         else:
             error_message = "You don't exist in the contacts database yet, and as such you cannot submit a post."
             return render_template("error_page.html", error=error_message)
@@ -233,7 +233,7 @@ class View(FlaskView):
     @route("/add-external-contact")
     def add_external_contact(self):
         if contact_is_admin(session['username']):
-            return render_template("contact_form.html", form=ContactForm(), external=True)
+            return render_template("forms/contact_form.html", form=ContactForm(), external=True)
         else:
             return abort(404)
 
@@ -248,7 +248,7 @@ class View(FlaskView):
         if contact_exists_in_db(session['username']):
             if not contact_is_admin(session['username']):
                 return abort(404)
-            return render_template("category_form.html", form=CategoryForm(), external_submission=True)
+            return render_template("forms/category_form.html", form=CategoryForm(), external_submission=True)
         else:
             error_message = "You don't exist in the contacts database yet, and as such you cannot submit a post."
             return render_template("error_page.html", error=error_message)
@@ -275,7 +275,7 @@ class View(FlaskView):
         form = CategoryForm(storage)
         isValid = form.validate()
         if not isValid:
-            return render_template("category_form.html", form=form)
+            return render_template("forms/category_form.html", form=form)
         add_category(storage['category_html'], storage['category_human'])
         message = "Category successfully added!"
         return render_template("confirmation_page.html", message=message)
