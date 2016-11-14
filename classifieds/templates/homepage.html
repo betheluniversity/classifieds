@@ -67,10 +67,15 @@
                     </div>
                 </div>
             {% endif %}
-            {% if is_admin %}
+            {% if is_admin or session['username'] == val['username'] %}
                 <div class="row">
-                    <div class="title cell"><a class="button" href="{{ url_for('View:delete_post_confirm', post_id = val['id']) }}">Delete</a></div>
-            </div>
+                    <div class="title cell">
+                        <a class="button" href="{{ url_for('View:edit_post', post_id = val['id']) }}">Edit</a>
+                        {% if is_admin %}
+                        <a class="button" href="{{ url_for('View:delete_post_confirm', post_id = val['id']) }}">Delete</a>
+                        {% endif %}
+                    </div>
+                </div>
             {% endif %}
         <hr/>
         </div>

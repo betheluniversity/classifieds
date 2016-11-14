@@ -25,12 +25,6 @@
     </p>
 
     <form id="post" method="POST" action="/submit-post">
-        {% if external_submission %}
-        <label for="submitters_username">Email of external poster:</label>
-        <input type="text" id="submitters_username" name="submitters_username"/>
-        {% else %}
-        <input type="hidden" name="submitters_username" value="{{ session['username'] }}"/>
-        {% endif %}
         {{ form.render_to_html() | safe }}
     </form>
 </div>

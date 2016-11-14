@@ -17,14 +17,39 @@ from models import Posts, Contacts, Categories, PostCategories
 #                                                    Alter Posts                                                      #
 #######################################################################################################################
 
-def add_post(new_title, new_description, new_price, username, new_categories_list):
+def add_post(title, description, price, username, categories_list):
     try:
-        new_post = Posts(title=new_title, desc=new_description, price=new_price, username=username)
+        new_post = Posts(title=title, desc=description, price=price, username=username)
         db.session.add(new_post)
         new_post_id = Posts.query.order_by(desc(Posts.id)).first().id
-        for category in new_categories_list:
+        for category in categories_list:
             category_id = Categories.query.filter(Categories.category_for_html == category).first().id
             row_to_add = PostCategories(new_category_id=category_id, new_post_id=new_post_id)
+            db.session.add(row_to_add)
+        db.session.commit()
+        return True
+    except:
+        db.session.rollback()
+        return False
+
+
+def edit_post(post_id, title, description, price, categories_list):
+    try:
+        # Edit the values in the post itself
+        existing_post = Posts.query.filter(Posts.id.like(post_id)).first()
+        if existing_post:
+            existing_post.title = title
+            existing_post.description = description
+            existing_post.price = price
+        else:
+            return False
+
+        # Delete existing PostCategory rows and make new ones
+        PostCategories.query.filter_by(post_id=post_id).delete()
+
+        for category in categories_list:
+            category_id = Categories.query.filter(Categories.category_for_html == category).first().id
+            row_to_add = PostCategories(new_category_id=category_id, new_post_id=post_id)
             db.session.add(row_to_add)
         db.session.commit()
         return True
@@ -71,15 +96,20 @@ def delete_post(post_id):
 #######################################################################################################################
 
 
-def get_post_form_data(post_id):
-    to_return = view_post(post_id)
-    to_return['categories'] = []
-    for cat in get_post_categories(post_id):
-        to_return['categories'].append(cat['category_html'])
+def get_post_form_data(post_id=None, hidden_username=None):
+    if post_id:
+        to_return = get_post(post_id)
+        to_return['submitters_username'] = to_return['username']
+        del to_return['username']
+        to_return['categories'] = []
+        for cat in get_post_categories(post_id):
+            to_return['categories'].append(cat['category_html'])
+    else:
+        to_return = {'id': -1, 'submitters_username': hidden_username}
     return ImmutableMultiDict(to_return)
 
 
-def view_post(post_id):
+def get_post(post_id):
     post = Posts.query.filter(Posts.id.like(post_id)).first()
     contact = Contacts.query.filter(Contacts.username.like(post.username)).first()
     return {
@@ -98,6 +128,17 @@ def view_post(post_id):
 def post_exists_in_db(post_id):
     posts = Posts.query.filter(Posts.id.like(post_id)).all()
     return len(list(posts)) > 0
+
+
+def allowed_to_edit_post(post_id, username):
+    if contact_is_admin(username):
+        return True
+    else:
+        post = get_post(post_id)
+        if post['username'] == username:
+            return True
+        else:
+            return False
 
 
 #######################################################################################################################
@@ -122,11 +163,11 @@ def add_contact(username, first_name, last_name, email, phone_number):
         return False
 
 
-def update_contact(username, first_name, last_name, email, phone_number):
+def edit_contact(username, first_name, last_name, email, phone_number):
     # If the username is not already in here, it should fail
     try:
         existing_info = Contacts.query.filter(Contacts.username.like(username)).first()
-        if existing_info is not None:
+        if existing_info:
             existing_info.first_name = first_name
             existing_info.last_name = last_name
             existing_info.email = email
@@ -209,9 +250,48 @@ def add_category(html, human):
         return False
 
 
+def edit_category(category_id, new_html, new_human):
+    try:
+        existing_category = Categories.query.filter(Categories.id.like(category_id)).first()
+        if existing_category:
+            existing_category.category_for_html = new_html
+            existing_category.category_for_humans = new_human
+            db.session.commit()
+            return True
+        else:
+            return False
+    except:
+        db.session.rollback()
+        return False
+
+
+def delete_category(category_id):
+    deleted = Categories.query.filter_by(id=category_id).delete()
+    db.session.commit()
+    return deleted
+
+
 #######################################################################################################################
 #                                                   Get Categories                                                    #
 #######################################################################################################################
+
+
+def get_category_form_data(category_id=None):
+    if category_id:  # Get an existing category by ID
+        to_return = get_category(category_id)
+    else:  # Create a form for a new category
+        to_return = {'id': -1}
+
+    return ImmutableMultiDict(to_return)
+
+
+def get_category(category_id):
+    category = Categories.query.filter(Categories.id.like(category_id)).first()
+    return {
+        'id': category.id,
+        'category_html': category.category_for_html,
+        'category_human': category.category_for_humans
+    }
 
 
 def get_category_list(return_list_of_tuples=False):
@@ -219,7 +299,7 @@ def get_category_list(return_list_of_tuples=False):
     if return_list_of_tuples:
         return [(category.category_for_html, category.category_for_humans) for category in raw_list]
     else:
-        return [{'category_html': category.category_for_html, 'category_human': category.category_for_humans}
+        return [{'id': category.id, 'category_html': category.category_for_html, 'category_human': category.category_for_humans}
                 for category in raw_list]
 
 

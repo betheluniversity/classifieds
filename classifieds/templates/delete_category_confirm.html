@@ -1,0 +1,17 @@
+{% extends "classifieds_base.html" %}
+
+{% block subpage_title %}
+    | Delete confirm
+{% endblock %}
+
+{% block internal %}
+    <div>
+        <p class="note">Are you sure you want to delete category "{{ category['category_human'] }}"?</p>
+    </div>
+    <div>
+        <p class="note">
+            <a class="button button-danger" href="{{ url_for('View:delete_category', category_id=category['id']) }}">Delete</a>
+            <a class="button" href="{{ url_for('View:index') }}">Cancel</a>
+        </p>
+    </div>
+{% endblock %}

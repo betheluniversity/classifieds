@@ -1,7 +1,7 @@
 from controller import *
 from flask import abort, redirect, render_template, request, session
 from flask_classy import FlaskView, route
-from forms import *
+from forms import RegularPostForm, ExternalPosterForm, ContactForm, CategoryForm
 
 
 # This Flask-Classy object is simply named "View" because Flask-Classy takes whatever is in front of View and makes it
@@ -76,7 +76,7 @@ class View(FlaskView):
     @route("/view-post/<post_id>")
     def view_post(self, post_id):
         if post_exists_in_db(post_id):
-            return render_template("view_post.html", post=view_post(post_id), categories=get_post_categories(post_id))
+            return render_template("view_post.html", post=get_post(post_id), categories=get_post_categories(post_id))
         else:
             error_message = "That post id number doesn't exist in the posts database."
             return render_template("error_page.html", error=error_message)
@@ -85,7 +85,9 @@ class View(FlaskView):
     @route("/add-post")
     def add_post(self):
         if contact_exists_in_db(session['username']):
-            return render_template("forms/post_form.html", form=PostForm(), external_submission=False)
+            return render_template("forms/post_form.html",
+                                   form=RegularPostForm(get_post_form_data(hidden_username=session['username'])),
+                                   external_submission=False)
         else:
             error_message = "You don't exist in the contacts database yet, and as such you cannot submit a post."
             return render_template("error_page.html", error=error_message)
@@ -94,8 +96,9 @@ class View(FlaskView):
     def edit_post(self, post_id):
         if contact_exists_in_db(session['username']):
             if post_exists_in_db(post_id):
-                if True:  # allowed_to_edit_post(post_id, session['username']):
-                    return render_template("forms/post_form.html", form=PostForm(get_post_form_data(post_id)),
+                if allowed_to_edit_post(post_id, session['username']):
+                    return render_template("forms/post_form.html",
+                                           form=RegularPostForm(get_post_form_data(post_id=post_id)),
                                            external_submission=False)
                 else:
                     error_message = "You don't have permission to edit that post."
@@ -104,7 +107,7 @@ class View(FlaskView):
                 error_message = "That post id number doesn't exist in the posts database."
                 return render_template("error_page.html", error=error_message)
         else:
-            error_message = "You don't exist in the contacts database yet, and as such you cannot submit a post."
+            error_message = "You don't exist in the contacts database yet, and as such you cannot edit a post."
             return render_template("error_page.html", error=error_message)
 
     # This is a post method that takes the post form's contents, parses them, validates, and if it passes, it adds
@@ -113,11 +116,12 @@ class View(FlaskView):
     def submit_post(self):
         form_contents = request.form
         print form_contents
-        form = PostForm(form_contents)
+        form = RegularPostForm(form_contents)
         is_valid = form.validate()
         if not is_valid:
             return render_template("forms/post_form.html", form=form)
         data_for_new_post = {
+            'post_id': form_contents.get('id'),
             'username': form_contents.get('submitters_username'),
             'title': form_contents.get('title'),
             'description': form_contents.get('description'),
@@ -128,13 +132,24 @@ class View(FlaskView):
             error_message = "You don't exist in the contacts database yet, and as such you cannot submit a post."
             return render_template("error_page.html", error=error_message)
 
-        successfully_submitted = add_post(**data_for_new_post)
-        if successfully_submitted:
-            message = "Post successfully submitted!"
-            return render_template("confirmation_page.html", message=message)
-        else:
-            error_message = "The post did not get added correctly. Please try again."
-            return render_template("error_page.html", error=error_message)
+        if data_for_new_post['post_id'] < 0:  # Submitting a new post
+            del data_for_new_post['post_id']
+            successfully_submitted = add_post(**data_for_new_post)
+            if successfully_submitted:
+                message = "Post successfully submitted!"
+                return render_template("confirmation_page.html", message=message)
+            else:
+                error_message = "The post did not get added correctly. Please try again."
+                return render_template("error_page.html", error=error_message)
+        else:  # Editing an existing post
+            del data_for_new_post['username']
+            successfully_edited = edit_post(**data_for_new_post)
+            if successfully_edited:
+                message = "Post successfully edited!"
+                return render_template("confirmation_page.html", message=message)
+            else:
+                error_message = "The post did not get edited correctly. Please try again."
+                return render_template("error_page.html", error=error_message)
 
     # A pretty straightforward pair of methods; if the poster calls this URL via a link on the pages, it will change
     # that value appropriately in the DB.
@@ -175,8 +190,8 @@ class View(FlaskView):
     def submit_contact(self):
         storage = request.form
         form = ContactForm(storage)
-        isValid = form.validate()
-        if not isValid:
+        is_valid = form.validate()
+        if not is_valid:
             return render_template("forms/contact_form.html", form=form)
 
         if storage['external'] == 'True':  # this is a string of a boolean because it's coming from the form.
@@ -185,8 +200,8 @@ class View(FlaskView):
             message = "External contact information successfully added!"
             return render_template("confirmation_page.html", message=message)
         else:
-            update_contact(session['username'], storage['first_name'], storage['last_name'], storage['email'],
-                           storage['phone_number'])
+            edit_contact(session['username'], storage['first_name'], storage['last_name'], storage['email'],
+                         storage['phone_number'])
             message = "Contact information successfully updated!"
             return render_template("confirmation_page.html", message=message)
 
@@ -200,23 +215,34 @@ class View(FlaskView):
         if contact_exists_in_db(session['username']):
             if not contact_is_admin(session['username']):
                 return abort(404)
-            return render_template("forms/post_form.html", form=PostForm(), external_submission=True)
+            return render_template("forms/post_form.html", form=ExternalPosterForm(), external_submission=True)
         else:
             error_message = "You don't exist in the contacts database yet, and as such you cannot submit a post."
             return render_template("error_page.html", error=error_message)
 
-    @route("/edit-external-post")
-    def edit_external_post(self):
-        # TODO
-        return ""
+    @route("/edit-external-post/<post_id>")
+    def edit_external_post(self, post_id):
+        if contact_exists_in_db(session['username']):
+            if post_exists_in_db(post_id):
+                if True:  # allowed_to_edit_post(post_id, session['username']):
+                    return render_template("forms/post_form.html", form=ExternalPosterForm(get_post_form_data(post_id)),
+                                           external_submission=False)
+                else:
+                    error_message = "You don't have permission to edit that post."
+                    return render_template("error_page.html", error=error_message)
+            else:
+                error_message = "That post id number doesn't exist in the posts database."
+                return render_template("error_page.html", error=error_message)
+        else:
+            error_message = "You don't exist in the contacts database yet, and as such you cannot edit a post."
+            return render_template("error_page.html", error=error_message)
 
     # Asks the administrator to confirm that they want to delete a specific post
     @route("/delete-post-confirm/<post_id>")
     def delete_post_confirm(self, post_id):
         if not contact_is_admin(session['username']):
             return abort(404)
-        return render_template('delete_confirm.html', post_id=post_id,
-                               post=view_post(post_id))
+        return render_template('delete_post_confirm.html', post=get_post(post_id))
 
     # Allows administrators to delete posts that do not comply with BU standards
     @route("/delete-post/<post_id>")
@@ -237,36 +263,51 @@ class View(FlaskView):
         else:
             return abort(404)
 
-    @route("/edit-external-contact")
-    def edit_external_contact(self):
-        # TODO
-        return ""
+    @route("/edit-external-contact/<email>")
+    def edit_external_contact(self, email):
+        if contact_is_admin(session['username']):
+            return render_template("forms/contact_form.html", form=ContactForm(get_contact_form_data(email)),
+                                   external=True)
+        else:
+            return abort(404)
 
     # For administrators to add a new category that everyone can choose from in their submissions
     @route("/add-category")
     def add_new_category(self):
+        if not contact_is_admin(session['username']):
+            return abort(404)
+        return render_template("forms/category_form.html", form=CategoryForm(get_category_form_data()))
+
+    @route("/manage-categories")
+    def manage_categories(self):
+        if not contact_is_admin(session['username']):
+            return abort(404)
+        return render_template("manage_categories.html", categories=get_category_list())
+
+    @route("/edit-category/<category_id>")
+    def edit_category(self, category_id):
         if contact_exists_in_db(session['username']):
             if not contact_is_admin(session['username']):
                 return abort(404)
-            return render_template("forms/category_form.html", form=CategoryForm(), external_submission=True)
+            return render_template("forms/category_form.html", form=CategoryForm(get_category_form_data(category_id)))
         else:
-            error_message = "You don't exist in the contacts database yet, and as such you cannot submit a post."
+            error_message = "You don't exist in the contacts database yet, and as such you cannot add a category."
             return render_template("error_page.html", error=error_message)
 
-    @route("/edit-category")
-    def edit_category(self):
-        # TODO
-        return ""
-
-    @route("/delete-category-confirm")
-    def delete_category_confirm(self):
-        # TODO
-        return ""
+    @route("/delete-category-confirm/<category_id>")
+    def delete_category_confirm(self, category_id):
+        if not contact_is_admin(session['username']):
+            return abort(404)
+        return render_template('delete_category_confirm.html', category=get_category(category_id))
 
     @route("/delete-category/<category_id>")
-    def delete_category(sel, category_id):
-        # TODO
-        return ""
+    def delete_category(self, category_id):
+        if not contact_is_admin(session['username']):
+            return abort(404)
+
+        delete_category(category_id)
+
+        return redirect('/')
 
     # The corresponding post method to /add-category
     @route("/submit-category", methods=['POST'])
