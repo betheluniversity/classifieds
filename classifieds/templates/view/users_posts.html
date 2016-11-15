@@ -51,7 +51,7 @@
         {% endif %}
     </ul></div>
 {% if posts | length == 0 %}
-<p class="noPosts">There are no active posts to show.</p>
+<p class="noPosts">There are no posts to show.</p>
     {% else %}
     <div class="table">
         <div class="sorting">
@@ -74,7 +74,7 @@
         <div id="singlePost-{{ loop.index }}" class="singlePost">
             <div class="row">
                 <div class="cell">Title:</div>
-                <div class="title cell"><a href="{{ url_for('View:view_post', id = post['id']) }}">{{ post['title'] }}</a></div>
+                <div class="title cell"><a href="{{ url_for('View:view_post', post_id = post['id']) }}">{{ post['title'] }}</a></div>
             </div>
             <div class="row">
                 <div class="cell">Description: </div>
@@ -92,13 +92,13 @@
                 {% if post['expired'] == True %}
                     <div class="row">
                         <div class="marked cell">
-                            <a href="{{ url_for('View:renew', id = post['id']) }}">Renew this ad</a>
+                            <a href="{{ url_for('View:renew', post_id = post['id']) }}">Renew this ad</a>
                         </div>
                     </div>
                 {% else %}
                     <div class="row">
                         <div class="marked cell">
-                            <a href="{{ url_for('View:mark_complete', id = post['id']) }}">Mark as complete</a>
+                            <a href="{{ url_for('View:mark_complete', post_id = post['id']) }}">Mark as complete</a>
                         </div>
                     </div>
                 {% endif %}
