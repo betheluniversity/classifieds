@@ -92,13 +92,13 @@
                 {% if post['expired'] == True %}
                     <div class="row">
                         <div class="marked cell">
-                            <a href="{{ url_for('View:renew', post_id = post['id']) }}">Renew this ad</a>
+                            <a href="{{ url_for('View:renew', post_id = post['id']) }}" class="button">Renew this ad</a>
                         </div>
                     </div>
                 {% else %}
                     <div class="row">
                         <div class="marked cell">
-                            <a href="{{ url_for('View:mark_complete', post_id = post['id']) }}">Mark as complete</a>
+                            <a href="{{ url_for('View:mark_complete', post_id = post['id']) }}" class="button">Mark as complete</a>
                         </div>
                     </div>
                 {% endif %}

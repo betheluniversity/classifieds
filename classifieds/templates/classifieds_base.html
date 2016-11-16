@@ -18,33 +18,30 @@
         <div class="padded">
             <a href="{{ url_for('View:index') }}"><img class="logo" src="/static/bethel-classifieds-logo.png"></a>
             <div id="user_menu" class="top-right">
-                <button class="dropbtn"><img class="icon"
-                                             src="/static/drop-down-icon.png">Hello, {{ session['fullname'] }}!
+                <button class="dropbtn">
+                    <img class="icon" src="/static/drop-down-icon.png">
+                    Hello, {{ session['fullname'] }}!
                 </button>
                 <div class="dropdown-content">
                     <a href="{{ url_for('View:view_contact', username = session['username']) }}">View your profile</a>
+                    {% if is_user_admin() %}
+                    <div id="admin_menu" class="admin">
+                        <hr/>
+                        &gt; Administrator Functions
+                        <a href="{{ url_for('View:manage_privileges') }}">Manage user privilege levels</a>
+                        <a href="{{ url_for('View:manage_categories') }}">Manage existing categories</a>
+                        <a href="{{ url_for('View:add_new_category') }}">Add a new category</a>
+                        <a href="{{ url_for('View:add_external_contact') }}">Add a non-BCA contact</a>
+                        <a href="{{ url_for('View:add_external_post') }}">Submit a non-BCA user's post</a>
+                        <hr/>
+                    </div>
+                    {% endif %}
                     <a href="{{ url_for('View:feedback') }}">Provide feedback</a>
                     <a href="{{ url_for('View:logout') }}">Sign out</a>
                 </div>
             </div>
             <div class="menu-bar">
                 <ul>
-                    {% if is_user_admin() %}
-                        <li>
-                            <div id="admin_menu" class="admin">
-                                <button class="dropbtn-admin"><img class="icon" src="/static/drop-down-icon.png">Administrator
-                                    Functions
-                                </button>
-                                <div class="dropdown-content dropdown-content-admin">
-                                    <a href="{{ url_for('View:manage_privileges') }}">Manage user privilege levels</a>
-                                    <a href="{{ url_for('View:add_new_category') }}">Add a new category</a>
-                                    <a href="{{ url_for('View:add_external_contact') }}">Add a non-BCA contact</a>
-                                    <a href="{{ url_for('View:add_external_post') }}">Submit a non-BCA user's
-                                        post</a>
-                                </div>
-                            </div>
-                        </li>
-                    {% endif %}
                     <li>
                         {% if request.path == '/' %}
                             <a href="{{ url_for('View:index') }}" class="button active">Home</a>

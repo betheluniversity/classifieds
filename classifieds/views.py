@@ -15,8 +15,7 @@ class View(FlaskView):
 
     # This method doesn't need the actual word index; just the base URL will work to return the homepage
     def index(self):
-        is_admin = contact_is_admin(session['username'])
-        return render_template("homepage.html", values=get_homepage(), showStatus=False, is_admin=is_admin)
+        return render_template("homepage.html", values=get_homepage(), showStatus=False)
 
     # This URL is only for rendering to a channel in BLink
     @route("/blink-posts")
@@ -115,7 +114,7 @@ class View(FlaskView):
     @route("/submit-post", methods=['POST'])
     def submit_post(self):
         form_contents = request.form
-        print form_contents
+        # print form_contents
         form = RegularPostForm(form_contents)
         is_valid = form.validate()
         if not is_valid:
@@ -194,16 +193,22 @@ class View(FlaskView):
         if not is_valid:
             return render_template("forms/contact.html", form=form)
 
-        if storage['external'] == 'True':  # this is a string of a boolean because it's coming from the form.
-            add_contact(storage['email'], storage['first_name'], storage['last_name'], storage['email'],
-                        storage['phone_number'])
-            message = "External contact information successfully added!"
-            return render_template("confirmation_page.html", message=message)
+        if storage['external'] == 'True':
+            submitters_username = storage['email']
+            if contact_exists_in_db(submitters_username):
+                edit_contact(submitters_username, storage['first_name'], storage['last_name'], storage['email'],
+                             storage['phone_number'])
+                message = "Contact information successfully edited!"
+            else:
+                add_contact(submitters_username, storage['first_name'], storage['last_name'], storage['email'],
+                             storage['phone_number'])
+                message = "Contact information successfully updated!"
         else:
-            edit_contact(session['username'], storage['first_name'], storage['last_name'], storage['email'],
+            submitters_username = session['username']
+            edit_contact(submitters_username, storage['first_name'], storage['last_name'], storage['email'],
                          storage['phone_number'])
             message = "Contact information successfully updated!"
-            return render_template("confirmation_page.html", message=message)
+        return render_template("confirmation_page.html", message=message)
 
     ###################################################################################################################
     #                                                 Admin endpoints                                                 #
@@ -317,9 +322,22 @@ class View(FlaskView):
         is_valid = form.validate()
         if not is_valid:
             return render_template("forms/category.html", form=form)
-        add_category(storage['category_html'], storage['category_human'])
-        message = "Category successfully added!"
-        return render_template("confirmation_page.html", message=message)
+        if storage['id'] < 0:  # Adding a new category
+            result = add_category(storage['category_html'], storage['category_human'])
+            if result:
+                message = "Category successfully added!"
+            else:
+                message = "Category failed to be added; please try again."
+        else:  # Editing an existing category
+            result = edit_category(storage['id'], storage['category_html'], storage['category_human'])
+            if result:
+                message = "Category successfully edited!"
+            else:
+                message = "Category failed to be edited; please try again."
+        if result:
+            return render_template("confirmation_page.html", message=message)
+        else:
+            return render_template("error_page.html", error=message)
 
     # Used by administrators to manage the privilege levels of people who are not them. Any admin can promote any
     # non-admin to admin level, and any admin can demote any admin except themselves. This way, there is ALWAYS at least

@@ -12,7 +12,7 @@ db = SQLAlchemy(app)
 sentry = Sentry(app, dsn=app.config['SENTRY_URL'])
 
 
-# This import needs to be after app and db's creation, as they get imported into views.py, from which this imports.
+# These imports need to be after app and db's creation, as they get imported into views.py, from which this imports.
 from models import Contacts
 from views import View
 from controller import contact_is_admin
