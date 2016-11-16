@@ -30,9 +30,7 @@ There are no active posts to show.
     <thead>
         <tr>
             <th>Title</th>
-            {#<th>Description</th>#}
             <th>Price</th>
-            {#<th>Date Posted</th>#}
             <th>Posted By</th>
             {% if showStatus == True %}
             <th>Status</th>
@@ -42,10 +40,8 @@ There are no active posts to show.
     <tbody>
 {% for val in values[0:5] %}
         <tr>
-            <td><a href="{{ url_for('View:view_post', val['id']) }}" target="_blank">{{ val['title'] }}</a></td>
-            {#<td><h4>{{ val['description'] }}</h4></td>#}
+            <td><a href="{{ url_for('View:view_post', post_id=val['id']) }}" target="_blank">{{ val['title'] }}</a></td>
             <td>{{ val['price'] }}</td>
-            {#<td>{{ val['dateAdded'].date() }}</td>#}
             <td>{{ val['full_name'] }}</td>
             {% if showStatus == True %}
             <td>
