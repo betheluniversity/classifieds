@@ -42,7 +42,7 @@ There are no active posts to show.
     <tbody>
 {% for val in values[0:5] %}
         <tr>
-            <td><a href="https://classifieds.bethel.edu/view-post/{{ val['id'] }}" target="_blank">{{ val['title'] }}</a></td>
+            <td><a href="{{ url_for('View:view_post', val['id']) }}" target="_blank">{{ val['title'] }}</a></td>
             {#<td><h4>{{ val['description'] }}</h4></td>#}
             <td>{{ val['price'] }}</td>
             {#<td>{{ val['dateAdded'].date() }}</td>#}
@@ -66,8 +66,8 @@ There are no active posts to show.
 </div>
 <br/>
 <div style="text-align:center">
-    <a href="https://classifieds.bethel.edu/add-post" target="_blank">New Listing</a> |
-    <a href="https://classifieds.bethel.edu" target="_blank">View All</a>
+    <a href="{{ url_for('View:add_post') }}" target="_blank">New Listing</a> |
+    <a href="{{ url_for('View:index') }}" target="_blank">View All</a>
 </div>
 </body>
 </html>

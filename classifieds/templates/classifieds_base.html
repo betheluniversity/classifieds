@@ -8,7 +8,7 @@
 {% block head_add %}
 
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-    <script src="../static/readmore.js"></script>
+    <script src="{{ url_for('static', filename='readmore.js') }}"></script>
 
 {% endblock %}
 
@@ -16,10 +16,10 @@
     <div id="body">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes"/>
         <div class="padded">
-            <a href="{{ url_for('View:index') }}"><img class="logo" src="/static/bethel-classifieds-logo.png"></a>
+            <a href="{{ url_for('View:index') }}"><img class="logo" src="{{ url_for('static', filename='bethel-classifieds-logo.png') }}"></a>
             <div id="user_menu" class="top-right">
                 <button class="dropbtn">
-                    <img class="icon" src="/static/drop-down-icon.png">
+                    <img class="icon" src="{{ url_for('static', filename='drop-down-icon.png') }}">
                     Hello, {{ session['fullname'] }}!
                 </button>
                 <div class="dropdown-content">
@@ -90,7 +90,7 @@
             });
         </script>
         {# links sorting JS file to HTML (only way this file would work)   #}
-        <script src="../static/sorting.js"></script>
+        <script src="{{ url_for('static', filename='sorting.js') }}"></script>
         <div class="clear_footer"></div>
     </div>
 
