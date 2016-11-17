@@ -54,9 +54,18 @@ def update_contact(username, first_name, last_name, email, phone_number):
         return False
 
 
-def get_contact(username):
-    toReturn = Contacts.query.filter(Contacts.username.like(username)).first()
-    return [toReturn.username, toReturn.first_name, toReturn.last_name, toReturn.email, toReturn.phone_number]
+def get_contact(username, return_dict=False):
+    contact = Contacts.query.filter(Contacts.username.like(username)).first()
+    if return_dict:
+        return {
+            'username': contact.username,
+            'first_name': contact.first_name,
+            'last_name': contact.last_name,
+            'email': contact.email,
+            'phone_number': contact.phone_number
+        }
+    else:
+        return [contact.username, contact.first_name, contact.last_name, contact.email, contact.phone_number]
 
 
 def mark_entry_as_complete(entry_id, username):
