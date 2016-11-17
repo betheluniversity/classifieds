@@ -11,8 +11,8 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 # Step 1: access the old database
 
 old = Flask(__name__)
-old.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'app.db.dist')
-old.config['SQLALCHEMY_MIGRATE_REPO'] = os.path.join(basedir, 'db_repository')
+old.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'old_db.db')
+# old.config['SQLALCHEMY_MIGRATE_REPO'] = os.path.join(basedir, 'db_repository')
 old_db = SQLAlchemy(old)
 
 # Old Models:
@@ -65,8 +65,8 @@ class Contacts(old_db.Model):
 # Step 2: instantiate the new database
 
 new = Flask(__name__)
-new.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'new_app.db')
-new.config['SQLALCHEMY_MIGRATE_REPO'] = os.path.join(basedir, 'db_repository')
+new.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'new_db.db')
+# new.config['SQLALCHEMY_MIGRATE_REPO'] = os.path.join(basedir, 'db_repository')
 new_db = SQLAlchemy(new)
 
 # New models:
@@ -197,9 +197,10 @@ try:
 
     # Step 4: commit the changes
     new_db.session.commit()
-    print "Data has been successfully transferred to new_app.db"
+    print "Data has been successfully transferred to new_db.db"
 
     # Step 5: change the name of the contacts table from "new_contacts" to "contacts" using sqlite3
-except:
+except Exception as e:
     new_db.session.rollback()
+    print e.message
     print "Data failed to be transferred"
