@@ -17,42 +17,27 @@
 
     <form id="contact" method="POST" action="/submit-contact">
         <input type="hidden" name="external" value="{{ external }}"/>
-{% for field in form if field.widget.input_type != 'hidden' %}
-    <div>
-    {% if field.type != "SubmitField" %}
-        <div>{{ field.label }}</div>
-    {% else %}
-        <div></div>
-    {% endif %}
-        <div>
-            {% if info.__len__() > 0 %}
-                {% if loop.index0 == info.__len__() - 1 %}
-                    {% if external %}
-                        {{ field(size=20, value="Submit") }}
-                    {% else %}
-                        {{ field(size=20) }}
-                    {% endif %}
-                {% else %}
-                    {{ field(size=20, value=info[loop.index0 + 1]) }}
-                {% endif %}
-            {% else %}
-                {{ field(size=20) }}
+        {% for name, field in form %}
+        <div id="field_container">
+            <div id="label">
+            {% if field.type != "SubmitField" %}
+                {{ field.label }}
             {% endif %}
+            </div>
+            <div id="errors">
+            {% if field.errors | length > 0 %}
+                <span class="star">
+                {% for err in field.errors %}
+                    {{ err }}<br/>
+                {% endfor %}
+                </span>
+                {% endif %}
+            </div>
+            <div id="field">
+                {{ field }}
+            </div>
         </div>
-    </div>
-{% endfor %}
+        {% endfor %}
     </form>
-
-{#    <form id="classifieds" method="POST" action="/submit-contact">#}
-{#        <label for="firstname"><span style="color:red">* </span>First Name:</label>#}
-{#            <input type="text" name="fname" id="fname">#}
-{#        <label for="lastname"><span style="color:red">* </span>Last Name:</label>#}
-{#            <input type="text" name="lname" id="lname">#}
-{#        <label for="email"><span style="color:red">* </span>Email Address:</label>#}
-{#            <input type="text" name="email" id="email">#}
-{#        <label for="phonenum"><span style="color:red">* </span>Phone Number:</label>#}
-{#            <input type="text" name="phone" id="phone">#}
-{#        <input type="submit" value="Update"/>#}
-{#    </form>#}
 </div>
 {% endblock %}

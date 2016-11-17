@@ -3,6 +3,7 @@ from forms import get_homepage, view_classified, filter_posts, query_database, \
 from classifieds_controller import *
 from flask import request, render_template, session, redirect, abort
 from flask_classy import FlaskView, route
+from werkzeug.datastructures import ImmutableMultiDict
 
 
 # This Flask-Classy object is simply named "View" because Flask-Classy takes whatever is in front of View and makes it
@@ -44,8 +45,9 @@ class View(FlaskView):
     # log in to classifieds, I only made a page to edit their contact info.
     @route("/edit-contact")
     def edit_contact(self):
-        return render_template("contact_form.html", form=ContactForm(),
-                               info=get_contact(session['username']), external=False)
+        return render_template("contact_form.html",
+                               form=ContactForm(ImmutableMultiDict(get_contact(session['username'], return_dict=True))),
+                               external=False)
 
     @route("/add-external-contact")
     def add_external_contact(self):

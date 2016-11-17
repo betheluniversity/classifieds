@@ -13,6 +13,7 @@ category_list = [
         ("jewelry", "Jewelry"),
         ("musical-instruments", "Musical Instruments"),
         ("photo-video", "Photo / Video"),
+        ("rides", "Rides"),
         ("tickets", "Tickets"),
         ("tools", "Tools"),
         ("toys-games", "Toys / Games"),
