@@ -131,7 +131,8 @@ class View(FlaskView):
             error_message = "You don't exist in the contacts database yet, and as such you cannot submit a post."
             return render_template("error_page.html", error=error_message)
 
-        if data_for_new_post['post_id'] < 0:  # Submitting a new post
+        print data_for_new_post
+        if data_for_new_post['post_id'] == '-1':  # Submitting a new post
             del data_for_new_post['post_id']
             successfully_submitted = add_post(**data_for_new_post)
             if successfully_submitted:

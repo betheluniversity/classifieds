@@ -12,7 +12,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 old = Flask(__name__)
 old.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'old_db.db')
-# old.config['SQLALCHEMY_MIGRATE_REPO'] = os.path.join(basedir, 'db_repository')
+old.config['SQLALCHEMY_MIGRATE_REPO'] = os.path.join(basedir, 'old_db_repository')
 old_db = SQLAlchemy(old)
 
 # Old Models:
@@ -66,21 +66,27 @@ class Contacts(old_db.Model):
 
 new = Flask(__name__)
 new.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'new_db.db')
-# new.config['SQLALCHEMY_MIGRATE_REPO'] = os.path.join(basedir, 'db_repository')
+new.config['SQLALCHEMY_MIGRATE_REPO'] = os.path.join(basedir, 'new_db_repository')
 new_db = SQLAlchemy(new)
 
 # New models:
 
 
 class Posts(new_db.Model):
+    # Columns
     id = new_db.Column(new_db.Integer, primary_key=True)
     title = new_db.Column(new_db.String(100), nullable=False)
     description = new_db.Column(new_db.String(1000), nullable=False)
     price = new_db.Column(new_db.String(50), nullable=False)
-    username = new_db.Column(new_db.String(30), new_db.ForeignKey('contacts.username'))
+    username = new_db.Column(new_db.String(30), new_db.ForeignKey('new_contacts.username'))
     date_added = new_db.Column(new_db.DateTime, nullable=False)
     completed = new_db.Column(new_db.Boolean, nullable=False)
     expired = new_db.Column(new_db.Boolean, nullable=False)
+
+    # Relationships
+    contact = new_db.relationship('contacts',
+                                  backref=new_db.backref('posts', cascade="all, delete-orphan"),
+                                  lazy='joined')
 
     def __init__(self, title, desc, price, username):
         self.title = title
@@ -96,6 +102,9 @@ class Posts(new_db.Model):
 
 
 class NewContacts(new_db.Model):
+    __tablename__ = 'contacts'
+
+    # Columns
     username = new_db.Column(new_db.String(30), primary_key=True)
     first_name = new_db.Column(new_db.String(20), nullable=False)
     last_name = new_db.Column(new_db.String(30), nullable=False)
@@ -116,6 +125,7 @@ class NewContacts(new_db.Model):
 
 
 class Categories(new_db.Model):
+    # Columns
     id = new_db.Column(new_db.Integer, primary_key=True)
     category_for_html = new_db.Column(new_db.String(50), nullable=False)
     category_for_humans = new_db.Column(new_db.String(50), nullable=False)
@@ -129,9 +139,15 @@ class Categories(new_db.Model):
 
 
 class PostCategories(new_db.Model):
+    # Columns
     id = new_db.Column(new_db.Integer, primary_key=True)
     post_id = new_db.Column(new_db.Integer, new_db.ForeignKey('posts.id'))
     category_id = new_db.Column(new_db.Integer, new_db.ForeignKey('categories.id'))
+
+    # Relationships
+    post = new_db.relationship('posts',
+                               backref=new_db.backref('post_categories', cascade="all, delete-orphan"),
+                               lazy='joined')
 
     def __init__(self, new_post_id, new_category_id):
         self.post_id = new_post_id
@@ -143,6 +159,7 @@ class PostCategories(new_db.Model):
 
 # Step 3: put the old data into the new database
 try:
+    new_db.create_all()
     # Part 1: transfer old contacts into new contacts
     for old_contact in Contacts.query.all():
         new_contact = NewContacts(old_contact.username,
@@ -150,7 +167,7 @@ try:
                                   old_contact.last_name,
                                   old_contact.email,
                                   old_contact.phone_number)
-        new_contact.is_admin = old_contact.isAdmin
+        new_contact.is_admin = (old_contact.isAdmin == 1)
         new_db.session.add(new_contact)
 
     # Part 2: add all the categories
@@ -191,6 +208,8 @@ try:
         post_id = Posts.query.order_by(desc(Posts.id)).first().id
         # Part 4: iterate through old post's categories and add PostCategory rows accordingly
         for old_category in old_post.categories.split(";"):
+            if old_category == "books":
+                old_category = "general"
             category_id = Categories.query.filter(Categories.category_for_html.like(old_category)).first().id
             new_post_category_row = PostCategories(post_id, category_id)
             new_db.session.add(new_post_category_row)
@@ -200,6 +219,11 @@ try:
     print "Data has been successfully transferred to new_db.db"
 
     # Step 5: change the name of the contacts table from "new_contacts" to "contacts" using sqlite3
+    #
+    # Console:
+    # sqlite3 new_db.db
+    # ALTER TABLE new_contacts RENAME TO contacts;
+
 except Exception as e:
     new_db.session.rollback()
     print e.message

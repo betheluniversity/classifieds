@@ -28,8 +28,9 @@ def add_post(title, description, price, username, categories_list):
             db.session.add(row_to_add)
         db.session.commit()
         return True
-    except:
+    except Exception as e:
         db.session.rollback()
+        print e.message
         return False
 
 
@@ -86,9 +87,17 @@ def expire_old_posts():
 
 
 def delete_post(post_id):
-    deleted = Posts.query.filter_by(id=post_id).delete()
-    db.session.commit()
-    return deleted
+    try:
+        postcateory_rows_for_this_post = PostCategories.query.filter_by(post_id=post_id).all()
+        for row in postcateory_rows_for_this_post:
+            PostCategories.query.filter_by(id=row.id).delete()
+        deleted = Posts.query.filter_by(id=post_id).delete()
+        db.session.commit()
+        return deleted
+    except Exception as e:
+        db.session.rollback()
+        print e.message
+        return False
 
 
 #######################################################################################################################
@@ -193,6 +202,22 @@ def remove_admin(username):
     db.session.commit()
 
 
+# This method should not have any endpoint; this method is only for usage via terminal
+def delete_contact(username):
+    try:
+        posts_by_this_user = Posts.query.filter_by(username=username).all()
+        for row in posts_by_this_user:
+            Posts.query.filter_by(id=row.id).delete()
+        Contacts.query.filter_by(username=username).delete()
+        db.session.commit()
+        return "Contact and posts successfully deleted"
+    except Exception as e:
+        db.session.rollback()
+        print e.message
+        return False
+
+
+
 #######################################################################################################################
 #                                                    Get Contacts                                                     #
 #######################################################################################################################
@@ -222,14 +247,16 @@ def contact_is_admin(username):
     return Contacts.query.filter(Contacts.username.like(username)).first().is_admin
 
 
+# Although it could be written as .filter(not Contacts.is_admin), it doesn't work properly that way.
 def get_non_admins():
-    non_admins = Contacts.query.filter(not Contacts.is_admin).all()
+    non_admins = Contacts.query.filter(Contacts.is_admin == False).all()
     return [{'username': na.username, 'first_name': na.first_name, 'last_name': na.last_name}
             for na in non_admins]
 
 
+# Although it could be written as .filter(Contacts.is_admin), it doesn't work properly that way.
 def get_admins():
-    admins = Contacts.query.filter(Contacts.is_admin).all()
+    admins = Contacts.query.filter(Contacts.is_admin == True).all()
     return [{'username': a.username, 'first_name': a.first_name, 'last_name': a.last_name}
             for a in admins]
 
@@ -266,9 +293,37 @@ def edit_category(category_id, new_html, new_human):
 
 
 def delete_category(category_id):
-    deleted = Categories.query.filter_by(id=category_id).delete()
-    db.session.commit()
-    return deleted
+    try:
+        posts_that_have_this_category = db.session.query(Posts, PostCategories, Categories
+            ).join(PostCategories, PostCategories.post_id == Posts.id
+            ).join(Categories, PostCategories.category_id == Categories.id
+            ).filter(
+                Categories.id == category_id
+            ).all()
+        dict_of_posts = {}
+        for post in posts_that_have_this_category:
+            # This if statement might be redundant?
+            if post[0].id not in dict_of_posts:  # Make sure to only do each post once
+                categories_for_this_post = PostCategories.query.filter(PostCategories.post_id == post[0].id).all()
+                if len(categories_for_this_post) > 1:
+                    # The post_category row with this category can be deleted
+                    for post_category in categories_for_this_post:
+                        if post_category.category_id == category_id:
+                            PostCategories.query.filter_by(id=post_category.id).delete()
+                            break
+                else:
+                    # This is the only category for this post, so it should be changed to "general" (category.id = 9)
+                    post_category_row = PostCategories.query.filter_by(id=categories_for_this_post[0].id).first()
+                    post_category_row.category_id = 9
+                dict_of_posts[post[0].id] = "post has been processed"
+        # Now that all references to this category have been removed, delete it without fear of Foreign Key dependency
+        deleted = Categories.query.filter_by(id=category_id).delete()
+        db.session.commit()
+        return deleted
+    except Exception as e:
+        db.session.rollback()
+        print e.message
+        return False
 
 
 #######################################################################################################################
