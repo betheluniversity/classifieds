@@ -1,7 +1,7 @@
 {% extends "classifieds_base.html" %}
 
 {% block subpage_title %}
-    | View post
+    | View {{ app_settings['POST_TYPE'] }} post
 {% endblock %}
 
 {% block internal %}
@@ -44,8 +44,8 @@
         {% endif %}
     </div>
 {% elif post['completed'] == True %}
-    <div>This classified has been marked as completed.</div>
+    <div>This {{ app_settings['POST_TYPE'] }} post has been marked as completed.</div>
 {% elif post['expired'] == True %}
-    <div>This classified has expired; it hasn't been completed in over 180 days.</div>
+    <div>This {{ app_settings['POST_TYPE'] }} post has expired; it hasn't been marked as complete in over 180 days.</div>
 {% endif %}
 {% endblock %}

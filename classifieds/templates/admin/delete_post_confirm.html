@@ -6,7 +6,7 @@
 
 {% block internal %}
     <div>
-        <p class="note">Are you sure you want to delete post "{{ post['title'] }}"?</p>
+        <p class="note">Are you sure you want to delete {{ app_settings['POST_TYPE'] }} post "{{ post['title'] }}"?</p>
     </div>
     <div>
         <p class="note">

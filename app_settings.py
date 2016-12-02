@@ -1,0 +1,5 @@
+HOMEPAGE_HEADING = "Classified Posts"
+POST_TYPE = "classified"
+MY_POSTS = "My Classifieds"
+PAGE_TITLE = "Classifieds"
+LOGO = "bethel-classifieds-logo.png"

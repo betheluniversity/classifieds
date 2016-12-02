@@ -1,7 +1,11 @@
 {% extends "classifieds_base.html" %}
 
 {% block subpage_title %}
-    | Update your contact info
+    {% if new %}
+    | Add a New Category
+    {% else %}
+    | Edit an Existing Category
+    {% endif %}
 {% endblock %}
 
 {% block internal %}

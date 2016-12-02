@@ -1,4 +1,5 @@
 import datetime
+import os
 import smtplib
 from collections import OrderedDict
 from email.mime.text import MIMEText
@@ -507,8 +508,18 @@ def get_homepage():
 
 
 #######################################################################################################################
-#                                                   Email Methods                                                     #
+#                                                   Other Methods                                                     #
 #######################################################################################################################
+
+
+def read_file_to_dict(relative_file_path):
+    to_return = {}
+    absolute_file_path = os.path.abspath(relative_file_path)
+    with open(absolute_file_path) as f:
+        for line in f.readlines():
+            key, val = line.split(" = ")
+            to_return[key] = val[1:-2]  # This peels off a " from the front and a "\n from the end
+    return to_return
 
 
 def send_expired_email(username):

@@ -265,7 +265,7 @@ class View(FlaskView):
     @route("/add-external-contact")
     def add_external_contact(self):
         if contact_is_admin(session['username']):
-            return render_template("forms/contact.html", form=ContactForm(), external=True)
+            return render_template("forms/contact.html", form=ContactForm(), external=True, new=True)
         else:
             return abort(404)
 
@@ -273,16 +273,20 @@ class View(FlaskView):
     def edit_external_contact(self, email):
         if contact_is_admin(session['username']):
             return render_template("forms/contact.html", form=ContactForm(get_contact_form_data(email)),
-                                   external=True)
+                                   external=True, new=False)
         else:
             return abort(404)
 
     # For administrators to add a new category that everyone can choose from in their submissions
     @route("/add-category")
     def add_new_category(self):
-        if not contact_is_admin(session['username']):
-            return abort(404)
-        return render_template("forms/category.html", form=CategoryForm(get_category_form_data()))
+        if contact_exists_in_db(session['username']):
+            if not contact_is_admin(session['username']):
+                return abort(404)
+            return render_template("forms/category.html", form=CategoryForm(get_category_form_data()), new=True)
+        else:
+            error_message = "You don't exist in the contacts database yet, and as such you cannot add a category."
+            return render_template("error_page.html", error=error_message)
 
     @route("/manage-categories")
     def manage_categories(self):
@@ -295,9 +299,9 @@ class View(FlaskView):
         if contact_exists_in_db(session['username']):
             if not contact_is_admin(session['username']):
                 return abort(404)
-            return render_template("forms/category.html", form=CategoryForm(get_category_form_data(category_id)))
+            return render_template("forms/category.html", form=CategoryForm(get_category_form_data(category_id)), new=False)
         else:
-            error_message = "You don't exist in the contacts database yet, and as such you cannot add a category."
+            error_message = "You don't exist in the contacts database yet, and as such you cannot edit a category."
             return render_template("error_page.html", error=error_message)
 
     @route("/delete-category-confirm/<category_id>")
@@ -321,9 +325,10 @@ class View(FlaskView):
         storage = request.form
         form = CategoryForm(storage)
         is_valid = form.validate()
+        is_new = storage['id'] < 0
         if not is_valid:
-            return render_template("forms/category.html", form=form)
-        if storage['id'] < 0:  # Adding a new category
+            return render_template("forms/category.html", form=form, new=is_new)
+        if is_new:  # Adding a new category
             result = add_category(storage['category_html'], storage['category_human'])
             if result:
                 message = "Category successfully added!"

@@ -1,7 +1,15 @@
 {% extends "classifieds_base.html" %}
 
 {% block subpage_title %}
-    | Update your contact info
+    {% if external %}
+        {% if new %}
+            | Add an External Contact
+        {% else %}
+            | Edit an External Contact
+        {% endif %}
+    {% else %}
+        | Update your Contact Information
+    {% endif %}
 {% endblock %}
 
 {% block internal %}

@@ -6,11 +6,11 @@
 
 {% block internal %}
 <div>
-    <p class="page-title">Listings</p>
+    <p class="page-title">{{ app_settings['HOMEPAGE_HEADING'] }}</p>
 
-    <p class="page-info">All of the listings.</br>
-        Choose how you would like to sort the listings, search through and contact</br>
-        who posted them to get more information.</p>
+    <p class="page-info">All of the {{ app_settings['POST_TYPE'] }} posts.</br>
+        Choose how you would like to sort the posts, search through them, and contact</br>
+        who posted the ad to get more information.</p>
         {% if values|length == 0 %}
             <p class="noPosts">There are no active posts to show.</p>
         {% else %}
@@ -58,11 +58,11 @@
                     <div class="cell">Status:</div>
                     <div class="status cell">
                         {% if val['completed'] == True %}
-                        Completed
+                            Completed
                         {% elif val['expired'] == True %}
-                        Expired
+                            Expired
                         {% else %}
-                        Active
+                            Active
                         {% endif %}
                     </div>
                 </div>
@@ -81,6 +81,6 @@
         </div>
     {% endfor %}
     </div>
-        {% endif %}
+    {% endif %}
 </div>
 {% endblock %}

@@ -1,7 +1,7 @@
 {% extends "classifieds_base.html" %}
 
 {% block subpage_title %}
-    | Update your contact info
+    | Edit users' permissions
 {% endblock %}
 
 {% block internal %}
@@ -29,7 +29,7 @@
         {% endfor %}
             </tbody>
         </table>
-        <input type="submit" value="Remove admin priveleges for checked users"/>
+        <input type="submit" value="Remove admin privileges for checked users"/>
     </form>
 
     <form id="single_promotion" method="POST" action="/single-promote">
@@ -59,7 +59,7 @@
         {% endfor %}
             </tbody>
         </table>
-        <input type="submit" value="Make the checked users admins for classifieds"/>
+        <input type="submit" value="Make the checked users admins for {{ app_settings['PAGE_TITLE'] }}"/>
     </form>
 </div>
 {% endblock %}

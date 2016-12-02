@@ -7,7 +7,6 @@ from raven.contrib.flask import Sentry
 
 app = Flask(__name__)
 app.config.from_object('config')
-app.config.from_object('app_settings')
 db = SQLAlchemy(app)
 sentry = Sentry(app, dsn=app.config['SENTRY_URL'])
 
@@ -15,7 +14,7 @@ sentry = Sentry(app, dsn=app.config['SENTRY_URL'])
 # These imports need to be after app and db's creation, as they get imported into views.py, from which this imports.
 from models import Contacts
 from views import View
-from controller import contact_is_admin
+from controller import contact_is_admin, read_file_to_dict
 View.register(app)
 
 
@@ -54,5 +53,7 @@ def init_user():
 def is_user_admin():
     return contact_is_admin(session['username'])
 
+app_settings = read_file_to_dict('app_settings.py')
 
 app.jinja_env.globals.update(is_user_admin=is_user_admin)
+app.jinja_env.globals.update(app_settings=app_settings)

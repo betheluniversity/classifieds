@@ -1,44 +1,43 @@
 {% extends "foundation_base.html" %}
 
 {% block title %}
-    Classifieds{% block subpage_title %}{% endblock %}
+    {{ app_settings['PAGE_TITLE'] }}{% block subpage_title %}{% endblock %}
 {% endblock %}
 
 
 {% block head_add %}
-
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-    <script src="{{ url_for('static', filename='readmore.js') }}"></script>
-
+    <script src="{{ url_for('static', filename = 'readmore.js') }}"></script>
 {% endblock %}
 
 {% block body_content %}
     <div id="body">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes"/>
         <div class="padded">
-            <a href="{{ url_for('View:index') }}"><img class="logo" src="{{ url_for('static', filename='bethel-classifieds-logo.png') }}"></a>
+            <a href="{{ url_for('View:index') }}">
+                <img class="logo" src="{{ url_for('static', filename = app_settings['LOGO']) }}">
+            </a>
             <div id="user_menu" class="top-right">
-                <button class="dropbtn">
-                    <img class="icon" src="{{ url_for('static', filename='drop-down-icon.png') }}">
-                    Hello, {{ session['fullname'] }}!
+                <p class="welcome-box float-right">Hello, {{ session['fullname'] }}!</p>
+                <button class="dropbtn float-right">
+                    <img class="icon" src="{{ url_for('static', filename = 'drop-down-icon.png') }}">
                 </button>
-                <div class="dropdown-content">
+                <div id="generic_menu" class="dropdown-content">
                     <a href="{{ url_for('View:view_contact', username = session['username']) }}">View your profile</a>
-                    {% if is_user_admin() %}
-                    <div id="admin_menu" class="admin">
-                        <hr/>
-                        &gt; Administrator Functions
-                        <a href="{{ url_for('View:manage_privileges') }}">Manage user privilege levels</a>
-                        <a href="{{ url_for('View:manage_categories') }}">Manage existing categories</a>
-                        <a href="{{ url_for('View:add_new_category') }}">Add a new category</a>
-                        <a href="{{ url_for('View:add_external_contact') }}">Add a non-BCA contact</a>
-                        <a href="{{ url_for('View:add_external_post') }}">Submit a non-BCA user's post</a>
-                        <hr/>
-                    </div>
-                    {% endif %}
                     <a href="{{ url_for('View:feedback') }}">Provide feedback</a>
                     <a href="{{ url_for('View:logout') }}">Sign out</a>
                 </div>
+            {% if is_user_admin() %}
+                <button class="dropbtn float-right">
+                    <img class="icon" src="{{ url_for('static', filename = 'drop-down-icon.png') }}">
+                </button>
+                <div id="admin_menu" class="dropdown-content">
+                    <a href="{{ url_for('View:manage_privileges') }}">Manage user privilege levels</a>
+                    <a href="{{ url_for('View:manage_categories') }}">Manage existing categories</a>
+                    <a href="{{ url_for('View:add_new_category') }}">Add a new category</a>
+                    <a href="{{ url_for('View:add_external_contact') }}">Add a non-BCA contact</a>
+                    <a href="{{ url_for('View:add_external_post') }}">Submit a non-BCA user's post</a>
+                </div>
+            {% endif %}
             </div>
             <div class="menu-bar">
                 <ul>
@@ -50,14 +49,14 @@
                         {% endif %}
                     </li>
                     <li>
-                        {% if '/search-page' in request.path %}
+                        {% if url_for('View:search_page') in request.path %}
                             <a href="{{ url_for('View:search_page') }}" class="button active">Search</a>
                         {% else %}
                             <a href="{{ url_for('View:search_page') }}" class="button">Search</a>
                         {% endif %}
                     </li>
                     <li>
-                        {% if '/add-post' in request.path %}
+                        {% if url_for('View:add_post') in request.path %}
                             <a href="{{ url_for('View:add_post') }}" class="button active">Submit</a>
                         {% else %}
                             <a href="{{ url_for('View:add_post') }}" class="button">Submit</a>
@@ -65,11 +64,13 @@
                     </li>
                     <li>
                         {% if '/view-posted/' in request.path %}
-                            <a href="{{ url_for('View:view_posted', selector = 'active') }}" class="button active">My
-                                Listings</a>
+                            <a href="{{ url_for('View:view_posted', selector = 'active') }}" class="button active">
+                                {{ app_settings['MY_POSTS'] }}
+                            </a>
                         {% else %}
-                            <a href="{{ url_for('View:view_posted', selector = 'active') }}" class="button">My
-                                Listings</a>
+                            <a href="{{ url_for('View:view_posted', selector = 'active') }}" class="button">
+                                {{ app_settings['MY_POSTS'] }}
+                            </a>
                         {% endif %}
                     </li>
                 </ul>
@@ -89,13 +90,13 @@
                 }
             });
         </script>
-        {# links sorting JS file to HTML (only way this file would work)   #}
-        <script src="{{ url_for('static', filename='sorting.js') }}"></script>
+        {# links sorting JS file to HTML (only way this file would work) #}
+        <script src="{{ url_for('static', filename = 'sorting.js') }}"></script>
         <div class="clear_footer"></div>
     </div>
 
     <div class="footer">
-        <p id="foot_title">Bethel University est. 1871 | Classifieds</p>
+        <p id="foot_title">Bethel University est. 1871 | {{ app_settings['PAGE_TITLE'] }}</p>
     </div>
 
 {% endblock %}

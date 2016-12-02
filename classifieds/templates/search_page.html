@@ -6,8 +6,8 @@
 
 {% block internal %}
 <div>
-    <p class="page-title">Search Postings</p>
-    <p class="page-info search">Search through the Classified Postings by Title,
+    <p class="page-title">Search {{ app_settings['PAGE_TITLE'] }}</p>
+    <p class="page-info search">Search through the {{ app_settings['PAGE_TITLE'] }} by Title,
         Description, and/or Category of the posting.</p>
 
     <form id="classifieds" action="/search" method="post">
