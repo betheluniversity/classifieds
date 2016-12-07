@@ -56,9 +56,7 @@ img.icon {
     float: left;
     width: 1.5em;
     height: 1.5em;
-    display:flex;
-    justify-content:center;
-    align-items:center;
+    margin: -.2em .6em 0em 0em;
 }
 
 ul {
@@ -182,6 +180,7 @@ a.button-danger {
     color: #FFFFFF !important;
 }
 
+
 .button:hover {
     background: rgba(0, 105, 170, 0.5) !important;
 }
@@ -227,9 +226,10 @@ select.selectSort {
     border-radius: .25em;
     transition: 0s background-color;
     background: rgba(0, 105, 170, 0.5) !important;
-    margin: .9em 0.5em 0em 0.5em;
+    margin: .9em 2em 0em 3.7em;
     border: none;
     cursor: pointer;
+    width: 16.2em;
 }
 
 .dropbtn-admin {
@@ -271,38 +271,17 @@ select.selectSort {
     box-shadow: 0em .5em 1em 0em rgba(0, 0, 0, 0.2);
 }
 
-.float-right{
-    float: right;
-}
-
-.welcome-box{
-    padding: 1em;
-    font-size: .85em;
-    font-family: "Helvetica Neue","Helvetica",Helvetica,Arial,sans-serif;
-    border-radius: .25em;
-    transition: 0s background-color;
-    background: rgba(0, 105, 170, 0.5) !important;
-    color: #FFFFFF !important;
-    margin: .9em 2em 0em 0.5em;
-    border: none;
-    width: 16.2em;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-}
-
 .dropdown-content {
     font-size: .85em;
     margin: 0em 0em 0em 3.7em;
     text-align: left;
     display: none;
-    position: relative;
+    position: absolute;
     z-index: 1;
     width: 16.2em;
     background-color: white;
     overflow: auto;
     box-shadow: 0em .5em 1em 0em rgba(0, 0, 0, 0.2);
-    float: right;
 }
 
 .dropdown-content a {
@@ -429,6 +408,7 @@ textarea#input {
     }
 
     .dropbtn {
+        width: 12.5em;
         border-radius: .25em;
     }
 
