@@ -1,3 +1,4 @@
+argparse
 Flask
 Flask-Classy
 Flask-SQLAlchemy
