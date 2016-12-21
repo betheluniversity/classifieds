@@ -14,7 +14,7 @@ sentry = Sentry(app, dsn=app.config['SENTRY_URL'])
 # These imports need to be after app and db's creation, as they get imported into views.py, from which this imports.
 from models import Contacts
 from views import View
-from controller import contact_is_admin, read_file_to_dict
+from controller import contact_is_admin, get_app_settings
 View.register(app)
 
 
@@ -53,7 +53,7 @@ def init_user():
 def is_user_admin():
     return contact_is_admin(session['username'])
 
-app_settings = read_file_to_dict('app_settings.py')
+app_settings = get_app_settings()
 
 app.jinja_env.globals.update(is_user_admin=is_user_admin)
 app.jinja_env.globals.update(app_settings=app_settings)

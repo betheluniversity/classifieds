@@ -512,10 +512,13 @@ def get_homepage():
 #######################################################################################################################
 
 
-def read_file_to_dict(relative_file_path):
+def get_app_settings():
     to_return = {}
-    absolute_file_path = os.path.abspath(relative_file_path)
-    with open(absolute_file_path) as f:
+    path = os.path.abspath(__file__)
+    dir_path = os.path.dirname(path)
+    parent_dir_path = os.path.abspath(os.path.join(dir_path, os.pardir))
+    final_path = os.path.join(parent_dir_path, "app_settings.py")
+    with open(final_path) as f:
         for line in f.readlines():
             key, val = line.split(" = ")
             to_return[key] = val[1:-2]  # This peels off a " from the front and a "\n from the end
@@ -525,8 +528,8 @@ def read_file_to_dict(relative_file_path):
 def send_expired_email(username):
     contact = Contacts.query.filter(Contacts.username.like(username)).first()
 
-    msg = MIMEText("One of the classifieds that you posted 180 days ago has been marked as expired.")
-    msg['Subject'] = "One of your classifieds has expired"
+    msg = MIMEText("One of the posts that you listed 180 days ago has been marked as expired.")
+    msg['Subject'] = "One of your posts has expired"
     msg['From'] = "no-reply@bethel.edu"
     msg['To'] = contact.email
 
@@ -537,8 +540,8 @@ def send_expired_email(username):
 
 def send_feedback_email(form_contents, username):
     msg = MIMEText(form_contents['input'])
-    msg['Subject'] = "Feedback regarding classifieds.bethel.edu from " + username
-    msg['From'] = "classifieds@bethel.edu"
+    msg['Subject'] = "Feedback from " + username
+    msg['From'] = "webmaster@bethel.edu"
     msg['To'] = app.config['ADMINS']
 
     s = smtplib.SMTP('localhost')
