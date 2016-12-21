@@ -325,7 +325,7 @@ class View(FlaskView):
         storage = request.form
         form = CategoryForm(storage)
         is_valid = form.validate()
-        is_new = storage['id'] < 0
+        is_new = int(storage['id']) < 0
         if not is_valid:
             return render_template("forms/category.html", form=form, new=is_new)
         if is_new:  # Adding a new category
