@@ -1,5 +1,7 @@
 config.py
 
+app_settings.py
+
 *.pyc
 
 workspace.xml

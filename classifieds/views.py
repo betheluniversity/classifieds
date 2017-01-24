@@ -392,6 +392,12 @@ class View(FlaskView):
     #                                                  Utility endpoints                                              #
     ###################################################################################################################
 
+    def faq(self):
+        if app.config['FAQ_PAGE']:
+            return render_template("BE-faq.html")
+        else:
+            return abort(404)
+
     # This method is to be used by the crontab job; it should be called every night at midnight, and mark all posts that
     # expired during that day as expired.
     def expire(self):

@@ -78,6 +78,15 @@
                             </a>
                         {% endif %}
                     </li>
+                    {% if app_settings['FAQ_PAGE'] == "True" %}
+                    <li>
+                        {% if '/faq' in request.path %}
+                            <a href="{{ url_for('View:faq') }}" class="button active">FAQ</a>
+                        {% else %}
+                            <a href="{{ url_for('View:faq') }}" class="button">FAQ</a>
+                        {% endif %}
+                    </li>
+                    {% endif %}
                 </ul>
             </div>
         </div>
