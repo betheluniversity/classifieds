@@ -27,7 +27,7 @@ class RenderableForm(Form):
 # WTForm objects that are used in rendering. Each Field in this object corresponds to the user-input columns in the DB
 class RegularPostForm(RenderableForm):
     id = HiddenField("", [validators.DataRequired(), validators.Length(max=8)])
-    submitters_username = HiddenField("", [validators.DataRequired(), validators.Length(max=30)])
+    submitters_username = HiddenField("", [validators.DataRequired(), validators.Length(max=50)])
     title = StringField('Title:', [validators.DataRequired(), validators.Length(max=100)])
     description = TextAreaField('Description:', [validators.DataRequired(), validators.Length(max=1000)])
     price = StringField('Price:', [validators.DataRequired(), validators.Length(max=50)])
@@ -39,7 +39,7 @@ class RegularPostForm(RenderableForm):
 class ExternalPosterForm(RenderableForm):
     id = HiddenField("", [validators.DataRequired(), validators.Length(max=8)])
     submitters_username = StringField("Email of external poster:", [validators.DataRequired(),
-                                                                    validators.Length(max=30)])
+                                                                    validators.Length(max=50)])
     title = StringField('Title:', [validators.DataRequired(), validators.Length(max=100)])
     description = TextAreaField('Description:', [validators.DataRequired(), validators.Length(max=1000)])
     price = StringField('Price:', [validators.DataRequired(), validators.Length(max=50)])

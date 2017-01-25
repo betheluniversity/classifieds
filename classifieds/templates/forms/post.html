@@ -18,11 +18,18 @@
 {% block internal %}
 <div>
     <p class="page-title">Submit a Listing</p>
-    {% if external_submission %}
-    <p class="page-info">Submit someone else's post.</br>
-    {% else %}
-    <p class="page-info">Submit your own post.</br>
-    {% endif %}
+    <p class="page-info">
+        {% if new %}
+            Submit
+        {% else %}
+            Edit
+        {% endif %}
+        {% if external %}
+            someone else's
+        {% else %}
+            your own
+        {% endif %}
+        {{ app_settings['POST_TYPE'] }} post <br/>
         Please be as descriptive as possible to help viewers find and understand the post.</br>
         All posts will automatically expire in 180 days.</p>
 

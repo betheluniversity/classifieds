@@ -86,7 +86,7 @@ class View(FlaskView):
         if contact_exists_in_db(session['username']):
             return render_template("forms/post.html",
                                    form=RegularPostForm(get_post_form_data(hidden_username=session['username'])),
-                                   external_submission=False)
+                                   external=False, new=True)
         else:
             error_message = "You don't exist in the contacts database yet, and as such you cannot submit a post."
             return render_template("error_page.html", error=error_message)
@@ -98,7 +98,7 @@ class View(FlaskView):
                 if allowed_to_edit_post(post_id, session['username']):
                     return render_template("forms/post.html",
                                            form=RegularPostForm(get_post_form_data(post_id=post_id)),
-                                           external_submission=False)
+                                           external=False, new=False)
                 else:
                     error_message = "You don't have permission to edit that post."
                     return render_template("error_page.html", error=error_message)
@@ -114,11 +114,6 @@ class View(FlaskView):
     @route("/submit-post", methods=['POST'])
     def submit_post(self):
         form_contents = request.form
-        # print form_contents
-        form = RegularPostForm(form_contents)
-        is_valid = form.validate()
-        if not is_valid:
-            return render_template("forms/post.html", form=form)
         data_for_new_post = {
             'post_id': form_contents.get('id'),
             'username': form_contents.get('submitters_username'),
@@ -131,7 +126,14 @@ class View(FlaskView):
             error_message = "You don't exist in the contacts database yet, and as such you cannot submit a post."
             return render_template("error_page.html", error=error_message)
 
-        print data_for_new_post
+        if '@' in data_for_new_post['username']:
+            form = ExternalPosterForm(form_contents)
+        else:
+            form = RegularPostForm(form_contents)
+        is_valid = form.validate()
+        if not is_valid:
+            return render_template("forms/post.html", form=form)
+
         if data_for_new_post['post_id'] == '-1':  # Submitting a new post
             del data_for_new_post['post_id']
             successfully_submitted = add_post(**data_for_new_post)
@@ -221,7 +223,9 @@ class View(FlaskView):
         if contact_exists_in_db(session['username']):
             if not contact_is_admin(session['username']):
                 return abort(404)
-            return render_template("forms/post.html", form=ExternalPosterForm(), external_submission=True)
+            return render_template("forms/post.html",
+                                   form=ExternalPosterForm(get_post_form_data(hidden_username="")),
+                                   external=True, new=True)
         else:
             error_message = "You don't exist in the contacts database yet, and as such you cannot submit a post."
             return render_template("error_page.html", error=error_message)
@@ -232,7 +236,7 @@ class View(FlaskView):
             if post_exists_in_db(post_id):
                 if True:  # allowed_to_edit_post(post_id, session['username']):
                     return render_template("forms/post.html", form=ExternalPosterForm(get_post_form_data(post_id)),
-                                           external_submission=False)
+                                           external=True, new=False)
                 else:
                     error_message = "You don't have permission to edit that post."
                     return render_template("error_page.html", error=error_message)
