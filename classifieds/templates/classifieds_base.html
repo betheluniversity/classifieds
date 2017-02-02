@@ -1,27 +1,27 @@
 {% extends "foundation_base.html" %}
 
 {% block title %}
-    Classifieds{% block subpage_title %}{% endblock %}
+    {{ app_settings['PAGE_TITLE'] }}{% block subpage_title %}{% endblock %}
 {% endblock %}
 
 
 {% block head_add %}
-
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-    <script src="{{ url_for('static', filename='readmore.js') }}"></script>
-
+    <script src="{{ url_for('static', filename = 'readmore.js') }}"></script>
 {% endblock %}
 
 {% block body_content %}
     <div id="body">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes"/>
         <div class="padded">
-            <a href="{{ url_for('View:index') }}"><img class="logo" src="/static/bethel-classifieds-logo.png"></a>
+            <a href="{{ url_for('View:index') }}">
+                <img class="logo" src="{{ url_for('static', filename = app_settings['LOGO']) }}">
+            </a>
             <div id="user_menu" class="top-right">
-                <button class="dropbtn"><img class="icon"
-                                             src="/static/drop-down-icon.png">Hello, {{ session['fullname'] }}!
+                <button class="dropbtn">
+                    <img class="icon" src="{{ url_for('static', filename = 'drop-down-icon.png') }}">
+                    Hello, {{ session['fullname'] }}!
                 </button>
-                <div class="dropdown-content">
+                <div id="generic_menu" class="dropdown-content">
                     <a href="{{ url_for('View:view_contact', username = session['username']) }}">View your profile</a>
                     <a href="{{ url_for('View:feedback') }}">Provide feedback</a>
                     <a href="{{ url_for('View:logout') }}">Sign out</a>
@@ -32,14 +32,16 @@
                     {% if is_user_admin() %}
                         <li>
                             <div id="admin_menu" class="admin">
-                                <button class="dropbtn-admin"><img class="icon" src="/static/drop-down-icon.png">Administrator
-                                    Functions
+                                <button class="dropbtn-admin">
+                                    <img class="icon" src="/static/drop-down-icon.png">
+                                    Administrator Functions
                                 </button>
                                 <div class="dropdown-content dropdown-content-admin">
-                                    <a href="{{ url_for('View:manage_admins') }}">Manage user privilege levels</a>
+                                    <a href="{{ url_for('View:manage_privileges') }}">Manage user privilege levels</a>
+                                    <a href="{{ url_for('View:manage_categories') }}">Manage existing categories</a>
+                                    <a href="{{ url_for('View:add_new_category') }}">Add a new category</a>
                                     <a href="{{ url_for('View:add_external_contact') }}">Add a non-BCA contact</a>
-                                    <a href="{{ url_for('View:add_external_classified') }}">Submit a non-BCA user's
-                                        post</a>
+                                    <a href="{{ url_for('View:add_external_post') }}">Submit a non-BCA contact's post</a>
                                 </div>
                             </div>
                         </li>
@@ -52,28 +54,39 @@
                         {% endif %}
                     </li>
                     <li>
-                        {% if '/search-page' in request.path %}
+                        {% if url_for('View:search_page') in request.path %}
                             <a href="{{ url_for('View:search_page') }}" class="button active">Search</a>
                         {% else %}
                             <a href="{{ url_for('View:search_page') }}" class="button">Search</a>
                         {% endif %}
                     </li>
                     <li>
-                        {% if '/add-classified' in request.path %}
-                            <a href="{{ url_for('View:add_classified') }}" class="button active">Submit</a>
+                        {% if url_for('View:add_post') in request.path %}
+                            <a href="{{ url_for('View:add_post') }}" class="button active">Submit</a>
                         {% else %}
-                            <a href="{{ url_for('View:add_classified') }}" class="button">Submit</a>
+                            <a href="{{ url_for('View:add_post') }}" class="button">Submit</a>
                         {% endif %}
                     </li>
                     <li>
                         {% if '/view-posted/' in request.path %}
-                            <a href="{{ url_for('View:view_posted', selector = 'active') }}" class="button active">My
-                                Classifieds</a>
+                            <a href="{{ url_for('View:view_posted', selector = 'active') }}" class="button active">
+                                {{ app_settings['MY_POSTS'] }}
+                            </a>
                         {% else %}
-                            <a href="{{ url_for('View:view_posted', selector = 'active') }}" class="button">My
-                                Classifieds</a>
+                            <a href="{{ url_for('View:view_posted', selector = 'active') }}" class="button">
+                                {{ app_settings['MY_POSTS'] }}
+                            </a>
                         {% endif %}
                     </li>
+                    {% if app_settings['FAQ_PAGE'] == "True" %}
+                    <li>
+                        {% if '/faq' in request.path %}
+                            <a href="{{ url_for('View:faq') }}" class="button active">FAQ</a>
+                        {% else %}
+                            <a href="{{ url_for('View:faq') }}" class="button">FAQ</a>
+                        {% endif %}
+                    </li>
+                    {% endif %}
                 </ul>
             </div>
         </div>
@@ -91,13 +104,13 @@
                 }
             });
         </script>
-        {# links sorting JS file to HTML (only way this file would work)   #}
-        <script src="../static/sorting.js"></script>
+        {# links sorting JS file to HTML (only way this file would work) #}
+        <script src="{{ url_for('static', filename = 'sorting.js') }}"></script>
         <div class="clear_footer"></div>
     </div>
 
     <div class="footer">
-        <p id="foot_title">Bethel University est. 1871 | Classifieds</p>
+        <p id="foot_title">Bethel University est. 1871 | {{ app_settings['PAGE_TITLE'] }}</p>
     </div>
 
 {% endblock %}

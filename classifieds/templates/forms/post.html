@@ -1,0 +1,48 @@
+{% extends "classifieds_base.html" %}
+
+{% block subpage_title %}
+    |
+    {% if new %}
+        Submit
+    {% else %}
+        Edit
+    {% endif %}
+    {% if external %}
+        someone else's
+    {% else %}
+        your own
+    {% endif %}
+    {{ app_settings['POST_TYPE'] }} post
+{% endblock %}
+
+{% block internal %}
+<div>
+    <p class="page-title">Submit a Listing</p>
+    <p class="page-info">
+        {% if new %}
+            Submit
+        {% else %}
+            Edit
+        {% endif %}
+        {% if external %}
+            someone else's
+        {% else %}
+            your own
+        {% endif %}
+        {{ app_settings['POST_TYPE'] }} post <br/>
+        Please be as descriptive as possible to help viewers find and understand the post.</br>
+        All posts will automatically expire in 180 days.</p>
+
+        {% if form.errors %}
+            <span class="error">There were errors with the form submission.</span>
+        {% endif %}
+
+    <p class="note">
+        <span class="star">* </span><span class="warning"> All fields are required</span>
+    </p>
+
+    <form id="post" method="POST" action="/submit-post">
+        {{ form.render_to_html() | safe }}
+    </form>
+</div>
+{% endblock %}

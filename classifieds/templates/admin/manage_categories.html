@@ -1,0 +1,38 @@
+{% extends "classifieds_base.html" %}
+
+{% block subpage_title %}
+    | Manage categories
+{% endblock %}
+
+{% block internal %}
+<div class="table">
+    <table>
+        <thead>
+            <tr>
+                <td>HTML Version</td>
+                <td>Human-readable Version</td>
+                <td></td>
+                <td></td>
+            </tr>
+        </thead>
+        <tbody>
+    {% for category in categories %}
+            <tr>
+                <td>
+                    {{ category['category_html'] }}
+                </td>
+                <td>
+                    {{ category['category_human'] }}
+                </td>
+                <td>
+                    <a href="{{ url_for('View:edit_category', category_id = category['id']) }}" class="button">Edit</a>
+                </td>
+                <td>
+                    <a href="{{ url_for('View:delete_category_confirm', category_id = category['id']) }}" class="button">Delete</a>
+                </td>
+            </tr>
+    {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

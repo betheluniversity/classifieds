@@ -1,0 +1,21 @@
+{% extends "classifieds_base.html" %}
+
+{% block subpage_title %}
+    {% if new %}
+    | Add a New Category
+    {% else %}
+    | Edit an Existing Category
+    {% endif %}
+{% endblock %}
+
+{% block internal %}
+<div>
+    {% if form.errors %}
+        <span class="error">There were errors with your form submission.</span>
+    {% endif %}
+
+    <form id="contact" method="POST" action="/submit-category">
+        {{ form.render_to_html() | safe }}
+    </form>
+</div>
+{% endblock %}

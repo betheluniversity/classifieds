@@ -1,5 +1,7 @@
 config.py
 
+app_settings.py
+
 *.pyc
 
 workspace.xml
@@ -7,8 +9,6 @@ workspace.xml
 tasks.xml
 
 error.log
-
-redirects.txt
 
 .idea
 
@@ -25,7 +25,5 @@ upgrade.txt
 db_repository/versions/002_migration.py
 
 db_repository/versions/003_migration.py
-
-redirects.txt.back
 
 app.db

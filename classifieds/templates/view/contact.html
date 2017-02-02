@@ -1,0 +1,18 @@
+{% extends "classifieds_base.html" %}
+
+{% block subpage_title %}
+    | View Contact
+{% endblock %}
+
+{% block internal %}
+<div class="viewTable">
+<table>
+    <tr><td>Name:</td><td>{{ to_view['first_name'] }}&nbsp;{{ to_view['last_name'] }}</td></tr>
+    <tr><td>Email:</td><td>{{ to_view['email'] }}</td></tr>
+    <tr><td>Phone number:</td><td>{{ to_view['phone_number'] }}</td></tr>
+</table>
+{% if session['username'] == to_view['username'] %}
+    <a href="{{ url_for('View:edit_contact') }}" id="edit-profile">Edit info</a>
+{% endif %}
+</div>
+{% endblock %}

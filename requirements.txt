@@ -1,8 +1,11 @@
+argparse
 Flask
 Flask-Classy
+Flask-Migrate
+Flask-Script
 Flask-SQLAlchemy
 Flask-WTF
-migrate
 raven[flask]
 alembic
 dataset
+blinker

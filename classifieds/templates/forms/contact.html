@@ -1,7 +1,15 @@
 {% extends "classifieds_base.html" %}
 
 {% block subpage_title %}
-    | Update your contact info
+    {% if external %}
+        {% if new %}
+            | Add an External Contact
+        {% else %}
+            | Edit an External Contact
+        {% endif %}
+    {% else %}
+        | Update your Contact Information
+    {% endif %}
 {% endblock %}
 
 {% block internal %}
@@ -17,27 +25,7 @@
 
     <form id="contact" method="POST" action="/submit-contact">
         <input type="hidden" name="external" value="{{ external }}"/>
-        {% for name, field in form %}
-        <div id="field_container">
-            <div id="label">
-            {% if field.type != "SubmitField" %}
-                {{ field.label }}
-            {% endif %}
-            </div>
-            <div id="errors">
-            {% if field.errors | length > 0 %}
-                <span class="star">
-                {% for err in field.errors %}
-                    {{ err }}<br/>
-                {% endfor %}
-                </span>
-                {% endif %}
-            </div>
-            <div id="field">
-                {{ field }}
-            </div>
-        </div>
-        {% endfor %}
+        {{ form.render_to_html() | safe }}
     </form>
 </div>
 {% endblock %}

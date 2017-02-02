@@ -1,69 +1,20 @@
 import ast
-import datetime
 import urllib2
-
-from flask import Flask, session, request, current_app
+from flask import current_app, Flask, request, session
 from flask_sqlalchemy import SQLAlchemy
+from raven.contrib.flask import Sentry
+
 
 app = Flask(__name__)
 app.config.from_object('config')
 db = SQLAlchemy(app)
-
-from raven.contrib.flask import Sentry
 sentry = Sentry(app, dsn=app.config['SENTRY_URL'])
 
-# TODO: maybe change the external post submission email field to a dropdown list of external emails?
-# TODO: add a way to view by category, so that when someone is viewing a post, they can click on the category it was
-#       posted in and view similar posts
 
-
-class Classifieds(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(100), nullable=False)
-    description = db.Column(db.String(1000), nullable=False)
-    price = db.Column(db.String(50), nullable=False)
-    categories = db.Column(db.String(200), nullable=False)
-    username = db.Column(db.String(30), db.ForeignKey('contacts.username'))
-    dateAdded = db.Column(db.DateTime, nullable=False)
-    completed = db.Column(db.Boolean, nullable=False)
-    expired = db.Column(db.Boolean, nullable=False)
-
-    def __init__(self, title, desc, price, categories, username):
-        self.title = title
-        self.description = desc
-        self.price = price
-        self.categories = categories
-        self.username = username
-        self.dateAdded = datetime.datetime.now()
-        self.completed = False
-        self.expired = False
-
-    def __repr__(self):
-        return "<Classified #%(0)s: %(1)s>" % {'0': self.id, '1': self.title}
-
-
-class Contacts(db.Model):
-    username = db.Column(db.String(30), primary_key=True)
-    first_name = db.Column(db.String(20), nullable=False)
-    last_name = db.Column(db.String(30), nullable=False)
-    email = db.Column(db.String(50), nullable=False)
-    phone_number = db.Column(db.String(15), nullable=False)
-    isAdmin = db.Column(db.Boolean, nullable=False, default=False)
-
-    def __init__(self, username, first, last, email, phone):
-        self.username = username
-        self.first_name = first
-        self.last_name = last
-        self.email = email
-        self.phone_number = phone
-        self.isAdmin = False
-
-    def __repr__(self):
-        return "<Contact %s>" % self.username
-
-
-# This import needs to be after app and db's creation, as they get imported into views.py, from which this imports.
-from classifieds.views import View
+# These imports need to be after app and db's creation, as they get imported into views.py, from which this imports.
+from models import Contacts
+from views import View
+from controller import contact_is_admin, get_app_settings
 View.register(app)
 
 
@@ -99,11 +50,10 @@ def init_user():
         db.session.commit()
 
 
-from classifieds_controller import contact_is_admin
-
-
 def is_user_admin():
     return contact_is_admin(session['username'])
 
+app_settings = get_app_settings()
 
 app.jinja_env.globals.update(is_user_admin=is_user_admin)
+app.jinja_env.globals.update(app_settings=app_settings)

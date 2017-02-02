@@ -1,0 +1,51 @@
+{% extends "classifieds_base.html" %}
+
+{% block subpage_title %}
+    | View {{ app_settings['POST_TYPE'] }} post
+{% endblock %}
+
+{% block internal %}
+{% if session['username'] == post['username'] or (post['completed'] == False and post['expired'] == False) %}
+    <div class="viewTable">
+        <table>
+            <tr>
+                <td>Title:</td><td class="maxWordLength">{{ post['title'] }}</td>
+            </tr>
+            <tr>
+                <td class="classified_description">Description:</td><td class="maxWordLength">{{ post['description'] }}</td>
+            </tr>
+            <tr>
+                <td>Price:</td><td class="maxWordLength">{{ post['price'] }}</td>
+            </tr>
+            <tr>
+                <td>Categories:</td>
+                <td>
+                    {% for category_pair in categories %}
+                        <a href="/search/{{ category_pair['category_html'] }}">{{ category_pair['category_human'] }}</a><br/>
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <td>Listed by:</td><td class="maxWordLength"><a href="{{ url_for('View:view_contact', username = post['username']) }}">{{ post['full_name'] }}</a></td>
+            </tr>
+            <tr>
+                <td>Date listed:</td><td>{{ post['date_added'].date() }}</td>
+            </tr>
+        </table>
+        {% if session['username'] == post['username'] or is_user_admin() %}
+            <a class="button" href="{{ url_for('View:edit_post', post_id = post['id']) }}">Edit</a>
+        {% endif %}
+        {% if ( session['username'] == post['username'] or is_user_admin() ) and post['completed'] == False %}
+            {% if post['expired'] == False %}
+                <a href="{{ url_for('View:mark_complete', post_id = post['id']) }}" class="button">Mark as complete</a>
+            {% else %}
+                <a href="{{ url_for('View:renew', post_id = post['id']) }}" class="button">Renew this ad</a>
+            {% endif %}
+        {% endif %}
+    </div>
+{% elif post['completed'] == True %}
+    <div>This {{ app_settings['POST_TYPE'] }} post has been marked as completed.</div>
+{% elif post['expired'] == True %}
+    <div>This {{ app_settings['POST_TYPE'] }} post has expired; it hasn't been marked as complete in over 180 days.</div>
+{% endif %}
+{% endblock %}
