@@ -11,7 +11,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 # Step 1: access the old database
 
 old = Flask(__name__)
-old.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'old_db.db')
+old.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, '../app.db')
 old.config['SQLALCHEMY_MIGRATE_REPO'] = os.path.join(basedir, 'old_db_repository')
 old_db = SQLAlchemy(old)
 
@@ -65,7 +65,7 @@ class Contacts(old_db.Model):
 # Step 2: instantiate the new database
 
 new = Flask(__name__)
-new.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'new_db.db')
+new.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'app.db')
 new.config['SQLALCHEMY_MIGRATE_REPO'] = os.path.join(basedir, 'new_db_repository')
 new_db = SQLAlchemy(new)
 
@@ -83,11 +83,6 @@ class Posts(new_db.Model):
     completed = new_db.Column(new_db.Boolean, nullable=False)
     expired = new_db.Column(new_db.Boolean, nullable=False)
 
-    # Relationships
-    contact = new_db.relationship('contacts',
-                                  backref=new_db.backref('posts', cascade="all, delete-orphan"),
-                                  lazy='joined')
-
     def __init__(self, title, desc, price, username):
         self.title = title
         self.description = desc
@@ -102,7 +97,7 @@ class Posts(new_db.Model):
 
 
 class NewContacts(new_db.Model):
-    __tablename__ = 'contacts'
+    __tablename__ = 'new_contacts'
 
     # Columns
     username = new_db.Column(new_db.String(30), primary_key=True)
@@ -143,11 +138,6 @@ class PostCategories(new_db.Model):
     id = new_db.Column(new_db.Integer, primary_key=True)
     post_id = new_db.Column(new_db.Integer, new_db.ForeignKey('posts.id'))
     category_id = new_db.Column(new_db.Integer, new_db.ForeignKey('categories.id'))
-
-    # Relationships
-    post = new_db.relationship('posts',
-                               backref=new_db.backref('post_categories', cascade="all, delete-orphan"),
-                               lazy='joined')
 
     def __init__(self, new_post_id, new_category_id):
         self.post_id = new_post_id
