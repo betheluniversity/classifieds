@@ -15,9 +15,9 @@
                 else if ($(".selectSort option:selected").text() == "Description (Z-A)")
                     sortPosts(".description > article", false);
                 else if ($(".selectSort option:selected").text() == "Price (High-Low)")
-                    sortPosts(".price", true);
+                    sortPrice(".price", true);
                 else if ($(".selectSort option:selected").text() == "Price (Low-High)")
-                    sortPosts(".price", false);
+                    sortPrice(".price", false);
                 else if ($(".selectSort option:selected").text() == "Date (Old-New)")
                     sortPosts(".date", true);
                 else if ($(".selectSort option:selected").text() == "Date (New-Old)")
@@ -44,5 +44,13 @@
                     }
                 }).appendTo('.table');
             };
+
+            function sortPrice(sortQuery, reverse) {
+                jQuery(".table > .singlePost").sort(function (a, b) {
+                    var test1 = jQuery('> .row > ' + sortQuery, a).text().toUpperCase();
+                    var test2 = jQuery('> .row > ' + sortQuery, a).text().toUpperCase();
+                    window.alert(test1);
+                }).appendTo('.table');
+            }
 
 
