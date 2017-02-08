@@ -15,7 +15,21 @@ class View(FlaskView):
 
     # This method doesn't need the actual word index; just the base URL will work to return the homepage
     def index(self):
-        return render_template("homepage.html", values=get_homepage(), showStatus=False)
+        page_number = request.args.get('page')  # Needs to be an int > 0
+        if page_number is None:
+            page_number = 1
+        else:
+            page_number = int(page_number)
+
+        results, number_of_pages = get_homepage(page_number)
+        page_selector_packet = {
+            'previous': max(1, (page_number - 1)),
+            'current': page_number,
+            'next': min((page_number + 1), number_of_pages),
+            'all_page_numbers': range(1, number_of_pages + 1)  # Offset zero-based indexing to one-based indexing
+        }
+
+        return render_template("homepage.html", values=results, page_selector=page_selector_packet, showStatus=False)
 
     # This URL is only for rendering to a channel in BLink
     @route("/blink-posts")
@@ -32,7 +46,20 @@ class View(FlaskView):
         if selector == "external" and not contact_is_admin(session['username']):
             return abort(404)
         if contact_exists_in_db(session['username']):
-            return render_template("view/users_posts.html", posts=filter_posts(session['username'], selector))
+            page_number = request.args.get('page')  # Needs to be an int > 0
+            if page_number is None:
+                page_number = 1
+            else:
+                page_number = int(page_number)
+
+            results, number_of_pages = filter_posts(session['username'], selector, page_number)
+            page_selector_packet = {
+                'previous': max(1, (page_number - 1)),
+                'current': page_number,
+                'next': min((page_number + 1), number_of_pages),
+                'all_page_numbers': range(1, number_of_pages + 1)  # Offset zero-based indexing to one-based indexing
+            }
+            return render_template("view/users_posts.html", posts=results, page_selector=page_selector_packet)
         else:
             error_message = "You don't exist in the contacts database yet, and as such you don't have any posts to view."
             return render_template("error_page.html", error=error_message)
@@ -55,16 +82,46 @@ class View(FlaskView):
         }
         if request.method == 'POST':
             storage = request.form
+            print storage
             if len(storage['title']) > 0:
                 to_send['title'] = [u"%" + word + u"%" for word in storage['title'].split(" ")]
             if len(storage['description']) > 0:
                 to_send['description'] = [u"%" + word + u"%" for word in storage['description'].split(" ")]
-            category_list = storage.getlist('categories')
+            category_list = storage.getlist('categories[]')
             if len(category_list) > 0:
                 to_send['categories'] = category_list
+            page_number = int(storage['page_number'])
+            to_send['page_no'] = page_number
+
+            results, number_of_pages = query_database(to_send)
+            page_selector_packet = {
+                'previous': max(1, (page_number - 1)),
+                'current': page_number,
+                'next': min((page_number + 1), number_of_pages),
+                'all_page_numbers': range(1, number_of_pages + 1)  # Offset zero-based indexing to one-based indexing
+            }
+
+            return render_template("search_results.html", values=results, page_selector=page_selector_packet)
         else:
             to_send['categories'] = [category]
-        return render_template("homepage.html", values=query_database(to_send), showStatus=False)
+
+            page_number = request.args.get('page')  # Needs to be an int > 0
+            if page_number is None:
+                page_number = 1
+            else:
+                page_number = int(page_number)
+
+            to_send['page_no'] = page_number
+            results, number_of_pages = query_database(to_send)
+            page_selector_packet = {
+                'previous': max(1, (page_number - 1)),
+                'current': page_number,
+                'next': min((page_number + 1), number_of_pages),
+                'all_page_numbers': range(1, number_of_pages + 1)  # Offset zero-based indexing to one-based indexing
+            }
+
+            return render_template("homepage.html", values=results, page_selector=page_selector_packet,
+                                   showStatus=False)
 
     ###################################################################################################################
     #                                                  Post endpoints                                                 #

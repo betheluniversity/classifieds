@@ -1,4 +1,5 @@
 import datetime
+import math
 import os
 import smtplib
 from collections import OrderedDict
@@ -377,12 +378,8 @@ def get_post_categories(post_id):
 #######################################################################################################################
 
 
-# If we want to change this over to pagination at a later date, I'm putting in commented code that should get you
-# started on it.
 def search_posts(title=[u"%"], description=[u"%"], categories=[u"%"], username=u"%", completed=u"%", expired=u"%",
-                 sort_date_descending=True):
-    # def search_classifieds(title=u"%", description=u"%", categories=u"%", username=u"%", completed=u"%", expired=u"%",
-    #                        sort_date_descending=True, max_results=50, page_no=1):
+                 sort_date_descending=True, max_results=20, page_no=1):
 
     # There's always a list of titles; by default it's only the wildcard, but this will search for any title that
     # contains any word in the list
@@ -437,6 +434,9 @@ def search_posts(title=[u"%"], description=[u"%"], categories=[u"%"], username=u
             is_expired
         ).all()
     #   ).limit(max_results).offset(max_results * (page_no - 1)).all()
+    num_results = len(all_results)
+    starting_index = max_results * (page_no - 1)
+    all_results = all_results[starting_index:starting_index + max_results]
 
     # Each row returned is a tuple of the following:
     # (non-unique post, non-unique contact, unique post_category, non-unique category)
@@ -452,7 +452,7 @@ def search_posts(title=[u"%"], description=[u"%"], categories=[u"%"], username=u
                 'contact': row[1],
                 'categories': [row[3]]
             }
-    return to_return
+    return to_return, int(math.ceil(float(num_results)/float(max_results)))
 
 
 def make_template_friendly_results(search_results):
@@ -474,10 +474,11 @@ def make_template_friendly_results(search_results):
     return to_send
 
 
-def filter_posts(username, selector):
+def filter_posts(username, selector, page_number):
     search_params = {
         'username': username,
-        'sort_date_descending': False
+        'sort_date_descending': False,
+        'page_no': page_number
     }
     if selector == "all":
         pass
@@ -494,17 +495,17 @@ def filter_posts(username, selector):
     else:
         pass
 
-    entries = search_posts(**search_params)
-    return make_template_friendly_results(entries)
+    entries, number_of_pages = search_posts(**search_params)
+    return make_template_friendly_results(entries), number_of_pages
 
 
 def query_database(params):
-    entries = search_posts(**params)
-    return make_template_friendly_results(entries)
+    entries, num_pages = search_posts(**params)
+    return make_template_friendly_results(entries), num_pages
 
 
-def get_homepage():
-    return query_database({'expired': False, 'completed': False})
+def get_homepage(page_number):
+    return query_database({'expired': False, 'completed': False, 'page_no': page_number})
 
 
 #######################################################################################################################
