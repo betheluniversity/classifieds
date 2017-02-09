@@ -112,7 +112,7 @@ span.warning {
 }
 
 form {
-    margin: 1em 3em 3em 2.5em;
+    margin: 1em 3em .5em 2.5em;
     padding: .75em;
 }
 
@@ -353,6 +353,37 @@ textarea {
 
 textarea#input {
     margin: -2em 0em 1.25em 0em;
+}
+
+/* pagination */
+
+.full-width {
+    text-align: center;
+}
+
+.page_selector {
+    margin: 1em 0em 1em 0em;
+}
+
+.page_button {
+    background-color: #0F2C52;
+    color: #ffffff !important;
+    padding: 8px 12px;
+    border-radius: .25em;
+    transition: 0s background-color;
+}
+
+.page_button:hover {
+    background-color: #0069AA;
+    color: #ffffff !important;
+}
+
+a.prev_arrow {
+
+}
+
+a.active_page {
+    background-color: #0069AA;
 }
 
 /* footer */

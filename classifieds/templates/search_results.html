@@ -1,15 +1,17 @@
 {% macro page_selector_macro(page_selector_dict) -%}
-<div class="page_selector">
-    <a onclick="get_result_page({{ page_selector_dict['previous'] }})">&lt;</a>&nbsp;
-    {% for page_no in page_selector_dict['all_page_numbers'] %}
-        {% if page_no == page_selector_dict['current']  %}
-            <a onclick="get_result_page({{ page_no }})" style="font-weight:bold">{{ page_no }}&nbsp;</a>
-        {% else %}
-            <a onclick="get_result_page({{ page_no }})">{{ page_no }}&nbsp;</a>
-        {% endif %}
-    {% endfor %}
-    <a onclick="get_result_page({{ page_selector_dict['next'] }})">&gt;</a>
-</div>
+    <div class="full-width">
+        <div class="page_selector">
+            <a class="page_button prev_arrow" onclick="get_result_page({{ page_selector_dict['previous'] }})">&lt;</a>
+            {% for page_no in page_selector_dict['all_page_numbers'] %}
+                {% if page_no == page_selector_dict['current']  %}
+                    <a class="page_button active_page" onclick="get_result_page({{ page_no }})">{{ page_no }}</a>
+                {% else %}
+                    <a class="page_button page_num" onclick="get_result_page({{ page_no }})">{{ page_no }}</a>
+                {% endif %}
+            {% endfor %}
+            <a class="page_button next_arrow" onclick="get_result_page({{ page_selector_dict['next'] }})">&gt;</a>
+        </div>
+    </div>
 {%- endmacro %}
 
 {{ page_selector_macro(page_selector) }}
