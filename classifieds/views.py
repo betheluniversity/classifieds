@@ -82,7 +82,6 @@ class View(FlaskView):
         }
         if request.method == 'POST':
             storage = request.form
-            print storage
             if len(storage['title']) > 0:
                 to_send['title'] = [u"%" + word + u"%" for word in storage['title'].split(" ")]
             if len(storage['description']) > 0:
