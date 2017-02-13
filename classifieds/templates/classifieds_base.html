@@ -28,9 +28,9 @@
                 </div>
             </div>
             <div class="menu-bar">
-                <ul>
+                <ul class="nav">
                     {% if is_user_admin() %}
-                        <li>
+                        <li class="nav-button">
                             <div id="admin_menu" class="admin">
                                 <button class="dropbtn-admin">
                                     <img class="icon" src="/static/drop-down-icon.png">
@@ -46,28 +46,28 @@
                             </div>
                         </li>
                     {% endif %}
-                    <li>
+                    <li class="nav-button">
                         {% if request.path == '/' %}
                             <a href="{{ url_for('View:index') }}" class="button active">Home</a>
                         {% else %}
                             <a href="{{ url_for('View:index') }}" class="button">Home</a>
                         {% endif %}
                     </li>
-                    <li>
+                    <li class="nav-button">
                         {% if url_for('View:search_page') in request.path %}
                             <a href="{{ url_for('View:search_page') }}" class="button active">Search</a>
                         {% else %}
                             <a href="{{ url_for('View:search_page') }}" class="button">Search</a>
                         {% endif %}
                     </li>
-                    <li>
+                    <li class="nav-button">
                         {% if url_for('View:add_post') in request.path %}
                             <a href="{{ url_for('View:add_post') }}" class="button active">Submit</a>
                         {% else %}
                             <a href="{{ url_for('View:add_post') }}" class="button">Submit</a>
                         {% endif %}
                     </li>
-                    <li>
+                    <li class="nav-button">
                         {% if '/view-posted/' in request.path %}
                             <a href="{{ url_for('View:view_posted', selector = 'active') }}" class="button active">
                                 {{ app_settings['MY_POSTS'] }}
@@ -78,15 +78,13 @@
                             </a>
                         {% endif %}
                     </li>
-                    {% if app_settings['FAQ_PAGE'] == "True" %}
-                    <li>
+                    <li class="nav-button">
                         {% if '/faq' in request.path %}
                             <a href="{{ url_for('View:faq') }}" class="button active">FAQ</a>
                         {% else %}
                             <a href="{{ url_for('View:faq') }}" class="button">FAQ</a>
                         {% endif %}
                     </li>
-                    {% endif %}
                 </ul>
             </div>
         </div>
