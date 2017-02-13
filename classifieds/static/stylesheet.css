@@ -59,14 +59,14 @@ img.icon {
     margin: -.2em .6em 0em 0em;
 }
 
-ul {
+ul.nav {
     list-style-type: none;
     margin: 0;
     padding: 0;
     overflow: hidden;
 }
 
-li a {
+li a.nav-button {
     width: 16.2em;
     float: left;
 }
@@ -432,7 +432,7 @@ textarea#input {
         text-align: left;
     }
 
-    ul {
+    ul.nav {
         list-style-type: none;
         margin: 0em;
         padding: 0em;
@@ -443,7 +443,7 @@ textarea#input {
         width: auto;
     }
 
-    li {
+    li.nav-button {
         float: left;
     }
 }
