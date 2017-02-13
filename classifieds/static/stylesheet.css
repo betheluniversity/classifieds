@@ -15,7 +15,7 @@ div.viewTable {
 }
 
 .padded {
-    height: 26.4em;
+    height: 29.4em;
     text-align: right;
     padding: .9em 0em 0em 0em;
     background-color: #0F2C52 !important;
@@ -368,18 +368,14 @@ textarea#input {
 .page_button {
     background-color: #0F2C52;
     color: #ffffff !important;
-    padding: 8px 12px;
+    padding: 6px 9px;
     border-radius: .25em;
     transition: 0s background-color;
 }
 
 .page_button:hover {
-    background-color: #0069AA;
+    background-color: rgba(0, 105, 170, 0.5);
     color: #ffffff !important;
-}
-
-a.prev_arrow {
-
 }
 
 a.active_page {
@@ -418,7 +414,7 @@ a.active_page {
 
 @media (min-width: 32.5em) {
     .padded {
-        height: 19.5em;
+        height: 22.5em;
     }
 
     /*img.logo {*/
@@ -431,7 +427,7 @@ a.active_page {
 
 @media (min-width: 39.1em) {
     .padded {
-        height: 16.5em;
+        height: 19em;
     }
 
     .top-right {
@@ -479,7 +475,7 @@ a.active_page {
     }
 }
 
-/* If webpage size becomes larger than em*/
+/* If webpage size becomes larger than 75em*/
 @media (min-width: 75em) {
 
     .padded {
