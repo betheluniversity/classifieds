@@ -1,0 +1,67 @@
+{% macro page_selector_macro(page_selector_dict) -%}
+    <div class="full-width">
+        <div class="page_selector">
+            <a class="page_button prev_arrow" onclick="get_result_page({{ page_selector_dict['previous'] }})">&lt;</a>
+            {% for page_no in page_selector_dict['all_page_numbers'] %}
+                {% if page_no == page_selector_dict['current']  %}
+                    <a class="page_button active_page" onclick="get_result_page({{ page_no }})">{{ page_no }}</a>
+                {% else %}
+                    <a class="page_button page_num" onclick="get_result_page({{ page_no }})">{{ page_no }}</a>
+                {% endif %}
+            {% endfor %}
+            <a class="page_button next_arrow" onclick="get_result_page({{ page_selector_dict['next'] }})">&gt;</a>
+        </div>
+    </div>
+{%- endmacro %}
+
+{{ page_selector_macro(page_selector) }}
+{% for val in values %}
+    <div id="singlePost-{{ loop.index }}" class="singlePost">
+        <div class="row">
+            <div class="cell">Title: </div>
+            <div class="title cell"><a href="{{ url_for('View:view_post', post_id = val['id']) }}">{{ val['title'] }}</a></div>
+        </div>
+        <div class="row">
+            <div class="cell">Description: </div>
+            <div class="description cell"><article>{{ val['description'] }}</article></div>
+        </div>
+        <div class="row">
+            <div class="cell">Price: </div>
+            <div class="price cell">{{ val['price'] }}</div>
+        </div>
+        <div class="row">
+            <div class="cell">Date Posted: </div>
+            <div class="date cell">{{ val['date_added'].date() }}</div>
+        </div>
+        <div class="row">
+            <div class="cell">Posted By: </div>
+            <div class="postedBy cell"><a href="{{ url_for('View:view_contact', username = val['username']) }}">{{ val['full_name'] }}</a></div>
+        </div>
+        {% if showStatus == True %}
+            <div class="row">
+                <div class="cell">Status:</div>
+                <div class="status cell">
+                    {% if val['completed'] == True %}
+                        Completed
+                    {% elif val['expired'] == True %}
+                        Expired
+                    {% else %}
+                        Active
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+        {% if is_user_admin() or session['username'] == val['username'] %}
+            <div class="row">
+                <div class="title cell">
+                    <a class="button" href="{{ url_for('View:edit_post', post_id = val['id']) }}">Edit</a>
+                    {% if is_user_admin() %}
+                    <a class="button" href="{{ url_for('View:delete_post_confirm', post_id = val['id']) }}">Delete</a>
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+        <hr/>
+    </div>
+{% endfor %}
+{{ page_selector_macro(page_selector) }}
