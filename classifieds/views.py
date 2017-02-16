@@ -34,7 +34,8 @@ class View(FlaskView):
     # This URL is only for rendering to a channel in BLink
     @route("/blink-posts")
     def blink_posts(self):
-        return render_template("blink_template.html", values=get_homepage(), showStatus=False)
+        results, num_pages = get_homepage(1)
+        return render_template("blink_template.html", values=results, showStatus=False)
 
     # This method is more or less a 'hub' for all the various ways that a poster would like to view the posts that
     # they've made. This passes on what type of posts they want to see, the DB does the filtering and returns the list,
