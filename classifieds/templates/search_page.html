@@ -10,17 +10,39 @@
     <p class="page-info search">Search through the {{ app_settings['PAGE_TITLE'] }} by Title,
         Description, and/or Category of the posting.</p>
 
-    <form id="classifieds" action="/search" method="post">
+    <form id="classifieds">
         <label for="title">Title contains:</label><input type="text" name="title" id="title">
         <label for="description">Description contains:</label><input type="text" name="description" id="description">
         <label for="categories">In any of these categories:</label>
-        <select name="categories" id="categories" class="largeselect" style="height:auto;" name="categories" multiple="">
+        <select name="categories" id="categories" class="largeselect" style="height:auto;" multiple="">
             {% for category_pair in categories %}
             <option value="{{ category_pair['category_html'] }}">{{ category_pair['category_human'] }}</option>
             {% endfor %}
-        </select><br>
-        <input type="submit" value="Search"/>
+        </select>
     </form>
+    <button onclick="get_result_page(1)" class="button" style="margin-left: 3.25em">Search</button>
+    <hr/>
+    <div id="results" class="table">
+
+    </div>
 </div>
 
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function get_result_page(page_number){
+        var kwargs = {
+            'title': $('#title').val(),
+            'description': $('#description').val(),
+            'categories': $('#categories').val(),
+            'page_number': page_number
+        };
+        $.post("/search", kwargs, update_result_div);
+    }
+
+    function update_result_div(new_inner_content){
+        document.getElementById('results').innerHTML = new_inner_content;
+    }
+</script>
 {% endblock %}

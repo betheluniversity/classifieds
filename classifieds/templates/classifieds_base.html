@@ -33,7 +33,7 @@
                         <li class="nav-button">
                             <div id="admin_menu" class="admin">
                                 <button class="dropbtn-admin">
-                                    <img class="icon" src="/static/drop-down-icon.png">
+                                    <img class="icon" src="{{ url_for('static', filename = 'drop-down-icon.png') }}">
                                     Administrator Functions
                                 </button>
                                 <div class="dropdown-content dropdown-content-admin">
@@ -112,3 +112,19 @@
     </div>
 
 {% endblock %}
+
+{% macro page_selector_macro(page_selector_dict) -%}
+<div class="full-width">
+    <div class="page_selector">
+        <a class="page_button prev_arrow" href="?page={{ page_selector_dict['previous'] }}">&lt;</a>
+        {% for page_no in page_selector_dict['all_page_numbers'] %}
+            {% if page_no == page_selector_dict['current']  %}
+                <a class="page_button active_page" href="?page={{ page_no }}">{{ page_no }}</a>
+            {% else %}
+                <a class="page_button page_num" href="?page={{ page_no }}">{{ page_no }}</a>
+            {% endif %}
+        {% endfor %}
+        <a class="page_button next_arrow" href="?page={{ page_selector_dict['next'] }}">&gt;</a>
+    </div>
+</div>
+{%- endmacro %}

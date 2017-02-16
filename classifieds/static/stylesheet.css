@@ -15,7 +15,7 @@ div.viewTable {
 }
 
 .padded {
-    height: 26.4em;
+    height: 29.4em;
     text-align: right;
     padding: .9em 0em 0em 0em;
     background-color: #0F2C52 !important;
@@ -66,7 +66,7 @@ ul.nav {
     overflow: hidden;
 }
 
-li a.nav-button {
+li a {
     width: 16.2em;
     float: left;
 }
@@ -112,7 +112,7 @@ span.warning {
 }
 
 form {
-    margin: 1em 3em 3em 2.5em;
+    margin: 1em 3em .5em 2.5em;
     padding: .75em;
 }
 
@@ -355,6 +355,33 @@ textarea#input {
     margin: -2em 0em 1.25em 0em;
 }
 
+/* pagination */
+
+.full-width {
+    text-align: center;
+}
+
+.page_selector {
+    margin: 1em 0em 1em 0em;
+}
+
+.page_button {
+    background-color: #0F2C52;
+    color: #ffffff !important;
+    padding: 6px 9px;
+    border-radius: .25em;
+    transition: 0s background-color;
+}
+
+.page_button:hover {
+    background-color: rgba(0, 105, 170, 0.5);
+    color: #ffffff !important;
+}
+
+a.active_page {
+    background-color: #0069AA;
+}
+
 /* footer */
 
 .footer {
@@ -387,7 +414,7 @@ textarea#input {
 
 @media (min-width: 32.5em) {
     .padded {
-        height: 19.5em;
+        height: 22.5em;
     }
 
     /*img.logo {*/
@@ -400,7 +427,7 @@ textarea#input {
 
 @media (min-width: 39.1em) {
     .padded {
-        height: 16.5em;
+        height: 19em;
     }
 
     .top-right {
@@ -448,7 +475,7 @@ textarea#input {
     }
 }
 
-/* If webpage size becomes larger than em*/
+/* If webpage size becomes larger than 75em*/
 @media (min-width: 75em) {
 
     .padded {
