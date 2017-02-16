@@ -35,6 +35,7 @@
                     var upB = jQuery('> .row > ' + sortQuery, b).text().toUpperCase();
                     console.log(upA);
                     console.log(upB);
+                    console.log("end");
                     if (upA > upB && reverse == true) {
                         return 1;
                     }
@@ -48,8 +49,8 @@
             };
 
             function sortPrice(sortQuery, reverse) {
-                console.log("sortPrice")
-                var re = /\d+\.?\d+/g;
+                console.log("sortPrice");
+                var re = /(\d+(\.?(\d*)))/g;
                 jQuery(".table > .singlePost").sort(function (a, b) {
                     var test1 = jQuery('> .row > ' + sortQuery, a).text();
                     var test2 = jQuery('> .row > ' + sortQuery, b).text();
