@@ -54,8 +54,8 @@
                 jQuery(".table > .singlePost").sort(function (a, b) {
                     var test1 = jQuery('> .row > ' + sortQuery, a).text();
                     var test2 = jQuery('> .row > ' + sortQuery, b).text();
-                    var result1 = parseFloat(re.exec(test1));
-                    var result2 = parseFloat(re.exec(test2));
+                    var result2 = parseFloat(test1.match(re)[0]);
+                    var result1 = parseFloat(test2.match(re)[0]);
                     console.log(result1);
                     console.log(result2);
                     console.log("break");
