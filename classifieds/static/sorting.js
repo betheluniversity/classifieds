@@ -33,6 +33,8 @@
                 jQuery(".table > .singlePost").sort(function (a, b) {
                     var upA = jQuery('> .row > ' + sortQuery, a).text().toUpperCase();
                     var upB = jQuery('> .row > ' + sortQuery, b).text().toUpperCase();
+                    console.log(upA);
+                    console.log(upB);
                     if (upA > upB && reverse == true) {
                         return 1;
                     }
@@ -46,11 +48,25 @@
             };
 
             function sortPrice(sortQuery, reverse) {
+                console.log("sortPrice")
+                var re = /\d+\.?\d+/g;
                 jQuery(".table > .singlePost").sort(function (a, b) {
-                    var test1 = jQuery('> .row > ' + sortQuery, a).text().toUpperCase();
-                    var test2 = jQuery('> .row > ' + sortQuery, a).text().toUpperCase();
-                    window.alert(test1);
+                    var test1 = jQuery('> .row > ' + sortQuery, a).text();
+                    var test2 = jQuery('> .row > ' + sortQuery, b).text();
+                    var result1 = parseFloat(re.exec(test1));
+                    var result2 = parseFloat(re.exec(test2));
+                    console.log(result1);
+                    console.log(result2);
+                    console.log("break");
+                    // window.alert("result2: " + result2);
+                    if(result1 > result2 && reverse == true) {
+                        return 1;
+                    }
+                    else if (result1 < result2 && reverse == false) {
+                        return 1;
+                    }
+                    else{
+                        return -1;
+                    }
                 }).appendTo('.table');
-            }
-
-
+            };
