@@ -33,9 +33,6 @@
                 jQuery(".table > .singlePost").sort(function (a, b) {
                     var upA = jQuery('> .row > ' + sortQuery, a).text().toUpperCase();
                     var upB = jQuery('> .row > ' + sortQuery, b).text().toUpperCase();
-                    console.log(upA);
-                    console.log(upB);
-                    console.log("end");
                     if (upA > upB && reverse == true) {
                         return 1;
                     }
@@ -54,12 +51,29 @@
                 jQuery(".table > .singlePost").sort(function (a, b) {
                     var test1 = jQuery('> .row > ' + sortQuery, a).text();
                     var test2 = jQuery('> .row > ' + sortQuery, b).text();
-                    var result2 = parseFloat(test1.match(re)[0]);
-                    var result1 = parseFloat(test2.match(re)[0]);
+
+
+                    var match1 = test2.match(re);
+                    var match2 = test1.match(re);
+                    var result1, result2;
+
+                    if( match1.length == 0 ){
+                        result1 = 0;
+                    }
+                    else {
+                        result1 = parseFloat(match1[0]);
+                    }
+
+                    if( match2.length == 0 ){
+                        result2 = 0;
+                    }
+                    else {
+                        result2 = parseFloat(match2[0]);
+                    }
+
                     console.log(result1);
                     console.log(result2);
                     console.log("break");
-                    // window.alert("result2: " + result2);
                     if(result1 > result2 && reverse == true) {
                         return 1;
                     }
