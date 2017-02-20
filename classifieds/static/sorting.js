@@ -57,14 +57,14 @@
                     var match2 = test1.match(re);
                     var result1, result2;
 
-                    if( match1.length == 0 ){
+                    if( match1 == null ){
                         result1 = 0;
                     }
                     else {
                         result1 = parseFloat(match1[0]);
                     }
 
-                    if( match2.length == 0 ){
+                    if( match2 == null ){
                         result2 = 0;
                     }
                     else {
