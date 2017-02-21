@@ -46,13 +46,10 @@
             };
 
             function sortPrice(sortQuery, reverse) {
-                console.log("sortPrice");
                 var re = /(\d+(\.?(\d*)))/g;
                 jQuery(".table > .singlePost").sort(function (a, b) {
                     var test1 = jQuery('> .row > ' + sortQuery, a).text();
                     var test2 = jQuery('> .row > ' + sortQuery, b).text();
-
-
                     var match1 = test2.match(re);
                     var match2 = test1.match(re);
                     var result1, result2;
@@ -71,9 +68,6 @@
                         result2 = parseFloat(match2[0]);
                     }
 
-                    console.log(result1);
-                    console.log(result2);
-                    console.log("break");
                     if(result1 > result2 && reverse == true) {
                         return 1;
                     }
