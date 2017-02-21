@@ -23,9 +23,6 @@ class View(FlaskView):
 
         results, number_of_pages = get_homepage(page_number)
         page_selector_packet = create_page_selector_packet(number_of_pages, page_number)
-
-
-
         return render_template("homepage.html", values=results, page_selector=page_selector_packet, showStatus=False)
 
     # This URL is only for rendering to a channel in BLink
@@ -87,7 +84,6 @@ class View(FlaskView):
 
             results, number_of_pages = query_database(to_send)
             page_selector_packet = create_page_selector_packet(number_of_pages, page_number)
-
             return render_template("search_results.html", values=results, page_selector=page_selector_packet)
         else:
             to_send['categories'] = [category]
@@ -101,7 +97,6 @@ class View(FlaskView):
             to_send['page_no'] = page_number
             results, number_of_pages = query_database(to_send)
             page_selector_packet = create_page_selector_packet(number_of_pages, page_number)
-
             return render_template("homepage.html", values=results, page_selector=page_selector_packet,
                                    showStatus=False)
 

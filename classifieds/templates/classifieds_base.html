@@ -116,6 +116,7 @@
 {% macro page_selector_macro(page_selector_dict) -%}
 <div class="full-width">
     <div class="page_selector">
+        <a class="page_button prev_arrow" href="?page=1">&lt;&lt;</a>
         <a class="page_button prev_arrow" href="?page={{ page_selector_dict['previous'] }}">&lt;</a>
         {% for page_no in page_selector_dict['all_page_numbers'] %}
             {% if page_no == page_selector_dict['current']  %}
@@ -125,6 +126,7 @@
             {% endif %}
         {% endfor %}
         <a class="page_button next_arrow" href="?page={{ page_selector_dict['next'] }}">&gt;</a>
+        <a class="page_button next_arrow" href="?page={{ page_selector_dict['last'] }}">&gt;&gt;</a>
     </div>
 </div>
 {%- endmacro %}

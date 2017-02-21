@@ -545,6 +545,7 @@ def create_page_selector_packet(number_of_pages, selected_page):
         'previous': previous_page_number,
         'current': selected_page,
         'next': next_page_number,
+        'last': number_of_pages,
         'all_page_numbers': page_range
     }
     return page_selector_packet
