@@ -236,7 +236,8 @@ def get_contact(username):
         'first_name': contact.first_name,
         'last_name': contact.last_name,
         'email': contact.email,
-        'phone_number': contact.phone_number
+        'phone_number': contact.phone_number,
+        'external': contact.username == contact.email
     }
 
 
