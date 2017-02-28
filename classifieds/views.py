@@ -22,12 +22,9 @@ class View(FlaskView):
             page_number = int(page_number)
 
         results, number_of_pages = get_homepage(page_number)
-        page_selector_packet = {
-            'previous': max(1, (page_number - 1)),
-            'current': page_number,
-            'next': min((page_number + 1), number_of_pages),
-            'all_page_numbers': range(1, number_of_pages + 1)  # Offset zero-based indexing to one-based indexing
-        }
+        page_selector_packet = create_page_selector_packet(number_of_pages, page_number)
+
+
 
         return render_template("homepage.html", values=results, page_selector=page_selector_packet, showStatus=False)
 
@@ -54,12 +51,7 @@ class View(FlaskView):
                 page_number = int(page_number)
 
             results, number_of_pages = filter_posts(session['username'], selector, page_number)
-            page_selector_packet = {
-                'previous': max(1, (page_number - 1)),
-                'current': page_number,
-                'next': min((page_number + 1), number_of_pages),
-                'all_page_numbers': range(1, number_of_pages + 1)  # Offset zero-based indexing to one-based indexing
-            }
+            page_selector_packet = create_page_selector_packet(number_of_pages, page_number)
             return render_template("view/users_posts.html", posts=results, page_selector=page_selector_packet)
         else:
             error_message = "You don't exist in the contacts database yet, and as such you don't have any posts to view."
@@ -94,12 +86,7 @@ class View(FlaskView):
             to_send['page_no'] = page_number
 
             results, number_of_pages = query_database(to_send)
-            page_selector_packet = {
-                'previous': max(1, (page_number - 1)),
-                'current': page_number,
-                'next': min((page_number + 1), number_of_pages),
-                'all_page_numbers': range(1, number_of_pages + 1)  # Offset zero-based indexing to one-based indexing
-            }
+            page_selector_packet = create_page_selector_packet(number_of_pages, page_number)
 
             return render_template("search_results.html", values=results, page_selector=page_selector_packet)
         else:
@@ -113,12 +100,7 @@ class View(FlaskView):
 
             to_send['page_no'] = page_number
             results, number_of_pages = query_database(to_send)
-            page_selector_packet = {
-                'previous': max(1, (page_number - 1)),
-                'current': page_number,
-                'next': min((page_number + 1), number_of_pages),
-                'all_page_numbers': range(1, number_of_pages + 1)  # Offset zero-based indexing to one-based indexing
-            }
+            page_selector_packet = create_page_selector_packet(number_of_pages, page_number)
 
             return render_template("homepage.html", values=results, page_selector=page_selector_packet,
                                    showStatus=False)
