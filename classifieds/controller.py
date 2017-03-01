@@ -236,7 +236,8 @@ def get_contact(username):
         'first_name': contact.first_name,
         'last_name': contact.last_name,
         'email': contact.email,
-        'phone_number': contact.phone_number
+        'phone_number': contact.phone_number,
+        'external': contact.username == contact.email
     }
 
 
@@ -524,6 +525,31 @@ def get_app_settings():
             key, val = line.split(" = ")
             to_return[key] = val[1:-2]  # This peels off a " from the front and a "\n from the end
     return to_return
+
+
+def create_page_selector_packet(number_of_pages, selected_page):
+    previous_page_number = max(1, (selected_page - 1))  # Must always be 1 or greater
+    next_page_number = min((selected_page + 1), number_of_pages)  # Can never be more than the last page
+
+    DESIRED_OFFSET = 2
+    if number_of_pages < 2 * DESIRED_OFFSET + 2:  # window = 2 * desired_offset + 1, so x < (window + 1)
+        page_range = range(1, number_of_pages + 1)
+    else:
+        if selected_page < DESIRED_OFFSET + 1:
+            page_range = range(1, 2 * DESIRED_OFFSET + 2)  # window = 2 * desired_offset + 1, then offset by +1
+        elif number_of_pages - selected_page < DESIRED_OFFSET + 1:
+            page_range = range(number_of_pages - 2 * DESIRED_OFFSET, number_of_pages+1)
+        else:
+            page_range = range(selected_page - DESIRED_OFFSET, selected_page + DESIRED_OFFSET + 1)
+
+    page_selector_packet = {
+        'previous': previous_page_number,
+        'current': selected_page,
+        'next': next_page_number,
+        'last': number_of_pages,
+        'all_page_numbers': page_range
+    }
+    return page_selector_packet
 
 
 def send_expired_email(username):
