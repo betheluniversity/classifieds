@@ -13,6 +13,8 @@
 </table>
 {% if session['username'] == to_view['username'] %}
     <a href="{{ url_for('View:edit_contact') }}" id="edit-profile">Edit info</a>
+{% elif to_view['external'] and is_user_admin() %}
+    <a href="{{ url_for('View:edit_external_contact', email=to_view['username']) }}" id="edit-profile">Edit info</a>
 {% endif %}
 </div>
 {% endblock %}

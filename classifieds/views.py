@@ -23,9 +23,6 @@ class View(FlaskView):
 
         results, number_of_pages = get_homepage(page_number)
         page_selector_packet = create_page_selector_packet(number_of_pages, page_number)
-
-
-
         return render_template("homepage.html", values=results, page_selector=page_selector_packet, showStatus=False)
 
     # This URL is only for rendering to a channel in BLink
@@ -87,7 +84,6 @@ class View(FlaskView):
 
             results, number_of_pages = query_database(to_send)
             page_selector_packet = create_page_selector_packet(number_of_pages, page_number)
-
             return render_template("search_results.html", values=results, page_selector=page_selector_packet)
         else:
             to_send['categories'] = [category]
@@ -101,7 +97,6 @@ class View(FlaskView):
             to_send['page_no'] = page_number
             results, number_of_pages = query_database(to_send)
             page_selector_packet = create_page_selector_packet(number_of_pages, page_number)
-
             return render_template("homepage.html", values=results, page_selector=page_selector_packet,
                                    showStatus=False)
 
@@ -222,7 +217,7 @@ class View(FlaskView):
     @route("/edit-contact")
     def edit_contact(self):
         return render_template("forms/contact.html", form=ContactForm(get_contact_form_data(session['username'])),
-                               external=False)
+                               external=False, new=False)
 
     # Similarly to /submit-post, this method parses the contact form's contents, validates, and updates the DB's entry
     # for the user. If they're already in the DB, it edits their info. If an administrator is adding an external
@@ -231,22 +226,27 @@ class View(FlaskView):
     def submit_contact(self):
         storage = request.form
         form = ContactForm(storage)
+        is_external = (storage['external'] == 'True')
+        if is_external:
+            submitters_username = storage['email']
+        else:
+            submitters_username = session['username']
+        contact_in_db = contact_exists_in_db(submitters_username)
+
         is_valid = form.validate()
         if not is_valid:
-            return render_template("forms/contact.html", form=form)
+            return render_template("forms/contact.html", form=form, external=is_external, new=not contact_in_db)
 
-        if storage['external'] == 'True':
-            submitters_username = storage['email']
-            if contact_exists_in_db(submitters_username):
+        if is_external:
+            if contact_in_db:
                 edit_contact(submitters_username, storage['first_name'], storage['last_name'], storage['email'],
                              storage['phone_number'])
-                message = "Contact information successfully edited!"
+                message = "External contact information successfully edited!"
             else:
                 add_contact(submitters_username, storage['first_name'], storage['last_name'], storage['email'],
                              storage['phone_number'])
-                message = "Contact information successfully updated!"
+                message = "External contact information successfully added!"
         else:
-            submitters_username = session['username']
             edit_contact(submitters_username, storage['first_name'], storage['last_name'], storage['email'],
                          storage['phone_number'])
             message = "Contact information successfully updated!"
