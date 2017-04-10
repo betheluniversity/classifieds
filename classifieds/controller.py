@@ -381,7 +381,7 @@ def get_post_categories(post_id):
 
 def search_posts(title=[u"%"], description=[u"%"], categories=[u"%"], username=u"%", completed=u"%", expired=u"%",
                  sort_date_descending=True, max_results=20, page_no=1):
-
+    #sort_type = "sort_date_descending",
     # There's always a list of titles; by default it's only the wildcard, but this will search for any title that
     # contains any word in the list
     titles = Posts.title.like(title[0])
@@ -418,6 +418,18 @@ def search_posts(title=[u"%"], description=[u"%"], categories=[u"%"], username=u
         ordering = desc(Posts.date_added)
     else:
         ordering = asc(Posts.date_added)
+
+    # if sort_type == "sortByTitleAZ":
+    # ordering = desc(Posts.title)
+    # elif sort_type == "sortByTitleZA":
+    # ordering = asc(Posts.title)
+    # elif sort_type == ""
+    # ordering = desc(Posts.description)
+    # ordering = asc(Posts.description)
+    #
+    # ordering = desc(Posts.username)
+    # ordering = asc(Posts.username)
+
 
     # This monstrosity is what joins all 4 tables together properly, adds the filters as specified above, and then runs
     # the resultant query.
