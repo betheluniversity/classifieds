@@ -82,7 +82,7 @@ def expire_old_posts():
         entry = all_active_entries[key]['post']
         now = datetime.datetime.now().date()
         then = entry.date_added.date()
-        if (now - then).days >= 180:
+        if (now - then).days >= 30:
             entry.expired = True
             send_expired_email(entry.username)
     db.session.commit()
