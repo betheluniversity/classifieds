@@ -46,6 +46,6 @@
 {% elif post['completed'] == True %}
     <div>This {{ app_settings['POST_TYPE'] }} post has been marked as completed.</div>
 {% elif post['expired'] == True %}
-    <div>This {{ app_settings['POST_TYPE'] }} post has expired; it hasn't been marked as complete in over 180 days.</div>
+    <div>This {{ app_settings['POST_TYPE'] }} post has expired; it hasn't been marked as complete in over {{ app_settings['EXPIRY'] }} days.</div>
 {% endif %}
 {% endblock %}
