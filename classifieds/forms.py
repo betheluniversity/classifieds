@@ -18,6 +18,20 @@ def phone_validator():
     return _phone
 
 
+# This is a custom validator that I made to make sure that any emails put in will only use characters that are also safe
+# to call in URLs, like classifieds.bethel.edu/view-contact/example@fake.com
+def safe_for_url():
+    message = 'The text provided would not work in a URL bar'
+
+    def _safe(form, field):
+        bad_chars = re.compile(r'(["%<> /\\{|}\^]+)')
+        result = bad_chars.search(field.data)
+        if result:
+            raise ValidationError(message)
+
+    return _safe
+
+
 class RenderableForm(Form):
 
     def render_to_html(self):
@@ -51,7 +65,7 @@ class ExternalPosterForm(RenderableForm):
 class ContactForm(RenderableForm):
     first_name = StringField('First Name:', [validators.DataRequired(), validators.Length(max=20)])
     last_name = StringField('Last Name:', [validators.DataRequired(), validators.Length(max=30)])
-    email = StringField('Email address:', [validators.DataRequired(), validators.Email()])
+    email = StringField('Email address:', [validators.DataRequired(), validators.Email(), safe_for_url()])
     phone_number = StringField('Phone Number:', [validators.DataRequired(), phone_validator()])
     submit = SubmitField("Submit")
 
@@ -61,4 +75,3 @@ class CategoryForm(RenderableForm):
     category_html = StringField('HTML version of the category:', [validators.DataRequired(), validators.Length(max=50)])
     category_human = StringField('Human-friendly version of the category:', [validators.DataRequired(), validators.Length(max=50)])
     submit = SubmitField("Submit")
-
