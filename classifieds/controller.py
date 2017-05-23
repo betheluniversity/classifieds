@@ -78,13 +78,13 @@ def renew_entry(entry_id, username):
 
 
 def expire_old_posts():
-    all_active_entries = search_posts(completed=False, expired=False)
+    all_active_entries = search_posts(completed=False, expired=False)[0]
     for key in all_active_entries:
         entry = all_active_entries[key]['post']
         now = datetime.datetime.now().date()
         then = entry.date_added.date()
-        if (now - then).days >= 180:
-            entry.expired = True
+        if (now - then).days >= app.config['EXPIRY']:
+            Posts.query.filter(Posts.id.like(entry.id)).first().expired = True
             send_expired_email(entry.username)
     db.session.commit()
 
@@ -581,7 +581,8 @@ def create_page_selector_packet(number_of_pages, selected_page):
 def send_expired_email(username):
     contact = Contacts.query.filter(Contacts.username.like(username)).first()
 
-    msg = MIMEText("One of the posts that you listed 180 days ago has been marked as expired.")
+    msg = MIMEText("One of the posts that you listed " + str(app.config['EXPIRY']) +
+                   " days ago has been marked as expired.")
     msg['Subject'] = "One of your posts has expired"
     msg['From'] = "no-reply@bethel.edu"
     msg['To'] = contact.email
