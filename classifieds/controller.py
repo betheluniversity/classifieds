@@ -618,11 +618,3 @@ def send_feedback_email(form_contents, username):
     s.sendmail(username + "@bethel.edu", app.config['ADMINS'], msg.as_string())
     s.quit()
 
-def testregex():
-    import re
-    testword = "abcdefg123456"
-    pattern = "([bcd]+)"
-    matches = re.search(pattern, testword)
-    results = matches.groups()
-    print results
-
