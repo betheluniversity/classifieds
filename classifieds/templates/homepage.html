@@ -15,22 +15,7 @@
             <p class="noPosts">There are no active posts to show.</p>
         {% else %}
     <div class="table">
-        <div class="sorting">
-            <div class="centered">
-                <select class="selectSort">
-                    <option id="titleAZ" value="sortByTitleAZ">Title (A-Z)</option>
-                    <option id="titleZA" value="sortByTitleZA">Title (Z-A)</option>
-                    <option id="descriptionAZ" value="sortByDescriptionAZ">Description (A-Z)</option>
-                    <option id="descriptionZA" value="sortByDescriptionZA">Description (Z-A)</option>
-                    <option id="priceAZ" value="sortByPrice">Price (High-Low)</option>
-                    <option id="priceZA" value="reversePriceOrder">Price (Low-High)</option>
-                    <option id="dateAZ" value="sortByDate">Date (Old-New)</option>
-                    <option id="dateZA" value="reverseDateOrder" selected="selected">Date (New-Old)</option>
-                    <option id="postedByAZ" value="sortByPostedByAZ">Author (A-Z)</option>
-                    <option id="postedByZA" value="sortByPostedByZA">Author (Z-A)</option>
-                </select>
-            </div>
-        </div>
+        {{ sort_type_selector() }}
         {{ page_selector_macro(page_selector) }}
     {% for val in values %}
         <div id="singlePost-{{ loop.index }}" class="singlePost">

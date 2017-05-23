@@ -16,6 +16,23 @@
     </div>
 {%- endmacro %}
 
+{% macro sort_type_selector(page_selector_dict) -%}
+<div class="sorting">
+    <div class="centered">
+        <select class="selectSort" id="sortSelector" onchange="get_result_page({{ page_selector_dict['current'] }})">
+            {% for tuple in list_of_tuples %}
+                {% if tuple[1] == page_selector_dict['sort_type'] %}
+                <option id="{{ tuple[0] }}" value="{{ tuple[1] }}" selected="selected">{{ tuple[2] }}</option>
+                {% else %}
+                <option id="{{ tuple[0] }}" value="{{ tuple[1] }}">{{ tuple[2] }}</option>
+                {% endif %}
+            {% endfor %}
+        </select>
+    </div>
+</div>
+{%- endmacro %}
+
+{{ sort_type_selector(page_selector) }}
 {{ page_selector_macro(page_selector) }}
 {% for val in values %}
     <div id="singlePost-{{ loop.index }}" class="singlePost">

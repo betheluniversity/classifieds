@@ -1,6 +1,7 @@
 import datetime
 import math
 import os
+import re
 import smtplib
 from collections import OrderedDict
 from email.mime.text import MIMEText
@@ -380,8 +381,7 @@ def get_post_categories(post_id):
 
 
 def search_posts(title=[u"%"], description=[u"%"], categories=[u"%"], username=u"%", completed=u"%", expired=u"%",
-                 sort_date_descending=True, max_results=20, page_no=1):
-
+                max_results=20, page_no=1, sort_type="sortByDate"):
     # There's always a list of titles; by default it's only the wildcard, but this will search for any title that
     # contains any word in the list
     titles = Posts.title.like(title[0])
@@ -414,10 +414,25 @@ def search_posts(title=[u"%"], description=[u"%"], categories=[u"%"], username=u
 
     # Home page and search results return with most recent date at the top, but viewing user's posts should have the
     # oldest date at the top. By having the sort done in this method, it clears up the code elsewhere.
-    if sort_date_descending:
-        ordering = desc(Posts.date_added)
-    else:
+    ordering = desc(Posts.date_added)
+
+    if sort_type == "sortByTitleAZ":
+        ordering = asc(Posts.title)
+    elif sort_type == "sortByTitleZA":
+        ordering = desc(Posts.title)
+    elif sort_type == "sortByDescriptionAZ":
+        ordering = asc(Posts.description)
+    elif sort_type == "sortByDescriptionZA":
+        ordering = desc(Posts.description)
+    elif sort_type == "sortByUsernameAZ":
+        ordering = asc(Posts.username)
+    elif sort_type == "sortByUsernameZA":
+        ordering = desc(Posts.username)
+    elif sort_type == "sortByDate":
         ordering = asc(Posts.date_added)
+    elif sort_type == "reverseDateOrder":
+        ordering = desc(Posts.date_added)
+
 
     # This monstrosity is what joins all 4 tables together properly, adds the filters as specified above, and then runs
     # the resultant query.
@@ -435,9 +450,32 @@ def search_posts(title=[u"%"], description=[u"%"], categories=[u"%"], username=u
             is_expired
         ).all()
     #   ).limit(max_results).offset(max_results * (page_no - 1)).all()
-    num_results = len(all_results)
-    starting_index = max_results * (page_no - 1)
-    all_results = all_results[starting_index:starting_index + max_results]
+
+    # This method takes in the price field given, parses and returns out the numeric value. Entries that lack a number
+    # are assigned a price of 0.
+    def get_numerical_value(price_string):
+        # i'm sorry
+        # This regular expression matches a group of text, numbers (including commas and periods), more text,
+        # more numbers, and finally another set of text.
+        pattern = "[~@!:$<> &-/a-zA-Z]*(\d[\d,.]*)?[~@!:$<> &-/a-zA-Z]*(\d[\d,.]*)?[~@!:$<> &-/a-zA-Z]*"
+
+        results = re.match(pattern, price_string)
+        if results is not None:
+            # Because the primary/lower price should always be on the left, get the left number group match
+            number_string = results.groups()[0]
+            if number_string is None:
+                return 0
+            return float(number_string)
+        else:
+            # If there is no match, that means the price is a word which equates to 0 numerically
+            return 0
+
+    # The sorted function here takes in all results processed into numbers and sorts them accordingly by price.
+    # The sorting is simply reversed for reverse price order.
+    if sort_type == "sortByPrice":
+        all_results = sorted(all_results, key=lambda tuple_result: get_numerical_value(tuple_result[0].price), reverse=True)
+    elif sort_type == "reversePriceOrder":
+        all_results = sorted(all_results, key=lambda tuple_result: get_numerical_value(tuple_result[0].price))
 
     # Each row returned is a tuple of the following:
     # (non-unique post, non-unique contact, unique post_category, non-unique category)
@@ -453,13 +491,17 @@ def search_posts(title=[u"%"], description=[u"%"], categories=[u"%"], username=u
                 'contact': row[1],
                 'categories': [row[3]]
             }
+
+    num_results = len(to_return)
+    starting_index = max_results * (page_no - 1)
+    to_return = [to_return[key] for key in to_return.keys()[starting_index:starting_index + max_results]]
+
     return to_return, int(math.ceil(float(num_results)/float(max_results)))
 
 
 def make_template_friendly_results(search_results):
     to_send = []
-    for key in search_results:
-        entry = search_results[key]
+    for entry in search_results:
         entry_dictionary = {
             'id': entry['post'].id,
             'title': entry['post'].title,
@@ -575,3 +617,12 @@ def send_feedback_email(form_contents, username):
     s = smtplib.SMTP('localhost')
     s.sendmail(username + "@bethel.edu", app.config['ADMINS'], msg.as_string())
     s.quit()
+
+def testregex():
+    import re
+    testword = "abcdefg123456"
+    pattern = "([bcd]+)"
+    matches = re.search(pattern, testword)
+    results = matches.groups()
+    print results
+
