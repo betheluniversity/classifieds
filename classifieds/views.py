@@ -72,7 +72,7 @@ class View(FlaskView):
         }
         if request.method == 'POST':
             storage = request.form
-            # to_send['sort_type'] = storage['sort_type']
+            to_send['sort_type'] = storage['sort_type']
             if len(storage['title']) > 0:
                 to_send['title'] = [u"%" + word + u"%" for word in storage['title'].split(" ")]
             if len(storage['description']) > 0:
@@ -84,8 +84,24 @@ class View(FlaskView):
             to_send['page_no'] = page_number
 
             results, number_of_pages = query_database(to_send)
+            list_of_sort_selectors = [
+                ("titleAZ", "sortByTitleAZ", "Title (A-Z)"),
+                ("titleZA", "sortByTitleZA", "Title (Z-A)"),
+                ("descriptionAZ", "sortByDescriptionAZ", "Description (A-Z)"),
+                ("descriptionZA", "sortByDescriptionZA", "Description (Z-A)"),
+                ("priceAZ", "sortByPrice", "Price (High-Low)"),
+                ("priceZA", "reversePriceOrder", "Price (Low-High)"),
+                ("dateAZ", "sortByDate", "Date (Old-New)"),
+                ("dateZA", "reverseDateOrder", "Date (New-Old)"),
+                ("postedByAZ", "sortByPostedByAZ", "Author (A-Z)"),
+                ("postedByZA", "sortByPostedByZA", "Author (Z-A)")
+            ]
             page_selector_packet = create_page_selector_packet(number_of_pages, page_number)
-            return render_template("search_results.html", values=results, page_selector=page_selector_packet)
+            page_selector_packet['sort_type'] = storage['sort_type']
+            return render_template("search_results.html",
+                                   values=results,
+                                   page_selector=page_selector_packet,
+                                   list_of_tuples=list_of_sort_selectors)
         else:
             to_send['categories'] = [category]
 

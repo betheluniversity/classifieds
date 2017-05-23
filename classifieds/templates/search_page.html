@@ -32,11 +32,19 @@
 {% block scripts %}
 <script>
     function get_result_page(page_number){
+        var sort_type;
+        if(document.getElementById("sortSelector") === null){
+            sort_type = "reverseDateOrder";
+        }
+        else{
+            sort_type = $('#sortSelector').val();
+        }
         var kwargs = {
             'title': $('#title').val(),
             'description': $('#description').val(),
             'categories': $('#categories').val(),
-            'page_number': page_number
+            'page_number': page_number,
+            'sort_type' : sort_type
         };
         $.post("/search", kwargs, update_result_div);
     }

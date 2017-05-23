@@ -1,6 +1,7 @@
 import datetime
 import math
 import os
+import re
 import smtplib
 from collections import OrderedDict
 from email.mime.text import MIMEText
@@ -380,8 +381,7 @@ def get_post_categories(post_id):
 
 
 def search_posts(title=[u"%"], description=[u"%"], categories=[u"%"], username=u"%", completed=u"%", expired=u"%",
-                 sort_date_descending=True, max_results=20, page_no=1):
-    #sort_type = "sort_date_descending",
+                max_results=20, page_no=1, sort_type="sortByDate"):
     # There's always a list of titles; by default it's only the wildcard, but this will search for any title that
     # contains any word in the list
     titles = Posts.title.like(title[0])
@@ -414,21 +414,23 @@ def search_posts(title=[u"%"], description=[u"%"], categories=[u"%"], username=u
 
     # Home page and search results return with most recent date at the top, but viewing user's posts should have the
     # oldest date at the top. By having the sort done in this method, it clears up the code elsewhere.
-    if sort_date_descending:
-        ordering = desc(Posts.date_added)
-    else:
-        ordering = asc(Posts.date_added)
 
-    # if sort_type == "sortByTitleAZ":
-    # ordering = desc(Posts.title)
-    # elif sort_type == "sortByTitleZA":
-    # ordering = asc(Posts.title)
-    # elif sort_type == ""
-    # ordering = desc(Posts.description)
-    # ordering = asc(Posts.description)
-    #
-    # ordering = desc(Posts.username)
-    # ordering = asc(Posts.username)
+    if sort_type == "sortByTitleAZ":
+        ordering = asc(Posts.title)
+    elif sort_type == "sortByTitleZA":
+        ordering = desc(Posts.title)
+    elif sort_type == "sortByDescriptionAZ":
+        ordering = asc(Posts.description)
+    elif sort_type == "sortByDescriptionZA":
+        ordering = desc(Posts.description)
+    elif sort_type == "sortByUsernameAZ":
+        ordering = asc(Posts.username)
+    elif sort_type == "sortByUsernameZA":
+        ordering = desc(Posts.username)
+    elif sort_type == "sortByDate":
+        ordering = asc(Posts.date_added)
+    elif sort_type == "reverseDateOrder":
+        ordering = desc(Posts.date_added)
 
 
     # This monstrosity is what joins all 4 tables together properly, adds the filters as specified above, and then runs
@@ -447,6 +449,18 @@ def search_posts(title=[u"%"], description=[u"%"], categories=[u"%"], username=u
             is_expired
         ).all()
     #   ).limit(max_results).offset(max_results * (page_no - 1)).all()
+
+    # sort by price
+
+    def get_numerical_value(price_string):
+        alpha = "($)?\d+(.)?(\d)?(\d)?      ($)?\d+(.)?(\d)?(\d)?"
+        # beta = ""
+        # results = re.match(alpha, "").groups()
+        return 0
+
+    temp_results = sorted(all_results, key=lambda tuple_result: get_numerical_value(tuple_result[0].price))
+
+
     num_results = len(all_results)
     starting_index = max_results * (page_no - 1)
     all_results = all_results[starting_index:starting_index + max_results]
