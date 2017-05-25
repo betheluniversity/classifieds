@@ -381,7 +381,7 @@ def get_post_categories(post_id):
 
 
 def search_posts(title=[u"%"], description=[u"%"], categories=[u"%"], username=u"%", completed=u"%", expired=u"%",
-                max_results=20, page_no=1, sort_type="sortByDate"):
+                 max_results=20, page_no=1, sort_type="reverseDateOrder"):
     # There's always a list of titles; by default it's only the wildcard, but this will search for any title that
     # contains any word in the list
     titles = Posts.title.like(title[0])
@@ -433,7 +433,6 @@ def search_posts(title=[u"%"], description=[u"%"], categories=[u"%"], username=u
     elif sort_type == "reverseDateOrder":
         ordering = desc(Posts.date_added)
 
-
     # This monstrosity is what joins all 4 tables together properly, adds the filters as specified above, and then runs
     # the resultant query.
     all_results = db.session.query(Posts, Contacts, PostCategories, Categories
@@ -454,7 +453,7 @@ def search_posts(title=[u"%"], description=[u"%"], categories=[u"%"], username=u
     # This method takes in the price field given, parses and returns out the numeric value. Entries that lack a number
     # are assigned a price of 0.
     def get_numerical_value(price_string):
-        # i'm sorry
+        # "I'm sorry" - Nathan Li, 2017
         # This regular expression matches a group of text, numbers (including commas and periods), more text,
         # more numbers, and finally another set of text.
         pattern = "[~@!:$<> &-/a-zA-Z]*(\d[\d,.]*)?[~@!:$<> &-/a-zA-Z]*(\d[\d,.]*)?[~@!:$<> &-/a-zA-Z]*"
@@ -520,7 +519,6 @@ def make_template_friendly_results(search_results):
 def filter_posts(username, selector, page_number):
     search_params = {
         'username': username,
-        'sort_date_descending': False,
         'page_no': page_number
     }
     if selector == "all":
@@ -547,8 +545,8 @@ def query_database(params):
     return make_template_friendly_results(entries), num_pages
 
 
-def get_homepage(page_number):
-    return query_database({'expired': False, 'completed': False, 'page_no': page_number})
+def get_homepage(page_number, sort_type):
+    return query_database({'expired': False, 'completed': False, 'page_no': page_number, 'sort_type': sort_type})
 
 
 #######################################################################################################################
@@ -569,7 +567,7 @@ def get_app_settings():
     return to_return
 
 
-def create_page_selector_packet(number_of_pages, selected_page):
+def create_page_selector_packet(number_of_pages, selected_page, sort_type="reverseDateOrder"):
     previous_page_number = max(1, (selected_page - 1))  # Must always be 1 or greater
     next_page_number = min((selected_page + 1), number_of_pages)  # Can never be more than the last page
 
@@ -589,7 +587,8 @@ def create_page_selector_packet(number_of_pages, selected_page):
         'current': selected_page,
         'next': next_page_number,
         'last': number_of_pages,
-        'all_page_numbers': page_range
+        'all_page_numbers': page_range,
+        'sort_type': sort_type
     }
     return page_selector_packet
 
@@ -617,4 +616,3 @@ def send_feedback_email(form_contents, username):
     s = smtplib.SMTP('localhost')
     s.sendmail(username + "@bethel.edu", app.config['ADMINS'], msg.as_string())
     s.quit()
-

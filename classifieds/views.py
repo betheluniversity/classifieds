@@ -21,14 +21,22 @@ class View(FlaskView):
         else:
             page_number = int(page_number)
 
-        results, number_of_pages = get_homepage(page_number)
-        page_selector_packet = create_page_selector_packet(number_of_pages, page_number)
-        return render_template("homepage.html", values=results, page_selector=page_selector_packet, showStatus=False)
+        sort_type = request.args.get('sort')
+        if sort_type is None:
+            sort_type = "reverseDateOrder"
+
+        results, number_of_pages = get_homepage(page_number, sort_type)
+        page_selector_packet = create_page_selector_packet(number_of_pages, page_number, sort_type)
+        return render_template("homepage.html",
+                               values=results,
+                               page_selector=page_selector_packet,
+                               list_of_sort_types=app.config['SORT_TYPES'],
+                               showStatus=False)
 
     # This URL is only for rendering to a channel in BLink
     @route("/blink-posts")
     def blink_posts(self):
-        results, num_pages = get_homepage(1)
+        results, num_pages = get_homepage(1, "reverseDateOrder")
         return render_template("blink_template.html", values=results, showStatus=False)
 
     # This method is more or less a 'hub' for all the various ways that a poster would like to view the posts that
@@ -49,6 +57,7 @@ class View(FlaskView):
 
             results, number_of_pages = filter_posts(session['username'], selector, page_number)
             page_selector_packet = create_page_selector_packet(number_of_pages, page_number)
+            page_selector_packet['sort_type'] = ""
             return render_template("view/users_posts.html", posts=results, page_selector=page_selector_packet)
         else:
             error_message = "You don't exist in the contacts database yet, and as such you don't have any posts to view."
@@ -84,27 +93,13 @@ class View(FlaskView):
             to_send['page_no'] = page_number
 
             results, number_of_pages = query_database(to_send)
-            list_of_sort_selectors = [
-                ("titleAZ", "sortByTitleAZ", "Title (A-Z)"),
-                ("titleZA", "sortByTitleZA", "Title (Z-A)"),
-                ("descriptionAZ", "sortByDescriptionAZ", "Description (A-Z)"),
-                ("descriptionZA", "sortByDescriptionZA", "Description (Z-A)"),
-                ("priceAZ", "sortByPrice", "Price (High-Low)"),
-                ("priceZA", "reversePriceOrder", "Price (Low-High)"),
-                ("dateAZ", "sortByDate", "Date (Old-New)"),
-                ("dateZA", "reverseDateOrder", "Date (New-Old)"),
-                ("postedByAZ", "sortByPostedByAZ", "Author (A-Z)"),
-                ("postedByZA", "sortByPostedByZA", "Author (Z-A)")
-            ]
-            page_selector_packet = create_page_selector_packet(number_of_pages, page_number)
-            page_selector_packet['sort_type'] = storage['sort_type']
+            page_selector_packet = create_page_selector_packet(number_of_pages, page_number, to_send['sort_type'])
             return render_template("search_results.html",
                                    values=results,
                                    page_selector=page_selector_packet,
-                                   list_of_tuples=list_of_sort_selectors)
+                                   list_of_sort_types=app.config['SORT_TYPES'])
         else:
             to_send['categories'] = [category]
-
             page_number = request.args.get('page')  # Needs to be an int > 0
             if page_number is None:
                 page_number = 1
@@ -114,7 +109,10 @@ class View(FlaskView):
             to_send['page_no'] = page_number
             results, number_of_pages = query_database(to_send)
             page_selector_packet = create_page_selector_packet(number_of_pages, page_number)
-            return render_template("homepage.html", values=results, page_selector=page_selector_packet,
+            return render_template("homepage.html",
+                                   values=results,
+                                   page_selector=page_selector_packet,
+                                   list_of_sort_types=app.config['SORT_TYPES'],
                                    showStatus=False)
 
     ###################################################################################################################

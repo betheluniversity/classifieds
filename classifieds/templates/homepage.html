@@ -15,59 +15,87 @@
             <p class="noPosts">There are no active posts to show.</p>
         {% else %}
     <div class="table">
-        {{ sort_type_selector() }}
+        {{ sort_type_selector(page_selector['sort_type']) }}
         {{ page_selector_macro(page_selector) }}
-    {% for val in values %}
-        <div id="singlePost-{{ loop.index }}" class="singlePost">
-            <div class="row">
-                <div class="cell">Title: </div>
-                <div class="title cell"><a href="{{ url_for('View:view_post', post_id = val['id']) }}">{{ val['title'] }}</a></div>
-            </div>
-            <div class="row">
-                <div class="cell">Description: </div>
-                <div class="description cell"><article>{{ val['description'] }}</article></div>
-            </div>
-            <div class="row">
-                <div class="cell">Price: </div>
-                <div class="price cell">{{ val['price'] }}</div>
-            </div>
-            <div class="row">
-                <div class="cell">Date Posted: </div>
-                <div class="date cell">{{ val['date_added'].date() }}</div>
-            </div>
-            <div class="row">
-                <div class="cell">Posted By: </div>
-                <div class="postedBy cell"><a href="{{ url_for('View:view_contact', username = val['username']) }}">{{ val['full_name'] }}</a></div>
-            </div>
-            {% if showStatus == True %}
+        <div id="results">
+        {% for val in values %}
+            <div id="singlePost-{{ loop.index }}" class="singlePost">
                 <div class="row">
-                    <div class="cell">Status:</div>
-                    <div class="status cell">
-                        {% if val['completed'] == True %}
-                            Completed
-                        {% elif val['expired'] == True %}
-                            Expired
-                        {% else %}
-                            Active
-                        {% endif %}
-                    </div>
+                    <div class="cell">Title: </div>
+                    <div class="title cell"><a href="{{ url_for('View:view_post', post_id = val['id']) }}">{{ val['title'] }}</a></div>
                 </div>
-            {% endif %}
-            {% if is_user_admin() or session['username'] == val['username'] %}
                 <div class="row">
-                    <div class="title cell">
-                        <a class="button" href="{{ url_for('View:edit_post', post_id = val['id']) }}">Edit</a>
-                        {% if is_user_admin() %}
-                        <a class="button" href="{{ url_for('View:delete_post_confirm', post_id = val['id']) }}">Delete</a>
-                        {% endif %}
-                    </div>
+                    <div class="cell">Description: </div>
+                    <div class="description cell"><article>{{ val['description'] }}</article></div>
                 </div>
-            {% endif %}
-        <hr/>
+                <div class="row">
+                    <div class="cell">Price: </div>
+                    <div class="price cell">{{ val['price'] }}</div>
+                </div>
+                <div class="row">
+                    <div class="cell">Date Posted: </div>
+                    <div class="date cell">{{ val['date_added'].date() }}</div>
+                </div>
+                <div class="row">
+                    <div class="cell">Posted By: </div>
+                    <div class="postedBy cell"><a href="{{ url_for('View:view_contact', username = val['username']) }}">{{ val['full_name'] }}</a></div>
+                </div>
+                {% if showStatus == True %}
+                    <div class="row">
+                        <div class="cell">Status:</div>
+                        <div class="status cell">
+                            {% if val['completed'] == True %}
+                                Completed
+                            {% elif val['expired'] == True %}
+                                Expired
+                            {% else %}
+                                Active
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endif %}
+                {% if is_user_admin() or session['username'] == val['username'] %}
+                    <div class="row">
+                        <div class="title cell">
+                            <a class="button" href="{{ url_for('View:edit_post', post_id = val['id']) }}">Edit</a>
+                            {% if is_user_admin() %}
+                            <a class="button" href="{{ url_for('View:delete_post_confirm', post_id = val['id']) }}">Delete</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+            <hr/>
+        {% endfor %}
         </div>
-    {% endfor %}
         {{ page_selector_macro(page_selector) }}
     </div>
     {% endif %}
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    $(".selectSort").change(function(){
+        var sort_type = $(".selectSort option:selected").val();
+        var URL = window.location.href;
+        if(URL.indexOf('?') > -1){
+            // If there's already a '?' from an already existing URL arg
+            if(URL.indexOf('sort=') > 0){
+                // Means that the sort arg is already in URL, need to replace it.
+                var regex = /(sort=)[a-zA-Z]+/;
+                URL = URL.replace(regex, "$1" + sort_type)
+            }
+            else{
+                // Means that the existing URL arg is the page number
+                URL += "&sort=" + sort_type;
+            }
+        }
+        else{
+            // If it's just the base URL
+            URL += "?sort=" + sort_type;
+        }
+        window.location.href = URL;
+    });
+</script>
 {% endblock %}

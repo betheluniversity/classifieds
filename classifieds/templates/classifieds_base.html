@@ -102,8 +102,6 @@
                 }
             });
         </script>
-        {# links sorting JS file to HTML (only way this file would work) #}
-        <script src="{{ url_for('static', filename = 'sorting.js') }}"></script>
         <div class="clear_footer"></div>
     </div>
 
@@ -114,37 +112,43 @@
 {% endblock %}
 
 {% macro page_selector_macro(page_selector_dict) -%}
+{% set sort_type = page_selector_dict['sort_type'] %}
+{% if sort_type != "" %}
+    {% set sort_type_string = "&sort=" + sort_type %}
+{% else %}
+    {% set sort_type_string = "" %}
+{% endif %}
 <div class="full-width">
     <div class="page_selector">
-        <a class="page_button prev_arrow" href="?page=1">&lt;&lt;</a>
-        <a class="page_button prev_arrow" href="?page={{ page_selector_dict['previous'] }}">&lt;</a>
+        <a class="page_button prev_arrow" href="?page=1{{ sort_type_string }}">&lt;&lt;</a>
+        <a class="page_button prev_arrow" href="?page={{ page_selector_dict['previous'] }}{{ sort_type_string }}">&lt;</a>
         {% for page_no in page_selector_dict['all_page_numbers'] %}
             {% if page_no == page_selector_dict['current']  %}
-                <a class="page_button active_page" href="?page={{ page_no }}">{{ page_no }}</a>
+                <a class="page_button active_page" href="?page={{ page_no }}{{ sort_type_string }}">{{ page_no }}</a>
             {% else %}
-                <a class="page_button page_num" href="?page={{ page_no }}">{{ page_no }}</a>
+                <a class="page_button page_num" href="?page={{ page_no }}{{ sort_type_string }}">{{ page_no }}</a>
             {% endif %}
         {% endfor %}
-        <a class="page_button next_arrow" href="?page={{ page_selector_dict['next'] }}">&gt;</a>
-        <a class="page_button next_arrow" href="?page={{ page_selector_dict['last'] }}">&gt;&gt;</a>
+        <a class="page_button next_arrow" href="?page={{ page_selector_dict['next'] }}{{ sort_type_string }}">&gt;</a>
+        <a class="page_button next_arrow" href="?page={{ page_selector_dict['last'] }}{{ sort_type_string }}">&gt;&gt;</a>
     </div>
 </div>
 {%- endmacro %}
 
-{% macro sort_type_selector() -%}
+{% macro sort_type_selector(current_sort_type) -%}
+{% if current_sort_type == "" %}
+    {% set current_sort_type = "reverseDateOrder" %}
+{% endif %}
 <div class="sorting">
     <div class="centered">
         <select class="selectSort">
-            <option id="titleAZ" value="sortByTitleAZ">Title (A-Z)</option>
-            <option id="titleZA" value="sortByTitleZA">Title (Z-A)</option>
-            <option id="descriptionAZ" value="sortByDescriptionAZ">Description (A-Z)</option>
-            <option id="descriptionZA" value="sortByDescriptionZA">Description (Z-A)</option>
-            <option id="priceAZ" value="sortByPrice">Price (High-Low)</option>
-            <option id="priceZA" value="reversePriceOrder">Price (Low-High)</option>
-            <option id="dateAZ" value="sortByDate">Date (Old-New)</option>
-            <option id="dateZA" value="reverseDateOrder" selected="selected">Date (New-Old)</option>
-            <option id="postedByAZ" value="sortByPostedByAZ">Author (A-Z)</option>
-            <option id="postedByZA" value="sortByPostedByZA">Author (Z-A)</option>
+            {% for tuple in list_of_sort_types %}
+                {% if tuple[1] == current_sort_type %}
+                <option id="{{ tuple[0] }}" value="{{ tuple[1] }}" selected="selected">{{ tuple[2] }}</option>
+                {% else %}
+                <option id="{{ tuple[0] }}" value="{{ tuple[1] }}">{{ tuple[2] }}</option>
+                {% endif %}
+            {% endfor %}
         </select>
     </div>
 </div>
