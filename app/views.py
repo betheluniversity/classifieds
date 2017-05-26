@@ -5,8 +5,8 @@ from forms import RegularPostForm, ExternalPosterForm, ContactForm, CategoryForm
 
 
 # This Flask-Classy object is simply named "View" because Flask-Classy takes whatever is in front of View and makes it
-# the first argument of the url, such that "ClassifiedsView" would be accessed via classifieds.bethel.edu/classifieds
-# To avoid that, I put nothing in front of "View" so now all the URLs will have the form classifieds.bethel.edu/url-name
+# the first argument of the url, such that "ClassifiedsView" would be accessed via app.bethel.edu/app
+# To avoid that, I put nothing in front of "View" so now all the URLs will have the form app.bethel.edu/url-name
 class View(FlaskView):
 
     ###################################################################################################################
@@ -23,7 +23,7 @@ class View(FlaskView):
 
         sort_type = request.args.get('sort')
         if sort_type is None:
-            sort_type = "reverseDateOrder"
+            sort_type = app.config['SORT_TYPES'][6][1]
 
         results, number_of_pages = get_homepage(page_number, sort_type)
         page_selector_packet = create_page_selector_packet(number_of_pages, page_number, sort_type)
@@ -36,7 +36,7 @@ class View(FlaskView):
     # This URL is only for rendering to a channel in BLink
     @route("/blink-posts")
     def blink_posts(self):
-        results, num_pages = get_homepage(1, "reverseDateOrder")
+        results, num_pages = get_homepage(1, app.config['SORT_TYPES'][6][1])
         return render_template("blink_template.html", values=results, showStatus=False)
 
     # This method is more or less a 'hub' for all the various ways that a poster would like to view the posts that
@@ -228,7 +228,7 @@ class View(FlaskView):
             return render_template("error_page.html", error=error_message)
 
     # Because their contact entry in the DB should be added automatically by the init_user function the first time they
-    # log in to classifieds, I only made a page to edit their contact info.
+    # log in to app, I only made a page to edit their contact info.
     @route("/edit-contact")
     def edit_contact(self):
         return render_template("forms/contact.html", form=ContactForm(get_contact_form_data(session['username'])),
@@ -459,7 +459,7 @@ class View(FlaskView):
         expire_old_posts()
         return "Old posts expired"
 
-    # This method is simply to allow them to sign out of CAS Auth as well as the classifieds site itself.
+    # This method is simply to allow them to sign out of CAS Auth as well as the app site itself.
     def logout(self):
         return redirect("https://auth.bethel.edu/cas/logout")
 

@@ -1,5 +1,5 @@
 import datetime
-from classifieds import db
+from app import db
 
 
 class Posts(db.Model):

@@ -19,7 +19,7 @@ def phone_validator():
 
 
 # This is a custom validator that I made to make sure that any emails put in will only use characters that are also safe
-# to call in URLs, like classifieds.bethel.edu/view-contact/example@fake.com
+# to call in URLs, like app.bethel.edu/view-contact/example@fake.com
 def safe_for_url():
     message = 'The text provided would not work in a URL bar'
 

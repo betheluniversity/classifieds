@@ -8,7 +8,7 @@ from email.mime.text import MIMEText
 from sqlalchemy import asc, desc, or_
 from werkzeug.datastructures import ImmutableMultiDict
 
-from classifieds import app, db
+from app import app, db
 from models import Posts, Contacts, Categories, PostCategories
 
 
@@ -381,7 +381,7 @@ def get_post_categories(post_id):
 
 
 def search_posts(title=[u"%"], description=[u"%"], categories=[u"%"], username=u"%", completed=u"%", expired=u"%",
-                 max_results=20, page_no=1, sort_type="reverseDateOrder"):
+                 max_results=20, page_no=1, sort_type="sortByDateAZ"):
     # There's always a list of titles; by default it's only the wildcard, but this will search for any title that
     # contains any word in the list
     titles = Posts.title.like(title[0])
@@ -428,10 +428,10 @@ def search_posts(title=[u"%"], description=[u"%"], categories=[u"%"], username=u
         ordering = asc(Posts.username)
     elif sort_type == "sortByUsernameZA":
         ordering = desc(Posts.username)
-    elif sort_type == "sortByDate":
-        ordering = asc(Posts.date_added)
-    elif sort_type == "reverseDateOrder":
+    elif sort_type == "sortByDateAZ":
         ordering = desc(Posts.date_added)
+    elif sort_type == "sortByDateZA":
+        ordering = asc(Posts.date_added)
 
     # This monstrosity is what joins all 4 tables together properly, adds the filters as specified above, and then runs
     # the resultant query.
@@ -471,10 +471,17 @@ def search_posts(title=[u"%"], description=[u"%"], categories=[u"%"], username=u
 
     # The sorted function here takes in all results processed into numbers and sorts them accordingly by price.
     # The sorting is simply reversed for reverse price order.
-    if sort_type == "sortByPrice":
-        all_results = sorted(all_results, key=lambda tuple_result: get_numerical_value(tuple_result[0].price), reverse=True)
-    elif sort_type == "reversePriceOrder":
-        all_results = sorted(all_results, key=lambda tuple_result: get_numerical_value(tuple_result[0].price))
+    if sort_type == "sortByPriceAZ":
+        all_results = sorted(
+            all_results,
+            key=lambda tuple_result: get_numerical_value(tuple_result[0].price)
+        )
+    elif sort_type == "sortByPriceZA":
+        all_results = sorted(
+            all_results,
+            key=lambda tuple_result: get_numerical_value(tuple_result[0].price),
+            reverse=True
+        )
 
     # Each row returned is a tuple of the following:
     # (non-unique post, non-unique contact, unique post_category, non-unique category)
