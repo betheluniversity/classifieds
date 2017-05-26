@@ -464,7 +464,7 @@ def search_posts(title=[u"%"], description=[u"%"], categories=[u"%"], username=u
             number_string = results.groups()[0]
             if number_string is None:
                 return 0
-            return float(number_string)
+            return float(number_string.replace(',', ''))
         else:
             # If there is no match, that means the price is a word which equates to 0 numerically
             return 0
