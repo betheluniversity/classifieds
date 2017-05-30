@@ -79,8 +79,8 @@ def renew_entry(entry_id, username):
 
 def expire_old_posts():
     all_active_entries = search_posts(completed=False, expired=False)[0]
-    for key in all_active_entries:
-        entry = all_active_entries[key]['post']
+    for row_dict in all_active_entries:
+        entry = row_dict['post']
         now = datetime.datetime.now().date()
         then = entry.date_added.date()
         if (now - then).days >= app.config['EXPIRY']:
