@@ -420,10 +420,6 @@ def search_posts(title=[u"%"], description=[u"%"], categories=[u"%"], username=u
         ordering = asc(Posts.title)
     elif sort_type == "sortByTitleZA":
         ordering = desc(Posts.title)
-    elif sort_type == "sortByDescriptionAZ":
-        ordering = asc(Posts.description)
-    elif sort_type == "sortByDescriptionZA":
-        ordering = desc(Posts.description)
     elif sort_type == "sortByUsernameAZ":
         ordering = asc(Posts.username)
     elif sort_type == "sortByUsernameZA":
@@ -469,9 +465,25 @@ def search_posts(title=[u"%"], description=[u"%"], categories=[u"%"], username=u
             # If there is no match, that means the price is a word which equates to 0 numerically
             return 0
 
+    def get_text_from_description(description_string):
+        pattern = "^[^\w]*(.*)"
+        results = re.match(pattern, description_string)
+        return results.groups()[0]
+
     # The sorted function here takes in all results processed into numbers and sorts them accordingly by price.
     # The sorting is simply reversed for reverse price order.
-    if sort_type == "sortByPriceAZ":
+    if sort_type == "sortByDescriptionAZ":
+        all_results = sorted(
+            all_results,
+            key=lambda tuple_result: get_text_from_description(tuple_result[0].description)
+        )
+    elif sort_type == "sortByDescriptionZA":
+        all_results = sorted(
+            all_results,
+            key=lambda tuple_result: get_text_from_description(tuple_result[0].description),
+            reverse=True
+        )
+    elif sort_type == "sortByPriceAZ":
         all_results = sorted(
             all_results,
             key=lambda tuple_result: get_numerical_value(tuple_result[0].price)
