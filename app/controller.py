@@ -78,7 +78,7 @@ def renew_entry(entry_id, username):
 
 
 def expire_old_posts():
-    all_active_entries = search_posts(completed=False, expired=False)[0]
+    all_active_entries = search_posts(completed=False, expired=False, all_results=True)[0]
     for row_dict in all_active_entries:
         entry = row_dict['post']
         now = datetime.datetime.now().date()
@@ -381,7 +381,7 @@ def get_post_categories(post_id):
 
 
 def search_posts(title=[u"%"], description=[u"%"], categories=[u"%"], username=u"%", completed=u"%", expired=u"%",
-                 max_results=20, page_no=1, sort_type="sortByDateAZ"):
+                 max_results=20, page_no=1, sort_type="sortByDateAZ", all_results=False):
     # There's always a list of titles; by default it's only the wildcard, but this will search for any title that
     # contains any word in the list
     titles = Posts.title.like(title[0])
@@ -519,7 +519,10 @@ def search_posts(title=[u"%"], description=[u"%"], categories=[u"%"], username=u
 
     num_results = len(to_return)
     starting_index = max_results * (page_no - 1)
-    to_return = [to_return[key] for key in to_return.keys()[starting_index:starting_index + max_results]]
+    if all_results:
+        to_return = [to_return[key] for key in to_return.keys()]
+    else:
+        to_return = [to_return[key] for key in to_return.keys()[starting_index:starting_index + max_results]]
 
     return to_return, int(math.ceil(float(num_results)/float(max_results)))
 
