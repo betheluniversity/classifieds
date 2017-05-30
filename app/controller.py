@@ -85,7 +85,7 @@ def expire_old_posts():
         then = entry.date_added.date()
         if (now - then).days >= app.config['EXPIRY']:
             Posts.query.filter(Posts.id.like(entry.id)).first().expired = True
-            send_expired_email(entry.username)
+            send_expired_email(entry.username, entry.id)
     db.session.commit()
 
 
@@ -622,11 +622,12 @@ def create_page_selector_packet(number_of_pages, selected_page, sort_type="rever
     return page_selector_packet
 
 
-def send_expired_email(username):
+def send_expired_email(username, post_id):
     contact = Contacts.query.filter(Contacts.username.like(username)).first()
 
     msg = MIMEText("One of the posts that you listed " + str(app.config['EXPIRY']) +
-                   " days ago has been marked as expired.")
+                   " days ago in " + app.config['SITE_NAME'] + " has been marked as expired. If you want, you can" +
+                   " renew it at https://" + app.config['SITE_URL'] + "/view-post/" + str(post_id))
     msg['Subject'] = "One of your posts has expired"
     msg['From'] = "no-reply@bethel.edu"
     msg['To'] = contact.email

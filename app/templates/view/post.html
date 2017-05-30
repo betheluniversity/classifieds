@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block internal %}
-{% if session['username'] == post['username'] or (post['completed'] == False and post['expired'] == False) %}
+{% if session['username'] == post['username'] or is_user_admin() or (post['completed'] == False and post['expired'] == False) %}
     <div class="viewTable">
         <table>
             <tr>
