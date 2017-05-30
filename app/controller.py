@@ -468,7 +468,7 @@ def search_posts(title=[u"%"], description=[u"%"], categories=[u"%"], username=u
     def get_text_from_description(description_string):
         pattern = "^[^\w]*(.*)"
         results = re.match(pattern, description_string)
-        return results.groups()[0]
+        return results.groups()[0].upper()
 
     # The sorted function here takes in all results processed into numbers and sorts them accordingly by price.
     # The sorting is simply reversed for reverse price order.
