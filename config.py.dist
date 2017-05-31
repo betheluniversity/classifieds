@@ -24,3 +24,9 @@ CACHE_DEFAULT_TIMEOUT = 300
 
 FAQ_PAGE = ""
 EXPIRY = 30
+SITE_NAME = ""
+SITE_URL = ""
+
+SORT_TYPES = [
+    ("", "", "")
+]
