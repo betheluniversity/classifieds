@@ -23,7 +23,7 @@ def before_request():
     try:
         init_user()
     except:
-        app.logger.info("failed to init")
+        app.logger.info('failed to init')
 
 
 # This method sees who's logging in to the website, and then checks if they're in the contacts DB. If they are, it grabs
@@ -36,16 +36,16 @@ def init_user():
     session['username'] = username
     contact = Contacts.query.filter(Contacts.username.like(username)).first()
     if contact is not None:
-        session['fullname'] = contact.first_name + " " + contact.last_name
+        session['fullname'] = contact.first_name + ' ' + contact.last_name
     else:
-        banner_info = urllib2.urlopen("http://wsapi.bethel.edu/username/" + username + "/names").read()
+        banner_info = urllib2.urlopen('http://wsapi.bethel.edu/username/' + username + '/names').read()
         info_dict = ast.literal_eval(banner_info)['0']
         primary_name = info_dict['firstName']
         if len(info_dict['prefFirstName']) > 0:
             primary_name = info_dict['prefFirstName']
-        session['fullname'] = primary_name + " " + info_dict['lastName']
+        session['fullname'] = primary_name + ' ' + info_dict['lastName']
         new_contact = Contacts(username=username, first=primary_name, last=info_dict['lastName'],
-                               email=username + "@bethel.edu", phone="")
+                               email=username + '@bethel.edu', phone='')
         db.session.add(new_contact)
         db.session.commit()
 

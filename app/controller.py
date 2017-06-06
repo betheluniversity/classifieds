@@ -131,7 +131,7 @@ def get_post(post_id):
         'price': post.price,
         'date_added': post.date_added,
         'username': post.username,
-        'full_name': contact.first_name + " " + contact.last_name,
+        'full_name': contact.first_name + ' ' + contact.last_name,
         'completed': post.completed,
         'expired': post.expired
     }
@@ -213,7 +213,7 @@ def delete_contact(username):
             Posts.query.filter_by(id=row.id).delete()
         Contacts.query.filter_by(username=username).delete()
         db.session.commit()
-        return "Contact and posts successfully deleted"
+        return 'Contact and posts successfully deleted'
     except Exception as e:
         db.session.rollback()
         print e.message
@@ -316,10 +316,10 @@ def delete_category(category_id):
                             PostCategories.query.filter_by(id=post_category.id).delete()
                             break
                 else:
-                    # This is the only category for this post, so it should be changed to "general" (category.id = 9)
+                    # This is the only category for this post, so it should be changed to 'general' (category.id = 9)
                     post_category_row = PostCategories.query.filter_by(id=categories_for_this_post[0].id).first()
                     post_category_row.category_id = 9
-                dict_of_posts[post[0].id] = "post has been processed"
+                dict_of_posts[post[0].id] = 'post has been processed'
         # Now that all references to this category have been removed, delete it without fear of Foreign Key dependency
         deleted = Categories.query.filter_by(id=category_id).delete()
         db.session.commit()
@@ -380,8 +380,8 @@ def get_post_categories(post_id):
 #######################################################################################################################
 
 
-def search_posts(title=[u"%"], description=[u"%"], categories=[u"%"], username=u"%", completed=u"%", expired=u"%",
-                 max_results=20, page_no=1, sort_type="sortByDateAZ", return_all_results=False):
+def search_posts(title=[u'%'], description=[u'%'], categories=[u'%'], username=u'%', completed=u'%', expired=u'%',
+                 max_results=20, page_no=1, sort_type='sortByDateAZ', return_all_results=False):
     # There's always a list of titles; by default it's only the wildcard, but this will search for any title that
     # contains any word in the list
     titles = Posts.title.like(title[0])
@@ -416,13 +416,13 @@ def search_posts(title=[u"%"], description=[u"%"], categories=[u"%"], username=u
     # oldest date at the top. By having the sort done in this method, it clears up the code elsewhere.
     ordering = desc(Posts.date_added)
 
-    if sort_type == "sortByUsernameAZ":
+    if sort_type == 'sortByUsernameAZ':
         ordering = asc(Posts.username)
-    elif sort_type == "sortByUsernameZA":
+    elif sort_type == 'sortByUsernameZA':
         ordering = desc(Posts.username)
-    elif sort_type == "sortByDateAZ":
+    elif sort_type == 'sortByDateAZ':
         ordering = desc(Posts.date_added)
-    elif sort_type == "sortByDateZA":
+    elif sort_type == 'sortByDateZA':
         ordering = asc(Posts.date_added)
 
     # This monstrosity is what joins all 4 tables together properly, adds the filters as specified above, and then runs
@@ -448,7 +448,7 @@ def search_posts(title=[u"%"], description=[u"%"], categories=[u"%"], username=u
         # "I'm sorry" - Nathan Li, 2017
         # This regular expression matches a group of text, numbers (including commas and periods), more text,
         # more numbers, and finally another set of text.
-        pattern = "[~@!:$<> &-/a-zA-Z]*(\d[\d,.]*)?[~@!:$<> &-/a-zA-Z]*(\d[\d,.]*)?[~@!:$<> &-/a-zA-Z]*"
+        pattern = '[~@!:$<> &-/a-zA-Z]*(\d[\d,.]*)?[~@!:$<> &-/a-zA-Z]*(\d[\d,.]*)?[~@!:$<> &-/a-zA-Z]*'
 
         results = re.match(pattern, price_string)
         if results is not None:
@@ -462,40 +462,40 @@ def search_posts(title=[u"%"], description=[u"%"], categories=[u"%"], username=u
             return 0
 
     def get_sortable_text_from_string(silly_string):
-        pattern = "^[^\w]*(.*)"
+        pattern = '^[^\w]*(.*)'
         results = re.match(pattern, silly_string)
         return results.groups()[0].upper()
 
     # The sorted function here takes in all results processed into numbers and sorts them accordingly by price.
     # The sorting is simply reversed for reverse price order.
-    if sort_type == "sortByTitleAZ":
+    if sort_type == 'sortByTitleAZ':
         all_results = sorted(
             all_results,
             key=lambda tuple_result: get_sortable_text_from_string(tuple_result[0].title)
         )
-    elif sort_type == "sortByTitleZA":
+    elif sort_type == 'sortByTitleZA':
         all_results = sorted(
             all_results,
             key=lambda tuple_result: get_sortable_text_from_string(tuple_result[0].title),
             reverse=True
         )
-    elif sort_type == "sortByDescriptionAZ":
+    elif sort_type == 'sortByDescriptionAZ':
         all_results = sorted(
             all_results,
             key=lambda tuple_result: get_sortable_text_from_string(tuple_result[0].description)
         )
-    elif sort_type == "sortByDescriptionZA":
+    elif sort_type == 'sortByDescriptionZA':
         all_results = sorted(
             all_results,
             key=lambda tuple_result: get_sortable_text_from_string(tuple_result[0].description),
             reverse=True
         )
-    elif sort_type == "sortByPriceAZ":
+    elif sort_type == 'sortByPriceAZ':
         all_results = sorted(
             all_results,
             key=lambda tuple_result: get_numerical_value(tuple_result[0].price)
         )
-    elif sort_type == "sortByPriceZA":
+    elif sort_type == 'sortByPriceZA':
         all_results = sorted(
             all_results,
             key=lambda tuple_result: get_numerical_value(tuple_result[0].price),
@@ -537,7 +537,7 @@ def make_template_friendly_results(search_results):
             'price': entry['post'].price,
             'date_added': entry['post'].date_added,
             'username': entry['post'].username,
-            'full_name': entry['contact'].first_name + " " + entry['contact'].last_name,
+            'full_name': entry['contact'].first_name + ' ' + entry['contact'].last_name,
             'completed': entry['post'].completed,
             'expired': entry['post'].expired
         }
@@ -550,18 +550,18 @@ def filter_posts(username, selector, page_number):
         'username': username,
         'page_no': page_number
     }
-    if selector == "all":
+    if selector == 'all':
         pass
-    elif selector == "active":
+    elif selector == 'active':
         search_params['completed'] = False
         search_params['expired'] = False
-    elif selector == "completed":
+    elif selector == 'completed':
         search_params['completed'] = True
-    elif selector == "expired":
+    elif selector == 'expired':
         search_params['completed'] = False
         search_params['expired'] = True
-    elif selector == "external":
-        search_params['username'] = u"%@%"
+    elif selector == 'external':
+        search_params['username'] = u'%@%'
     else:
         pass
 
@@ -588,15 +588,15 @@ def get_app_settings():
     path = os.path.abspath(__file__)
     dir_path = os.path.dirname(path)
     parent_dir_path = os.path.abspath(os.path.join(dir_path, os.pardir))
-    final_path = os.path.join(parent_dir_path, "app_settings.py")
+    final_path = os.path.join(parent_dir_path, 'app_settings.py')
     with open(final_path) as f:
         for line in f.readlines():
-            key, val = line.split(" = ")
-            to_return[key] = val[1:-2]  # This peels off a " from the front and a "\n from the end
+            key, val = line.split(' = ')
+            to_return[key] = val[1:-2]  # This peels off a ' from the front and a '\n from the end
     return to_return
 
 
-def create_page_selector_packet(number_of_pages, selected_page, sort_type="reverseDateOrder"):
+def create_page_selector_packet(number_of_pages, selected_page, sort_type='reverseDateOrder'):
     previous_page_number = max(1, (selected_page - 1))  # Must always be 1 or greater
     next_page_number = min((selected_page + 1), number_of_pages)  # Can never be more than the last page
 
@@ -625,24 +625,24 @@ def create_page_selector_packet(number_of_pages, selected_page, sort_type="rever
 def send_expired_email(username, post_id):
     contact = Contacts.query.filter(Contacts.username.like(username)).first()
 
-    msg = MIMEText("One of the posts that you listed " + str(app.config['EXPIRY']) +
-                   " days ago in " + app.config['SITE_NAME'] + " has been marked as expired. If you want, you can" +
-                   " renew it at https://" + app.config['SITE_URL'] + "/view-post/" + str(post_id))
-    msg['Subject'] = "One of your posts has expired"
-    msg['From'] = "no-reply@bethel.edu"
+    msg = MIMEText('One of the posts that you listed ' + str(app.config['EXPIRY']) +
+                   ' days ago in ' + app.config['SITE_NAME'] + ' has been marked as expired. If you want, you can' +
+                   ' renew it at https://' + app.config['SITE_URL'] + '/view-post/' + str(post_id))
+    msg['Subject'] = 'One of your posts has expired'
+    msg['From'] = 'no-reply@bethel.edu'
     msg['To'] = contact.email
 
     s = smtplib.SMTP('localhost')
-    s.sendmail("no-reply@bethel.edu", [contact.email], msg.as_string())
+    s.sendmail('no-reply@bethel.edu', [contact.email], msg.as_string())
     s.quit()
 
 
 def send_feedback_email(form_contents, username):
     msg = MIMEText(form_contents['input'])
-    msg['Subject'] = "Feedback from " + username
-    msg['From'] = "webmaster@bethel.edu"
+    msg['Subject'] = 'Feedback from ' + username
+    msg['From'] = 'webmaster@bethel.edu'
     msg['To'] = app.config['ADMINS']
 
     s = smtplib.SMTP('localhost')
-    s.sendmail(username + "@bethel.edu", app.config['ADMINS'], msg.as_string())
+    s.sendmail(username + '@bethel.edu', app.config['ADMINS'], msg.as_string())
     s.quit()

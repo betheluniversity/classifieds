@@ -16,7 +16,7 @@ class Posts(db.Model):
     # Relationships
     # Delete every post by a user if that user is removed from the DB
     # contact = db.relationship('contacts',
-    #                           backref=db.backref('posts', cascade="all, delete-orphan"),
+    #                           backref=db.backref('posts', cascade='all, delete-orphan'),
     #                           lazy='joined')
 
     def __init__(self, title, desc, price, username):
@@ -29,7 +29,7 @@ class Posts(db.Model):
         self.expired = False
 
     def __repr__(self):
-        return "<Post #%(0)s: %(1)s>" % {'0': self.id, '1': self.title}
+        return '<Post #%(0)s: %(1)s>' % {'0': self.id, '1': self.title}
 
 
 class Contacts(db.Model):
@@ -50,7 +50,7 @@ class Contacts(db.Model):
         self.is_admin = False
 
     def __repr__(self):
-        return "<Contact '%s'>" % self.first_name + " " + self.last_name
+        return "<Contact '%s'>" % self.first_name + ' ' + self.last_name
 
 
 class Categories(db.Model):
@@ -61,7 +61,7 @@ class Categories(db.Model):
 
     # Relationships
     # After each category gets deleted, the associated post_category rows need to be removed too.
-    # The trick is, if that's the only category for the post, then it has to be changed to "General" category,
+    # The trick is, if that's the only category for the post, then it has to be changed to 'General' category,
     # so that can't be done with cascade deletion in the database. :(
 
     def __init__(self, category_html, category_human):
@@ -81,7 +81,7 @@ class PostCategories(db.Model):
     # Relationships
     # Delete all post_category rows if their associated post gets deleted
     # post = db.relationship('posts',
-    #                        backref=db.backref('post_categories', cascade="all, delete-orphan"),
+    #                        backref=db.backref('post_categories', cascade='all, delete-orphan'),
     #                        lazy='joined')
 
     def __init__(self, new_post_id, new_category_id):
@@ -89,4 +89,4 @@ class PostCategories(db.Model):
         self.category_id = new_category_id
 
     def __repr__(self):
-        return "<Post #%(0)s => Category #%(1)s>" % {'0': self.post_id, '1': self.category_id}
+        return '<Post #%(0)s => Category #%(1)s>' % {'0': self.post_id, '1': self.category_id}
