@@ -1,5 +1,8 @@
+# Standard library imports
 import ast
 import urllib2
+
+# Third party imports
 from flask import current_app, Flask, request, session
 from flask_sqlalchemy import SQLAlchemy
 from raven.contrib.flask import Sentry
@@ -10,7 +13,7 @@ app.config.from_object('config')
 db = SQLAlchemy(app)
 sentry = Sentry(app, dsn=app.config['SENTRY_URL'])
 
-
+# Local application imports
 # These imports need to be after app and db's creation, as they get imported into views.py, from which this imports.
 from models import Contacts
 from views import View

@@ -1,13 +1,17 @@
+# Standard library imports
 import datetime
 import math
 import os
 import re
 import smtplib
+
+# Third party imports
 from collections import OrderedDict
 from email.mime.text import MIMEText
 from sqlalchemy import asc, desc, or_
 from werkzeug.datastructures import ImmutableMultiDict
 
+# Local application imports
 from app import app, db
 from models import Posts, Contacts, Categories, PostCategories
 
@@ -218,7 +222,6 @@ def delete_contact(username):
         db.session.rollback()
         print e.message
         return False
-
 
 
 #######################################################################################################################

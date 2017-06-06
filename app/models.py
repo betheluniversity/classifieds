@@ -1,4 +1,7 @@
+# Standard library imports
 import datetime
+
+# Local application imports
 from app import db
 
 

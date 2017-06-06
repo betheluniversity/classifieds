@@ -1,6 +1,9 @@
-from controller import *
+# Third party imports
 from flask import abort, redirect, render_template, request, session
 from flask_classy import FlaskView, route
+
+# Local application imports
+from controller import *
 from forms import RegularPostForm, ExternalPosterForm, ContactForm, CategoryForm
 
 
