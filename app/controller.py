@@ -1,3 +1,38 @@
+__all__ = [
+    'add_category',
+    'add_contact',
+    'add_post',
+    'allowed_to_edit_post',
+    'contact_exists_in_db',
+    'contact_is_admin',
+    'create_page_selector_packet',
+    'delete_category',
+    'delete_post',
+    'edit_category',
+    'edit_contact',
+    'edit_post',
+    'expire_old_posts',
+    'filter_posts',
+    'get_admins',
+    'get_category',
+    'get_category_form_data',
+    'get_category_list',
+    'get_contact',
+    'get_contact_form_data',
+    'get_homepage',
+    'get_non_admins',
+    'get_post',
+    'get_post_categories',
+    'get_post_form_data',
+    'make_admin',
+    'mark_entry_as_complete',
+    'post_exists_in_db',
+    'query_database',
+    'remove_admin',
+    'renew_entry',
+    'send_feedback_email'
+]
+
 # Standard library imports
 import datetime
 import math
@@ -82,14 +117,14 @@ def renew_entry(entry_id, username):
 
 
 def expire_old_posts():
-    all_active_entries = search_posts(completed=False, expired=False, return_all_results=True)[0]
+    all_active_entries = _search_posts(completed=False, expired=False, return_all_results=True)[0]
     for row_dict in all_active_entries:
         entry = row_dict['post']
         now = datetime.datetime.now().date()
         then = entry.date_added.date()
         if (now - then).days >= app.config['EXPIRY']:
             Posts.query.filter(Posts.id.like(entry.id)).first().expired = True
-            send_expired_email(entry.username, entry.id)
+            _send_expired_email(entry.username, entry.id)
     db.session.commit()
 
 
@@ -209,7 +244,7 @@ def remove_admin(username):
 
 
 # This method should not have any endpoint; this method is only for usage via terminal
-def delete_contact(username):
+def _delete_contact(username):
     try:
         posts_by_this_user = Posts.query.filter_by(username=username).all()
         for row in posts_by_this_user:
@@ -382,7 +417,7 @@ def get_post_categories(post_id):
 #######################################################################################################################
 
 
-def search_posts(title=[u'%'], description=[u'%'], categories=[u'%'], username=u'%', completed=u'%', expired=u'%',
+def _search_posts(title=[u'%'], description=[u'%'], categories=[u'%'], username=u'%', completed=u'%', expired=u'%',
                  max_results=20, page_no=1, sort_type='sortByDateAZ', return_all_results=False):
     # There's always a list of titles; by default it's only the wildcard, but this will search for any title that
     # contains any word in the list
@@ -529,7 +564,7 @@ def search_posts(title=[u'%'], description=[u'%'], categories=[u'%'], username=u
     return to_return, int(math.ceil(float(num_results)/float(max_results)))
 
 
-def make_template_friendly_results(search_results):
+def _make_template_friendly_results(search_results):
     to_send = []
     for entry in search_results:
         entry_dictionary = {
@@ -567,13 +602,13 @@ def filter_posts(username, selector, page_number):
     else:
         pass
 
-    entries, number_of_pages = search_posts(**search_params)
-    return make_template_friendly_results(entries), number_of_pages
+    entries, number_of_pages = _search_posts(**search_params)
+    return _make_template_friendly_results(entries), number_of_pages
 
 
 def query_database(params):
-    entries, num_pages = search_posts(**params)
-    return make_template_friendly_results(entries), num_pages
+    entries, num_pages = _search_posts(**params)
+    return _make_template_friendly_results(entries), num_pages
 
 
 def get_homepage(page_number, sort_type):
@@ -624,7 +659,7 @@ def create_page_selector_packet(number_of_pages, selected_page, sort_type='rever
     return page_selector_packet
 
 
-def send_expired_email(username, post_id):
+def _send_expired_email(username, post_id):
     contact = Contacts.query.filter(Contacts.username.like(username)).first()
 
     msg = MIMEText('One of the posts that you listed ' + str(app.config['EXPIRY']) +
