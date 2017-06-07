@@ -32,9 +32,17 @@
                 <td>Date listed:</td><td>{{ post['date_added'].date() }}</td>
             </tr>
         </table>
-        {% if session['username'] == post['username'] or is_user_admin() %}
-            <a class="button" href="{{ url_for('View:edit_post', post_id = post['id']) }}">Edit</a>
+
+        {% if '@' in post['username'] %}
+            {% if is_user_admin() %}
+                <a class="button" href="{{ url_for('View:edit_external_post', post_id = post['id']) }}">Edit</a>
+            {% endif %}
+        {% else %}
+            {% if session['username'] == post['username'] or is_user_admin() %}
+                <a class="button" href="{{ url_for('View:edit_post', post_id = post['id']) }}">Edit</a>
+            {% endif %}
         {% endif %}
+
         {% if ( session['username'] == post['username'] or is_user_admin() ) and post['completed'] == False %}
             {% if post['expired'] == False %}
                 <a href="{{ url_for('View:mark_complete', post_id = post['id']) }}" class="button">Mark as complete</a>

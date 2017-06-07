@@ -16,12 +16,6 @@ class Posts(db.Model):
     completed = db.Column(db.Boolean, nullable=False)
     expired = db.Column(db.Boolean, nullable=False)
 
-    # Relationships
-    # Delete every post by a user if that user is removed from the DB
-    # contact = db.relationship('contacts',
-    #                           backref=db.backref('posts', cascade='all, delete-orphan'),
-    #                           lazy='joined')
-
     def __init__(self, title, desc, price, username):
         self.title = title
         self.description = desc
@@ -62,11 +56,6 @@ class Categories(db.Model):
     category_for_html = db.Column(db.String(50), nullable=False)
     category_for_humans = db.Column(db.String(50), nullable=False)
 
-    # Relationships
-    # After each category gets deleted, the associated post_category rows need to be removed too.
-    # The trick is, if that's the only category for the post, then it has to be changed to 'General' category,
-    # so that can't be done with cascade deletion in the database. :(
-
     def __init__(self, category_html, category_human):
         self.category_for_html = category_html
         self.category_for_humans = category_human
@@ -80,12 +69,6 @@ class PostCategories(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     post_id = db.Column(db.Integer, db.ForeignKey('posts.id'))
     category_id = db.Column(db.Integer, db.ForeignKey('categories.id'))
-
-    # Relationships
-    # Delete all post_category rows if their associated post gets deleted
-    # post = db.relationship('posts',
-    #                        backref=db.backref('post_categories', cascade='all, delete-orphan'),
-    #                        lazy='joined')
 
     def __init__(self, new_post_id, new_category_id):
         self.post_id = new_post_id

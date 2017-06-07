@@ -167,8 +167,7 @@ def add_contact(username, first_name, last_name, email, phone_number):
     try:
         existing_info = Contacts.query.filter(Contacts.username.like(username)).first()
         if existing_info is None:
-            new_contact = Contacts(username=username, first=first_name, last=last_name, email=email,
-                                   phone=phone_number)
+            new_contact = Contacts(username=username, first=first_name, last=last_name, email=email, phone=phone_number)
             db.session.add(new_contact)
             db.session.commit()
             return True

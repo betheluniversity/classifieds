@@ -145,21 +145,20 @@ class View(FlaskView):
 
     @route('/edit-post/<post_id>')
     def edit_post(self, post_id):
-        if contact_exists_in_db(session['username']):
-            if post_exists_in_db(post_id):
-                if allowed_to_edit_post(post_id, session['username']):
-                    return render_template('forms/post.html',
-                                           form=RegularPostForm(get_post_form_data(post_id=post_id)),
-                                           external=False, new=False)
-                else:
-                    error_message = "You don't have permission to edit that post."
-                    return render_template('error_page.html', error=error_message)
-            else:
-                error_message = "That post id number doesn't exist in the posts database."
-                return render_template('error_page.html', error=error_message)
-        else:
+        error_message = False
+        if not contact_exists_in_db(session['username']):
             error_message = "You don't exist in the contacts database yet, and as such you cannot edit a post."
+        elif not post_exists_in_db(post_id):
+            error_message = "That post id number doesn't exist in the posts database."
+        elif not allowed_to_edit_post(post_id, session['username']):
+            error_message = "You don't have permission to edit that post."
+
+        if error_message:
             return render_template('error_page.html', error=error_message)
+        else:
+            return render_template('forms/post.html',
+                                   form=RegularPostForm(get_post_form_data(post_id=post_id)),
+                                   external=False, new=False)
 
     # This is a post method that takes the post form's contents, parses them, validates, and if it passes, it adds
     # it to the DB and then returns if it was successful or not.
@@ -186,7 +185,8 @@ class View(FlaskView):
         if not is_valid:
             return render_template('forms/post.html', form=form)
 
-        if data_for_new_post['post_id'] == '-1':  # Submitting a new post
+        if data_for_new_post['post_id'] == '-1':
+            # Submitting a new post
             del data_for_new_post['post_id']
             successfully_submitted = add_post(**data_for_new_post)
             if successfully_submitted:
@@ -195,7 +195,8 @@ class View(FlaskView):
             else:
                 error_message = 'The post did not get added correctly. Please try again.'
                 return render_template('error_page.html', error=error_message)
-        else:  # Editing an existing post
+        else:
+            # Editing an existing post
             del data_for_new_post['username']
             successfully_edited = edit_post(**data_for_new_post)
             if successfully_edited:
@@ -289,20 +290,19 @@ class View(FlaskView):
 
     @route('/edit-external-post/<post_id>')
     def edit_external_post(self, post_id):
-        if contact_exists_in_db(session['username']):
-            if post_exists_in_db(post_id):
-                if True:  # allowed_to_edit_post(post_id, session['username']):
-                    return render_template('forms/post.html', form=ExternalPosterForm(get_post_form_data(post_id)),
-                                           external=True, new=False)
-                else:
-                    error_message = "You don't have permission to edit that post."
-                    return render_template('error_page.html', error=error_message)
-            else:
-                error_message = "That post id number doesn't exist in the posts database."
-                return render_template('error_page.html', error=error_message)
-        else:
+        error_message = False
+        if not contact_exists_in_db(session['username']):
             error_message = "You don't exist in the contacts database yet, and as such you cannot edit a post."
+        elif not post_exists_in_db(post_id):
+            error_message = "That post id number doesn't exist in the posts database."
+        elif not allowed_to_edit_post(post_id, session['username']):
+            error_message = "You don't have permission to edit that post."
+
+        if error_message:
             return render_template('error_page.html', error=error_message)
+        else:
+            return render_template('forms/post.html', form=ExternalPosterForm(get_post_form_data(post_id)),
+                                   external=True, new=False)
 
     # Asks the administrator to confirm that they want to delete a specific post
     @route('/delete-post-confirm/<post_id>')
@@ -464,6 +464,7 @@ class View(FlaskView):
 
     # This method is simply to allow them to sign out of CAS Auth as well as the app site itself.
     def logout(self):
+        # TODO: After Josiah figures out the logout method for Tinker, implement it over here too.
         return redirect('https://auth.bethel.edu/cas/logout')
 
     # These last two methods are designed to be here only temporarily. They allow the users to submit feedback about the
