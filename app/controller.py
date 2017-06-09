@@ -156,7 +156,7 @@ def get_post_form_data(post_id=None, hidden_username=None):
         for cat in get_post_categories(post_id):
             to_return['categories'].append(cat['category_html'])
     else:
-        to_return = {'id': -1, 'submitters_username': hidden_username}
+        to_return = {'post_id': -1, 'submitters_username': hidden_username}
     return ImmutableMultiDict(to_return)
 
 
@@ -164,7 +164,7 @@ def get_post(post_id):
     post = Posts.query.filter(Posts.id.like(post_id)).first()
     contact = Contacts.query.filter(Contacts.username.like(post.username)).first()
     return {
-        'id': post.id,
+        'post_id': post.id,
         'title': post.title,
         'description': post.description,
         'price': post.price,
@@ -376,7 +376,7 @@ def get_category_form_data(category_id=None):
     if category_id:  # Get an existing category by ID
         to_return = get_category(category_id)
     else:  # Create a form for a new category
-        to_return = {'id': -1}
+        to_return = {'category_id': -1}
 
     return ImmutableMultiDict(to_return)
 
@@ -384,7 +384,7 @@ def get_category_form_data(category_id=None):
 def get_category(category_id):
     category = Categories.query.filter(Categories.id.like(category_id)).first()
     return {
-        'id': category.id,
+        'category_id': category.id,
         'category_html': category.category_for_html,
         'category_human': category.category_for_humans
     }
@@ -395,7 +395,7 @@ def get_category_list(return_list_of_tuples=False):
     if return_list_of_tuples:
         return [(category.category_for_html, category.category_for_humans) for category in raw_list]
     else:
-        return [{'id': category.id, 'category_html': category.category_for_html, 'category_human': category.category_for_humans}
+        return [{'category_id': category.id, 'category_html': category.category_for_html, 'category_human': category.category_for_humans}
                 for category in raw_list]
 
 
@@ -418,7 +418,7 @@ def get_post_categories(post_id):
 
 
 def _search_posts(title=[u'%'], description=[u'%'], categories=[u'%'], username=u'%', completed=u'%', expired=u'%',
-                 max_results=20, page_no=1, sort_type='sortByDateAZ', return_all_results=False):
+                  max_results=20, page_no=1, sort_type='sortByDateAZ', return_all_results=False):
     # There's always a list of titles; by default it's only the wildcard, but this will search for any title that
     # contains any word in the list
     titles = Posts.title.like(title[0])
@@ -568,7 +568,7 @@ def _make_template_friendly_results(search_results):
     to_send = []
     for entry in search_results:
         entry_dictionary = {
-            'id': entry['post'].id,
+            'post_id': entry['post'].id,
             'title': entry['post'].title,
             'description': entry['post'].description,
             'price': entry['post'].price,

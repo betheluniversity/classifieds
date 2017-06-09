@@ -45,7 +45,7 @@ class RenderableForm(Form):
 
 # WTForm objects that are used in rendering. Each Field in this object corresponds to the user-input columns in the DB
 class RegularPostForm(RenderableForm):
-    id = HiddenField('', [validators.DataRequired(), validators.Length(max=8)])
+    post_id = HiddenField('', [validators.DataRequired(), validators.Length(max=8)])
     submitters_username = HiddenField('', [validators.DataRequired(), validators.Length(max=50)])
     title = StringField('Title:', [validators.DataRequired(), validators.Length(max=100)])
     description = TextAreaField('Description:', [validators.DataRequired(), validators.Length(max=1000)])
@@ -56,7 +56,7 @@ class RegularPostForm(RenderableForm):
 
 
 class ExternalPosterForm(RenderableForm):
-    id = HiddenField('', [validators.DataRequired(), validators.Length(max=8)])
+    post_id = HiddenField('', [validators.DataRequired(), validators.Length(max=8)])
     submitters_username = StringField('Email of external poster:', [validators.DataRequired(),
                                                                     validators.Length(max=50)])
     title = StringField('Title:', [validators.DataRequired(), validators.Length(max=100)])
@@ -76,7 +76,7 @@ class ContactForm(RenderableForm):
 
 
 class CategoryForm(RenderableForm):
-    id = HiddenField('', [validators.DataRequired(), validators.Length(max=8)])
+    category_id = HiddenField('', [validators.DataRequired(), validators.Length(max=8)])
     category_html = StringField('HTML version of the category:', [validators.DataRequired(), validators.Length(max=50)])
     category_human = StringField('Human-friendly version of the category:', [validators.DataRequired(), validators.Length(max=50)])
     submit = SubmitField('Submit')

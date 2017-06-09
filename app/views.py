@@ -166,8 +166,9 @@ class View(FlaskView):
     @route('/submit-post', methods=['POST'])
     def submit_post(self):
         form_contents = request.form
+        print form_contents
         data_for_new_post = {
-            'post_id': form_contents.get('id'),
+            'post_id': form_contents.get('post_id'),
             'username': form_contents.get('submitters_username'),
             'title': form_contents.get('title'),
             'description': form_contents.get('description'),
@@ -184,9 +185,11 @@ class View(FlaskView):
             form = RegularPostForm(form_contents)
         is_valid = form.validate()
         if not is_valid:
+            print form.errors
             return render_template('forms/post.html', form=form)
 
-        if data_for_new_post['post_id'] == '-1':
+        is_new = int(data_for_new_post['post_id']) < 0
+        if is_new:
             # Submitting a new post
             del data_for_new_post['post_id']
             successfully_submitted = add_post(**data_for_new_post)
@@ -387,9 +390,9 @@ class View(FlaskView):
         storage = request.form
         form = CategoryForm(storage)
         is_valid = form.validate()
-        is_new = int(storage['id']) < 0
         if not is_valid:
             return render_template('forms/category.html', form=form, new=is_new)
+        is_new = int(storage['category_id']) < 0
         if is_new:  # Adding a new category
             result = add_category(storage['category_html'], storage['category_human'])
             if result:
@@ -397,7 +400,7 @@ class View(FlaskView):
             else:
                 message = 'Category failed to be added; please try again.'
         else:  # Editing an existing category
-            result = edit_category(storage['id'], storage['category_html'], storage['category_human'])
+            result = edit_category(storage['category_id'], storage['category_html'], storage['category_human'])
             if result:
                 message = 'Category successfully edited!'
             else:

@@ -47,7 +47,7 @@ class Contacts(db.Model):
         self.is_admin = False
 
     def __repr__(self):
-        return "<Contact '%s'>" % self.first_name + ' ' + self.last_name
+        return "<Contact '%(0)s %(1)s'>" % {'0': self.first_name, '1': self.last_name}
 
 
 class Categories(db.Model):

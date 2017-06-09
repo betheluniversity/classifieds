@@ -40,7 +40,7 @@ There are no active posts to show.
     <tbody>
 {% for val in values[0:5] %}
         <tr>
-            <td><a href="{{ url_for('View:view_post', post_id=val['id']) }}" target="_blank">{{ val['title'] }}</a></td>
+            <td><a href="{{ url_for('View:view_post', post_id=val['post_id']) }}" target="_blank">{{ val['title'] }}</a></td>
             <td>{{ val['price'] }}</td>
             <td>{{ val['full_name'] }}</td>
             {% if showStatus == True %}
