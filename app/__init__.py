@@ -52,7 +52,7 @@ def init_user():
 @app.route("/logout", methods=["GET"])
 def logout():
     session.clear()
-    resp = make_response(redirect("https://auth.bethel.edu/cas/logout"))
+    resp = make_response(redirect(app.config['LOGOUT_URL']))
     resp.set_cookie('MOD_AUTH_CAS_S', '', expires=0)
     resp.set_cookie('MOD_AUTH_CAS', '', expires=0)
     return resp
