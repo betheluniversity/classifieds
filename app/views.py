@@ -459,10 +459,6 @@ class View(FlaskView):
         expire_old_posts()
         return "Old posts expired"
 
-    # This method is simply to allow them to sign out of CAS Auth as well as the app site itself.
-    def logout(self):
-        return redirect("https://auth.bethel.edu/cas/logout")
-
     # These last two methods are designed to be here only temporarily. They allow the users to submit feedback about the
     # site, whether it's a feature suggestion or bugfix.
     def feedback(self):
