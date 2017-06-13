@@ -166,7 +166,6 @@ class View(FlaskView):
     @route('/submit-post', methods=['POST'])
     def submit_post(self):
         form_contents = request.form
-        print form_contents
         data_for_new_post = {
             'post_id': form_contents.get('post_id'),
             'username': form_contents.get('submitters_username'),
@@ -185,7 +184,6 @@ class View(FlaskView):
             form = RegularPostForm(form_contents)
         is_valid = form.validate()
         if not is_valid:
-            print form.errors
             return render_template('forms/post.html', form=form)
 
         is_new = int(data_for_new_post['post_id']) < 0
@@ -474,7 +472,6 @@ class View(FlaskView):
     # Arbitrary comment
     @route('/submit-feedback', methods=['POST'])
     def submit_feedback(self):
-        print request.form
         send_feedback_email(request.form, session['username'])
         message = "Thank you for submitting feedback! We'll take a look at your message and try to make the " \
                   "site better for everyone!"
