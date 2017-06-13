@@ -390,9 +390,9 @@ class View(FlaskView):
         storage = request.form
         form = CategoryForm(storage)
         is_valid = form.validate()
+        is_new = int(storage['category_id']) < 0
         if not is_valid:
             return render_template('forms/category.html', form=form, new=is_new)
-        is_new = int(storage['category_id']) < 0
         if is_new:  # Adding a new category
             result = add_category(storage['category_html'], storage['category_human'])
             if result:
@@ -465,11 +465,6 @@ class View(FlaskView):
     def expire(self):
         expire_old_posts()
         return 'Old posts expired'
-
-    # This method is simply to allow them to sign out of CAS Auth as well as the app site itself.
-    def logout(self):
-        # TODO: After Josiah figures out the logout method for Tinker, implement it over here too.
-        return redirect('https://auth.bethel.edu/cas/logout')
 
     # These last two methods are designed to be here only temporarily. They allow the users to submit feedback about the
     # site, whether it's a feature suggestion or bugfix.

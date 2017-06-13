@@ -3,7 +3,7 @@ import ast
 import urllib2
 
 # Third party imports
-from flask import current_app, Flask, request, session
+from flask import current_app, Flask, request, session, make_response, redirect
 from flask_sqlalchemy import SQLAlchemy
 from raven.contrib.flask import Sentry
 
@@ -52,6 +52,13 @@ def init_user():
         db.session.add(new_contact)
         db.session.commit()
 
+@app.route("/logout", methods=["GET"])
+def logout():
+    session.clear()
+    resp = make_response(redirect(app.config['LOGOUT_URL']))
+    resp.set_cookie('MOD_AUTH_CAS_S', '', expires=0)
+    resp.set_cookie('MOD_AUTH_CAS', '', expires=0)
+    return resp
 
 def is_user_admin():
     return contact_is_admin(session['username'])

@@ -30,3 +30,5 @@ SITE_URL = ''
 SORT_TYPES = [
     ('', '', '')
 ]
+
+LOGOUT_URL = ""
