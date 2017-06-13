@@ -417,19 +417,38 @@ def get_post_categories(post_id):
 #######################################################################################################################
 
 
-def _search_posts(title=[u'%'], description=[u'%'], categories=[u'%'], username=u'%', completed=u'%', expired=u'%',
+def _search_posts(title=u'%', description=u'%', categories=[u'%'], username=u'%', completed=u'%', expired=u'%',
                   max_results=20, page_no=1, sort_type='sortByDateAZ', return_all_results=False):
-    # There's always a list of titles; by default it's only the wildcard, but this will search for any title that
-    # contains any word in the list
-    titles = Posts.title.like(title[0])
-    for term in title[1:]:
-        titles = or_(titles, Posts.title.like(term))
 
-    # Similar to title, description searches for wildcard by default, but can search for any descriptions that contain
-    # any word in its list
-    descriptions = Posts.description.like(description[0])
-    for term in description[1:]:
-        descriptions = or_(descriptions, Posts.description.like(term))
+    stop_words = _get_stop_words()
+
+    # By default title will be the wildcard, but if it's not then it's assumed to be a string of at least one word
+    if title == u'%':
+        titles = Posts.title.like(title)
+    else:
+        # Split the long string of multiple words into a list of individual words wrapped by wildcard characters
+        # Don't search for trivial words like "the" or "a" (referred to as stopwords)
+        titles_list = [u'%' + t + u'%' for t in title.split(' ') if t not in stop_words]
+        # There must be at least one word that is not a stopword
+        if len(titles_list) > 0:
+            titles = Posts.title.like(titles_list[0])
+            for term in titles_list[1:]:
+                titles = or_(titles, Posts.title.like(term))
+        else:
+            titles = Posts.title.like(u'%')
+
+    # Similarly to title, description searches for wildcard by default, but can search for any descriptions that contain
+    # any word in its list (excluding stopwords)
+    if description == u'%':
+        descriptions = Posts.description.like(description)
+    else:
+        descriptions_list = [u'%' + d + u'%' for d in description.split(' ') if d not in stop_words]
+        if len(descriptions_list) > 0:
+            descriptions = Posts.description.like(descriptions_list[0])
+            for term in descriptions_list[1:]:
+                descriptions = or_(descriptions, Posts.description.like(term))
+        else:
+            descriptions = Posts.description.like(u'%')
 
     # This filter functions similarly to title and description, but instead searches for exact matches between any of
     # the html_categories passed in by the list and the Categories table
@@ -630,6 +649,18 @@ def get_app_settings():
         for line in f.readlines():
             key, val = line.split(' = ')
             to_return[key] = val[1:-2]  # This peels off a ' from the front and a '\n from the end
+    return to_return
+
+
+def _get_stop_words():
+    to_return = []
+    path = os.path.abspath(__file__)
+    dir_path = os.path.dirname(path)
+    parent_dir_path = os.path.abspath(os.path.join(dir_path, os.pardir))
+    final_path = os.path.join(parent_dir_path, 'search_keywords_to_ignore.txt')
+    with open(final_path) as f:
+        for line in f.readlines():
+            to_return.append(line[:-1])
     return to_return
 
 

@@ -87,9 +87,9 @@ class View(FlaskView):
             storage = request.form
             to_send['sort_type'] = storage['sort_type']
             if len(storage['title']) > 0:
-                to_send['title'] = [u'%' + word + u'%' for word in storage['title'].split(' ')]
+                to_send['title'] = storage['title']
             if len(storage['description']) > 0:
-                to_send['description'] = [u'%' + word + u'%' for word in storage['description'].split(' ')]
+                to_send['description'] = storage['description']
             category_list = storage.getlist('categories[]')
             if len(category_list) > 0:
                 to_send['categories'] = category_list
