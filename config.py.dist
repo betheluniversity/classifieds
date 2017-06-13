@@ -31,4 +31,4 @@ SORT_TYPES = [
     ('', '', '')
 ]
 
-LOGOUT_URL = ""
+LOGOUT_URL = ''
