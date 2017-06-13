@@ -30,7 +30,7 @@ div.menu-bar {
     float: left;
     margin-left: 2.9em;
     margin-bottom: 0.8em;
-    width: 90%;
+    width: 100%;
 }
 
 div.second-bar {
@@ -38,7 +38,7 @@ div.second-bar {
     float: left;
     margin-left: 2.9em;
     margin-bottom: 1.5em;
-    width: 90%;
+    width: 100%;
 }
 
 div.centered {
