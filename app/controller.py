@@ -1,13 +1,52 @@
+__all__ = [
+    'add_category',
+    'add_contact',
+    'add_post',
+    'allowed_to_edit_post',
+    'contact_exists_in_db',
+    'contact_is_admin',
+    'create_page_selector_packet',
+    'delete_category',
+    'delete_post',
+    'edit_category',
+    'edit_contact',
+    'edit_post',
+    'expire_old_posts',
+    'filter_posts',
+    'get_admins',
+    'get_category',
+    'get_category_form_data',
+    'get_category_list',
+    'get_contact',
+    'get_contact_form_data',
+    'get_homepage',
+    'get_non_admins',
+    'get_post',
+    'get_post_categories',
+    'get_post_form_data',
+    'make_admin',
+    'mark_entry_as_complete',
+    'post_exists_in_db',
+    'query_database',
+    'remove_admin',
+    'renew_entry',
+    'send_feedback_email'
+]
+
+# Standard library imports
 import datetime
 import math
 import os
 import re
 import smtplib
+
+# Third party imports
 from collections import OrderedDict
 from email.mime.text import MIMEText
 from sqlalchemy import asc, desc, or_
 from werkzeug.datastructures import ImmutableMultiDict
 
+# Local application imports
 from app import app, db
 from models import Posts, Contacts, Categories, PostCategories
 
@@ -78,14 +117,14 @@ def renew_entry(entry_id, username):
 
 
 def expire_old_posts():
-    all_active_entries = search_posts(completed=False, expired=False, return_all_results=True)[0]
+    all_active_entries = _search_posts(completed=False, expired=False, return_all_results=True)[0]
     for row_dict in all_active_entries:
         entry = row_dict['post']
         now = datetime.datetime.now().date()
         then = entry.date_added.date()
         if (now - then).days >= app.config['EXPIRY']:
             Posts.query.filter(Posts.id.like(entry.id)).first().expired = True
-            send_expired_email(entry.username, entry.id)
+            _send_expired_email(entry.username, entry.id)
     db.session.commit()
 
 
@@ -117,7 +156,7 @@ def get_post_form_data(post_id=None, hidden_username=None):
         for cat in get_post_categories(post_id):
             to_return['categories'].append(cat['category_html'])
     else:
-        to_return = {'id': -1, 'submitters_username': hidden_username}
+        to_return = {'post_id': -1, 'submitters_username': hidden_username}
     return ImmutableMultiDict(to_return)
 
 
@@ -125,13 +164,13 @@ def get_post(post_id):
     post = Posts.query.filter(Posts.id.like(post_id)).first()
     contact = Contacts.query.filter(Contacts.username.like(post.username)).first()
     return {
-        'id': post.id,
+        'post_id': post.id,
         'title': post.title,
         'description': post.description,
         'price': post.price,
         'date_added': post.date_added,
         'username': post.username,
-        'full_name': contact.first_name + " " + contact.last_name,
+        'full_name': contact.first_name + ' ' + contact.last_name,
         'completed': post.completed,
         'expired': post.expired
     }
@@ -163,8 +202,7 @@ def add_contact(username, first_name, last_name, email, phone_number):
     try:
         existing_info = Contacts.query.filter(Contacts.username.like(username)).first()
         if existing_info is None:
-            new_contact = Contacts(username=username, first=first_name, last=last_name, email=email,
-                                   phone=phone_number)
+            new_contact = Contacts(username=username, first=first_name, last=last_name, email=email, phone=phone_number)
             db.session.add(new_contact)
             db.session.commit()
             return True
@@ -206,19 +244,18 @@ def remove_admin(username):
 
 
 # This method should not have any endpoint; this method is only for usage via terminal
-def delete_contact(username):
+def _delete_contact(username):
     try:
         posts_by_this_user = Posts.query.filter_by(username=username).all()
         for row in posts_by_this_user:
             Posts.query.filter_by(id=row.id).delete()
         Contacts.query.filter_by(username=username).delete()
         db.session.commit()
-        return "Contact and posts successfully deleted"
+        return 'Contact and posts successfully deleted'
     except Exception as e:
         db.session.rollback()
         print e.message
         return False
-
 
 
 #######################################################################################################################
@@ -316,10 +353,10 @@ def delete_category(category_id):
                             PostCategories.query.filter_by(id=post_category.id).delete()
                             break
                 else:
-                    # This is the only category for this post, so it should be changed to "general" (category.id = 9)
+                    # This is the only category for this post, so it should be changed to 'general' (category.id = 9)
                     post_category_row = PostCategories.query.filter_by(id=categories_for_this_post[0].id).first()
                     post_category_row.category_id = 9
-                dict_of_posts[post[0].id] = "post has been processed"
+                dict_of_posts[post[0].id] = 'post has been processed'
         # Now that all references to this category have been removed, delete it without fear of Foreign Key dependency
         deleted = Categories.query.filter_by(id=category_id).delete()
         db.session.commit()
@@ -339,7 +376,7 @@ def get_category_form_data(category_id=None):
     if category_id:  # Get an existing category by ID
         to_return = get_category(category_id)
     else:  # Create a form for a new category
-        to_return = {'id': -1}
+        to_return = {'category_id': -1}
 
     return ImmutableMultiDict(to_return)
 
@@ -347,7 +384,7 @@ def get_category_form_data(category_id=None):
 def get_category(category_id):
     category = Categories.query.filter(Categories.id.like(category_id)).first()
     return {
-        'id': category.id,
+        'category_id': category.id,
         'category_html': category.category_for_html,
         'category_human': category.category_for_humans
     }
@@ -358,7 +395,7 @@ def get_category_list(return_list_of_tuples=False):
     if return_list_of_tuples:
         return [(category.category_for_html, category.category_for_humans) for category in raw_list]
     else:
-        return [{'id': category.id, 'category_html': category.category_for_html, 'category_human': category.category_for_humans}
+        return [{'category_id': category.id, 'category_html': category.category_for_html, 'category_human': category.category_for_humans}
                 for category in raw_list]
 
 
@@ -380,19 +417,38 @@ def get_post_categories(post_id):
 #######################################################################################################################
 
 
-def search_posts(title=[u"%"], description=[u"%"], categories=[u"%"], username=u"%", completed=u"%", expired=u"%",
-                 max_results=20, page_no=1, sort_type="sortByDateAZ", return_all_results=False):
-    # There's always a list of titles; by default it's only the wildcard, but this will search for any title that
-    # contains any word in the list
-    titles = Posts.title.like(title[0])
-    for term in title[1:]:
-        titles = or_(titles, Posts.title.like(term))
+def _search_posts(title=u'%', description=u'%', categories=[u'%'], username=u'%', completed=u'%', expired=u'%',
+                  max_results=20, page_no=1, sort_type='sortByDateAZ', return_all_results=False):
 
-    # Similar to title, description searches for wildcard by default, but can search for any descriptions that contain
-    # any word in its list
-    descriptions = Posts.description.like(description[0])
-    for term in description[1:]:
-        descriptions = or_(descriptions, Posts.description.like(term))
+    stop_words = _get_stop_words()
+
+    # By default title will be the wildcard, but if it's not then it's assumed to be a string of at least one word
+    if title == u'%':
+        titles = Posts.title.like(title)
+    else:
+        # Split the long string of multiple words into a list of individual words wrapped by wildcard characters
+        # Don't search for trivial words like "the" or "a" (referred to as stopwords)
+        titles_list = [u'%' + t + u'%' for t in title.split(' ') if t not in stop_words]
+        # There must be at least one word that is not a stopword
+        if len(titles_list) > 0:
+            titles = Posts.title.like(titles_list[0])
+            for term in titles_list[1:]:
+                titles = or_(titles, Posts.title.like(term))
+        else:
+            titles = Posts.title.like(u'%')
+
+    # Similarly to title, description searches for wildcard by default, but can search for any descriptions that contain
+    # any word in its list (excluding stopwords)
+    if description == u'%':
+        descriptions = Posts.description.like(description)
+    else:
+        descriptions_list = [u'%' + d + u'%' for d in description.split(' ') if d not in stop_words]
+        if len(descriptions_list) > 0:
+            descriptions = Posts.description.like(descriptions_list[0])
+            for term in descriptions_list[1:]:
+                descriptions = or_(descriptions, Posts.description.like(term))
+        else:
+            descriptions = Posts.description.like(u'%')
 
     # This filter functions similarly to title and description, but instead searches for exact matches between any of
     # the html_categories passed in by the list and the Categories table
@@ -416,13 +472,13 @@ def search_posts(title=[u"%"], description=[u"%"], categories=[u"%"], username=u
     # oldest date at the top. By having the sort done in this method, it clears up the code elsewhere.
     ordering = desc(Posts.date_added)
 
-    if sort_type == "sortByUsernameAZ":
+    if sort_type == 'sortByUsernameAZ':
         ordering = asc(Posts.username)
-    elif sort_type == "sortByUsernameZA":
+    elif sort_type == 'sortByUsernameZA':
         ordering = desc(Posts.username)
-    elif sort_type == "sortByDateAZ":
+    elif sort_type == 'sortByDateAZ':
         ordering = desc(Posts.date_added)
-    elif sort_type == "sortByDateZA":
+    elif sort_type == 'sortByDateZA':
         ordering = asc(Posts.date_added)
 
     # This monstrosity is what joins all 4 tables together properly, adds the filters as specified above, and then runs
@@ -448,7 +504,7 @@ def search_posts(title=[u"%"], description=[u"%"], categories=[u"%"], username=u
         # "I'm sorry" - Nathan Li, 2017
         # This regular expression matches a group of text, numbers (including commas and periods), more text,
         # more numbers, and finally another set of text.
-        pattern = "[~@!:$<> &-/a-zA-Z]*(\d[\d,.]*)?[~@!:$<> &-/a-zA-Z]*(\d[\d,.]*)?[~@!:$<> &-/a-zA-Z]*"
+        pattern = '[~@!:$<> &-/a-zA-Z]*(\d[\d,.]*)?[~@!:$<> &-/a-zA-Z]*(\d[\d,.]*)?[~@!:$<> &-/a-zA-Z]*'
 
         results = re.match(pattern, price_string)
         if results is not None:
@@ -462,40 +518,40 @@ def search_posts(title=[u"%"], description=[u"%"], categories=[u"%"], username=u
             return 0
 
     def get_sortable_text_from_string(silly_string):
-        pattern = "^[^\w]*(.*)"
+        pattern = '^[^\w]*(.*)'
         results = re.match(pattern, silly_string)
         return results.groups()[0].upper()
 
     # The sorted function here takes in all results processed into numbers and sorts them accordingly by price.
     # The sorting is simply reversed for reverse price order.
-    if sort_type == "sortByTitleAZ":
+    if sort_type == 'sortByTitleAZ':
         all_results = sorted(
             all_results,
             key=lambda tuple_result: get_sortable_text_from_string(tuple_result[0].title)
         )
-    elif sort_type == "sortByTitleZA":
+    elif sort_type == 'sortByTitleZA':
         all_results = sorted(
             all_results,
             key=lambda tuple_result: get_sortable_text_from_string(tuple_result[0].title),
             reverse=True
         )
-    elif sort_type == "sortByDescriptionAZ":
+    elif sort_type == 'sortByDescriptionAZ':
         all_results = sorted(
             all_results,
             key=lambda tuple_result: get_sortable_text_from_string(tuple_result[0].description)
         )
-    elif sort_type == "sortByDescriptionZA":
+    elif sort_type == 'sortByDescriptionZA':
         all_results = sorted(
             all_results,
             key=lambda tuple_result: get_sortable_text_from_string(tuple_result[0].description),
             reverse=True
         )
-    elif sort_type == "sortByPriceAZ":
+    elif sort_type == 'sortByPriceAZ':
         all_results = sorted(
             all_results,
             key=lambda tuple_result: get_numerical_value(tuple_result[0].price)
         )
-    elif sort_type == "sortByPriceZA":
+    elif sort_type == 'sortByPriceZA':
         all_results = sorted(
             all_results,
             key=lambda tuple_result: get_numerical_value(tuple_result[0].price),
@@ -527,17 +583,17 @@ def search_posts(title=[u"%"], description=[u"%"], categories=[u"%"], username=u
     return to_return, int(math.ceil(float(num_results)/float(max_results)))
 
 
-def make_template_friendly_results(search_results):
+def _make_template_friendly_results(search_results):
     to_send = []
     for entry in search_results:
         entry_dictionary = {
-            'id': entry['post'].id,
+            'post_id': entry['post'].id,
             'title': entry['post'].title,
             'description': entry['post'].description,
             'price': entry['post'].price,
             'date_added': entry['post'].date_added,
             'username': entry['post'].username,
-            'full_name': entry['contact'].first_name + " " + entry['contact'].last_name,
+            'full_name': entry['contact'].first_name + ' ' + entry['contact'].last_name,
             'completed': entry['post'].completed,
             'expired': entry['post'].expired
         }
@@ -550,28 +606,28 @@ def filter_posts(username, selector, page_number):
         'username': username,
         'page_no': page_number
     }
-    if selector == "all":
+    if selector == 'all':
         pass
-    elif selector == "active":
+    elif selector == 'active':
         search_params['completed'] = False
         search_params['expired'] = False
-    elif selector == "completed":
+    elif selector == 'completed':
         search_params['completed'] = True
-    elif selector == "expired":
+    elif selector == 'expired':
         search_params['completed'] = False
         search_params['expired'] = True
-    elif selector == "external":
-        search_params['username'] = u"%@%"
+    elif selector == 'external':
+        search_params['username'] = u'%@%'
     else:
         pass
 
-    entries, number_of_pages = search_posts(**search_params)
-    return make_template_friendly_results(entries), number_of_pages
+    entries, number_of_pages = _search_posts(**search_params)
+    return _make_template_friendly_results(entries), number_of_pages
 
 
 def query_database(params):
-    entries, num_pages = search_posts(**params)
-    return make_template_friendly_results(entries), num_pages
+    entries, num_pages = _search_posts(**params)
+    return _make_template_friendly_results(entries), num_pages
 
 
 def get_homepage(page_number, sort_type):
@@ -588,15 +644,27 @@ def get_app_settings():
     path = os.path.abspath(__file__)
     dir_path = os.path.dirname(path)
     parent_dir_path = os.path.abspath(os.path.join(dir_path, os.pardir))
-    final_path = os.path.join(parent_dir_path, "app_settings.py")
+    final_path = os.path.join(parent_dir_path, 'app_settings.py')
     with open(final_path) as f:
         for line in f.readlines():
-            key, val = line.split(" = ")
-            to_return[key] = val[1:-2]  # This peels off a " from the front and a "\n from the end
+            key, val = line.split(' = ')
+            to_return[key] = val[1:-2]  # This peels off a ' from the front and a '\n from the end
     return to_return
 
 
-def create_page_selector_packet(number_of_pages, selected_page, sort_type="reverseDateOrder"):
+def _get_stop_words():
+    to_return = []
+    path = os.path.abspath(__file__)
+    dir_path = os.path.dirname(path)
+    parent_dir_path = os.path.abspath(os.path.join(dir_path, os.pardir))
+    final_path = os.path.join(parent_dir_path, 'search_keywords_to_ignore.txt')
+    with open(final_path) as f:
+        for line in f.readlines():
+            to_return.append(line[:-1])
+    return to_return
+
+
+def create_page_selector_packet(number_of_pages, selected_page, sort_type='reverseDateOrder'):
     previous_page_number = max(1, (selected_page - 1))  # Must always be 1 or greater
     next_page_number = min((selected_page + 1), number_of_pages)  # Can never be more than the last page
 
@@ -622,27 +690,27 @@ def create_page_selector_packet(number_of_pages, selected_page, sort_type="rever
     return page_selector_packet
 
 
-def send_expired_email(username, post_id):
+def _send_expired_email(username, post_id):
     contact = Contacts.query.filter(Contacts.username.like(username)).first()
 
-    msg = MIMEText("One of the posts that you listed " + str(app.config['EXPIRY']) +
-                   " days ago in " + app.config['SITE_NAME'] + " has been marked as expired. If you want, you can" +
-                   " renew it at https://" + app.config['SITE_URL'] + "/view-post/" + str(post_id))
-    msg['Subject'] = "One of your posts has expired"
-    msg['From'] = "no-reply@bethel.edu"
+    msg = MIMEText('One of the posts that you listed ' + str(app.config['EXPIRY']) +
+                   ' days ago in ' + app.config['SITE_NAME'] + ' has been marked as expired. If you want, you can' +
+                   ' renew it at https://' + app.config['SITE_URL'] + '/view-post/' + str(post_id))
+    msg['Subject'] = 'One of your posts has expired'
+    msg['From'] = 'no-reply@bethel.edu'
     msg['To'] = contact.email
 
     s = smtplib.SMTP('localhost')
-    s.sendmail("no-reply@bethel.edu", [contact.email], msg.as_string())
+    s.sendmail('no-reply@bethel.edu', [contact.email], msg.as_string())
     s.quit()
 
 
 def send_feedback_email(form_contents, username):
     msg = MIMEText(form_contents['input'])
-    msg['Subject'] = "Feedback from " + username
-    msg['From'] = "webmaster@bethel.edu"
+    msg['Subject'] = 'Feedback from ' + username
+    msg['From'] = 'webmaster@bethel.edu'
     msg['To'] = app.config['ADMINS']
 
     s = smtplib.SMTP('localhost')
-    s.sendmail(username + "@bethel.edu", app.config['ADMINS'], msg.as_string())
+    s.sendmail(username + '@bethel.edu', app.config['ADMINS'], msg.as_string())
     s.quit()

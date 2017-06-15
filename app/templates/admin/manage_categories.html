@@ -25,10 +25,10 @@
                     {{ category['category_human'] }}
                 </td>
                 <td>
-                    <a href="{{ url_for('View:edit_category', category_id = category['id']) }}" class="button">Edit</a>
+                    <a href="{{ url_for('View:edit_category', category_id = category['category_id']) }}" class="button">Edit</a>
                 </td>
                 <td>
-                    <a href="{{ url_for('View:delete_category_confirm', category_id = category['id']) }}" class="button">Delete</a>
+                    <a href="{{ url_for('View:delete_category_confirm', category_id = category['category_id']) }}" class="button">Delete</a>
                 </td>
             </tr>
     {% endfor %}

@@ -28,17 +28,19 @@ hr {
 div.menu-bar {
     position: relative;
     float: left;
-    margin-left: 2.9em;
-    margin-bottom: 0.8em;
-    width: 90%;
+    /*margin-left: 2.9em;*/
+    /*margin-bottom: 0.8em;*/
+    width: 100%;
+    padding: 0 0 .8em 2.9em;
 }
 
 div.second-bar {
     position: relative;
     float: left;
-    margin-left: 2.9em;
-    margin-bottom: 1.5em;
-    width: 90%;
+    /*margin-left: 2.9em;*/
+    /*margin-bottom: 1.5em;*/
+    width: 100%;
+    padding: 0 0 1.5em 2.9em;
 }
 
 div.centered {
@@ -368,9 +370,10 @@ textarea#input {
 .page_button {
     background-color: #0F2C52;
     color: #ffffff !important;
-    padding: 6px 9px;
+    padding: 4px 6px;
     border-radius: .25em;
     transition: 0s background-color;
+    font-size: 12px;
 }
 
 .page_button:hover {
@@ -400,7 +403,7 @@ a.active_page {
 }
 
 .clear_footer {
-    height: .625em;
+    height: 4em;
     clear: both;
 }
 
@@ -472,6 +475,11 @@ a.active_page {
 
     li.nav-button {
         float: left;
+    }
+
+    .page_button {
+        padding: 6px 9px;
+        font-size: 16px;
     }
 }
 

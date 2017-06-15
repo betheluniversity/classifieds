@@ -1,8 +1,13 @@
+# Standard library imports
 import re
-from controller import get_category_list
+
+# Third party imports
 from flask import render_template
-from wtforms import Form, HiddenField, SelectMultipleField, StringField, SubmitField, TextAreaField, ValidationError, \
-    validators
+from wtforms import Form, HiddenField, SelectMultipleField, StringField
+from wtforms import SubmitField, TextAreaField, ValidationError, validators
+
+# Local application imports
+from controller import get_category_list
 
 
 # This is a custom validator that I made to make sure that they put in valid phone numbers into their Contact form
@@ -35,31 +40,31 @@ def safe_for_url():
 class RenderableForm(Form):
 
     def render_to_html(self):
-        return render_template("forms/generic.html", fields=self._fields.iteritems())
+        return render_template('forms/generic.html', fields=self._fields.iteritems())
 
 
 # WTForm objects that are used in rendering. Each Field in this object corresponds to the user-input columns in the DB
 class RegularPostForm(RenderableForm):
-    id = HiddenField("", [validators.DataRequired(), validators.Length(max=8)])
-    submitters_username = HiddenField("", [validators.DataRequired(), validators.Length(max=50)])
+    post_id = HiddenField('', [validators.DataRequired(), validators.Length(max=8)])
+    submitters_username = HiddenField('', [validators.DataRequired(), validators.Length(max=50)])
     title = StringField('Title:', [validators.DataRequired(), validators.Length(max=100)])
     description = TextAreaField('Description:', [validators.DataRequired(), validators.Length(max=1000)])
     price = StringField('Price:', [validators.DataRequired(), validators.Length(max=50)])
     categories = SelectMultipleField('Categories:', [validators.DataRequired()],
                                      choices=get_category_list(return_list_of_tuples=True))
-    submit = SubmitField("Submit")
+    submit = SubmitField('Submit')
 
 
 class ExternalPosterForm(RenderableForm):
-    id = HiddenField("", [validators.DataRequired(), validators.Length(max=8)])
-    submitters_username = StringField("Email of external poster:", [validators.DataRequired(),
+    post_id = HiddenField('', [validators.DataRequired(), validators.Length(max=8)])
+    submitters_username = StringField('Email of external poster:', [validators.DataRequired(),
                                                                     validators.Length(max=50)])
     title = StringField('Title:', [validators.DataRequired(), validators.Length(max=100)])
     description = TextAreaField('Description:', [validators.DataRequired(), validators.Length(max=1000)])
     price = StringField('Price:', [validators.DataRequired(), validators.Length(max=50)])
     categories = SelectMultipleField('Categories:', [validators.DataRequired()],
                                      choices=get_category_list(return_list_of_tuples=True))
-    submit = SubmitField("Submit")
+    submit = SubmitField('Submit')
 
 
 class ContactForm(RenderableForm):
@@ -67,11 +72,11 @@ class ContactForm(RenderableForm):
     last_name = StringField('Last Name:', [validators.DataRequired(), validators.Length(max=30)])
     email = StringField('Email address:', [validators.DataRequired(), validators.Email(), safe_for_url()])
     phone_number = StringField('Phone Number:', [validators.DataRequired(), phone_validator()])
-    submit = SubmitField("Submit")
+    submit = SubmitField('Submit')
 
 
 class CategoryForm(RenderableForm):
-    id = HiddenField("", [validators.DataRequired(), validators.Length(max=8)])
+    category_id = HiddenField('', [validators.DataRequired(), validators.Length(max=8)])
     category_html = StringField('HTML version of the category:', [validators.DataRequired(), validators.Length(max=50)])
     category_human = StringField('Human-friendly version of the category:', [validators.DataRequired(), validators.Length(max=50)])
-    submit = SubmitField("Submit")
+    submit = SubmitField('Submit')

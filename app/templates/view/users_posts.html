@@ -61,7 +61,7 @@
         <div id="singlePost-{{ loop.index }}" class="singlePost">
             <div class="row">
                 <div class="cell">Title:</div>
-                <div class="title cell"><a href="{{ url_for('View:view_post', post_id = post['id']) }}">{{ post['title'] }}</a></div>
+                <div class="title cell"><a href="{{ url_for('View:view_post', post_id = post['post_id']) }}">{{ post['title'] }}</a></div>
             </div>
             <div class="row">
                 <div class="cell">Description: </div>
@@ -79,13 +79,13 @@
                 {% if post['expired'] == True %}
                     <div class="row">
                         <div class="marked cell">
-                            <a href="{{ url_for('View:renew', post_id = post['id']) }}" class="button">Renew this ad</a>
+                            <a href="{{ url_for('View:renew', post_id = post['post_id']) }}" class="button">Renew this ad</a>
                         </div>
                     </div>
                 {% else %}
                     <div class="row">
                         <div class="marked cell">
-                            <a href="{{ url_for('View:mark_complete', post_id = post['id']) }}" class="button">Mark as complete</a>
+                            <a href="{{ url_for('View:mark_complete', post_id = post['post_id']) }}" class="button">Mark as complete</a>
                         </div>
                     </div>
                 {% endif %}

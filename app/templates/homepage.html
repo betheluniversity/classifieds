@@ -22,7 +22,7 @@
             <div id="singlePost-{{ loop.index }}" class="singlePost">
                 <div class="row">
                     <div class="cell">Title: </div>
-                    <div class="title cell"><a href="{{ url_for('View:view_post', post_id = val['id']) }}">{{ val['title'] }}</a></div>
+                    <div class="title cell"><a href="{{ url_for('View:view_post', post_id = val['post_id']) }}">{{ val['title'] }}</a></div>
                 </div>
                 <div class="row">
                     <div class="cell">Description: </div>
@@ -54,15 +54,27 @@
                         </div>
                     </div>
                 {% endif %}
-                {% if is_user_admin() or session['username'] == val['username'] %}
+
+                {% if '@' in val['username'] %}
+                    {% if is_user_admin() %}
                     <div class="row">
                         <div class="title cell">
-                            <a class="button" href="{{ url_for('View:edit_post', post_id = val['id']) }}">Edit</a>
+                            <a class="button" href="{{ url_for('View:edit_external_post', post_id = val['post_id']) }}">Edit</a>
+                            <a class="button" href="{{ url_for('View:delete_post_confirm', post_id = val['post_id']) }}">Delete</a>
+                        </div>
+                    </div>
+                    {% endif %}
+                {% else %}
+                    {% if is_user_admin() or session['username'] == val['username'] %}
+                    <div class="row">
+                        <div class="title cell">
+                            <a class="button" href="{{ url_for('View:edit_post', post_id = val['post_id']) }}">Edit</a>
                             {% if is_user_admin() %}
-                            <a class="button" href="{{ url_for('View:delete_post_confirm', post_id = val['id']) }}">Delete</a>
+                            <a class="button" href="{{ url_for('View:delete_post_confirm', post_id = val['post_id']) }}">Delete</a>
                             {% endif %}
                         </div>
                     </div>
+                    {% endif %}
                 {% endif %}
             </div>
             <hr/>

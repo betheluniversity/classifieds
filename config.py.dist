@@ -11,24 +11,24 @@ FOUNDATION_USE_CDN = True
 
 ##emails
 ADMINS = ''
-secret_key = ""
-SECRET_KEY = ""
+secret_key = ''
+SECRET_KEY = ''
 
 SENTRY_URL = ''
 
 
-ENVIRON = ""
+ENVIRON = ''
 TEST_USER = ''
 
 CACHE_DEFAULT_TIMEOUT = 300
 
-FAQ_PAGE = ""
+FAQ_PAGE = ''
 EXPIRY = 30
-SITE_NAME = ""
-SITE_URL = ""
+SITE_NAME = ''
+SITE_URL = ''
 
 SORT_TYPES = [
-    ("", "", "")
+    ('', '', '')
 ]
 
-LOGOUT_URL = ""
+LOGOUT_URL = ''
