@@ -41,7 +41,8 @@ import re
 import smtplib
 
 # Third party imports
-from collections import OrderedDict
+# from collections import OrderedDict
+from ordereddict import OrderedDict
 from email.mime.text import MIMEText
 from sqlalchemy import asc, desc, or_
 from werkzeug.datastructures import ImmutableMultiDict
