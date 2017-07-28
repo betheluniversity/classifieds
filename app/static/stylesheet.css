@@ -326,7 +326,15 @@ input[type=submit] {
     padding: .625em 1em .625em 1em;
     letter-spacing: 0.75px;
     margin-bottom: 1.25em;
+}
 
+#external_submit {
+    margin-bottom: 0;
+}
+
+#email_search {
+    margin-bottom: 0;
+    padding-bottom: 0;
 }
 
 input {
