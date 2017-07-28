@@ -1,0 +1,81 @@
+{% extends "classifieds_base.html" %}
+
+{% block subpage_title %}
+    | Search Results
+{% endblock %}
+
+{% block internal %}
+    <div>
+        <p class="page-title">
+            Search Results
+        </p>
+        <p class="page-info">
+            External posts from <span style="font-weight: bold;">'{{ external_email }}'</span> that have not been marked as completed
+        </p>
+    </div>
+    <div class="table">
+        <div id="results">
+        {% for val in values %}
+            <div id="singlePost-{{ loop.index }}" class="singlePost">
+                <div class="row">
+                    <div class="cell">Title: </div>
+                    <div class="title cell"><a href="{{ url_for('View:view_post', post_id = val['post_id']) }}">{{ val['title'] }}</a></div>
+                </div>
+                <div class="row">
+                    <div class="cell">Description: </div>
+                    <div class="description cell"><article>{{ val['description'] }}</article></div>
+                </div>
+                <div class="row">
+                    <div class="cell">Price: </div>
+                    <div class="price cell">{{ val['price'] }}</div>
+                </div>
+                <div class="row">
+                    <div class="cell">Date Posted: </div>
+                    <div class="date cell">{{ val['date_added'].date() }}</div>
+                </div>
+                <div class="row">
+                    <div class="cell">Posted By: </div>
+                    <div class="postedBy cell"><a href="{{ url_for('View:view_contact', username = val['username']) }}">{{ val['full_name'] }}</a></div>
+                </div>
+                {% if showStatus == True %}
+                    <div class="row">
+                        <div class="cell">Status:</div>
+                        <div class="status cell">
+                            {% if val['completed'] == True %}
+                                Completed
+                            {% elif val['expired'] == True %}
+                                Expired
+                            {% else %}
+                                Active
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endif %}
+
+                {% if '@' in val['username'] %}
+                    {% if is_user_admin() %}
+                    <div class="row">
+                        <div class="title cell">
+                            <a class="button" href="{{ url_for('View:edit_external_post', post_id = val['post_id']) }}">Edit</a>
+                            <a class="button" href="{{ url_for('View:delete_post_confirm', post_id = val['post_id']) }}">Delete</a>
+                        </div>
+                    </div>
+                    {% endif %}
+                {% else %}
+                    {% if is_user_admin() or session['username'] == val['username'] %}
+                    <div class="row">
+                        <div class="title cell">
+                            <a class="button" href="{{ url_for('View:edit_post', post_id = val['post_id']) }}">Edit</a>
+                            {% if is_user_admin() %}
+                            <a class="button" href="{{ url_for('View:delete_post_confirm', post_id = val['post_id']) }}">Delete</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endif %}
+                {% endif %}
+            </div>
+            <hr/>
+        {% endfor %}
+        </div>
+    </div>
+{% endblock %}
