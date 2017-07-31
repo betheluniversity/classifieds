@@ -10,17 +10,13 @@
             Search Results
         </p>
         <p class="page-info">
-            {% if name and external_email %}
-                External posts that both match the name <span style="font-weight: bold;">'{{ name }}'</span>
-                and the email <span style="font-weight: bold;">'{{ external_email }}'</span>
-            {% elif name %}
-                External posts that match the name <span style="font-weight: bold;">'{{ name }}'</span>
-            {% elif external_email %}
-                External posts that match the email <span style="font-weight: bold;">'{{ external_email }}'</span>
+            {% if name_or_email != '%' %}
+                External posts not marked as completed where
+                <span style="font-weight: bold;">'{{ name_or_email }}'</span>
+                matches either the contact's first name, last name, or email
             {% else %}
-                All external posts
+                No search criteria given, returning all external posts
             {% endif %}
-            that have not been marked as completed
         </p>
     </div>
     <div class="table">

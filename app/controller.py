@@ -585,29 +585,37 @@ def _search_posts(title=u'%', description=u'%', categories=[u'%'], username=u'%'
     return to_return, int(math.ceil(float(num_results)/float(max_results)))
 
 
-def search_for_external_posts(name='%', username='%@%'):
-    if name != '%':
-        name_parts = name.split(' ')
-        first_name = Contacts.first_name.like('%' + name_parts[0] + '%')
-        if len(name_parts) > 1:
-            last_name = Contacts.last_name.like('%' + name_parts[1] + '%')
-        else:
-            last_name = Contacts.last_name.like('%')
+def search_for_external_posts(name_or_email):
+    if len(name_or_email) > 0:
+        words = name_or_email.split(' ')
+        first_name = Contacts.first_name.like('%' + words[0] + '%')
+        last_name = Contacts.last_name.like('%' + words[0] + '%')
+        username = or_(Contacts.username.like('%' + words[0] + '%@%'),
+                       Contacts.username.like('%@%' + words[0] + '%'))
+        for word in words[1:]:
+            name = '%' + word + '%'
+            email_one = '%' + word + '%@%'
+            email_two = '%@%' + word + '%'
+            first_name = or_(first_name, Contacts.first_name.like(name))
+            last_name = or_(last_name, Contacts.last_name.like(name))
+            email_or = or_(Contacts.username.like(email_one), Contacts.username.like(email_two))
+            username = or_(username, email_or)
     else:
         first_name = Contacts.first_name.like('%')
         last_name = Contacts.last_name.like('%')
+        username = Contacts.username.like('%@%')
 
-    username = Contacts.username.like(username)
+    criteria = or_(or_(first_name, last_name), username)
 
     all_results = db.session.query(Posts, Contacts, PostCategories, Categories
         ).join(Contacts, Contacts.username == Posts.username
         ).join(PostCategories, PostCategories.post_id == Posts.id
         ).join(Categories, Categories.id == PostCategories.category_id
         ).filter(
-            first_name,
-            last_name,
-            username,
+            criteria,
+            Posts.username.like('%@%'),
             Posts.completed == False,
+            # desc(Posts.date_added),  # This line throws a SQL error that I'm not going to fix right now.
         ).all()
 
     to_return = OrderedDict()

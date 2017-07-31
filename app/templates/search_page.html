@@ -11,8 +11,10 @@
         Description, and/or Category of the posting.</p>
 
     <form id="classifieds">
-        <label for="title">Title contains:</label><input type="text" name="title" id="title">
-        <label for="description">Description contains:</label><input type="text" name="description" id="description">
+        <label for="title">Title contains:</label>
+        <input type="text" name="title" id="title" placeholder="Leave empty to match all"/>
+        <label for="description">Description contains:</label>
+        <input type="text" name="description" id="description" placeholder="Leave empty to match all"/>
         <label for="categories">In any of these categories:</label>
         <select name="categories" id="categories" class="largeselect" style="height:auto;" multiple="">
             {% for category_pair in categories %}
