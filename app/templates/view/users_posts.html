@@ -58,8 +58,10 @@
         {% if '/external' in request.path %}
             <div>
                 <form id="email_search" method="POST" action="{{ url_for('View:search_external_posts') }}">
+                    <label for="external_name">Name of external contact to search for:</label>
+                    <input id="external_name" name="external_name" type="text" placeholder="Leave empty to search all"/>
                     <label for="external_user_email">External email to search for:</label>
-                    <input id="external_user_email" name="external_user_email" type="text"/>
+                    <input id="external_user_email" name="external_user_email" type="text" placeholder="Leave empty to search all"/>
                     <input id="external_submit" type="submit" value="Search"/>
                 </form>
             </div>

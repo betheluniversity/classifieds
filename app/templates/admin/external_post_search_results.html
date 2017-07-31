@@ -10,7 +10,17 @@
             Search Results
         </p>
         <p class="page-info">
-            External posts from <span style="font-weight: bold;">'{{ external_email }}'</span> that have not been marked as completed
+            {% if name and external_email %}
+                External posts that both match the name <span style="font-weight: bold;">'{{ name }}'</span>
+                and the email <span style="font-weight: bold;">'{{ external_email }}'</span>
+            {% elif name %}
+                External posts that match the name <span style="font-weight: bold;">'{{ name }}'</span>
+            {% elif external_email %}
+                External posts that match the email <span style="font-weight: bold;">'{{ external_email }}'</span>
+            {% else %}
+                All external posts
+            {% endif %}
+            that have not been marked as completed
         </p>
     </div>
     <div class="table">

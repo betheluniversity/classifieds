@@ -30,6 +30,7 @@ __all__ = [
     'query_database',
     'remove_admin',
     'renew_entry',
+    'search_for_external_posts',
     'send_feedback_email'
 ]
 
@@ -41,8 +42,8 @@ import re
 import smtplib
 
 # Third party imports
-# from collections import OrderedDict
-from ordereddict import OrderedDict
+from collections import OrderedDict
+# from ordereddict import OrderedDict
 from email.mime.text import MIMEText
 from sqlalchemy import asc, desc, or_
 from werkzeug.datastructures import ImmutableMultiDict
@@ -582,6 +583,45 @@ def _search_posts(title=u'%', description=u'%', categories=[u'%'], username=u'%'
         to_return = [to_return[key] for key in to_return.keys()[starting_index:starting_index + max_results]]
 
     return to_return, int(math.ceil(float(num_results)/float(max_results)))
+
+
+def search_for_external_posts(name='%', username='%@%'):
+    if name != '%':
+        name_parts = name.split(' ')
+        first_name = Contacts.first_name.like('%' + name_parts[0] + '%')
+        if len(name_parts) > 1:
+            last_name = Contacts.last_name.like('%' + name_parts[1] + '%')
+        else:
+            last_name = Contacts.last_name.like('%')
+    else:
+        first_name = Contacts.first_name.like('%')
+        last_name = Contacts.last_name.like('%')
+
+    username = Contacts.username.like(username)
+
+    all_results = db.session.query(Posts, Contacts, PostCategories, Categories
+        ).join(Contacts, Contacts.username == Posts.username
+        ).join(PostCategories, PostCategories.post_id == Posts.id
+        ).join(Categories, Categories.id == PostCategories.category_id
+        ).filter(
+            first_name,
+            last_name,
+            username,
+            Posts.completed == False,
+        ).all()
+
+    to_return = OrderedDict()
+    for row in all_results:
+        if row[0].id in to_return:
+            to_return[row[0].id]['categories'].append(row[3])
+        else:
+            to_return[row[0].id] = {
+                'post': row[0],
+                'contact': row[1],
+                'categories': [row[3]]
+            }
+    to_return = [to_return[key] for key in to_return.keys()]
+    return _make_template_friendly_results(to_return)
 
 
 def _make_template_friendly_results(search_results):

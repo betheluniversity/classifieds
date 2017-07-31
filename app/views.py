@@ -310,15 +310,18 @@ class View(FlaskView):
     def search_external_posts(self):
         if not contact_is_admin(session['username']):
             return abort(404)
+        name = request.form['external_name']
         email = request.form['external_user_email']
-        to_send = {
-            'username': '%' + email + '%',
-            'completed': False,
-            'sort_type': 'sortByTitleAZ'
-        }
-
-        results, number_of_pages = query_database(to_send)
-        return render_template('admin/external_post_search_results.html', values=results, external_email=email)
+        to_send = dict()
+        if name != u'':
+            to_send['name'] = name
+        if email != u'':
+            to_send['username'] = '%' + email + '%'
+        results = search_for_external_posts(**to_send)
+        return render_template('admin/external_post_search_results.html',
+                               values=results,
+                               name=name,
+                               external_email=email)
 
     # Asks the administrator to confirm that they want to delete a specific post
     @route('/delete-post-confirm/<post_id>')
