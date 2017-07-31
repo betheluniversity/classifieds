@@ -52,9 +52,18 @@
             {% endif %}
         </ul>
     </div>
-{% if posts | length == 0 %}
-<p class="noPosts">There are no posts to show.</p>
+    {% if posts | length == 0 %}
+    <p class="noPosts">There are no posts to show.</p>
     {% else %}
+        {% if '/external' in request.path %}
+            <div>
+                <form id="email_search" method="POST" action="{{ url_for('View:search_external_posts') }}">
+                    <label for="external_user_name_or_email">Name or email of external contact to search for:</label>
+                    <input id="external_user_name_or_email" name="external_user_name_or_email" type="text" placeholder="Leave empty to match all"/>
+                    <input id="external_submit" type="submit" value="Search"/>
+                </form>
+            </div>
+        {% endif %}
     <div class="table">
     {{ page_selector_macro(page_selector) }}
     {% for post in posts %}
