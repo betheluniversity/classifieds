@@ -46,3 +46,65 @@
     </form>
 </div>
 {% endblock %}
+
+{% block scripts %}
+    <datalist id="partial_email_matches"></datalist>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+        //setup before functions
+        document.getElementById('submitters_username').setAttribute('list', 'partial_email_matches');
+        var typingTimer;                // timer identifier
+        var doneTypingInterval = 500;   // delay in ms
+        var input = $('#submitters_username');
+
+        //on keyup, start the countdown
+        input.on('keyup', function (key) {
+            // do nothing if it's an arrow key
+            var code = (key.keyCode || key.which);
+            if(code < 37 || code > 40){
+                clearTimeout(typingTimer);
+                typingTimer = setTimeout(doneTyping, doneTypingInterval);
+            }
+        });
+
+        //on keydown, clear the countdown
+        input.on('keydown', function (key) {
+            // do nothing if it's an arrow key
+            var code = (key.keyCode || key.which);
+            if(code < 37 || code > 40){
+                clearTimeout(typingTimer);
+            }
+        });
+
+        //user is "finished typing," do something
+        function doneTyping () {
+          // Do stuff when user has been idle for 0.5 sec
+            $.ajax({
+                'type': 'POST',
+                'url': '{{ url_for('View:search_external_emails') }}',
+                'data': {
+                    'partial': input.val()
+                },
+                'success': suggestEmails
+            });
+        }
+
+        function suggestEmails(data){
+            // First remove the current suggestions
+            var datalist_alias = document.getElementById('partial_email_matches');
+            while(datalist_alias.hasChildNodes()){
+                datalist_alias.removeChild(datalist_alias.lastChild);
+            }
+
+            // Then add the new suggestions
+            var list_of_suggestions = JSON.parse(data);
+            var temp_option_object;
+            for(var i=0; i < list_of_suggestions.length; i++){
+                temp_option_object = document.createElement("OPTION");
+                temp_option_object.setAttribute('value', list_of_suggestions[i]);
+                temp_option_object.setAttribute('text', list_of_suggestions[i]);
+                datalist_alias.appendChild(temp_option_object);
+            }
+        }
+    </script>
+{% endblock %}

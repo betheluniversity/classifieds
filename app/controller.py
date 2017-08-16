@@ -21,6 +21,7 @@ __all__ = [
     'get_contact_form_data',
     'get_homepage',
     'get_non_admins',
+    'get_partial_email_matches',
     'get_post',
     'get_post_categories',
     'get_post_form_data',
@@ -280,6 +281,12 @@ def get_contact(username):
         'external': contact.username == contact.email
     }
 
+
+def get_partial_email_matches(partial):
+    pattern = partial + '%@%'
+    # TODO: maybe add sorting to this list, to sort by relevance?
+    matches = Contacts.query.filter(Contacts.username.like(pattern)).all()
+    return [partial_match.username for partial_match in matches]
 
 def contact_exists_in_db(username):
     contacts = Contacts.query.filter(Contacts.username.like(username)).all()
