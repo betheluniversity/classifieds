@@ -59,9 +59,9 @@
 
         //on keyup, start the countdown
         input.on('keyup', function (key) {
-            // do nothing if it's an arrow key
+            // do nothing if it's a backspace, enter, shift, or arrow key
             var code = (key.keyCode || key.which);
-            if(code < 37 || code > 40){
+            if(!(code == 8 || code == 13 || code == 16 || code == 37 || code == 38 || code == 39 || code == 40)){
                 clearTimeout(typingTimer);
                 typingTimer = setTimeout(doneTyping, doneTypingInterval);
             }
@@ -69,9 +69,9 @@
 
         //on keydown, clear the countdown
         input.on('keydown', function (key) {
-            // do nothing if it's an arrow key
+            // do nothing if it's a backspace, enter, shift, or arrow key
             var code = (key.keyCode || key.which);
-            if(code < 37 || code > 40){
+            if(!(code == 8 || code == 13 || code == 16 || code == 37 || code == 38 || code == 39 || code == 40)){
                 clearTimeout(typingTimer);
             }
         });

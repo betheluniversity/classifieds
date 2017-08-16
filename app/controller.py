@@ -284,7 +284,6 @@ def get_contact(username):
 
 def get_partial_email_matches(partial):
     pattern = partial + '%@%'
-    # TODO: maybe add sorting to this list, to sort by relevance?
     matches = Contacts.query.filter(Contacts.username.like(pattern)).all()
     return [partial_match.username for partial_match in matches]
 
