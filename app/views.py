@@ -1,3 +1,6 @@
+# Global imports
+import json
+
 # Third party imports
 from flask import abort, redirect, render_template, request, session
 from flask_classy import FlaskView, route
@@ -289,6 +292,12 @@ class View(FlaskView):
         else:
             error_message = "You don't exist in the contacts database yet, and as such you cannot submit a post."
             return render_template('error_page.html', error=error_message)
+
+    @route('/search-external-emails', methods=['POST'])
+    def search_external_emails(self):
+        partial_email = request.form['partial']
+        emails_that_match = get_partial_email_matches(partial_email)
+        return json.dumps(emails_that_match)
 
     @route('/edit-external-post/<post_id>')
     def edit_external_post(self, post_id):
