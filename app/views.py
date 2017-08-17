@@ -67,7 +67,8 @@ class View(FlaskView):
             page_selector_packet['sort_type'] = ''
             return render_template('view/users_posts.html', posts=results, page_selector=page_selector_packet)
         else:
-            error_message = "You don't exist in the contacts database yet, and as such you don't have any posts to view."
+            error_message = "You don't exist in the contacts database yet, " \
+                            "and as such you don't have any posts to view."
             return render_template('error_page.html', error=error_message)
 
     # Really straightforward method, simply renders the search page.
@@ -383,7 +384,9 @@ class View(FlaskView):
         if contact_exists_in_db(session['username']):
             if not contact_is_admin(session['username']):
                 return abort(404)
-            return render_template('forms/category.html', form=CategoryForm(get_category_form_data(category_id)), new=False)
+            return render_template('forms/category.html',
+                                   form=CategoryForm(get_category_form_data(category_id)),
+                                   new=False)
         else:
             error_message = "You don't exist in the contacts database yet, and as such you cannot edit a category."
             return render_template('error_page.html', error=error_message)
