@@ -28,7 +28,7 @@
     <span class="star">* </span><span class="warning"> All fields are required</span>
 </p>
 
-    <form id="contact" method="POST" action="/submit-contact">
+    <form id="contact" method="POST" action="{{ url_for('View:submit_contact') }}">
         <input type="hidden" name="external" value="{{ external }}"/>
         {{ form.render_to_html() | safe }}
     </form>

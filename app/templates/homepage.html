@@ -8,9 +8,11 @@
 <div>
     <p class="page-title">{{ app_settings['HOMEPAGE_HEADING'] }}</p>
 
-    <p class="page-info">All of the {{ app_settings['POST_TYPE'] }} posts.</br>
-        Choose how you would like to sort the posts, search through them, and contact</br>
-        who posted the ad to get more information.</p>
+    <p class="page-info">
+        All of the {{ app_settings['POST_TYPE'] }} posts.<br/>
+        Choose how you would like to sort the posts, search through them, and contact<br/>
+        who posted the ad to get more information.
+    </p>
         {% if values|length == 0 %}
             <p class="noPosts">There are no active posts to show.</p>
         {% else %}

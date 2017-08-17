@@ -41,14 +41,14 @@
         else{
             sort_type = $('#sortSelector').val();
         }
-        var kwargs = {
+        var data = {
             'title': $('#title').val(),
             'description': $('#description').val(),
             'categories': $('#categories').val(),
             'page_number': page_number,
             'sort_type' : sort_type
         };
-        $.post("/search", kwargs, update_result_div);
+        $.post("{{ url_for('View:search') }}", data, update_result_div);
     }
 
     function update_result_div(new_inner_content){

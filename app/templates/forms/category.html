@@ -14,7 +14,7 @@
         <span class="error">There were errors with your form submission.</span>
     {% endif %}
 
-    <form id="contact" method="POST" action="/submit-category">
+    <form id="contact" method="POST" action="{{ url_for('View:submit_category') }}">
         {{ form.render_to_html() | safe }}
     </form>
 </div>
