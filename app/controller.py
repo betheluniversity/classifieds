@@ -513,17 +513,11 @@ def _search_posts(title=u'%', description=u'%', categories=[u'%'], username=u'%'
     # This method takes in the price field given, parses and returns out the numeric value. Entries that lack a number
     # are assigned a price of 0.
     def get_numerical_value(price_string):
-        # "I'm sorry" - Nathan Li, 2017
-        # This regular expression matches a group of text, numbers (including commas and periods), more text,
-        # more numbers, and finally another set of text.
-        pattern = '[~@!:$<> &-/a-zA-Z]*(\d[\d,.]*)?[~@!:$<> &-/a-zA-Z]*(\d[\d,.]*)?[~@!:$<> &-/a-zA-Z]*'
-
-        results = re.match(pattern, price_string)
-        if results is not None:
+        pattern = '(\d[\d,.]*)'
+        results = re.findall(pattern, price_string)
+        if len(results) > 0:
             # Because the primary/lower price should always be on the left, get the left number group match
-            number_string = results.groups()[0]
-            if number_string is None:
-                return 0
+            number_string = results[0]
             return float(number_string.replace(',', ''))
         else:
             # If there is no match, that means the price is a word which equates to 0 numerically
