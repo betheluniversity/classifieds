@@ -759,11 +759,17 @@ def _send_expired_email(username, post_id):
 
 
 def send_feedback_email(form_contents, username):
-    msg = MIMEText(form_contents['input'])
-    msg['Subject'] = 'Feedback from ' + username
-    msg['From'] = 'webmaster@bethel.edu'
-    msg['To'] = app.config['ADMINS']
+    feedback_msg = MIMEText(form_contents['input'])
+    feedback_msg['Subject'] = 'Feedback from ' + username
+    feedback_msg['From'] = username + '@bethel.edu'
+    feedback_msg['To'] = app.config['ADMINS']
+
+    confirmation_msg = MIMEText('Thanks for submitting feedback about the %s site!' % app.config['SITE_NAME'])
+    confirmation_msg['Subject'] = 'We got your feedback!'
+    confirmation_msg['From'] = 'noreply@bethel.edu'
+    confirmation_msg['To'] = username + '@bethel.edu'
 
     s = smtplib.SMTP('localhost')
-    s.sendmail(username + '@bethel.edu', app.config['ADMINS'], msg.as_string())
+    s.sendmail(username + '@bethel.edu', app.config['ADMINS'], feedback_msg.as_string())
+    s.sendmail('noreply@bethel.edu', username + '@bethel.edu', confirmation_msg.as_string())
     s.quit()
