@@ -41,7 +41,7 @@
         <span class="star">* </span><span class="warning"> All fields are required</span>
     </p>
 
-    <form id="post" method="POST" action="/submit-post">
+    <form id="post" method="POST" action="{{ url_for('View:submit_post') }}">
         {{ form.render_to_html() | safe }}
     </form>
 </div>
@@ -49,7 +49,6 @@
 
 {% block scripts %}
     <datalist id="partial_email_matches"></datalist>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script>
         //setup before functions
         document.getElementById('submitters_username').setAttribute('list', 'partial_email_matches');

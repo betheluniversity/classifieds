@@ -78,5 +78,6 @@ class ContactForm(RenderableForm):
 class CategoryForm(RenderableForm):
     category_id = HiddenField('', [validators.DataRequired(), validators.Length(max=8)])
     category_html = StringField('HTML version of the category:', [validators.DataRequired(), validators.Length(max=50)])
-    category_human = StringField('Human-friendly version of the category:', [validators.DataRequired(), validators.Length(max=50)])
+    category_human = StringField('Human-friendly version of the category:', [validators.DataRequired(),
+                                                                             validators.Length(max=50)])
     submit = SubmitField('Submit')

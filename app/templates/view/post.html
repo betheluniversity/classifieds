@@ -21,7 +21,9 @@
                 <td>Categories:</td>
                 <td>
                     {% for category_pair in categories %}
-                        <a href="/search/{{ category_pair['category_html'] }}">{{ category_pair['category_human'] }}</a><br/>
+                        <a href="{{ url_for('View:search_category', category = category_pair['category_html']) }}">
+                            {{ category_pair['category_human'] }}
+                        </a><br/>
                     {% endfor %}
                 </td>
             </tr>

@@ -67,7 +67,8 @@ class View(FlaskView):
             page_selector_packet['sort_type'] = ''
             return render_template('view/users_posts.html', posts=results, page_selector=page_selector_packet)
         else:
-            error_message = "You don't exist in the contacts database yet, and as such you don't have any posts to view."
+            error_message = "You don't exist in the contacts database yet, " \
+                            "and as such you don't have any posts to view."
             return render_template('error_page.html', error=error_message)
 
     # Really straightforward method, simply renders the search page.
@@ -75,52 +76,56 @@ class View(FlaskView):
     def search_page(self):
         return render_template('search_page.html', categories=get_category_list())
 
-    # This method does a bit of work in preparation of the DB query; it creates a dictionary of search terms that are
+    # These methods do a bit of work in preparation of the DB query; they create a dictionary of search terms that are
     # keyed to match the keyword arguments of the DB search method in forms. It creates a list of all the words being
     # searched for, and pads both sides of the title words and description words with a '%' for partial matching in the
     # DB. Categories, on the other hand, have to have an exact match. It can only return active posts.
     @route('/search', methods=['POST'])
-    @route('/search/<category>', methods=['GET'])
-    def search(self, category=None):
+    def search(self):
         to_send = {
             'expired': False,
             'completed': False
         }
-        if request.method == 'POST':
-            storage = request.form
-            to_send['sort_type'] = storage['sort_type']
-            if len(storage['title']) > 0:
-                to_send['title'] = storage['title']
-            if len(storage['description']) > 0:
-                to_send['description'] = storage['description']
-            category_list = storage.getlist('categories[]')
-            if len(category_list) > 0:
-                to_send['categories'] = category_list
-            page_number = int(storage['page_number'])
-            to_send['page_no'] = page_number
+        storage = request.form
+        to_send['sort_type'] = storage['sort_type']
+        if len(storage['title']) > 0:
+            to_send['title'] = storage['title']
+        if len(storage['description']) > 0:
+            to_send['description'] = storage['description']
+        category_list = storage.getlist('categories[]')
+        if len(category_list) > 0:
+            to_send['categories'] = category_list
+        page_number = int(storage['page_number'])
+        to_send['page_no'] = page_number
 
-            results, number_of_pages = query_database(to_send)
-            page_selector_packet = create_page_selector_packet(number_of_pages, page_number, to_send['sort_type'])
-            return render_template('search_results.html',
-                                   values=results,
-                                   page_selector=page_selector_packet,
-                                   list_of_sort_types=app.config['SORT_TYPES'])
+        results, number_of_pages = query_database(to_send)
+        page_selector_packet = create_page_selector_packet(number_of_pages, page_number, to_send['sort_type'])
+        return render_template('search_results.html',
+                               values=results,
+                               page_selector=page_selector_packet,
+                               list_of_sort_types=app.config['SORT_TYPES'])
+
+    @route('/search/<category>', methods=['GET'])
+    def search_category(self, category):
+        to_send = {
+            'expired': False,
+            'completed': False,
+            'categories': [category]
+        }
+        page_number = request.args.get('page')  # Needs to be an int > 0
+        if page_number is None:
+            page_number = 1
         else:
-            to_send['categories'] = [category]
-            page_number = request.args.get('page')  # Needs to be an int > 0
-            if page_number is None:
-                page_number = 1
-            else:
-                page_number = int(page_number)
+            page_number = int(page_number)
 
-            to_send['page_no'] = page_number
-            results, number_of_pages = query_database(to_send)
-            page_selector_packet = create_page_selector_packet(number_of_pages, page_number)
-            return render_template('homepage.html',
-                                   values=results,
-                                   page_selector=page_selector_packet,
-                                   list_of_sort_types=app.config['SORT_TYPES'],
-                                   showStatus=False)
+        to_send['page_no'] = page_number
+        results, number_of_pages = query_database(to_send)
+        page_selector_packet = create_page_selector_packet(number_of_pages, page_number)
+        return render_template('homepage.html',
+                               values=results,
+                               page_selector=page_selector_packet,
+                               list_of_sort_types=app.config['SORT_TYPES'],
+                               showStatus=False)
 
     ###################################################################################################################
     #                                                  Post endpoints                                                 #
@@ -383,7 +388,9 @@ class View(FlaskView):
         if contact_exists_in_db(session['username']):
             if not contact_is_admin(session['username']):
                 return abort(404)
-            return render_template('forms/category.html', form=CategoryForm(get_category_form_data(category_id)), new=False)
+            return render_template('forms/category.html',
+                                   form=CategoryForm(get_category_form_data(category_id)),
+                                   new=False)
         else:
             error_message = "You don't exist in the contacts database yet, and as such you cannot edit a category."
             return render_template('error_page.html', error=error_message)

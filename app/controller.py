@@ -1,3 +1,22 @@
+# Standard library imports
+import datetime
+import math
+import os
+import re
+import smtplib
+
+# Third party imports
+# from collections import OrderedDict
+from ordereddict import OrderedDict
+from email.mime.text import MIMEText
+from sqlalchemy import asc, desc, or_
+from werkzeug.datastructures import ImmutableMultiDict
+
+# Local application imports
+from app import app, db
+from models import Posts, Contacts, Categories, PostCategories
+
+
 __all__ = [
     'add_category',
     'add_contact',
@@ -34,24 +53,6 @@ __all__ = [
     'search_for_external_posts',
     'send_feedback_email'
 ]
-
-# Standard library imports
-import datetime
-import math
-import os
-import re
-import smtplib
-
-# Third party imports
-# from collections import OrderedDict
-from ordereddict import OrderedDict
-from email.mime.text import MIMEText
-from sqlalchemy import asc, desc, or_
-from werkzeug.datastructures import ImmutableMultiDict
-
-# Local application imports
-from app import app, db
-from models import Posts, Contacts, Categories, PostCategories
 
 
 # In general, these methods simply enable loose coupling between the database and the server. Some take in the
@@ -287,6 +288,7 @@ def get_partial_email_matches(partial):
     matches = Contacts.query.filter(Contacts.username.like(pattern)).all()
     return [partial_match.username for partial_match in matches]
 
+
 def contact_exists_in_db(username):
     contacts = Contacts.query.filter(Contacts.username.like(username)).all()
     return len(list(contacts)) > 0
@@ -403,7 +405,9 @@ def get_category_list(return_list_of_tuples=False):
     if return_list_of_tuples:
         return [(category.category_for_html, category.category_for_humans) for category in raw_list]
     else:
-        return [{'category_id': category.id, 'category_html': category.category_for_html, 'category_human': category.category_for_humans}
+        return [{'category_id': category.id, 
+                 'category_html': category.category_for_html, 
+                 'category_human': category.category_for_humans}
                 for category in raw_list]
 
 
@@ -509,17 +513,11 @@ def _search_posts(title=u'%', description=u'%', categories=[u'%'], username=u'%'
     # This method takes in the price field given, parses and returns out the numeric value. Entries that lack a number
     # are assigned a price of 0.
     def get_numerical_value(price_string):
-        # "I'm sorry" - Nathan Li, 2017
-        # This regular expression matches a group of text, numbers (including commas and periods), more text,
-        # more numbers, and finally another set of text.
-        pattern = '[~@!:$<> &-/a-zA-Z]*(\d[\d,.]*)?[~@!:$<> &-/a-zA-Z]*(\d[\d,.]*)?[~@!:$<> &-/a-zA-Z]*'
-
-        results = re.match(pattern, price_string)
-        if results is not None:
+        pattern = '(\d[\d,.]*)'
+        results = re.findall(pattern, price_string)
+        if len(results) > 0:
             # Because the primary/lower price should always be on the left, get the left number group match
-            number_string = results.groups()[0]
-            if number_string is None:
-                return 0
+            number_string = results[0]
             return float(number_string.replace(',', ''))
         else:
             # If there is no match, that means the price is a word which equates to 0 numerically
@@ -723,16 +721,16 @@ def create_page_selector_packet(number_of_pages, selected_page, sort_type='rever
     previous_page_number = max(1, (selected_page - 1))  # Must always be 1 or greater
     next_page_number = min((selected_page + 1), number_of_pages)  # Can never be more than the last page
 
-    DESIRED_OFFSET = 2
-    if number_of_pages < 2 * DESIRED_OFFSET + 2:  # window = 2 * desired_offset + 1, so x < (window + 1)
+    desired_offset = 2
+    if number_of_pages < 2 * desired_offset + 2:  # window = 2 * desired_offset + 1, so x < (window + 1)
         page_range = range(1, number_of_pages + 1)
     else:
-        if selected_page < DESIRED_OFFSET + 1:
-            page_range = range(1, 2 * DESIRED_OFFSET + 2)  # window = 2 * desired_offset + 1, then offset by +1
-        elif number_of_pages - selected_page < DESIRED_OFFSET + 1:
-            page_range = range(number_of_pages - 2 * DESIRED_OFFSET, number_of_pages+1)
+        if selected_page < desired_offset + 1:
+            page_range = range(1, 2 * desired_offset + 2)  # window = 2 * desired_offset + 1, then offset by +1
+        elif number_of_pages - selected_page < desired_offset + 1:
+            page_range = range(number_of_pages - 2 * desired_offset, number_of_pages+1)
         else:
-            page_range = range(selected_page - DESIRED_OFFSET, selected_page + DESIRED_OFFSET + 1)
+            page_range = range(selected_page - desired_offset, selected_page + desired_offset + 1)
 
     page_selector_packet = {
         'previous': previous_page_number,
@@ -761,11 +759,17 @@ def _send_expired_email(username, post_id):
 
 
 def send_feedback_email(form_contents, username):
-    msg = MIMEText(form_contents['input'])
-    msg['Subject'] = 'Feedback from ' + username
-    msg['From'] = 'webmaster@bethel.edu'
-    msg['To'] = app.config['ADMINS']
+    feedback_msg = MIMEText(form_contents['input'])
+    feedback_msg['Subject'] = 'Feedback from ' + username
+    feedback_msg['From'] = username + '@bethel.edu'
+    feedback_msg['To'] = app.config['ADMINS']
+
+    confirmation_msg = MIMEText('Thanks for submitting feedback about the %s site!' % app.config['SITE_NAME'])
+    confirmation_msg['Subject'] = 'We got your feedback!'
+    confirmation_msg['From'] = 'noreply@bethel.edu'
+    confirmation_msg['To'] = username + '@bethel.edu'
 
     s = smtplib.SMTP('localhost')
-    s.sendmail(username + '@bethel.edu', app.config['ADMINS'], msg.as_string())
+    s.sendmail(username + '@bethel.edu', app.config['ADMINS'], feedback_msg.as_string())
+    s.sendmail('noreply@bethel.edu', username + '@bethel.edu', confirmation_msg.as_string())
     s.quit()

@@ -52,6 +52,7 @@ def init_user():
         db.session.add(new_contact)
         db.session.commit()
 
+
 @app.route("/logout", methods=["GET"])
 def logout():
     session.clear()
@@ -59,6 +60,7 @@ def logout():
     resp.set_cookie('MOD_AUTH_CAS_S', '', expires=0)
     resp.set_cookie('MOD_AUTH_CAS', '', expires=0)
     return resp
+
 
 def is_user_admin():
     return contact_is_admin(session['username'])

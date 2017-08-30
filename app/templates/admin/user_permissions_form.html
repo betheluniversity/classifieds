@@ -6,7 +6,7 @@
 
 {% block internal %}
 <div>
-    <form id="group_demotion" method="POST" action="/group-demote">
+    <form id="group_demotion" method="POST" action="{{ url_for('View:group_demote') }}">
         <table>
             <thead>
                 <tr>
@@ -32,13 +32,13 @@
         <input type="submit" value="Remove admin privileges for checked users"/>
     </form>
 
-    <form id="single_promotion" method="POST" action="/single-promote">
+    <form id="single_promotion" method="POST" action="{{ url_for('View:single_promote') }}">
         <label for="promote_by_username"><h4>Promote a user by username:</h4></label>
         <input type="text" name="promotee" id="promote_by_username"/>
         <input type="submit" value="Promote this single user"/>
     </form>
 
-    <form id="group_promotion" method="POST" action="/group-promote">
+    <form id="group_promotion" method="POST" action="{{ url_for('View:group_promote') }}">
         <table>
             <thead>
                 <tr>

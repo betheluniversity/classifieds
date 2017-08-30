@@ -5,10 +5,15 @@
 {% endblock %}
 
 {% block internal %}
-<p class="note">If you would like to give feedback about the
-    new {{ app_settings['PAGE_TITLE'] }} website, here's where you can do it!</p><br/><br/>
-<form id="feedbackForm" method="POST" action="/submit-feedback">
-    <textarea type="text" row="3" id="input" name="input"></textarea>
+<p class="note">
+    If you would like to give feedback about the new {{ app_settings['PAGE_TITLE'] }} website,
+    here's where you can do it!
+</p>
+<br/>
+<br/>
+<form id="feedbackForm" method="POST" action="{{ url_for('View:submit_feedback') }}">
+    <label for="input"></label>
+    <textarea id="input" name="input"></textarea>
     <input type="submit" value="Submit feedback" id="submit" name="submit"/>
 </form>
 {% endblock %}
