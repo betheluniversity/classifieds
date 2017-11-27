@@ -32,6 +32,27 @@
 </div>
 {%- endmacro %}
 
+{% macro user_actions(post) -%}
+    {% if is_user_admin() %}
+        {% if '@' in post['username'] %}
+            <a class="button" href="{{ url_for('View:edit_external_post', post_id = post['post_id']) }}">Edit</a>
+        {% else %}
+            <a class="button" href="{{ url_for('View:edit_post', post_id = post['post_id']) }}">Edit</a>
+        {% endif %}
+        <a class="button" href="{{ url_for('View:delete_post_confirm', post_id = post['post_id']) }}">Delete</a>
+    {% elif session['username'] == post['username'] %}
+        <a class="button" href="{{ url_for('View:edit_post', post_id = post['post_id']) }}">Edit</a>
+    {% endif %}
+
+    {% if (is_user_admin() or session['username'] == post['username']) and post['completed'] == False %}
+        {% if post['expired'] == False %}
+            <a href="{{ url_for('View:mark_complete', post_id = post['post_id']) }}" class="button">Mark as complete</a>
+        {% else %}
+            <a href="{{ url_for('View:renew', post_id = post['post_id']) }}" class="button">Renew this ad</a>
+        {% endif %}
+    {% endif %}
+{%- endmacro %}
+
 {{ sort_type_selector(page_selector) }}
 {{ page_selector_macro(page_selector) }}
 {% for val in values %}
@@ -70,16 +91,9 @@
                 </div>
             </div>
         {% endif %}
-        {% if is_user_admin() or session['username'] == val['username'] %}
-            <div class="row">
-                <div class="title cell">
-                    <a class="button" href="{{ url_for('View:edit_post', post_id = val['post_id']) }}">Edit</a>
-                    {% if is_user_admin() %}
-                    <a class="button" href="{{ url_for('View:delete_post_confirm', post_id = val['post_id']) }}">Delete</a>
-                    {% endif %}
-                </div>
-            </div>
-        {% endif %}
+        <div class="row">
+            {{ user_actions(val) }}
+        </div>
     </div>
     <hr/>
 {% endfor %}
