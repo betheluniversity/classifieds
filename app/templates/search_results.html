@@ -1,5 +1,5 @@
 {% macro page_selector_macro(page_selector_dict) -%}
-    <div class="full-width">
+    <div class="full-width" xmlns="http://www.w3.org/1999/html">
         <div class="page_selector">
             <a class="page_button prev_arrow" onclick="get_result_page(1)">&lt;&lt;</a>
             <a class="page_button prev_arrow" onclick="get_result_page({{ page_selector_dict['previous'] }})">&lt;</a>
@@ -92,7 +92,10 @@
             </div>
         {% endif %}
         <div class="row">
-            {{ user_actions(val) }}
+            <div class="cell"></div>
+            <div class="cell">
+                {{ user_actions(val) }}
+            </div>
         </div>
     </div>
     <hr/>

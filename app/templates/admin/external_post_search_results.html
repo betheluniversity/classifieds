@@ -57,8 +57,12 @@
                         </div>
                     </div>
                 {% endif %}
-
-                {{ user_actions(val) }}
+                <div class="row">
+                    <div class="cell"></div>
+                    <div class="cell">
+                        {{ user_actions(val) }}
+                    </div>
+                </div>
             </div>
             <hr/>
         {% endfor %}
