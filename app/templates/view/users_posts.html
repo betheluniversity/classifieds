@@ -84,21 +84,12 @@
                 <div class="cell">Date Posted: </div>
                 <div class="date cell">{{ post['date_added'].date() }}</div>
             </div>
-            {% if post['completed'] == False %}
-                {% if post['expired'] == True %}
-                    <div class="row">
-                        <div class="marked cell">
-                            <a href="{{ url_for('View:renew', post_id = post['post_id']) }}" class="button">Renew this ad</a>
-                        </div>
-                    </div>
-                {% else %}
-                    <div class="row">
-                        <div class="marked cell">
-                            <a href="{{ url_for('View:mark_complete', post_id = post['post_id']) }}" class="button">Mark as complete</a>
-                        </div>
-                    </div>
-                {% endif %}
-            {% endif %}
+            <div class="row">
+                <div class="cell"></div>
+                <div class="cell">
+                    {{ user_actions(post) }}
+                </div>
+            </div>
         <hr/>
         </div>
     {% endfor %}

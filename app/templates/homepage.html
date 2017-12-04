@@ -56,28 +56,12 @@
                         </div>
                     </div>
                 {% endif %}
-
-                {% if '@' in val['username'] %}
-                    {% if is_user_admin() %}
-                    <div class="row">
-                        <div class="title cell">
-                            <a class="button" href="{{ url_for('View:edit_external_post', post_id = val['post_id']) }}">Edit</a>
-                            <a class="button" href="{{ url_for('View:delete_post_confirm', post_id = val['post_id']) }}">Delete</a>
-                        </div>
+                <div class="row">
+                    <div class="cell"></div>
+                    <div class="cell">
+                        {{ user_actions(val) }}
                     </div>
-                    {% endif %}
-                {% else %}
-                    {% if is_user_admin() or session['username'] == val['username'] %}
-                    <div class="row">
-                        <div class="title cell">
-                            <a class="button" href="{{ url_for('View:edit_post', post_id = val['post_id']) }}">Edit</a>
-                            {% if is_user_admin() %}
-                            <a class="button" href="{{ url_for('View:delete_post_confirm', post_id = val['post_id']) }}">Delete</a>
-                            {% endif %}
-                        </div>
-                    </div>
-                    {% endif %}
-                {% endif %}
+                </div>
             </div>
             <hr/>
         {% endfor %}

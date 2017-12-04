@@ -106,44 +106,65 @@
 {% endblock %}
 
 {% macro page_selector_macro(page_selector_dict) -%}
-{% set sort_type = page_selector_dict['sort_type'] %}
-{% if sort_type != "" %}
-    {% set sort_type_string = "&sort=" + sort_type %}
-{% else %}
-    {% set sort_type_string = "" %}
-{% endif %}
-<div class="full-width">
-    <div class="page_selector">
-        <a class="page_button prev_arrow" href="?page=1{{ sort_type_string }}">&lt;&lt;</a>
-        <a class="page_button prev_arrow" href="?page={{ page_selector_dict['previous'] }}{{ sort_type_string }}">&lt;</a>
-        {% for page_no in page_selector_dict['all_page_numbers'] %}
-            {% if page_no == page_selector_dict['current']  %}
-                <a class="page_button active_page" href="?page={{ page_no }}{{ sort_type_string }}">{{ page_no }}</a>
-            {% else %}
-                <a class="page_button page_num" href="?page={{ page_no }}{{ sort_type_string }}">{{ page_no }}</a>
-            {% endif %}
-        {% endfor %}
-        <a class="page_button next_arrow" href="?page={{ page_selector_dict['next'] }}{{ sort_type_string }}">&gt;</a>
-        <a class="page_button next_arrow" href="?page={{ page_selector_dict['last'] }}{{ sort_type_string }}">&gt;&gt;</a>
+    {% set sort_type = page_selector_dict['sort_type'] %}
+    {% if sort_type != "" %}
+        {% set sort_type_string = "&sort=" + sort_type %}
+    {% else %}
+        {% set sort_type_string = "" %}
+    {% endif %}
+    <div class="full-width">
+        <div class="page_selector">
+            <a class="page_button prev_arrow" href="?page=1{{ sort_type_string }}">&lt;&lt;</a>
+            <a class="page_button prev_arrow" href="?page={{ page_selector_dict['previous'] }}{{ sort_type_string }}">&lt;</a>
+            {% for page_no in page_selector_dict['all_page_numbers'] %}
+                {% if page_no == page_selector_dict['current']  %}
+                    <a class="page_button active_page" href="?page={{ page_no }}{{ sort_type_string }}">{{ page_no }}</a>
+                {% else %}
+                    <a class="page_button page_num" href="?page={{ page_no }}{{ sort_type_string }}">{{ page_no }}</a>
+                {% endif %}
+            {% endfor %}
+            <a class="page_button next_arrow" href="?page={{ page_selector_dict['next'] }}{{ sort_type_string }}">&gt;</a>
+            <a class="page_button next_arrow" href="?page={{ page_selector_dict['last'] }}{{ sort_type_string }}">&gt;&gt;</a>
+        </div>
     </div>
-</div>
 {%- endmacro %}
 
 {% macro sort_type_selector(current_sort_type) -%}
-{% if current_sort_type == "" %}
-    {% set current_sort_type = "reverseDateOrder" %}
-{% endif %}
-<div class="sorting">
-    <div class="centered">
-        <select class="selectSort">
-            {% for tuple in list_of_sort_types %}
-                {% if tuple[1] == current_sort_type %}
-                <option id="{{ tuple[0] }}" value="{{ tuple[1] }}" selected="selected">{{ tuple[2] }}</option>
-                {% else %}
-                <option id="{{ tuple[0] }}" value="{{ tuple[1] }}">{{ tuple[2] }}</option>
-                {% endif %}
-            {% endfor %}
-        </select>
+    {% if current_sort_type == "" %}
+        {% set current_sort_type = "reverseDateOrder" %}
+    {% endif %}
+    <div class="sorting">
+        <div class="centered">
+            <select class="selectSort">
+                {% for tuple in list_of_sort_types %}
+                    {% if tuple[1] == current_sort_type %}
+                    <option id="{{ tuple[0] }}" value="{{ tuple[1] }}" selected="selected">{{ tuple[2] }}</option>
+                    {% else %}
+                    <option id="{{ tuple[0] }}" value="{{ tuple[1] }}">{{ tuple[2] }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+        </div>
     </div>
-</div>
+{%- endmacro %}
+
+{% macro user_actions(post) -%}
+    {% if is_user_admin() %}
+        {% if '@' in post['username'] %}
+            <a class="button" href="{{ url_for('View:edit_external_post', post_id = post['post_id']) }}">Edit</a>
+        {% else %}
+            <a class="button" href="{{ url_for('View:edit_post', post_id = post['post_id']) }}">Edit</a>
+        {% endif %}
+        <a class="button" href="{{ url_for('View:delete_post_confirm', post_id = post['post_id']) }}">Delete</a>
+    {% elif session['username'] == post['username'] %}
+        <a class="button" href="{{ url_for('View:edit_post', post_id = post['post_id']) }}">Edit</a>
+    {% endif %}
+
+    {% if (is_user_admin() or session['username'] == post['username']) and post['completed'] == False %}
+        {% if post['expired'] == False %}
+            <a href="{{ url_for('View:mark_complete', post_id = post['post_id']) }}" class="button">Mark as complete</a>
+        {% else %}
+            <a href="{{ url_for('View:renew', post_id = post['post_id']) }}" class="button">Renew this ad</a>
+        {% endif %}
+    {% endif %}
 {%- endmacro %}
