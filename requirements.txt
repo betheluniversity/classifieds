@@ -1,4 +1,5 @@
 argparse
+SQLAlchemy==1.1.15
 Flask
 Flask-Classy
 Flask-Migrate
