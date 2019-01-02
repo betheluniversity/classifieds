@@ -296,7 +296,6 @@ def contact_exists_in_db(username):
 def contact_is_admin(username):
     return Contacts.query.filter(Contacts.username.like(username)).first().is_admin
 
-
 # Although it could be written as .filter(not Contacts.is_admin), it doesn't work properly that way.
 def get_non_admins():
     non_admins = Contacts.query.filter(Contacts.is_admin == False).all()
@@ -581,9 +580,9 @@ def _search_posts(title=u'%', description=u'%', categories=[u'%'], username=u'%'
     num_results = len(to_return)
     starting_index = max_results * (page_no - 1)
     if return_all_results:
-        to_return = [to_return[key] for key in to_return.keys()]
+        to_return = [post for key, post in to_return.items()]
     else:
-        to_return = [to_return[key] for key in to_return.keys()[starting_index:starting_index + max_results]]
+        to_return = [post for key, post in to_return.items()][starting_index:starting_index + max_results]
 
     return to_return, int(math.ceil(float(num_results)/float(max_results)))
 
