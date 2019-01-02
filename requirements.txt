@@ -8,6 +8,5 @@ Flask-SQLAlchemy
 Flask-WTF
 raven[flask]
 alembic
-dataset
 blinker
-ordereddict
+urllib

@@ -7,7 +7,7 @@ from wtforms import Form, HiddenField, SelectMultipleField, StringField
 from wtforms import SubmitField, TextAreaField, ValidationError, validators
 
 # Local application imports
-from controller import get_category_list
+from app.controller import get_category_list
 
 
 # This is a custom validator that I made to make sure that they put in valid phone numbers into their Contact form

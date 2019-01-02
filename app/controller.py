@@ -4,17 +4,16 @@ import math
 import os
 import re
 import smtplib
+import collections
 
 # Third party imports
-# from collections import OrderedDict
-from ordereddict import OrderedDict
 from email.mime.text import MIMEText
 from sqlalchemy import asc, desc, or_
 from werkzeug.datastructures import ImmutableMultiDict
 
 # Local application imports
 from app import app, db
-from models import Posts, Contacts, Categories, PostCategories
+from app.models import Posts, Contacts, Categories, PostCategories
 
 
 __all__ = [
@@ -76,7 +75,7 @@ def add_post(title, description, price, username, categories_list):
         return True
     except Exception as e:
         db.session.rollback()
-        print e.message
+        print(e.message)
         return False
 
 
@@ -142,7 +141,7 @@ def delete_post(post_id):
         return deleted
     except Exception as e:
         db.session.rollback()
-        print e.message
+        print(e.message)
         return False
 
 
@@ -258,7 +257,7 @@ def _delete_contact(username):
         return 'Contact and posts successfully deleted'
     except Exception as e:
         db.session.rollback()
-        print e.message
+        print(e.message)
         return False
 
 
@@ -373,7 +372,7 @@ def delete_category(category_id):
         return deleted
     except Exception as e:
         db.session.rollback()
-        print e.message
+        print(e.message)
         return False
 
 
@@ -568,7 +567,7 @@ def _search_posts(title=u'%', description=u'%', categories=[u'%'], username=u'%'
     # (non-unique post, non-unique contact, unique post_category, non-unique category)
     # This for loop iterates through them to turn it into an ordered dictionary of dictionaries like this:
     # {unique post, non-unique contact, list of non-unique categories}
-    to_return = OrderedDict()
+    to_return = collections.OrderedDict()
     for row in all_results:
         if row[0].id in to_return:
             to_return[row[0].id]['categories'].append(row[3])
@@ -622,7 +621,7 @@ def search_for_external_posts(name_or_email):
             # desc(Posts.date_added),  # This line throws a SQL error that I'm not going to fix right now.
         ).all()
 
-    to_return = OrderedDict()
+    to_return = collections.OrderedDict()
     for row in all_results:
         if row[0].id in to_return:
             to_return[row[0].id]['categories'].append(row[3])

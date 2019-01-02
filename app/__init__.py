@@ -1,6 +1,6 @@
 # Standard library imports
 import ast
-import urllib2
+from urllib.request import urlopen
 
 # Third party imports
 from flask import current_app, Flask, request, session, make_response, redirect
@@ -15,9 +15,9 @@ sentry = Sentry(app, dsn=app.config['SENTRY_URL'])
 
 # Local application imports
 # These imports need to be after app and db's creation, as they get imported into views.py, from which this imports.
-from models import Contacts
-from views import View
-from controller import contact_is_admin, get_app_settings
+from app.models import Contacts
+from app.views import View
+from app.controller import contact_is_admin, get_app_settings
 View.register(app)
 
 
@@ -41,7 +41,7 @@ def init_user():
     if contact is not None:
         session['fullname'] = contact.first_name + ' ' + contact.last_name
     else:
-        banner_info = urllib2.urlopen('http://wsapi.bethel.edu/username/' + username + '/names').read()
+        banner_info = urlopen('http://wsapi.bethel.edu/username/' + username + '/names').read()
         info_dict = ast.literal_eval(banner_info)['0']
         primary_name = info_dict['firstName']
         if len(info_dict['prefFirstName']) > 0:

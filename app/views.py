@@ -7,8 +7,8 @@ from flask_classy import FlaskView, route
 
 # Local application imports
 from app import app
-from controller import *
-from forms import RegularPostForm, ExternalPosterForm, ContactForm, CategoryForm
+from app.controller import *
+from app.forms import RegularPostForm, ExternalPosterForm, ContactForm, CategoryForm
 
 
 # This Flask-Classy object is simply named 'View' because Flask-Classy takes whatever is in front of View and makes it
