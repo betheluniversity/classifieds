@@ -9,4 +9,3 @@ Flask-WTF
 raven[flask]
 alembic
 blinker
-urllib
