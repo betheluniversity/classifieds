@@ -65,6 +65,7 @@ def logout():
 def is_user_admin():
     return contact_is_admin(session['username'])
 
+
 app_settings = get_app_settings()
 
 app.jinja_env.globals.update(is_user_admin=is_user_admin)

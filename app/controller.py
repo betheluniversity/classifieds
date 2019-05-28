@@ -1,10 +1,10 @@
 # Standard library imports
+import collections
 import datetime
 import math
 import os
 import re
 import smtplib
-import collections
 
 # Third party imports
 from email.mime.text import MIMEText
@@ -75,7 +75,7 @@ def add_post(title, description, price, username, categories_list):
         return True
     except Exception as e:
         db.session.rollback()
-        print(e.message)
+        print(e)
         return False
 
 
@@ -141,7 +141,7 @@ def delete_post(post_id):
         return deleted
     except Exception as e:
         db.session.rollback()
-        print(e.message)
+        print(e)
         return False
 
 
@@ -257,7 +257,7 @@ def _delete_contact(username):
         return 'Contact and posts successfully deleted'
     except Exception as e:
         db.session.rollback()
-        print(e.message)
+        print(e)
         return False
 
 
@@ -295,6 +295,7 @@ def contact_exists_in_db(username):
 
 def contact_is_admin(username):
     return Contacts.query.filter(Contacts.username.like(username)).first().is_admin
+
 
 # Although it could be written as .filter(not Contacts.is_admin), it doesn't work properly that way.
 def get_non_admins():
@@ -371,7 +372,7 @@ def delete_category(category_id):
         return deleted
     except Exception as e:
         db.session.rollback()
-        print(e.message)
+        print(e)
         return False
 
 
@@ -427,6 +428,7 @@ def get_post_categories(post_id):
 #######################################################################################################################
 
 
+# TODO: add type hinting that lets completed & expired be either String or boolean
 def _search_posts(title=u'%', description=u'%', categories=[u'%'], username=u'%', completed=u'%', expired=u'%',
                   max_results=20, page_no=1, sort_type='sortByDateAZ', return_all_results=False):
 
@@ -511,7 +513,7 @@ def _search_posts(title=u'%', description=u'%', categories=[u'%'], username=u'%'
     # This method takes in the price field given, parses and returns out the numeric value. Entries that lack a number
     # are assigned a price of 0.
     def get_numerical_value(price_string):
-        pattern = '(\d[\d,.]*)'
+        pattern = r'(\d[\d,.]*)'
         results = re.findall(pattern, price_string)
         if len(results) > 0:
             # Because the primary/lower price should always be on the left, get the left number group match
@@ -522,7 +524,7 @@ def _search_posts(title=u'%', description=u'%', categories=[u'%'], username=u'%'
             return 0
 
     def get_sortable_text_from_string(silly_string):
-        pattern = '^[^\w]*(.*)'
+        pattern = r'^[^\w]*(.*)'
         results = re.match(pattern, silly_string)
         return results.groups()[0].upper()
 
@@ -569,6 +571,8 @@ def _search_posts(title=u'%', description=u'%', categories=[u'%'], username=u'%'
     to_return = collections.OrderedDict()
     for row in all_results:
         if row[0].id in to_return:
+            # This throws a warning because PyCharm can't decipher that to_return[id]['categories'] is declared
+            # as a list in the else statement below. It works just fine, though.
             to_return[row[0].id]['categories'].append(row[3])
         else:
             to_return[row[0].id] = {
@@ -623,6 +627,7 @@ def search_for_external_posts(name_or_email):
     to_return = collections.OrderedDict()
     for row in all_results:
         if row[0].id in to_return:
+            # Again, the warning thrown on this line is errant.
             to_return[row[0].id]['categories'].append(row[3])
         else:
             to_return[row[0].id] = {

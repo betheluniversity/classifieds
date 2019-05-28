@@ -29,7 +29,7 @@ def safe_for_url():
     message = 'The text provided would not work in a URL bar'
 
     def _safe(form, field):
-        bad_chars = re.compile(r'(["%<> /\\{|}\^]+)')
+        bad_chars = re.compile(r'(["%<> /\\{|}^]+)')
         result = bad_chars.search(field.data)
         if result:
             raise ValidationError(message)
