@@ -5,6 +5,7 @@ import math
 import os
 import re
 import smtplib
+from typing import List, Union
 
 # Third party imports
 from email.mime.text import MIMEText
@@ -428,9 +429,9 @@ def get_post_categories(post_id):
 #######################################################################################################################
 
 
-# TODO: add type hinting that lets completed & expired be either String or boolean
-def _search_posts(title=u'%', description=u'%', categories=[u'%'], username=u'%', completed=u'%', expired=u'%',
-                  max_results=20, page_no=1, sort_type='sortByDateAZ', return_all_results=False):
+def _search_posts(title: str = u'%', description: str = u'%', categories: List[str] = [u'%'], username: str = u'%',
+                  completed: Union[str, bool] = u'%', expired: Union[str, bool] = u'%', max_results: int = 20,
+                  page_no: int = 1, sort_type: str = 'sortByDateAZ', return_all_results: bool = False):
 
     stop_words = _get_stop_words()
 
