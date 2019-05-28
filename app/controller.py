@@ -33,6 +33,7 @@ __all__ = [
     'expire_old_posts',
     'filter_posts',
     'get_admins',
+    'get_app_settings',
     'get_category',
     'get_category_form_data',
     'get_category_list',
