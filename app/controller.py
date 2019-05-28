@@ -429,7 +429,7 @@ def get_post_categories(post_id):
 #######################################################################################################################
 
 
-def _search_posts(title: str = u'%', description: str = u'%', categories: List[str] = [u'%'], username: str = u'%',
+def _search_posts(title: str = u'%', description: str = u'%', categories: List[str] = None, username: str = u'%',
                   completed: Union[str, bool] = u'%', expired: Union[str, bool] = u'%', max_results: int = 20,
                   page_no: int = 1, sort_type: str = 'sortByDateAZ', return_all_results: bool = False):
 
@@ -462,6 +462,9 @@ def _search_posts(title: str = u'%', description: str = u'%', categories: List[s
                 descriptions = or_(descriptions, Posts.description.like(term))
         else:
             descriptions = Posts.description.like(u'%')
+
+    if categories is None:
+        categories = [u'%']
 
     # This filter functions similarly to title and description, but instead searches for exact matches between any of
     # the html_categories passed in by the list and the Categories table
