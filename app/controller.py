@@ -1,20 +1,20 @@
 # Standard library imports
+import collections
 import datetime
 import math
 import os
 import re
 import smtplib
+from typing import List, Union
 
 # Third party imports
-# from collections import OrderedDict
-from ordereddict import OrderedDict
 from email.mime.text import MIMEText
 from sqlalchemy import asc, desc, or_
 from werkzeug.datastructures import ImmutableMultiDict
 
 # Local application imports
 from app import app, db
-from models import Posts, Contacts, Categories, PostCategories
+from app.models import Posts, Contacts, Categories, PostCategories
 
 
 __all__ = [
@@ -33,6 +33,7 @@ __all__ = [
     'expire_old_posts',
     'filter_posts',
     'get_admins',
+    'get_app_settings',
     'get_category',
     'get_category_form_data',
     'get_category_list',
@@ -76,7 +77,7 @@ def add_post(title, description, price, username, categories_list):
         return True
     except Exception as e:
         db.session.rollback()
-        print e.message
+        print(e)
         return False
 
 
@@ -142,7 +143,7 @@ def delete_post(post_id):
         return deleted
     except Exception as e:
         db.session.rollback()
-        print e.message
+        print(e)
         return False
 
 
@@ -258,7 +259,7 @@ def _delete_contact(username):
         return 'Contact and posts successfully deleted'
     except Exception as e:
         db.session.rollback()
-        print e.message
+        print(e)
         return False
 
 
@@ -373,7 +374,7 @@ def delete_category(category_id):
         return deleted
     except Exception as e:
         db.session.rollback()
-        print e.message
+        print(e)
         return False
 
 
@@ -429,8 +430,9 @@ def get_post_categories(post_id):
 #######################################################################################################################
 
 
-def _search_posts(title=u'%', description=u'%', categories=[u'%'], username=u'%', completed=u'%', expired=u'%',
-                  max_results=20, page_no=1, sort_type='sortByDateAZ', return_all_results=False):
+def _search_posts(title: str = u'%', description: str = u'%', categories: List[str] = None, username: str = u'%',
+                  completed: Union[str, bool] = u'%', expired: Union[str, bool] = u'%', max_results: int = 20,
+                  page_no: int = 1, sort_type: str = 'sortByDateAZ', return_all_results: bool = False):
 
     stop_words = _get_stop_words()
 
@@ -461,6 +463,9 @@ def _search_posts(title=u'%', description=u'%', categories=[u'%'], username=u'%'
                 descriptions = or_(descriptions, Posts.description.like(term))
         else:
             descriptions = Posts.description.like(u'%')
+
+    if categories is None:
+        categories = [u'%']
 
     # This filter functions similarly to title and description, but instead searches for exact matches between any of
     # the html_categories passed in by the list and the Categories table
@@ -513,7 +518,7 @@ def _search_posts(title=u'%', description=u'%', categories=[u'%'], username=u'%'
     # This method takes in the price field given, parses and returns out the numeric value. Entries that lack a number
     # are assigned a price of 0.
     def get_numerical_value(price_string):
-        pattern = '(\d[\d,.]*)'
+        pattern = r'(\d[\d,.]*)'
         results = re.findall(pattern, price_string)
         if len(results) > 0:
             # Because the primary/lower price should always be on the left, get the left number group match
@@ -524,7 +529,7 @@ def _search_posts(title=u'%', description=u'%', categories=[u'%'], username=u'%'
             return 0
 
     def get_sortable_text_from_string(silly_string):
-        pattern = '^[^\w]*(.*)'
+        pattern = r'^[^\w]*(.*)'
         results = re.match(pattern, silly_string)
         return results.groups()[0].upper()
 
@@ -568,9 +573,11 @@ def _search_posts(title=u'%', description=u'%', categories=[u'%'], username=u'%'
     # (non-unique post, non-unique contact, unique post_category, non-unique category)
     # This for loop iterates through them to turn it into an ordered dictionary of dictionaries like this:
     # {unique post, non-unique contact, list of non-unique categories}
-    to_return = OrderedDict()
+    to_return = collections.OrderedDict()
     for row in all_results:
         if row[0].id in to_return:
+            # This throws a warning because PyCharm can't decipher that to_return[id]['categories'] is declared
+            # as a list in the else statement below. It works just fine, though.
             to_return[row[0].id]['categories'].append(row[3])
         else:
             to_return[row[0].id] = {
@@ -582,9 +589,9 @@ def _search_posts(title=u'%', description=u'%', categories=[u'%'], username=u'%'
     num_results = len(to_return)
     starting_index = max_results * (page_no - 1)
     if return_all_results:
-        to_return = [to_return[key] for key in to_return.keys()]
+        to_return = [post for key, post in to_return.items()]
     else:
-        to_return = [to_return[key] for key in to_return.keys()[starting_index:starting_index + max_results]]
+        to_return = [post for key, post in to_return.items()][starting_index:starting_index + max_results]
 
     return to_return, int(math.ceil(float(num_results)/float(max_results)))
 
@@ -622,9 +629,10 @@ def search_for_external_posts(name_or_email):
             # desc(Posts.date_added),  # This line throws a SQL error that I'm not going to fix right now.
         ).all()
 
-    to_return = OrderedDict()
+    to_return = collections.OrderedDict()
     for row in all_results:
         if row[0].id in to_return:
+            # Again, the warning thrown on this line is errant.
             to_return[row[0].id]['categories'].append(row[3])
         else:
             to_return[row[0].id] = {

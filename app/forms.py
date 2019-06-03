@@ -7,7 +7,7 @@ from wtforms import Form, HiddenField, SelectMultipleField, StringField
 from wtforms import SubmitField, TextAreaField, ValidationError, validators
 
 # Local application imports
-from controller import get_category_list
+from app.controller import get_category_list
 
 
 # This is a custom validator that I made to make sure that they put in valid phone numbers into their Contact form
@@ -29,7 +29,7 @@ def safe_for_url():
     message = 'The text provided would not work in a URL bar'
 
     def _safe(form, field):
-        bad_chars = re.compile(r'(["%<> /\\{|}\^]+)')
+        bad_chars = re.compile(r'(["%<> /\\{|}^]+)')
         result = bad_chars.search(field.data)
         if result:
             raise ValidationError(message)
@@ -40,7 +40,7 @@ def safe_for_url():
 class RenderableForm(Form):
 
     def render_to_html(self):
-        return render_template('forms/generic.html', fields=self._fields.iteritems())
+        return render_template('forms/generic.html', fields=self._fields.items())
 
 
 # WTForm objects that are used in rendering. Each Field in this object corresponds to the user-input columns in the DB

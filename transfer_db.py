@@ -62,8 +62,8 @@ class Contacts(old_db.Model):
     def __repr__(self):
         return "<Contact %s>" % self.username
 
-# Step 2: instantiate the new database
 
+# Step 2: instantiate the new database
 new = Flask(__name__)
 new.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'app.db')
 new.config['SQLALCHEMY_MIGRATE_REPO'] = os.path.join(basedir, 'new_db_repository')
@@ -206,7 +206,7 @@ try:
 
     # Step 4: commit the changes
     new_db.session.commit()
-    print "Data has been successfully transferred to new_db.db"
+    print("Data has been successfully transferred to new_db.db")
 
     # Step 5: change the name of the contacts table from "new_contacts" to "contacts" using sqlite3
     #
@@ -216,5 +216,5 @@ try:
 
 except Exception as e:
     new_db.session.rollback()
-    print e.message
-    print "Data failed to be transferred"
+    print(e)
+    print("Data failed to be transferred")
