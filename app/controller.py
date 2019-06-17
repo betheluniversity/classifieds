@@ -296,7 +296,10 @@ def contact_exists_in_db(username):
 
 
 def contact_is_admin(username):
-    return Contacts.query.filter(Contacts.username.like(username)).first().is_admin
+    try:
+        return Contacts.query.filter(Contacts.username.like(username)).first().is_admin
+    except AttributeError:
+        return False
 
 
 # Although it could be written as .filter(not Contacts.is_admin), it doesn't work properly that way.
