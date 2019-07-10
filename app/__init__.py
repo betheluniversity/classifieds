@@ -28,7 +28,7 @@ def before_request():
     except:
         app.logger.info('failed to init')
 
-
+asdf
 # This method sees who's logging in to the website, and then checks if they're in the contacts DB. If they are, it grabs
 # their info from the DB for rendering. If not, then it creates a default entry for that user using info from wsapi.
 def init_user():
