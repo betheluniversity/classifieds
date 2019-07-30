@@ -42,7 +42,7 @@ def init_user():
     if contact is not None:
         session['fullname'] = contact.first_name + ' ' + contact.last_name
     else:
-        context = _create_unverified_context()
+        context = _create_unverified_context()  # This is an unsecure connection, but the data being received is not sensitive
         banner_info = urlopen('https://wsapi.bethel.edu/username/' + username + '/names', context=context).read().decode('utf-8')
         info_dict = ast.literal_eval(banner_info)['0']
         primary_name = info_dict['firstName']
