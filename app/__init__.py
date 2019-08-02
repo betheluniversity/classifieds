@@ -1,7 +1,6 @@
 # Standard library imports
 import ast
-from ssl import _create_unverified_context
-from urllib.request import urlopen
+import requests
 
 # Third party imports
 from flask import current_app, Flask, request, session, make_response, redirect
@@ -42,9 +41,8 @@ def init_user():
     if contact is not None:
         session['fullname'] = contact.first_name + ' ' + contact.last_name
     else:
-        context = _create_unverified_context()  # This is an unsecure connection, but the data being received is not sensitive
-        banner_info = urlopen('https://wsapi.bethel.edu/username/' + username + '/names', context=context).read().decode('utf-8')
-        info_dict = ast.literal_eval(banner_info)['0']
+        banner_info = requests.get('https://wsapi.bethel.edu/username/' + username + '/names')
+        info_dict = ast.literal_eval(banner_info.text)['0']
         primary_name = info_dict['firstName']
         if len(info_dict['prefFirstName']) > 0:
             primary_name = info_dict['prefFirstName']
