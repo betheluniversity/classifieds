@@ -11,6 +11,11 @@ app = Flask(__name__)
 app.config.from_object('config')
 db = SQLAlchemy(app)
 
+if app.config['SENTRY_URL']:
+    import sentry_sdk
+    from sentry_sdk.integrations.flask import FlaskIntegration
+    sentry_sdk.init(dsn=app.config['SENTRY_URL'], integrations=[FlaskIntegration()])
+
 # Local application imports
 # These imports need to be after app and db's creation, as they get imported into views.py, from which this imports.
 from app.models import Contacts
