@@ -76,6 +76,7 @@ class View(FlaskView):
     # DB. Categories, on the other hand, have to have an exact match. It can only return active posts.
     @route('/search', methods=['POST'])
     def search(self):
+        dbz = 1 / 0
         to_send = {
             'expired': False,
             'completed': False
