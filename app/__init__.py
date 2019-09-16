@@ -5,13 +5,16 @@ import requests
 # Third party imports
 from flask import current_app, Flask, request, session, make_response, redirect
 from flask_sqlalchemy import SQLAlchemy
-from raven.contrib.flask import Sentry
 
 
 app = Flask(__name__)
 app.config.from_object('config')
 db = SQLAlchemy(app)
-sentry = Sentry(app, dsn=app.config['SENTRY_URL'])
+
+if app.config['SENTRY_URL']:
+    import sentry_sdk
+    from sentry_sdk.integrations.flask import FlaskIntegration
+    sentry_sdk.init(dsn=app.config['SENTRY_URL'], integrations=[FlaskIntegration()])
 
 # Local application imports
 # These imports need to be after app and db's creation, as they get imported into views.py, from which this imports.
