@@ -50,7 +50,7 @@ __all__ = [
     'post_exists_in_db',
     'query_database',
     'remove_admin',
-    'renew_entry',
+    'relist_entry',
     'search_for_external_posts',
     'send_feedback_email'
 ]
@@ -113,11 +113,14 @@ def mark_entry_as_complete(entry_id, username):
         db.session.commit()
 
 
-def renew_entry(entry_id, username):
+def relist_entry(entry_id, username):
     entry_to_update = Posts.query.filter(Posts.id.like(entry_id)).first()
     if entry_to_update.username == username or contact_is_admin(username):
         entry_to_update.date_added = datetime.datetime.now()
-        entry_to_update.expired = False
+        if entry_to_update.expired:
+            entry_to_update.expired = False
+        else:
+            entry_to_update.completed = False
         db.session.commit()
 
 

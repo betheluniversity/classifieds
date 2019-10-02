@@ -160,11 +160,11 @@
         <a class="button" href="{{ url_for('View:edit_post', post_id = post['post_id']) }}">Edit</a>
     {% endif %}
 
-    {% if (is_user_admin() or session['username'] == post['username']) and post['completed'] == False %}
-        {% if post['expired'] == False %}
-            <a href="{{ url_for('View:mark_complete', post_id = post['post_id']) }}" class="button">Mark as complete</a>
-        {% else %}
-            <a href="{{ url_for('View:renew', post_id = post['post_id']) }}" class="button">Renew this ad</a>
-        {% endif %}
+    <!-- (If the user is admin or if they are the one who made the post) AND (if the post is NOT expired/complete) we show this -->
+    {% if (is_user_admin() or session['username'] == post['username']) and (post['expired'] == False and post['completed'] == False) %}
+        <a href="{{ url_for('View:mark_complete', post_id = post['post_id']) }}" class="button">Mark as complete</a>
+        <!-- Otherwise we want the renew button to show -->
+    {% else %}
+        <a href="{{ url_for('View:renew', post_id = post['post_id']) }}" class="button">Relist this ad</a>
     {% endif %}
 {%- endmacro %}
