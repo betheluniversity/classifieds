@@ -218,8 +218,8 @@ class View(FlaskView):
         return redirect('/view-posted/active')
 
     def renew(self, post_id):
-        renew_entry(post_id, session['username'])
-        return redirect('/view-posted/expired')
+        relist_entry(post_id, session['username'])
+        return redirect('/view-posted/active')
 
     ###################################################################################################################
     #                                                Contact endpoints                                                #
