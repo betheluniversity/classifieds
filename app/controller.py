@@ -240,15 +240,25 @@ def edit_contact(username, first_name, last_name, email, phone_number):
 
 
 def make_admin(username):
-    contact_to_change = Contacts.query.filter(Contacts.username.like(username)).first()
-    contact_to_change.is_admin = True
-    db.session.commit()
+    try:
+        contact_to_change = Contacts.query.filter(Contacts.username.like(username)).first()
+        contact_to_change.is_admin = True
+        db.session.commit()
+        return True
+    except:
+        db.session.rollback()
+        return False
 
 
 def remove_admin(username):
-    contact_to_change = Contacts.query.filter(Contacts.username.like(username)).first()
-    contact_to_change.is_admin = False
-    db.session.commit()
+    try:
+        contact_to_change = Contacts.query.filter(Contacts.username.like(username)).first()
+        contact_to_change.is_admin = False
+        db.session.commit()
+        return True
+    except:
+        db.session.rollback()
+        return False
 
 
 # This method should not have any endpoint; this method is only for usage via terminal

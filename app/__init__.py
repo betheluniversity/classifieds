@@ -67,8 +67,7 @@ def logout():
 
 
 def is_user_admin():
-    return True
-    # return contact_is_admin(session['username'])
+    return contact_is_admin(session['username'])
 
 
 app_settings = get_app_settings()
