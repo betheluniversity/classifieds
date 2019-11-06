@@ -222,6 +222,12 @@ select.selectSort {
     color: red;
 }
 
+.errors {
+    margin: 2% auto;
+    text-align: center;
+    color: red;
+}
+
 .dropbtn {
     padding: 1em;
     font-size: .85em;
@@ -307,6 +313,12 @@ select.selectSort {
 
 .show {
     display: block;
+}
+
+.promote-demote {
+    padding: 0.5em;
+    background-color: #0069AA;
+    color: white;
 }
 
 /* submit a classified page */
