@@ -14,40 +14,20 @@
     <div class="second-bar">
         <ul class="nav">
             <li class="nav-button">
-                {% if '/all' in request.path %}
-                    <a href="{{ url_for('View:view_posted', selector = 'all') }}" class="button active posts">All posts</a>
-                {% else %}
-                    <a href="{{ url_for('View:view_posted', selector = 'all') }}" class="button posts">All posts</a>
-                {% endif %}
+                <a href="{{ url_for('View:view_posted', selector='all') }}" class="button posts {{ 'active' if '/all' in request.path }}">All posts</a>
             </li>
             <li class="nav-button">
-                {% if '/active' in request.path %}
-                    <a href="{{ url_for('View:view_posted', selector = 'active') }}" class="button active posts">All active posts</a>
-                {% else %}
-                    <a href="{{ url_for('View:view_posted', selector = 'active') }}" class="button posts">All active posts</a>
-                {% endif %}
+                <a href="{{ url_for('View:view_posted', selector='active') }}" class="button posts {{ 'active' if '/active' in request.path }}">All active posts</a>
             </li>
             <li class="nav-button">
-                {% if '/completed' in request.path %}
-                    <a href="{{ url_for('View:view_posted', selector = 'completed') }}" class="button active posts">All completed posts</a>
-                {% else %}
-                    <a href="{{ url_for('View:view_posted', selector = 'completed') }}" class="button posts">All completed posts</a>
-                {% endif %}
+                <a href="{{ url_for('View:view_posted', selector='completed') }}" class="button posts {{ 'active' if '/completed' in request.path }}">All completed posts</a>
             </li>
             <li class="nav-button">
-                {% if '/expired' in request.path %}
-                    <a href="{{ url_for('View:view_posted', selector = 'expired') }}" class="button active posts">All expired posts</a>
-                {% else %}
-                    <a href="{{ url_for('View:view_posted', selector = 'expired') }}" class="button posts">All expired posts</a>
-                {% endif %}
+                <a href="{{ url_for('View:view_posted', selector='expired') }}" class="button posts {{ 'active' if '/expired' in request.path }}">All expired posts</a>
             </li>
             {% if is_user_admin() %}
             <li class="nav-button">
-                {% if '/external' in request.path %}
-                    <a href="{{ url_for('View:view_posted', selector = 'external') }}" class="button active posts">All external posts</a>
-                {% else %}
-                    <a href="{{ url_for('View:view_posted', selector = 'external') }}" class="button posts">All external posts</a>
-                {% endif %}
+                <a href="{{ url_for('View:view_posted', selector='external') }}" class="button posts {{ 'active' if '/external' in request.path }}">All external posts</a>
             </li>
             {% endif %}
         </ul>

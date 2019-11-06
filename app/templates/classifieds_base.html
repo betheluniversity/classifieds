@@ -47,43 +47,21 @@
                         </li>
                     {% endif %}
                     <li class="nav-button">
-                        {% if request.path == '/' %}
-                            <a href="{{ url_for('View:index') }}" class="button active">Home</a>
-                        {% else %}
-                            <a href="{{ url_for('View:index') }}" class="button">Home</a>
-                        {% endif %}
+                        <a href="{{ url_for('View:index') }}" class="button {{ 'active' if '/' == request.path }}">Home</a>
                     </li>
                     <li class="nav-button">
-                        {% if url_for('View:search_page') in request.path %}
-                            <a href="{{ url_for('View:search_page') }}" class="button active">Search</a>
-                        {% else %}
-                            <a href="{{ url_for('View:search_page') }}" class="button">Search</a>
-                        {% endif %}
+                        <a href="{{ url_for('View:search_page') }}" class="button {{ 'active' if url_for('View:search_page') in request.path }}">Search</a>
                     </li>
                     <li class="nav-button">
-                        {% if url_for('View:add_post') in request.path %}
-                            <a href="{{ url_for('View:add_post') }}" class="button active">Submit</a>
-                        {% else %}
-                            <a href="{{ url_for('View:add_post') }}" class="button">Submit</a>
-                        {% endif %}
+                        <a href="{{ url_for('View:add_post') }}" class="button {{ 'active' if url_for('View:add_post') in request.path }}">Submit</a>
                     </li>
                     <li class="nav-button">
-                        {% if '/view-posted/' in request.path %}
-                            <a href="{{ url_for('View:view_posted', selector = 'active') }}" class="button active">
-                                {{ app_settings['MY_POSTS'] }}
-                            </a>
-                        {% else %}
-                            <a href="{{ url_for('View:view_posted', selector = 'active') }}" class="button">
-                                {{ app_settings['MY_POSTS'] }}
-                            </a>
-                        {% endif %}
+                        <a href="{{ url_for('View:view_posted', selector='active') }}" class="button {{ 'active' if '/view-posted/' in request.path }}">
+                            {{ app_settings['MY_POSTS'] }}
+                        </a>
                     </li>
                     <li class="nav-button">
-                        {% if '/faq' in request.path %}
-                            <a href="{{ url_for('View:faq') }}" class="button active">FAQ</a>
-                        {% else %}
-                            <a href="{{ url_for('View:faq') }}" class="button">FAQ</a>
-                        {% endif %}
+                        <a href="{{ url_for('View:faq') }}" class="button {{ 'active' if '/faq' in request.path }}">FAQ</a>
                     </li>
                 </ul>
             </div>
@@ -117,11 +95,7 @@
             <a class="page_button prev_arrow" href="?page=1{{ sort_type_string }}">&lt;&lt;</a>
             <a class="page_button prev_arrow" href="?page={{ page_selector_dict['previous'] }}{{ sort_type_string }}">&lt;</a>
             {% for page_no in page_selector_dict['all_page_numbers'] %}
-                {% if page_no == page_selector_dict['current']  %}
-                    <a class="page_button active_page" href="?page={{ page_no }}{{ sort_type_string }}">{{ page_no }}</a>
-                {% else %}
-                    <a class="page_button page_num" href="?page={{ page_no }}{{ sort_type_string }}">{{ page_no }}</a>
-                {% endif %}
+                <a class="page_button {{ 'active_page' if page_no == page_selector_dict['current'] else 'page_num' }}" href="?page={{ page_no }}{{ sort_type_string }}">{{ page_no }}</a>
             {% endfor %}
             <a class="page_button next_arrow" href="?page={{ page_selector_dict['next'] }}{{ sort_type_string }}">&gt;</a>
             <a class="page_button next_arrow" href="?page={{ page_selector_dict['last'] }}{{ sort_type_string }}">&gt;&gt;</a>
@@ -137,11 +111,7 @@
         <div class="centered">
             <select class="selectSort">
                 {% for tuple in list_of_sort_types %}
-                    {% if tuple[1] == current_sort_type %}
-                    <option id="{{ tuple[0] }}" value="{{ tuple[1] }}" selected="selected">{{ tuple[2] }}</option>
-                    {% else %}
-                    <option id="{{ tuple[0] }}" value="{{ tuple[1] }}">{{ tuple[2] }}</option>
-                    {% endif %}
+                    <option id="{{ tuple[0] }}" value="{{ tuple[1] }}" {{ 'selected="selected"' if tuple[1] == current_sort_type }}>{{ tuple[2] }}</option>
                 {% endfor %}
             </select>
         </div>
