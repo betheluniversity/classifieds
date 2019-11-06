@@ -64,37 +64,37 @@
                 </form>
             </div>
         {% endif %}
-    <div class="table">
-    {{ page_selector_macro(page_selector) }}
-    {% for post in posts %}
-        <div id="singlePost-{{ loop.index }}" class="singlePost">
-            <div class="row">
-                <div class="cell">Title:</div>
-                <div class="title cell"><a href="{{ url_for('View:view_post', post_id = post['post_id']) }}">{{ post['title'] }}</a></div>
-            </div>
-            <div class="row">
-                <div class="cell">Description: </div>
-                <div class="description cell"><article>{{ post['description'] }}</article></div>
-            </div>
-            <div class="row">
-                <div class="cell">Price: </div>
-                <div class="price cell">{{ post['price'] }}</div>
-            </div>
-            <div class="row">
-                <div class="cell">Date Posted: </div>
-                <div class="date cell">{{ post['date_added'].date() }}</div>
-            </div>
-            <div class="row">
-                <div class="cell"></div>
-                <div class="cell">
-                    {{ user_actions(post) }}
+        <div class="table">
+        {{ page_selector_macro(page_selector) }}
+        {% for post in posts %}
+            <div id="singlePost-{{ loop.index }}" class="singlePost">
+                <div class="row">
+                    <div class="cell">Title:</div>
+                    <div class="title cell"><a href="{{ url_for('View:view_post', post_id = post['post_id']) }}">{{ post['title'] }}</a></div>
                 </div>
+                <div class="row">
+                    <div class="cell">Description: </div>
+                    <div class="description cell"><article>{{ post['description'] }}</article></div>
+                </div>
+                <div class="row">
+                    <div class="cell">Price: </div>
+                    <div class="price cell">{{ post['price'] }}</div>
+                </div>
+                <div class="row">
+                    <div class="cell">Date Posted: </div>
+                    <div class="date cell">{{ post['date_added'].date() }}</div>
+                </div>
+                <div class="row">
+                    <div class="cell"></div>
+                    <div class="cell">
+                        {{ user_actions(post) }}
+                    </div>
+                </div>
+            <hr/>
             </div>
-        <hr/>
+        {% endfor %}
+        {{ page_selector_macro(page_selector) }}
         </div>
-    {% endfor %}
-    {{ page_selector_macro(page_selector) }}
-    </div>
     {% endif %}
 </div>
 {% endblock %}

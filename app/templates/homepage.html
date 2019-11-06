@@ -13,61 +13,61 @@
         Choose how you would like to sort the posts, search through them, and contact<br/>
         who posted the ad to get more information.
     </p>
-        {% if values|length == 0 %}
-            <p class="noPosts">There are no active posts to show.</p>
-        {% else %}
-    <div class="table">
-        {{ sort_type_selector(page_selector['sort_type']) }}
-        {{ page_selector_macro(page_selector) }}
-        <div id="results">
-        {% for val in values %}
-            <div id="singlePost-{{ loop.index }}" class="singlePost">
-                <div class="row">
-                    <div class="cell">Title: </div>
-                    <div class="title cell"><a href="{{ url_for('View:view_post', post_id = val['post_id']) }}">{{ val['title'] }}</a></div>
-                </div>
-                <div class="row">
-                    <div class="cell">Description: </div>
-                    <div class="description cell"><article>{{ val['description'] }}</article></div>
-                </div>
-                <div class="row">
-                    <div class="cell">Price: </div>
-                    <div class="price cell">{{ val['price'] }}</div>
-                </div>
-                <div class="row">
-                    <div class="cell">Date Posted: </div>
-                    <div class="date cell">{{ val['date_added'].date() }}</div>
-                </div>
-                <div class="row">
-                    <div class="cell">Posted By: </div>
-                    <div class="postedBy cell"><a href="{{ url_for('View:view_contact', username = val['username']) }}">{{ val['full_name'] }}</a></div>
-                </div>
-                {% if showStatus == True %}
+    {% if values|length == 0 %}
+        <p class="noPosts">There are no active posts to show.</p>
+    {% else %}
+        <div class="table">
+            {{ sort_type_selector(page_selector['sort_type']) }}
+            {{ page_selector_macro(page_selector) }}
+            <div id="results">
+            {% for val in values %}
+                <div id="singlePost-{{ loop.index }}" class="singlePost">
                     <div class="row">
-                        <div class="cell">Status:</div>
-                        <div class="status cell">
-                            {% if val['completed'] == True %}
-                                Completed
-                            {% elif val['expired'] == True %}
-                                Expired
-                            {% else %}
-                                Active
-                            {% endif %}
+                        <div class="cell">Title: </div>
+                        <div class="title cell"><a href="{{ url_for('View:view_post', post_id = val['post_id']) }}">{{ val['title'] }}</a></div>
+                    </div>
+                    <div class="row">
+                        <div class="cell">Description: </div>
+                        <div class="description cell"><article>{{ val['description'] }}</article></div>
+                    </div>
+                    <div class="row">
+                        <div class="cell">Price: </div>
+                        <div class="price cell">{{ val['price'] }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="cell">Date Posted: </div>
+                        <div class="date cell">{{ val['date_added'].date() }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="cell">Posted By: </div>
+                        <div class="postedBy cell"><a href="{{ url_for('View:view_contact', username = val['username']) }}">{{ val['full_name'] }}</a></div>
+                    </div>
+                    {% if showStatus == True %}
+                        <div class="row">
+                            <div class="cell">Status:</div>
+                            <div class="status cell">
+                                {% if val['completed'] == True %}
+                                    Completed
+                                {% elif val['expired'] == True %}
+                                    Expired
+                                {% else %}
+                                    Active
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endif %}
+                    <div class="row">
+                        <div class="cell"></div>
+                        <div class="cell">
+                            {{ user_actions(val) }}
                         </div>
                     </div>
-                {% endif %}
-                <div class="row">
-                    <div class="cell"></div>
-                    <div class="cell">
-                        {{ user_actions(val) }}
-                    </div>
                 </div>
+                <hr/>
+            {% endfor %}
             </div>
-            <hr/>
-        {% endfor %}
+            {{ page_selector_macro(page_selector) }}
         </div>
-        {{ page_selector_macro(page_selector) }}
-    </div>
     {% endif %}
 </div>
 {% endblock %}
