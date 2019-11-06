@@ -6,7 +6,9 @@
 
 {% block internal %}
 <div>
-    <form id="group_demotion" method="POST" action="{{ url_for('View:group_demote') }}">
+    <div class="errors"></div>
+
+    <form>
         <table>
             <thead>
                 <tr>
@@ -23,22 +25,22 @@
                     <td> {{ admin['username'] }} </td>
                     <td> {{ admin['first_name'] }} </td>
                     <td> {{ admin['last_name'] }} </td>
-                    <td><input type="checkbox" name="admin{{ loop.index }}" value="{{ admin['username'] }}"/></td>
+                    <td><input class="admins" type="checkbox" name="admin{{ loop.index }}" value="{{ admin['username'] }}"/></td>
                 </tr>
             {% endif %}
         {% endfor %}
             </tbody>
         </table>
-        <input type="submit" value="Remove admin privileges for checked users"/>
+        <input id="demote_group" class="promote-demote" type="button" value="Remove admin privileges for checked users"/>
     </form>
 
-    <form id="single_promotion" method="POST" action="{{ url_for('View:single_promote') }}">
+    <form>
         <label for="promote_by_username"><h4>Promote a user by username:</h4></label>
-        <input type="text" name="promotee" id="promote_by_username"/>
-        <input type="submit" value="Promote this single user"/>
+        <input type="text" name="promotee" id="promote_by_username" required=""/>
+        <input id="promote_single" class="promote-demote" type="button" value="Promote this single user"/>
     </form>
 
-    <form id="group_promotion" method="POST" action="{{ url_for('View:group_promote') }}">
+    <form>
         <table>
             <thead>
                 <tr>
@@ -54,12 +56,73 @@
                     <td> {{ non_admin['username'] }} </td>
                     <td> {{ non_admin['first_name'] }} </td>
                     <td> {{ non_admin['last_name'] }} </td>
-                    <td><input type="checkbox" name="nonAdmin{{ loop.index }}" value="{{ non_admin['username'] }}"/></td>
+                    <td><input class="nonAdmins" type="checkbox" name="nonAdmin{{ loop.index }}" value="{{ non_admin['username'] }}"/></td>
                 </tr>
         {% endfor %}
             </tbody>
         </table>
-        <input type="submit" value="Make the checked users admins for {{ app_settings['PAGE_TITLE'] }}"/>
+        <input id="promote_group" class="promote-demote" type="button" value="Make the checked users admins for {{ app_settings['PAGE_TITLE'] }}"/>
     </form>
 </div>
+<script>
+    $("#demote_group").click(function() {
+        let users = [];
+        $.each($("input[class='admins']:checked"), function(){
+            users.push($(this).val());
+        });
+       $.ajax({
+           type: "POST",
+           url: "{{ url_for("View:group_demote") }}",
+           data: JSON.stringify({
+                'demotees': users
+            }),
+           contentType: 'application/json;charset=UTF-8',
+           success: function (data) {
+                window.location.reload();
+            },
+            error: function (error) {
+               $(".errors").html("You do not have permission to demote users");
+            }
+        });
+    });
+
+    $("#promote_single").click(function () {
+        $.ajax({
+            type: "POST",
+            url: "{{ url_for("View:single_promote") }}",
+            data: JSON.stringify({
+                'promotee': $("#promote_by_username").val()
+            }),
+            contentType: 'application/json;charset=UTF-8',
+            success: function(response) {
+                window.location.reload();
+            },
+            error: function (error) {
+               $(".errors").html("You do not have permission to promote a user");
+            }
+        });
+    });
+
+    $("#promote_group").click(function () {
+        let users = [];
+        $.each($("input[class='nonAdmins']:checked"), function(){
+            users.push($(this).val());
+        });
+        alert(users);
+       $.ajax({
+           type: "POST",
+           url: "{{ url_for("View:group_promote") }}",
+           data: JSON.stringify({
+                'promotees': users
+           }),
+           contentType: 'application/json;charset=UTF-8',
+           success: function(response) {
+               window.location.reload();
+           },
+           error: function (error) {
+               $(".errors").html("You do not have permission to promote users");
+            }
+       })
+    });
+</script>
 {% endblock %}
