@@ -50,7 +50,7 @@
             <div id="singlePost-{{ loop.index }}" class="singlePost">
                 <div class="row">
                     <div class="cell">Title:</div>
-                    <div class="title cell"><a href="{{ url_for('View:view_post', post_id = post['post_id']) }}">{{ post['title'] }}</a></div>
+                    <div class="title cell"><a href="{{ url_for('View:view_post', post_id=post['post_id']) }}">{{ post['title'] }}</a></div>
                 </div>
                 <div class="row">
                     <div class="cell">Description: </div>
