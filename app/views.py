@@ -445,10 +445,10 @@ class View(FlaskView):
     @route('/group-promote', methods=['POST'])
     def group_promote(self):
         if contact_is_admin(session['username']):
-            storage = request.form
-            for key in storage:
-                make_admin(storage[key])
-            return redirect('/manage-privileges')
+            promotees = json.loads(request.data).get('promotees')
+            for username in promotees:
+                make_admin(username)
+            return "success"
         else:
             return abort(404)
 
@@ -456,9 +456,9 @@ class View(FlaskView):
     @route('/single-promote', methods=['POST'])
     def single_promote(self):
         if contact_is_admin(session['username']):
-            storage = request.form
-            make_admin(storage['promotee'])
-            return redirect('/manage-privileges')
+            promotee = str(json.loads(request.data).get('promotee'))
+            make_admin(promotee)
+            return "success"
         else:
             return abort(404)
 
@@ -466,10 +466,10 @@ class View(FlaskView):
     @route('/group-demote', methods=['POST'])
     def group_demote(self):
         if contact_is_admin(session['username']):
-            storage = request.form
-            for key in storage:
-                remove_admin(storage[key])
-            return redirect('/manage-privileges')
+            demotees = json.loads(request.data).get('demotees')
+            for username in demotees:
+                remove_admin(username)
+            return "success"
         else:
             return abort(404)
 
