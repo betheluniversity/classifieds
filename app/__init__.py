@@ -73,8 +73,10 @@ def is_user_admin():
 @app.context_processor
 def utility_processor():
     to_return = {}
-    app_settings = get_app_settings()
 
-    return to_return.update({
+    to_return.update({
         "is_user_admin": is_user_admin,
-        "app_settings": app_settings})
+        "app_settings": get_app_settings()})
+
+    # you have to update before you can return the context_processor
+    return to_return
