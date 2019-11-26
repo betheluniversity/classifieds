@@ -70,7 +70,13 @@ def is_user_admin():
     return contact_is_admin(session['username'])
 
 
-app_settings = get_app_settings()
+@app.context_processor
+def utility_processor():
+    to_return = {}
 
-app.jinja_env.globals.update(is_user_admin=is_user_admin)
-app.jinja_env.globals.update(app_settings=app_settings)
+    to_return.update({
+        "is_user_admin": is_user_admin,
+        "app_settings": get_app_settings()})
+
+    # you have to update before you can return the context_processor
+    return to_return
