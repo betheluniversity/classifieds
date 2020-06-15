@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 DATEVAR=`date "+%m-%d-%Y_%H:%M%p"`
 sqlite3 /opt/<directory>/classifieds/app.db .dump > /opt/<directory>/db_back/app.db.bak_$DATEVAR
 find /opt/<directory>/db_back/app.db.bak* -mtime +13 -type f -exec rm {} \;
