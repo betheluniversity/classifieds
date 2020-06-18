@@ -170,7 +170,7 @@ class View(FlaskView):
         form_contents = request.form
         data_for_new_post = {
             'post_id': form_contents.get('post_id'),
-            'username': form_contents.get('submitters_username'),
+            'username': form_contents.get('submitters_username').lower(),
             'title': form_contents.get('title'),
             'description': form_contents.get('description'),
             'price': form_contents.get('price'),
