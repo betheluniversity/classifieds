@@ -1,35 +1,41 @@
 {% macro page_selector_macro(page_selector_dict) -%}
-    <div class="full-width">
-        <div class="page_selector">
-            <a class="page_button prev_arrow" onclick="get_result_page(1)">&lt;&lt;</a>
-            <a class="page_button prev_arrow" onclick="get_result_page({{ page_selector_dict['previous'] }})">&lt;</a>
-            {% for page_no in page_selector_dict['all_page_numbers'] %}
-                {% if page_no == page_selector_dict['current']  %}
-                    <a class="page_button active_page" onclick="get_result_page({{ page_no }})">{{ page_no }}</a>
-                {% else %}
-                    <a class="page_button page_num" onclick="get_result_page({{ page_no }})">{{ page_no }}</a>
-                {% endif %}
-            {% endfor %}
-            <a class="page_button next_arrow" onclick="get_result_page({{ page_selector_dict['next'] }})">&gt;</a>
-            <a class="page_button next_arrow" onclick="get_result_page({{ page_selector_dict['last'] }})">&gt;&gt;</a>
+    {% if values | length != 0 %}
+        <div class="full-width">
+            <div class="page_selector">
+                <a class="page_button prev_arrow" onclick="get_result_page(1)">&lt;&lt;</a>
+                <a class="page_button prev_arrow" onclick="get_result_page({{ page_selector_dict['previous'] }})">&lt;</a>
+                {% for page_no in page_selector_dict['all_page_numbers'] %}
+                    {% if page_no == page_selector_dict['current']  %}
+                        <a class="page_button active_page" onclick="get_result_page({{ page_no }})">{{ page_no }}</a>
+                    {% else %}
+                        <a class="page_button page_num" onclick="get_result_page({{ page_no }})">{{ page_no }}</a>
+                    {% endif %}
+                {% endfor %}
+                <a class="page_button next_arrow" onclick="get_result_page({{ page_selector_dict['next'] }})">&gt;</a>
+                <a class="page_button next_arrow" onclick="get_result_page({{ page_selector_dict['last'] }})">&gt;&gt;</a>
+            </div>
         </div>
-    </div>
+    {% endif %}
 {%- endmacro %}
 
 {% macro sort_type_selector(page_selector_dict) -%}
-<div class="sorting">
-    <div class="centered">
-        <select class="selectSort" id="sortSelector" onchange="get_result_page({{ page_selector_dict['current'] }})">
-            {% for tuple in list_of_sort_types %}
-                {% if tuple[1] == page_selector_dict['sort_type'] %}
-                <option id="{{ tuple[0] }}" value="{{ tuple[1] }}" selected="selected">{{ tuple[2] }}</option>
-                {% else %}
-                <option id="{{ tuple[0] }}" value="{{ tuple[1] }}">{{ tuple[2] }}</option>
-                {% endif %}
-            {% endfor %}
-        </select>
-    </div>
-</div>
+    {% if values | length != 0 %}
+        <div class="sorting">
+            <div class="centered">
+                <select class="selectSort" id="sortSelector" onchange="get_result_page({{ page_selector_dict['current'] }})">
+                    {% for tuple in list_of_sort_types %}
+                        {% if tuple[1] == page_selector_dict['sort_type'] %}
+                        <option id="{{ tuple[0] }}" value="{{ tuple[1] }}" selected="selected">{{ tuple[2] }}</option>
+                        {% else %}
+                        <option id="{{ tuple[0] }}" value="{{ tuple[1] }}">{{ tuple[2] }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    {% else %}
+        <p>Your search did not match any results</p>
+    {% endif %}
 {%- endmacro %}
 
 {% macro user_actions(post) -%}

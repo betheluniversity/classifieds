@@ -9,8 +9,8 @@
     <table>
         <thead>
             <tr>
-                <td>HTML Version</td>
-                <td>Human-readable Version</td>
+                <th>HTML Version</th>
+                <th>Human-readable Version</th>
                 <td></td>
                 <td></td>
             </tr>
@@ -18,16 +18,16 @@
         <tbody>
     {% for category in categories %}
             <tr>
-                <td>
+                <td data-th="HTML Version">
                     {{ category['category_html'] }}
                 </td>
-                <td>
+                <td data-th="Human-readable Version">
                     {{ category['category_human'] }}
                 </td>
-                <td>
+                <td data-th="Edit">
                     <a href="{{ url_for('View:edit_category', category_id = category['category_id']) }}" class="button">Edit</a>
                 </td>
-                <td>
+                <td data-th="Delete">
                     <a href="{{ url_for('View:delete_category_confirm', category_id = category['category_id']) }}" class="button">Delete</a>
                 </td>
             </tr>
