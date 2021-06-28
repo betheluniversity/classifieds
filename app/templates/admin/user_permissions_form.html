@@ -12,20 +12,20 @@
         <table>
             <thead>
                 <tr>
-                    <td>Username</td>
-                    <td>First name</td>
-                    <td>Last name</td>
-                    <td>Remove Admin?</td>
+                    <th>Username</th>
+                    <th>First name</th>
+                    <th>Last name</th>
+                    <th>Remove Admin?</th>
                 </tr>
             </thead>
             <tbody>
         {% for admin in admins %}
             {% if admin['username'] != session['username'] %}
                 <tr>
-                    <td> {{ admin['username'] }} </td>
-                    <td> {{ admin['first_name'] }} </td>
-                    <td> {{ admin['last_name'] }} </td>
-                    <td><input class="admins" type="checkbox" name="admin{{ loop.index }}" value="{{ admin['username'] }}"/></td>
+                    <td data-th="Username"> {{ admin['username'] }} </td>
+                    <td data-th="First name"> {{ admin['first_name'] }} </td>
+                    <td data-th="Last name"> {{ admin['last_name'] }} </td>
+                    <td data-th="Remove Admin?"><input class="admins" type="checkbox" name="admin{{ loop.index }}" value="{{ admin['username'] }}"/></td>
                 </tr>
             {% endif %}
         {% endfor %}
@@ -44,19 +44,19 @@
         <table>
             <thead>
                 <tr>
-                    <td>Username</td>
-                    <td>First name</td>
-                    <td>Last name</td>
-                    <td>Make Admin?</td>
+                    <th>Username</th>
+                    <th>First name</th>
+                    <th>Last name</th>
+                    <th>Make Admin?</th>
                 </tr>
             </thead>
             <tbody>
         {% for non_admin in non_admins %}
                 <tr>
-                    <td> {{ non_admin['username'] }} </td>
-                    <td> {{ non_admin['first_name'] }} </td>
-                    <td> {{ non_admin['last_name'] }} </td>
-                    <td><input class="nonAdmins" type="checkbox" name="nonAdmin{{ loop.index }}" value="{{ non_admin['username'] }}"/></td>
+                    <td data-th="Username"> {{ non_admin['username'] }} </td>
+                    <td data-th="First name"> {{ non_admin['first_name'] }} </td>
+                    <td data-th="Last name"> {{ non_admin['last_name'] }} </td>
+                    <td data-th="Make Admin?"><input class="nonAdmins" type="checkbox" name="nonAdmin{{ loop.index }}" value="{{ non_admin['username'] }}"/></td>
                 </tr>
         {% endfor %}
             </tbody>
