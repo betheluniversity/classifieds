@@ -4,8 +4,39 @@
     | Error
 {% endblock %}
 
-{% block internal %}
-<div id="error_message" class="error">
-    {{ error }}
-</div>
+{% block body_content %}
+    <div id="body">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes"/>
+        <div class="padded">
+            <a href="{{ url_for('View:index') }}">
+                <img class="logo" src="{{ url_for('static', filename = app_settings['LOGO']) }}">
+            </a>
+            <div id="user_menu" class="top-right">
+                <button class="dropbtn">
+                    <img class="icon" src="{{ url_for('static', filename = 'drop-down-icon.png') }}">
+                    Hello, {{ session['fullname'] }}!
+                </button>
+                <div id="generic_menu" class="dropdown-content">
+                    <a href="{{ url_for('View:view_contact', username = session['username']) }}">View your profile</a>
+                    <a href="{{ url_for('View:feedback') }}">Provide feedback</a>
+                    <a href="{{ url_for('logout') }}">Sign out</a>
+                </div>
+            </div>
+        </div>
+            {% if server_down_message %}
+                <div id="error_message" class="error">
+                    <h3>503 Error</h3>
+                    {{ server_down_message }}
+                </div>
+            {% else %}
+                <div id="error_message" class="error">
+                    <h3>Error</h3>
+                    {{ error }}
+                </div>
+            {% endif %}
+            <div class="clear_footer"></div>
+    </div>
+    <div class="footer">
+        <p id="foot_title">Bethel University est. 1871 | {{ app_settings['PAGE_TITLE'] }}</p>
+    </div>
 {% endblock %}

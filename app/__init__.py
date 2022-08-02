@@ -3,7 +3,7 @@ import ast
 import requests
 
 # Third party imports
-from flask import current_app, Flask, request, session, make_response, redirect
+from flask import current_app, Flask, request, session, make_response, redirect, render_template
 from flask_sqlalchemy import SQLAlchemy
 
 import sentry_sdk
@@ -27,6 +27,8 @@ View.register(app)
 
 @app.before_request
 def before_request():
+    if app.config['SERVER_DOWN']:
+        return render_template("error_page.html", server_down_message=app.config['ERROR_MESSAGE'])
     try:
         init_user()
     except:
