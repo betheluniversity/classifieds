@@ -9,5 +9,5 @@ Flask-SQLAlchemy
 Flask-WTF
 sentry_sdk[flask]
 SQLAlchemy>=1.3.0
-Werkzeug==0.15.3
+Werkzeug==0.15.5
 WTForms
