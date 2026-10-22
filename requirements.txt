@@ -1,9 +1,9 @@
-alembic
+alembic==1.7.7
 argparse
 blinker
 Flask==1.1.4
 Flask-Classy
-Flask-Migrate
+Flask-Migrate==2.7.0
 Flask-Script
 Flask-SQLAlchemy
 Flask-WTF
