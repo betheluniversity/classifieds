@@ -1,7 +1,7 @@
 alembic==1.7.7
 argparse
 blinker
-Flask==1.1.4
+Flask==3.1.3
 Flask-Classy
 Flask-Migrate==2.7.0
 Flask-Script
